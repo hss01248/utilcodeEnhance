@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.hss.utils.enhance.UrlEncodeUtil;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -19,38 +20,41 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+
+
+    public void urlEncode(View view) {
+        String str = "1 2  34+7+8+ 9";
+        String encode = UrlEncodeUtil.encode(str);
+        UrlEncodeUtil.decode(encode);
+
+
+
+      /*  String str2 = "12 34+789";
+        String encode1 = UrlEncodeUtil.encode(str2);
+        UrlEncodeUtil.decode(encode1);*/
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    public void getDecodedPath(View view) {
+        //秒 +开+45 a p+i
+        String url = "https://www.baidu.com/1234%2B789/%E7%A7%92%E5%BC%80%2B45%20api";
+        UrlEncodeUtil.decode(url);
+        UrlEncodeUtil.getDecodedPath(url);
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        String url2 = "https://www.baidu.com/1234%2B789/%E7%A7%92%20%2B%E5%BC%80%2B45%20a%20p%2Bi";
+        UrlEncodeUtil.decode(url2);
+        UrlEncodeUtil.getDecodedPath(url2);
 
-        return super.onOptionsItemSelected(item);
+    }
+
+    public void encodeFilePathToUrlUsage(View view) {
+        String path = "F:/img cache/秒  +开+45 a p+i/45.jpg";
+        String s = UrlEncodeUtil.encodeFilePathToUrlUsage(path);
+        //看能否还原
+        String url2 = "https://www.baidu.com"+s;
+        UrlEncodeUtil.getDecodedPath(url2);
+
     }
 }
