@@ -105,8 +105,8 @@ public class ShareUtils {
             intent.setType(type); // 其他的均使用流当做二进制数据来发送
         }
        // intent.setType("*/*");   //分享文件
-        //ActivityUtils.getTopActivity().startActivity(Intent.createChooser(intent, "分享"));
-        ActivityUtils.getTopActivity().startActivity(intent); // 调用系统的mail客户端进行发送
+        ActivityUtils.getTopActivity().startActivity(Intent.createChooser(intent, "share"));
+        //ActivityUtils.getTopActivity().startActivity(intent); // 调用系统的mail客户端进行发送
     }
     /**
      * <ul>
