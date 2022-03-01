@@ -42,4 +42,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     api 'com.google.android:flexbox:0.3.1'
+    implementation 'com.github.skyNet2017.Luban:dataForPhotoSelet:3.1.9'
 }

@@ -2,6 +2,8 @@ package com.hss.utilsenhance;
 
 import androidx.multidex.MultiDexApplication;
 
+import org.devio.takephoto.wrap.TakePhotoUtil;
+
 /**
  * @Despciption todo
  * @Author hss
@@ -9,4 +11,10 @@ import androidx.multidex.MultiDexApplication;
  * @Version 1.0
  */
 public class BaseApp extends MultiDexApplication {
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+    }
 }

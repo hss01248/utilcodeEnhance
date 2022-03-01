@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.hss.utils.enhance.ShareUtils;
 import com.hss.utils.enhance.UrlEncodeUtil;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +14,11 @@ import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
+
+import org.devio.takephoto.wrap.TakeOnePhotoListener;
+import org.devio.takephoto.wrap.TakePhotoUtil;
+
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,5 +62,24 @@ public class MainActivity extends AppCompatActivity {
         String url2 = "https://www.baidu.com"+s;
         UrlEncodeUtil.getDecodedPath(url2);
 
+    }
+
+    public void share(View view) {
+        TakePhotoUtil.startPickOneWitchDialog(this, new TakeOnePhotoListener() {
+            @Override
+            public void onSuccess(String path) {
+                ShareUtils.shareFile(new File(path));
+            }
+
+            @Override
+            public void onFail(String path, String msg) {
+
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
     }
 }

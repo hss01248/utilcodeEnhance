@@ -34,6 +34,13 @@
             android:onClick="encodeFilePathToUrlUsage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+
+        <Button
+            android:text="share"
+            android:textAllCaps="false"
+            android:onClick="share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     </com.google.android.flexbox.FlexboxLayout>
 
 </ScrollView>
