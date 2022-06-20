@@ -9,4 +9,10 @@ import androidx.multidex.MultiDexApplication;
  * @Version 1.0
  */
 public class BaseApp extends MultiDexApplication {
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        registerActivityLifecycleCallbacks(new PlayDecorviewActivityLifeycleCallback());
+    }
 }
