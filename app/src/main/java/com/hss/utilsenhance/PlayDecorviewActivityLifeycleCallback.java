@@ -31,6 +31,7 @@ public class PlayDecorviewActivityLifeycleCallback implements Application.Activi
 
     }
 
+    //https://github.com/Petterpx/FloatingX
     @Override
     public void onActivityResumed(@NonNull Activity activity) {
         View decorView = activity.getWindow().getDecorView();
@@ -43,6 +44,11 @@ public class PlayDecorviewActivityLifeycleCallback implements Application.Activi
             textView.setText("activity: "+ activity);
             textView.setPadding(padding,padding,padding,padding);
             root.addView(textView);
+
+            for (int i = 0; i < root.getChildCount(); i++) {
+                LogUtils.i("getChildAt:"+i,root.getChildAt(i));
+
+            }
         }
 
 
