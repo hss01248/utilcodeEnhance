@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ThreadUtils;
+import com.hss.utils.enhance.lifecycle.SimpleLifeCycledTask;
 
 import java.util.concurrent.TimeUnit;
 
@@ -17,10 +18,10 @@ public class TimeOutUtil {
 
     /**
      *
-     * @param hasCallbacked boolean[]{false},构建在栈中,保持线程安全. 正常任务执行后,应该置为true
+     * @param hasCallbacked boolean[]{false},必须声明在栈中,才能保持线程安全. 正常任务执行后,应该置为true
      * @param timeoutMills
      * @param lifecycledObject activity,context,fragment
-     * @param runnableWhenTimeout
+     * @param runnableWhenTimeout 回调运行在主线程
      */
     public static  void checkTimeout(boolean[] hasCallbacked, long timeoutMills, @Nullable Object lifecycledObject,@Nullable Runnable runnableWhenTimeout){
         if(hasCallbacked == null){

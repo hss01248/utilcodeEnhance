@@ -1,4 +1,4 @@
-package com.hss.utils.enhance;
+package com.hss.utils.enhance.lifecycle;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ThreadUtils;
