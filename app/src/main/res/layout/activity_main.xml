@@ -69,6 +69,12 @@
             android:onClick="hideNaviBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+        <Button
+            android:text="模拟点击home"
+            android:textAllCaps="false"
+            android:onClick="clickHome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     </com.google.android.flexbox.FlexboxLayout>
 
 </ScrollView>

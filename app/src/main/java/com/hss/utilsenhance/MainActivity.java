@@ -1,11 +1,13 @@
 package com.hss.utilsenhance;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.hss.utils.enhance.HomeMaintaner;
 import com.hss.utils.enhance.ShareUtils;
 import com.hss.utils.enhance.UrlEncodeUtil;
 
@@ -135,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus && Build.VERSION.SDK_INT >= 19) {
+       /* if (hasFocus && Build.VERSION.SDK_INT >= 19) {
             View decorView = getWindow().getDecorView();
             decorView.setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -149,8 +151,21 @@ public class MainActivity extends AppCompatActivity {
                 getWindow().setNavigationBarColor(Color.TRANSPARENT);
             }
 
-        }
+        }*/
     }
 
 
+    public void clickHome(View view) {
+        Intent i = new Intent(Intent.ACTION_MAIN);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.addCategory(Intent.CATEGORY_HOME);
+        startActivity(i);
+    }
+
+    @Override
+    public void onBackPressed() {
+       // super.onBackPressed();
+        //clickHome(null);
+        HomeMaintaner.onBackPressed(this,true,null);
+    }
 }
