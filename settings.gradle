@@ -2,3 +2,4 @@ include ':ext'
 include ':enhance'
 include ':app'
 rootProject.name = "UtilsEnhance"
+include ':common'

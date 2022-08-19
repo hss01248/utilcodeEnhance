@@ -2,8 +2,6 @@ package com.hss.utilsenhance;
 
 import androidx.multidex.MultiDexApplication;
 
-import org.devio.takephoto.wrap.TakePhotoUtil;
-
 /**
  * @Despciption todo
  * @Author hss
@@ -15,6 +13,6 @@ public class BaseApp extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        registerActivityLifecycleCallbacks(new PlayDecorviewActivityLifeycleCallback());
     }
 }

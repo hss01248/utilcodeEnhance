@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="#999999"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
@@ -12,19 +13,21 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:orientation="horizontal"
-        app:alignItems="center"
-        app:alignContent="stretch"
+        app:alignItems="flex_start"
+        app:justifyContent="space_around"
         app:flexDirection="row"
         app:flexWrap="wrap" >
         <Button
             android:text="urlEncode"
             android:textAllCaps="false"
             android:onClick="urlEncode"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <Button
             android:text="getDecodedPath"
             android:textAllCaps="false"
+
             android:onClick="getDecodedPath"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
@@ -39,6 +42,37 @@
             android:text="share"
             android:textAllCaps="false"
             android:onClick="share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:text="透明状态栏"
+            android:textAllCaps="false"
+            android:onClick="statusbarTrans"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:text="透明导航栏"
+            android:textAllCaps="false"
+            android:onClick="navibarTrans"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:text="隐藏状态栏"
+            android:textAllCaps="false"
+            android:onClick="hideStatusbar"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:text="隐藏导航栏"
+            android:textAllCaps="false"
+            android:onClick="hideNaviBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:text="模拟点击home"
+            android:textAllCaps="false"
+            android:onClick="clickHome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </com.google.android.flexbox.FlexboxLayout>
