@@ -28,16 +28,21 @@ public class LifecledCallbackHelper implements DefaultLifecycleObserver {
      * activity,context,fragment,LifecycleOwner
      */
     protected Object lifeCycledObj;
+    protected boolean hasDestoryed;
 
 
 
     @Override
     public void onDestroy(@NonNull LifecycleOwner owner) {
         DefaultLifecycleObserver.super.onDestroy(owner);
+        hasDestoryed = true;
         lifeCycledObj = null;
     }
 
     public boolean hasDestoryed(){
+        if(hasDestoryed){
+            return true;
+        }
         if(lifeCycledObj == null){
             return false;
         }
