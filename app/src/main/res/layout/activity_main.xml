@@ -75,6 +75,61 @@
             android:onClick="clickHome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:onClick="local2"
+            android:text="选择视频"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:onClick="pickImage"
+            android:text="选择图片"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:onClick="pickAudio"
+            android:text="选择音频"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:onClick="takeVideo"
+            android:text="调用系统拍视频intent"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:onClick="takePicture"
+            android:text="调用系统拍照intent"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:onClick="toastSuccess"
+            android:text="toast-success"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:onClick="toastError"
+            android:text="toast-error"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:onClick="toastNormal"
+            android:text="toast-normal"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:onClick="toastDebug"
+            android:text="toast-debug"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:onClick="showLoading"
+            android:text="showLoading"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:onClick="dismissLoading"
+            android:text="dismissLoading"
+            android:layout_height="wrap_content"/>
     </com.google.android.flexbox.FlexboxLayout>
 
 </ScrollView>

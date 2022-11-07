@@ -3,3 +3,4 @@ include ':enhance'
 include ':app'
 rootProject.name = "UtilsEnhance"
 include ':common'
+include ':toast'

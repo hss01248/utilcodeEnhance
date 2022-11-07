@@ -1,16 +1,31 @@
 package com.hss.utilsenhance;
 
+import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.PermissionUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.hss.utils.enhance.HomeMaintaner;
 import com.hss.utils.enhance.ShareUtils;
 import com.hss.utils.enhance.UrlEncodeUtil;
+import com.hss.utils.enhance.intent.SysIntentUtil;
+import com.hss.utils.enhance.media.MediaPickUtil;
+import com.hss.utils.enhance.media.MyCommonCallback;
+import com.hss.utils.enhance.media.TakePictureUtil;
+import com.hss.utils.enhance.media.VideoCaptureUtil;
+import com.hss01248.media.metadata.MetaDataUtil;
+import com.hss01248.permission.MyPermissions;
+import com.hss01248.toast.MyToast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -23,6 +38,7 @@ import org.devio.takephoto.wrap.TakeOnePhotoListener;
 import org.devio.takephoto.wrap.TakePhotoUtil;
 
 import java.io.File;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -167,5 +183,145 @@ public class MainActivity extends AppCompatActivity {
        // super.onBackPressed();
         //clickHome(null);
         HomeMaintaner.onBackPressed(this,true,null);
+    }
+
+    public void local2(View view) {
+
+        MediaPickUtil.pickVideo(new MyCommonCallback<String>() {
+            @Override
+            public void onSuccess(String s) {
+                showMata(s);
+            }
+
+            @Override
+            public void onError(String code, String msg, Throwable throwable) {
+
+            }
+        });
+    }
+
+    public void pickImage(View view) {
+        MediaPickUtil.pickImage(new MyCommonCallback<String>() {
+            @Override
+            public void onSuccess(String s) {
+                showMata(s);
+            }
+
+            @Override
+            public void onError(String code, String msg, Throwable throwable) {
+
+            }
+        });
+    }
+
+    public void pickVideo(View view) {
+        MediaPickUtil.pickVideo(new MyCommonCallback<String>() {
+            @Override
+            public void onSuccess(String s) {
+                showMata(s);
+            }
+
+            @Override
+            public void onError(String code, String msg, Throwable throwable) {
+
+            }
+        });
+    }
+
+    public void takeVideo(View view) {
+        VideoCaptureUtil.startVideoCapture(30, 1024 * 1024 * 1024, new MyCommonCallback<String>() {
+            @Override
+            public void onSuccess(String path) {
+                showMata(path);
+                LogUtils.d(path);
+            }
+
+            @Override
+            public void onError(String code, String msg,Throwable e) {
+                LogUtils.d(msg);
+            }
+        });
+    }
+
+    private void showMata(String path) {
+        LogUtils.d(path);
+        String desc = path+"";
+        try {
+            desc = MetaDataUtil.getDes(path);
+        }catch (Throwable throwable){
+            throwable.printStackTrace();
+            MyPermissions.request(new PermissionUtils.FullCallback() {
+                @Override
+                public void onGranted(@NonNull List<String> granted) {
+
+                }
+
+                @Override
+                public void onDenied(@NonNull List<String> deniedForever, @NonNull List<String> denied) {
+
+                }
+            }, Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
+        new AlertDialog.Builder(this)
+                .setTitle("mata data")
+                .setMessage(desc)
+                .setPositiveButton("预览", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        SysIntentUtil.openFile(path);
+                    }
+                }).setNegativeButton("cancel",null)
+                .create().show();
+    }
+
+    public void takePicture(View view) {
+        TakePictureUtil.takePicture(new MyCommonCallback<String>() {
+            @Override
+            public void onSuccess(String s) {
+                showMata(s);
+                LogUtils.d(s);
+            }
+
+            @Override
+            public void onError(String code, String msg, @Nullable Throwable throwable) {
+
+            }
+        });
+    }
+
+    public void pickAudio(View view) {
+        MediaPickUtil.pickAudio(new MyCommonCallback<String>() {
+            @Override
+            public void onSuccess(String s) {
+                showMata(s);
+            }
+
+            @Override
+            public void onError(String code, String msg, @Nullable Throwable throwable) {
+
+            }
+        });
+    }
+
+    public void toastSuccess(View view) {
+        MyToast.success("success---->");
+    }
+
+    public void toastError(View view) {
+        MyToast.error("toastError---->");
+    }
+
+    public void toastNormal(View view) {
+        MyToast.show("toastNormal---->");
+    }
+
+    public void toastDebug(View view) {
+        MyToast.debug("toastDebug---->");
+    }
+
+    public void showLoading(View view) {
+    }
+
+    public void dismissLoading(View view) {
     }
 }

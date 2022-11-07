@@ -49,6 +49,9 @@ dependencies {
     //com.github.hss01248.HttpUtil2:logforaop:3.0.5
 
     api 'androidx.lifecycle:lifecycle-common-java8:2.2.0'
+    api project(path: ':toast')
+
+
 
 
 }
