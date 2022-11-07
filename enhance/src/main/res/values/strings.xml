@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="main_click_again_to_home">click again to quit app</string>
+    <string name="deliver_error_save_failed">Saved Failed</string>
+    <string name="saved_success">Saved Successfully!</string>
 </resources>
