@@ -1,6 +1,7 @@
 package com.hss.utilsenhance;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -319,9 +320,23 @@ public class MainActivity extends AppCompatActivity {
         MyToast.debug("toastDebug---->");
     }
 
+    Dialog dialog;
     public void showLoading(View view) {
+         dialog = MyToast.showLoadingDialog("");
+        //dialog.setCancelable(true);
     }
 
     public void dismissLoading(View view) {
+        MyToast.dismissLoadingDialog(dialog);
+    }
+
+    public void showLoadingInBack(View view) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                dialog = MyToast.showLoadingDialog("showLoadingInBackshowLoadingInBackshowLoading" +
+                        "InBackshowLoadingInBackshowLoadingInBackshowLoadingInBackshowLoadingInBackshowLoadingInBackshowLoadingInBack");
+            }
+        }).start();
     }
 }

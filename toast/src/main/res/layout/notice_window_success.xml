@@ -17,12 +17,13 @@
         android:layout_height="32dp"
         android:contentDescription="@null"
         android:layout_marginBottom="8dp"
-        android:src="@drawable/message_icon"
-		android:visibility="gone"
+        android:src="@drawable/ic_check_white_48dp"
+		android:visibility="visible"
 		tools:visibility="visible"/>
 
+	<!--  android:id="@+id/message"-->
     <TextView
-        android:id="@+id/message"
+		android:id="@android:id/message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"

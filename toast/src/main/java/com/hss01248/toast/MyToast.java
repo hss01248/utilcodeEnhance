@@ -37,7 +37,7 @@ public class MyToast {
     }
 
     
-    public Dialog showLoadingDialog(@Nullable String loadingText) {
+    public static Dialog showLoadingDialog(@Nullable String loadingText) {
         return toastApi.showLoadingDialog(TextUtils.isEmpty(loadingText)? StringUtils.getString(R.string.toast_common_loading) :loadingText);
     }
 

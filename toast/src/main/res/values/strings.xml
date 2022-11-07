@@ -2,8 +2,7 @@
 <resources>
     <string name="toast_common_loading">loading...</string>
 
-    <color name="my_toast_bg_color">#A5060B11</color>
-    <string name="app_name">Toasty</string>
+    <color name="my_toast_bg_color">#99060B11</color>
     <string name="toast_message">Toast message</string>
     <string name="toasty_debug">(仅测试用)</string>
 </resources>
