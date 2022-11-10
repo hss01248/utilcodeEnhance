@@ -2,6 +2,7 @@
 dependencies {
 //页面加载状态
     api "com.github.hss01248:PageStateManager:3.0.5"
+    //备选: https://github.com/li-xiaojun/StateLayout
     //刷新和加载更多:
     api  'io.github.scwang90:refresh-layout-kernel:2.0.5'      //核心必须依赖
     // implementation  'io.github.scwang90:refresh-header-classics:2.0.5'    //经典刷新头
