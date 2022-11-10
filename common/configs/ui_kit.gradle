@@ -1,0 +1,40 @@
+
+dependencies {
+//页面加载状态
+    api "com.github.hss01248:PageStateManager:3.0.5"
+    //刷新和加载更多:
+    api  'io.github.scwang90:refresh-layout-kernel:2.0.5'      //核心必须依赖
+    // implementation  'io.github.scwang90:refresh-header-classics:2.0.5'    //经典刷新头
+    //implementation  'io.github.scwang90:refresh-header-radar:2.0.5'       //雷达刷新头
+    // implementation  'io.github.scwang90:refresh-header-falsify:2.0.5'     //虚拟刷新头
+    api  'io.github.scwang90:refresh-header-material:2.0.5'    //谷歌刷新头
+    //implementation  'io.github.scwang90:refresh-header-two-level:2.0.5'   //二级刷新头
+    // implementation  'io.github.scwang90:refresh-footer-ball:2.0.5'        //球脉冲加载
+    api  'io.github.scwang90:refresh-footer-classics:2.0.5'    //经典加载
+
+    api "com.github.hss01248:MainActivityUIUtil:2.0.2"
+    api "com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.47"
+    api "com.github.fondesa:recycler-view-divider:3.5.0"
+
+
+    //虚线
+    api 'com.github.skyNet2017:DashedLine:2.0.0'
+    // 阴影  https://github.com/lihangleo2/ShadowLayout
+    api 'com.github.lihangleo2:ShadowLayout:3.3.1'
+
+    //弹窗
+    api ('com.github.li-xiaojun:XPopup:2.9.11'){
+        exclude group: "com.davemorrissey.labs", module: "subsampling-scale-image-view-androidx"
+    }
+
+    //各种选择器 https://github.com/gzu-liyujiang/AndroidPicker
+    //包括日期及时间选择器（可用于出生日期、营业时间等）、单项选择器（可用于性别、民族、职业、学历、星座等）、
+    // 二三级联动选择器（可用于车牌号、基金定投日期等）、城市地址选择器（分省级、地市级及区县级）、
+    // 数字选择器（可用于年龄、身高、体重、温度等）、日历选日期择器（可用于酒店及机票预定日期）
+    // 、颜色选择器、文件及目录选择器等……
+    def pickerVersion = "4.1.11"
+    api "com.github.gzu-liyujiang.AndroidPicker:Common:$pickerVersion"
+    api "com.github.gzu-liyujiang.AndroidPicker:WheelPicker:$pickerVersion"
+    api "com.github.gzu-liyujiang.AndroidPicker:FilePicker:$pickerVersion"
+
+}

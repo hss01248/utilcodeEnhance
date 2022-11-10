@@ -1,0 +1,9 @@
+
+dependencies {
+
+    //android 7 uri和file转换适配
+    api "com.github.hss01248.HttpUtil2:openuri:3.1.4"
+//基于utilcodex里的permissionutil的产品级权限库,开箱即用,内置权限交互的产品逻辑
+    api 'com.github.hss01248.MyPermission:permission:2.1.8'
+    api 'com.github.hss01248.MyPermission:ext:1.0.6' //一行代码进行特殊权限申请
+}

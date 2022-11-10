@@ -1,4 +1,4 @@
-package com.hss.utils.enhance;
+package com.hss.utils.enhance.intent;
 
 import android.content.Context;
 import android.content.Intent;

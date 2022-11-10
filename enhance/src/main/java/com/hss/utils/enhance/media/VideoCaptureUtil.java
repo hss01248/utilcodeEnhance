@@ -14,6 +14,7 @@ import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.Utils;
+import com.hss.utils.enhance.api.MyCommonCallback;
 import com.hss01248.activityresult.ActivityResultListener;
 import com.hss01248.activityresult.StartActivityUtil;
 import com.hss01248.openuri.OpenUri;
@@ -37,7 +38,7 @@ public class VideoCaptureUtil {
 
 
 
-    public static void startVideoCapture(int maxDurationInSecond, int maxFileSize,MyCommonCallback<String> callback){
+    public static void startVideoCapture(int maxDurationInSecond, int maxFileSize, MyCommonCallback<String> callback){
         File externalFilesDir = Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_MOVIES);
         if(externalFilesDir == null){
             externalFilesDir = new File(Utils.getApp().getFilesDir(),Environment.DIRECTORY_MOVIES);

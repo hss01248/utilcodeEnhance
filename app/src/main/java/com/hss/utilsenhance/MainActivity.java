@@ -10,14 +10,12 @@ import android.os.Bundle;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.PermissionUtils;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.hss.utils.enhance.HomeMaintaner;
-import com.hss.utils.enhance.ShareUtils;
+import com.hss.utils.enhance.intent.ShareUtils;
 import com.hss.utils.enhance.UrlEncodeUtil;
 import com.hss.utils.enhance.intent.SysIntentUtil;
 import com.hss.utils.enhance.media.MediaPickUtil;
-import com.hss.utils.enhance.media.MyCommonCallback;
+import com.hss.utils.enhance.api.MyCommonCallback;
 import com.hss.utils.enhance.media.TakePictureUtil;
 import com.hss.utils.enhance.media.VideoCaptureUtil;
 import com.hss01248.media.metadata.MetaDataUtil;
@@ -28,12 +26,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
-
-import android.view.Menu;
-import android.view.MenuItem;
 
 import org.devio.takephoto.wrap.TakeOnePhotoListener;
 import org.devio.takephoto.wrap.TakePhotoUtil;

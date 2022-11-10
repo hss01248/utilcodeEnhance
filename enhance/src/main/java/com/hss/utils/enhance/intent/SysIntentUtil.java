@@ -23,7 +23,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
 import com.hss.utils.enhance.R;
 
-import com.hss.utils.enhance.media.MyCommonCallback;
+import com.hss.utils.enhance.api.MyCommonCallback;
 import com.hss01248.openuri.OpenUri;
 import com.hss01248.toast.MyToast;
 

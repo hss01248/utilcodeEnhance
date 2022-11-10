@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.application'
 }
-
+apply from: "configs/andresguard.gradle"
 android {
     compileSdkVersion 32
     buildToolsVersion "30.0.0"
