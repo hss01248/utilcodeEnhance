@@ -3,7 +3,7 @@
     package="com.hss01248.utils.ext">
 
     <application>
-        <activity android:name=".intent.SysIntentShareDispatcherActivity" >
+        <activity android:name=".intent.SysIntentShareDispatcherActivity" android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.SEND"/>
                 <category android:name="android.intent.category.DEFAULT" />

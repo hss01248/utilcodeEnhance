@@ -36,6 +36,10 @@ public class FilePickUtil {
                 new PermissionUtils.FullCallback() {
                     @Override
                     public void onGranted(@NonNull List<String> granted) {
+
+                        /*if (type.equals("dir")) {
+                            intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+        }*/
                         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                         //intent.setType("application/pdf");
                         intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -134,6 +138,27 @@ public class FilePickUtil {
         public static final String PPT = "application/vnd.ms-powerpoint";
         public static final String PPTX = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
         public static final String PDF = "application/pdf";
+    }
+
+    private static String resolveType(final String type) {
+
+        switch (type) {
+            case "audio":
+                return "audio/*";
+            case "image":
+                return "image/*";
+            case "video":
+                return "video/*";
+            case "media":
+                return "image/*,video/*";
+            case "any":
+            case "custom":
+                return "*/*";
+            case "dir":
+                return "dir";
+            default:
+                return null;
+        }
     }
 
 }
