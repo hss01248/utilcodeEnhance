@@ -27,6 +27,10 @@ import java.util.List;
  *  Android 13 选媒体文件需要细化权限: https://developer.android.com/about/versions/13/behavior-changes-13
  *  系统有单独的选择器: https://developer.android.com/about/versions/13/behavior-changes-13
  *  Intent intent = new Intent(MediaStore.ACTION_PICK_IMAGES);
+ *
+ *  其他一些自定义ui的文件选择器:
+ *  https://github.com/rosuH/AndroidFilePicker
+ *  https://github.com/DyncKathline/FilePicker
  * @Author hss
  * @Date 11/11/2022 09:52
  * @Version 1.0
