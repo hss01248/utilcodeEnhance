@@ -24,7 +24,9 @@ import java.util.List;
 /**
  * @Despciption 通过intent 筛选多种文件: 参考: flutter filePicker:
  * https://github.com/miguelpruivo/flutter_file_picker/blob/master/android/src/main/java/com/mr/flutter/plugin/filepicker/FilePickerDelegate.java
- *
+ *  Android 13 选媒体文件需要细化权限: https://developer.android.com/about/versions/13/behavior-changes-13
+ *  系统有单独的选择器: https://developer.android.com/about/versions/13/behavior-changes-13
+ *  Intent intent = new Intent(MediaStore.ACTION_PICK_IMAGES);
  * @Author hss
  * @Date 11/11/2022 09:52
  * @Version 1.0
