@@ -46,7 +46,7 @@ public class PlayDecorviewActivityLifeycleCallback implements Application.Activi
             root.addView(textView);
 
             for (int i = 0; i < root.getChildCount(); i++) {
-                LogUtils.i("getChildAt:"+i,root.getChildAt(i));
+                //LogUtils.i("getChildAt:"+i,root.getChildAt(i));
 
             }
         }

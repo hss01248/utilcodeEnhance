@@ -14,6 +14,7 @@ import com.hss.utils.enhance.HomeMaintaner;
 import com.hss.utils.enhance.intent.ShareUtils;
 import com.hss.utils.enhance.UrlEncodeUtil;
 import com.hss.utils.enhance.intent.SysIntentUtil;
+import com.hss.utils.enhance.media.FilePickUtil;
 import com.hss.utils.enhance.media.MediaPickUtil;
 import com.hss.utils.enhance.api.MyCommonCallback;
 import com.hss.utils.enhance.media.TakePictureUtil;
@@ -332,5 +333,9 @@ public class MainActivity extends AppCompatActivity {
                         "InBackshowLoadingInBackshowLoadingInBackshowLoadingInBackshowLoadingInBackshowLoadingInBackshowLoadingInBack");
             }
         }).start();
+    }
+
+    public void pickPdf(View view) {
+        FilePickUtil.pickPdf(this);
     }
 }
