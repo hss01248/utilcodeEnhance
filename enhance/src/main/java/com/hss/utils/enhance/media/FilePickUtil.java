@@ -31,6 +31,8 @@ import java.util.List;
  *  其他一些自定义ui的文件选择器:
  *  https://github.com/rosuH/AndroidFilePicker
  *  https://github.com/DyncKathline/FilePicker
+ *  以及文件操作大综合:
+ *  https://github.com/javakam/FileOperator
  * @Author hss
  * @Date 11/11/2022 09:52
  * @Version 1.0
