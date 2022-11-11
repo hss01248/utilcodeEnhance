@@ -1,0 +1,51 @@
+
+rootProject.buildscript {
+    ext.plugin_version="0.3.0"
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://artifact.bytedance.com/repository/byteX/"
+        }
+    }
+
+    dependencies {
+        classpath "com.bytedance.android.byteX:base-plugin:${plugin_version}"
+        // Add bytex plugins' dependencies on demand
+        classpath "com.bytedance.android.byteX:shrink-r-plugin:${plugin_version}"
+        classpath 'io.github.duking666:ImgCompressPlugin:1.2.1'
+        // ...
+    }
+}
+
+
+gradle.addProjectEvaluationListener(new ProjectEvaluationListener() {
+    @Override
+    void beforeEvaluate(Project project) {
+
+    }
+
+    @Override
+    void afterEvaluate(Project project, ProjectState projectState) {
+        if(project.plugins.findPlugin("com.android.application") != null){
+            /*project.apply plugin: 'bytex'
+            project.ByteX {
+                enable true
+                enableInDebug true
+                logLevel "DEBUG"
+            }*/
+
+            project.apply plugin: 'img-compressor'
+            project.imgCompressOpt{
+                way="pngquant"
+                test = false
+                whiteFiles=["text_pic1.png","test_pic2.jpg"]
+                minSize=5
+                tinyKeys=["your key"]
+            }
+
+            //https://github.com/bytedance/ByteX/blob/master/shrink-r-plugin/README.md
+           // project.apply plugin: 'bytex.shrink_r_class'
+
+        }
+    }
+})

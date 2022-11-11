@@ -17,8 +17,14 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        debug {
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig signingConfigs.debug
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -26,6 +32,10 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    packagingOptions {
+        pickFirst '**/libc++_shared.so'
+        pickFirst '**/META-INF/DEPENDENCIES'
     }
 }
 
@@ -37,6 +47,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.2.0'
     implementation 'androidx.navigation:navigation-ui:2.2.0'
     implementation project(path: ':ext')
+    implementation project(path: ':common')
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
@@ -44,4 +55,21 @@ dependencies {
     //api 'com.google.android:flexbox:0.3.1'
     api 'com.google.android.flexbox:flexbox:3.0.0'
     implementation 'com.github.skyNet2017.Luban:dataForPhotoSelet:3.1.9'
+}
+
+//org.jetbrains:annotations-java5
+configurations {
+    all*.exclude group: 'com.blankj', module: 'utilcode'
+    all*.exclude group: 'org.jetbrains', module: 'annotations-java5'
+    //url connection代理到okhttp会导致神策的请求无返回
+    // all*.exclude group: 'com.github.hss01248.flipperUtil', module:'network-hooks-chucker'
+    //com.google.android:flexbox:0.3.1, webview引入
+   // if (rootProject.isNoop()) {
+        //all*.exclude group: 'com.github.hss01248.accountCacher', module: 'accountcache'
+    //}
+    all {
+        resolutionStrategy {
+//  force "com.squareup.okhttp3:okhttp:3.12.12"
+        }
+    }
 }

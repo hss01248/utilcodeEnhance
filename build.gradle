@@ -4,6 +4,7 @@ buildscript {
     apply from: 'https://raw.githubusercontent.com/hss01248/flipperUtil/master/deps/depsLastestChecker.gradle'
     apply from: 'https://raw.githubusercontent.com/hss01248/flipperUtil/dev/z_config/git_branch_info.gradle'
     apply from: "app/configs/componentized.gradle"
+    apply from: "app/configs/apk_shrink.gradle"
 
 
     dependencies {
@@ -14,7 +15,23 @@ buildscript {
         // in the individual module build.gradle files
     }
 }
+allprojects {
+    repositories {
+        maven { url 'https://github.com/link-u/AndroidGlideAvifDecoder/raw/master/repository' }
+    }
+}
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+def isNoop(){
+    for (String s : gradle.startParameter.taskNames) {
+        if (s.contains("ebug") | s.contains("ommon") | s.contains("racere")) {
+            return false
+        }else if (s.contains("ultiChannel") | s.contains("elease")) {
+            return true
+        }
+    }
+    return null
 }

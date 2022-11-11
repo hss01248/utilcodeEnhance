@@ -35,7 +35,7 @@ public class PlayDecorviewActivityLifeycleCallback implements Application.Activi
     @Override
     public void onActivityResumed(@NonNull Activity activity) {
         View decorView = activity.getWindow().getDecorView();
-        LogUtils.w("decorview",decorView);
+        //LogUtils.w("decorview",decorView);
         //extends FrameLayout
         if(decorView instanceof FrameLayout){
             FrameLayout root = (FrameLayout) decorView;
@@ -50,8 +50,6 @@ public class PlayDecorviewActivityLifeycleCallback implements Application.Activi
 
             }
         }
-
-
     }
 
     @Override
