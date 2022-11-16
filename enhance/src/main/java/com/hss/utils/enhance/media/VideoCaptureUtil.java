@@ -83,6 +83,7 @@ public class VideoCaptureUtil {
         File file=new File(path);
         // 把文件地址转换成Uri格式
         Uri uri= OpenUri.fromFile(Utils.getApp(),file);
+        OpenUri.addPermissionRW(intent);
         // 设置系统相机拍摄照片完成后图片文件的存放地址
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         if(maxDurationInSecond> 0){
