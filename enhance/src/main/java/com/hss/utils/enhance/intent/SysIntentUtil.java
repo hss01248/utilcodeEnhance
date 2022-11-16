@@ -18,6 +18,7 @@ import android.webkit.MimeTypeMap;
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.IntentUtils;
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
@@ -128,6 +129,7 @@ public class SysIntentUtil {
         try {
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_VIEW);
+            OpenUri.addPermissionRW(intent);
             String extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString());
             String type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
             intent.setDataAndType(uri,type);
@@ -139,6 +141,7 @@ public class SysIntentUtil {
 
     public static void openFile(String filePath){
         Uri uri = OpenUri.fromFile(Utils.getApp(),new File(filePath));
+        LogUtils.d("uri to open :"+ uri.toString());
         openFile(uri);
     }
 
