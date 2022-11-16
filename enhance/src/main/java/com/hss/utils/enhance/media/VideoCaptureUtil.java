@@ -41,6 +41,7 @@ public class VideoCaptureUtil {
     public static void startVideoCapture(int maxDurationInSecond, int maxFileSize, MyCommonCallback<String> callback){
         File externalFilesDir = Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_MOVIES);
         if(externalFilesDir == null){
+            //Android4.4以下:
             externalFilesDir = new File(Utils.getApp().getFilesDir(),Environment.DIRECTORY_MOVIES);
         }
         externalFilesDir.mkdirs();
@@ -103,6 +104,7 @@ public class VideoCaptureUtil {
                 if(resultCode == Activity.RESULT_OK){
                     if(file.exists() && file.length()> 0){
                         MediaStoreRefresher.refreshMediaCenter(Utils.getApp(),path);
+                        //私有目录,其实刷也没有用
                         callback.onSuccess(path);
                     }else {
                         callback.onError("file error","file saved error",null);
