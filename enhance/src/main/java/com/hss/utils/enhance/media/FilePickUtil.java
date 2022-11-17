@@ -6,6 +6,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import androidx.annotation.Nullable;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.PermissionUtils;
+import com.hss.utils.enhance.api.MyCommonCallback;
 import com.hss01248.activityresult.ActivityResultListener;
 import com.hss01248.activityresult.StartActivityUtil;
 import com.hss01248.permission.MyPermissions;
@@ -20,6 +22,7 @@ import com.hss01248.toast.MyToast;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Despciption 通过intent 筛选多种文件: 参考: flutter filePicker:
@@ -39,7 +42,31 @@ import java.util.List;
  */
 public class FilePickUtil {
 
-    public static void pickPdf(Activity activity){
+    public static void pickDocument(Activity activity,MyCommonCallback<String> callback){
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("application/pdf");
+        //这个action设置type限制有效
+
+        // Optionally, specify a URI for the file that should appear in the
+        // system file picker when it loads.
+        //intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
+        StartActivityUtil.goOutAppForResult(activity, intent, new ActivityResultListener() {
+            @Override
+            public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+                LogUtils.i(data);
+            }
+
+            @Override
+            public void onActivityNotFound(Throwable e) {
+
+            }
+        });
+
+        //startActivityForResult(intent, PICK_PDF_FILE);
+    }
+
+    public static void pickPdf(Activity activity, MyCommonCallback<String> callback){
         MyPermissions.requestByMostEffort(false, true,
                 new PermissionUtils.FullCallback() {
                     @Override
@@ -78,7 +105,14 @@ public class FilePickUtil {
                             public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
                                 LogUtils.d(data);
                                 if(resultCode == Activity.RESULT_OK && data != null){
-                                    MediaPickUtil.queryMediaStore(data.getData());
+                                    Map<String, Object> map = MediaPickUtil.queryMediaStore(data.getData());
+                                    if(map.containsKey("_data")){
+                                        callback.onSuccess(map.get("_data").toString());
+                                    }else {
+                                        callback.onSuccess(data.getDataString());
+                                    }
+                                }else {
+                                    callback.onSuccess("canceled");
                                 }
 
                                 //content://com.android.providers.media.documents/document/video%3A34768
@@ -89,13 +123,14 @@ public class FilePickUtil {
 
                             @Override
                             public void onActivityNotFound(Throwable e) {
-
+                                callback.onError("0","no app can response ACTION_GET_CONTENT",null);
                             }
                         });
                     }
 
                     @Override
                     public void onDenied(@NonNull List<String> deniedForever, @NonNull List<String> denied) {
+                        callback.onError("0","permission deined",null);
                         MyToast.error("permission denied");
                     }
                 }, Manifest.permission.READ_EXTERNAL_STORAGE);

@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.DocumentsContract;
 import android.provider.Settings;
 import android.provider.Telephony;
 import android.text.TextUtils;
@@ -137,6 +138,16 @@ public class SysIntentUtil {
             ActivityUtils.startActivity(intent);
         }catch (Throwable throwable){
             MyToast.error(StringUtils.getString(R.string.open_no_activity));
+
+           /* Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("application/pdf");
+
+            // Optionally, specify a URI for the file that should appear in the
+            // system file picker when it loads.
+            intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, uri);*/
+
+            //startActivityForResult(intent, PICK_PDF_FILE);
         }
     }
 

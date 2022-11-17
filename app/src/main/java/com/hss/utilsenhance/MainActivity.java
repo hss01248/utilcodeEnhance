@@ -40,6 +40,7 @@ import org.devio.takephoto.wrap.TakeOnePhotoListener;
 import org.devio.takephoto.wrap.TakePhotoUtil;
 
 import java.io.File;
+import java.net.URLDecoder;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -248,23 +249,28 @@ public class MainActivity extends AppCompatActivity {
     private void showMata(String path) {
         LogUtils.d(path);
         String desc = path+"";
-        try {
-            //todo MetaDataUtil兼容fileprovider的uri,此时至少有读的权限
-            desc = MetaDataUtil.getDes(path);
-        }catch (Throwable throwable){
-            throwable.printStackTrace();
-            MyPermissions.request(new PermissionUtils.FullCallback() {
-                @Override
-                public void onGranted(@NonNull List<String> granted) {
+        if(!path.startsWith("/")){
+            desc = URLDecoder.decode(path);
+        }else {
+            try {
+                //todo MetaDataUtil兼容fileprovider的uri,此时至少有读的权限
+                desc = MetaDataUtil.getDes(path);
+            }catch (Throwable throwable){
+                throwable.printStackTrace();
+                MyPermissions.request(new PermissionUtils.FullCallback() {
+                    @Override
+                    public void onGranted(@NonNull List<String> granted) {
 
-                }
+                    }
 
-                @Override
-                public void onDenied(@NonNull List<String> deniedForever, @NonNull List<String> denied) {
+                    @Override
+                    public void onDenied(@NonNull List<String> deniedForever, @NonNull List<String> denied) {
 
-                }
-            }, Manifest.permission.READ_EXTERNAL_STORAGE);
+                    }
+                }, Manifest.permission.READ_EXTERNAL_STORAGE);
+            }
         }
+
         new AlertDialog.Builder(this)
                 .setTitle("mata data")
                 .setMessage(desc)
@@ -343,7 +349,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void pickPdf(View view) {
-        FilePickUtil.pickPdf(this);
+        FilePickUtil.pickPdf(this, new MyCommonCallback<String>() {
+            @Override
+            public void onSuccess(String s) {
+                showMata(s);
+            }
+        });
     }
 
     public void externalPrint(View view) {
@@ -432,5 +443,14 @@ public class MainActivity extends AppCompatActivity {
 
 
         //原文链接：https://blog.csdn.net/u012556114/article/details/101217053
+    }
+
+    public void pickPdf2(View view) {
+        FilePickUtil.pickDocument(this, new MyCommonCallback<String>() {
+            @Override
+            public void onSuccess(String s) {
+
+            }
+        });
     }
 }

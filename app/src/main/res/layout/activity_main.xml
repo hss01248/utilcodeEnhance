@@ -97,6 +97,11 @@
             android:layout_height="wrap_content"/>
         <Button
             android:layout_width="wrap_content"
+            android:onClick="pickPdf2"
+            android:text="选择pdf-ACTION_OPEN_DOCUMENT"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="wrap_content"
             android:onClick="takeVideo"
             android:text="调用系统拍视频intent"
             android:layout_height="wrap_content"/>
