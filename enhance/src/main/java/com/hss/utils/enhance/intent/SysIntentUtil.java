@@ -26,6 +26,7 @@ import com.hss.utils.enhance.R;
 
 import com.hss.utils.enhance.api.MyCommonCallback;
 import com.hss01248.openuri.OpenUri;
+import com.hss01248.openuri2.OpenUri2;
 import com.hss01248.toast.MyToast;
 
 
@@ -140,7 +141,14 @@ public class SysIntentUtil {
     }
 
     public static void openFile(String filePath){
-        Uri uri = OpenUri.fromFile(Utils.getApp(),new File(filePath));
+        File file = new File(filePath);
+        Uri uri = null;
+        if(file.exists()){
+            uri = OpenUri2.fromFile(Utils.getApp(),file);
+        }else {
+            uri = Uri.parse(filePath);
+
+        }
         LogUtils.d("uri to open :"+ uri.toString());
         openFile(uri);
     }

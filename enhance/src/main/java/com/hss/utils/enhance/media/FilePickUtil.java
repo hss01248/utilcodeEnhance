@@ -77,6 +77,14 @@ public class FilePickUtil {
                             @Override
                             public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
                                 LogUtils.d(data);
+                                if(resultCode == Activity.RESULT_OK && data != null){
+                                    MediaPickUtil.queryMediaStore(data.getData());
+                                }
+
+                                //content://com.android.providers.media.documents/document/video%3A34768
+                                //content://media/external/images/media/35001
+                                //uri from File :
+                                //content://com.hss.utilsenhance.fileprovider/openuri/storage/emulated/0/DCIM/Camera/PXL_20221116_234852141.jpg
                             }
 
                             @Override

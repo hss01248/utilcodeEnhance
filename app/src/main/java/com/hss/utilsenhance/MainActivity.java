@@ -2,14 +2,18 @@ package com.hss.utilsenhance;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.PermissionUtils;
+import com.blankj.utilcode.util.Utils;
 import com.hss.utils.enhance.HomeMaintaner;
 import com.hss.utils.enhance.intent.ShareUtils;
 import com.hss.utils.enhance.UrlEncodeUtil;
@@ -28,6 +32,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 
 import org.devio.takephoto.wrap.TakeOnePhotoListener;
@@ -243,6 +249,7 @@ public class MainActivity extends AppCompatActivity {
         LogUtils.d(path);
         String desc = path+"";
         try {
+            //todo MetaDataUtil兼容fileprovider的uri,此时至少有读的权限
             desc = MetaDataUtil.getDes(path);
         }catch (Throwable throwable){
             throwable.printStackTrace();
@@ -337,5 +344,93 @@ public class MainActivity extends AppCompatActivity {
 
     public void pickPdf(View view) {
         FilePickUtil.pickPdf(this);
+    }
+
+    public void externalPrint(View view) {
+        Uri uriQuery =  MediaStore.Files.getContentUri("external");
+        print(uriQuery);
+        //除了图片,视频,音频,还是100个其他类型的文件
+        //group by : https://blog.csdn.net/weixin_30755709/article/details/94945476
+        //"0=0) group by (mime_type"  已经不行了  Invalid token group
+    }
+
+    public void externalImage(View view) {
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                collection = MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL);
+            } else {
+                collection = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+            }
+
+            //打开文件:
+            try (ParcelFileDescriptor pfd =
+                    resolver.openFileDescriptor(content-uri, readOnlyMode)) {
+                // Perform operations on "pfd".
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //其他存储卷:
+            Set<String> volumeNames = MediaStore.getExternalVolumeNames(context);
+            String firstVolumeName = volumeNames.iterator().next();
+*/
+        Uri uriQuery =  MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        print(uriQuery);
+
+    }
+    void print(Uri uriQuery){
+        ContentResolver cr = Utils.getApp().getContentResolver();
+        Cursor query = cr.query(uriQuery, null, null, null, MediaStore.Files.FileColumns.DISPLAY_NAME + " DESC");
+        MediaPickUtil.doQuery(query,10);
+    }
+
+    public void externalAudio(View view) {
+        print(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
+    }
+
+    public void externalVideo(View view) {
+        print(MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+    }
+
+    public void groupby(View view) {
+        Uri uriQuery =  MediaStore.Files.getContentUri("external");
+        Cursor query = Utils.getApp().getContentResolver().query(uriQuery, null,
+                null, null, MediaStore.Files.FileColumns.DISPLAY_NAME + " DESC");
+        MediaPickUtil.groupBy(query,"mime_type");
+    }
+
+    public void groupbyNone(View view) {
+       /* String selection = MediaStore.Files.FileColumns.MEDIA_TYPE + "="
+                + MediaStore.Files.FileColumns.MEDIA_TYPE_NONE;
+
+        Uri uriQuery =  MediaStore.Files.getContentUri("external");
+        Cursor query = Utils.getApp().getContentResolver().query(uriQuery, null,
+                selection, null, MediaStore.Files.FileColumns.DISPLAY_NAME + " DESC");
+        MediaPickUtil.groupBy(query,"mime_type");*/
+
+        String[] columns = new String[]{MediaStore.Files.FileColumns._ID, MediaStore.Files.FileColumns.MIME_TYPE,
+                MediaStore.Files.FileColumns.SIZE, MediaStore.Files.FileColumns.DATE_MODIFIED, MediaStore.Files.FileColumns.DATA};
+        String select = "(_data LIKE '%.pdf')";
+
+        ContentResolver contentResolver = getContentResolver();
+        Cursor cursor = contentResolver.query(MediaStore.Files.getContentUri("external"), columns, select, null, null);
+
+        LogUtils.d( " pdf count " + cursor.getCount());
+        int columnIndexOrThrow_DATA = 0;
+        if (cursor != null) {
+            columnIndexOrThrow_DATA = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA);
+        }
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                String path = cursor.getString(columnIndexOrThrow_DATA);
+
+                //PDFFileInfo document = PDFUtil.getFileInfoFromFile(new File(path));
+
+               // pdfData.add(document);
+                LogUtils.d( " pdf " + path);
+            }
+        }
+        cursor.close();
+
+
+        //原文链接：https://blog.csdn.net/u012556114/article/details/101217053
     }
 }

@@ -140,6 +140,42 @@
             android:onClick="dismissLoading"
             android:text="dismissLoading"
             android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:onClick="externalPrint"
+            android:textAllCaps="false"
+            android:text="MediaStore.Files.getContentUri(external)"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:onClick="externalImage"
+            android:textAllCaps="false"
+            android:text="MediaStore.Images"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:onClick="externalAudio"
+            android:textAllCaps="false"
+            android:text="MediaStore.Audio"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:onClick="externalVideo"
+            android:textAllCaps="false"
+            android:text="MediaStore.Video"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:onClick="groupby"
+            android:textAllCaps="false"
+            android:text="external-groupby"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:onClick="groupbyNone"
+            android:textAllCaps="false"
+            android:text="external-groupby-none"
+            android:layout_height="wrap_content"/>
     </com.google.android.flexbox.FlexboxLayout>
 
 </ScrollView>
