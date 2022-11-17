@@ -13,12 +13,13 @@ import java.util.Map;
 
 
 /**
- * @Despciption todo
+ * @Despciption 页面模块化利器
+ * 普通ViewGroup的多类型adapter,非recycledview类型,adapterview类型
  * @Author hss
  * @Date 21/06/2022 11:45
  * @Version 1.0
  */
-public class MultiTypeAdapterForViewGroup {
+public class NormalViewGroupMultiTypeAdapter {
 
 
     Map<Integer,ItemViewProvider> providerMap = new HashMap<>();
@@ -34,6 +35,7 @@ public class MultiTypeAdapterForViewGroup {
     }
 
     public void setData(ViewGroup viewGroup, List<? extends IItemType> datas){
+        //todo 性能优化: 只更新数据,不重建view
         viewGroup.removeAllViews();
         viewHolders.clear();;
         for (int i = 0; i < datas.size(); i++) {
