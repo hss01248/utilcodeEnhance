@@ -51,6 +51,7 @@ public class SafUtil {
                         Uri uri = data.getData();
                         //检查uri是否为Android/data  Android%2Fdata
                         String url = uri.toString();
+                        LogUtils.w(url);
                         if(url.endsWith("%3AAndroid%2Fdata")){
                             ToastUtils.showLong("请选择Android/data目录");
                             return;
@@ -68,7 +69,7 @@ public class SafUtil {
     }
 
     private static void parseDoc(Uri uri) {
-        MediaPickUtil.doQuery(uri);
+        //MediaPickUtil.doQuery(uri);
         //将权限持久化,否则关机失效
         Utils.getApp().getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
