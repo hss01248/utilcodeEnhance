@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContentResolverCompat;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.LogUtils;
@@ -221,6 +222,18 @@ public class MediaPickUtil {
     }
     public static List<Map<String, Object>> doQuery(Cursor cursor){
         return doQuery(cursor,1);
+    }
+
+    public static List<Map<String, Object>> doQuery(Uri uri){
+        ContentResolver resolverCompat = Utils.getApp().getContentResolver();
+        //UnsupportedOperationException: Unsupported Uri
+        try {
+            Cursor query = resolverCompat.query(uri, null, null, null, null);
+            return doQuery(query);
+        }catch (Throwable throwable){
+            LogUtils.w(throwable);
+            return new ArrayList<>();
+        }
     }
 
     public static Map<Object,Integer> groupBy(Cursor cursor,String groupBy){

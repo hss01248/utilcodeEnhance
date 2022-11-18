@@ -37,6 +37,8 @@ import java.util.Map;
  *  以及文件操作大综合:
  *  https://github.com/javakam/FileOperator
  *
+ *  Document files (word, pdf, excel,...) are no longer returned from MediaStore.Files.getContentUri("external") since android 11
+ *
  *
  *  todo https://www.jianshu.com/p/a8e8a57f41f1
  * @Author hss

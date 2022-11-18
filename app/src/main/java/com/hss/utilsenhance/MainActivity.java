@@ -21,6 +21,7 @@ import com.hss.utils.enhance.intent.SysIntentUtil;
 import com.hss.utils.enhance.media.FilePickUtil;
 import com.hss.utils.enhance.media.MediaPickUtil;
 import com.hss.utils.enhance.api.MyCommonCallback;
+import com.hss.utils.enhance.media.SafUtil;
 import com.hss.utils.enhance.media.TakePictureUtil;
 import com.hss.utils.enhance.media.VideoCaptureUtil;
 import com.hss01248.media.metadata.MetaDataUtil;
@@ -452,5 +453,9 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void saf(View view) {
+        SafUtil.askAndroidDataDir();
     }
 }
