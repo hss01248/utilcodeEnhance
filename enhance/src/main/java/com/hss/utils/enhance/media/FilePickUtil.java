@@ -40,6 +40,8 @@ import java.util.Map;
  *  Document files (word, pdf, excel,...) are no longer returned from MediaStore.Files.getContentUri("external") since android 11
  *
  *
+ * https://www.jianshu.com/p/c5f207f8cce6  uri action适配,这篇不错
+ *
  *  todo https://www.jianshu.com/p/a8e8a57f41f1
  * @Author hss
  * @Date 11/11/2022 09:52
