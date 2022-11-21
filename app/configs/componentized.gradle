@@ -24,6 +24,11 @@ gradle.addProjectEvaluationListener(new ProjectEvaluationListener() {
         }
         if(project.plugins.findPlugin('com.android.application') != null){
             applyArouterAndLifecyclePlugin(project)
+            project.android{
+                viewBinding {
+                    enabled = true
+                }
+            }
             project.configurations {
                all*.exclude group: 'com.alibaba', module: 'arouter-api'
             }
@@ -35,6 +40,11 @@ gradle.addProjectEvaluationListener(new ProjectEvaluationListener() {
         }else if (project.plugins.findPlugin('com.android.library') != null){
             if(project.getName().startsWith("module")){
                 applyArouterAndLifecyclePlugin(project)
+            }
+            project.android{
+                viewBinding {
+                    enabled = true
+                }
             }
         }
     }

@@ -184,7 +184,20 @@
         <Button
             android:layout_width="wrap_content"
             android:onClick="saf"
+            android:textAllCaps="false"
             android:text="saf选择Android data"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:onClick="pageStateXml"
+            android:text="pageState-xml"
+            android:textAllCaps="false"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:onClick="pageStateCode"
+            android:text="pageState-code"
+            android:textAllCaps="false"
             android:layout_height="wrap_content"/>
     </com.google.android.flexbox.FlexboxLayout>
 

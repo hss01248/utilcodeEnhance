@@ -458,4 +458,12 @@ public class MainActivity extends AppCompatActivity {
     public void saf(View view) {
         SafUtil.askAndroidDataDir();
     }
+
+    public void pageStateXml(View view) {
+        startActivity(new Intent(this,StateActivity1.class));
+    }
+
+    public void pageStateCode(View view) {
+        startActivity(new Intent(this,StateActivityHasParent.class));
+    }
 }

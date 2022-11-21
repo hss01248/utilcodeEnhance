@@ -5,3 +5,4 @@ rootProject.name = "UtilsEnhance"
 include ':common'
 include ':toast'
 include ':openuri'
+include ':viewState'
