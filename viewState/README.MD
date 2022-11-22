@@ -1,8 +1,89 @@
-# View state-View的状态管理
+# View state-View的状态管理工具
 
-> loading-empty-error-content
+> loading(place holder/shimmer)
+>
+> empty
+>
+> error
+>
+> content
+
+> 页面交互语言:
+>
+> 进入页面--->使用页面状态控制
+>
+> 表单提交类-->点击按钮后,使用loading dialog控制,错误弹出toast或alert dialog,而不是单独对提交按钮进行状态变更(too  stupid).
+
+# 两种类型:
+
+* 页面级: 三种或四种状态,一般列表类页面才有empty状态.
+* 单个小view级别: loading和error,content三种状态
+
+## 页面级
+
+```java
+    static ViewStateConfig globalConfig  = new Builder()
+            .loadingLayout(R.layout.pager_loading)
+            .emptyLayout(R.layout.pager_empty)
+            .errorLayout(R.layout.pager_error)
+            .build();
+```
 
 
+
+![image-20221122103609346](https://cdn.jsdelivr.net/gh/shuiniuhss/myimages@main/imagemac2/image-20221122103609346.png)
+
+![image-20221122103639897](https://cdn.jsdelivr.net/gh/shuiniuhss/myimages@main/imagemac2/image-20221122103639897.png)
+
+
+
+![image-20221122103557010](https://cdn.jsdelivr.net/gh/shuiniuhss/myimages@main/imagemac2/image-20221122103557010.png)
+
+
+
+## 小view级别
+
+全局配置
+
+```java
+ static ViewStateConfig globalSmallViewConfig  = new Builder()
+            .loadingLayout(R.layout.small_view_loading)
+            .emptyLayout(R.layout.small_view_place_holder)
+            .errorLayout(R.layout.small_view_error)
+            .build();
+```
+
+使用
+
+```java
+  stateLayout1 = StatefulLayout.wrapWithStateOfSmallView(binding.rl1, new Runnable() {
+            @Override
+            public void run() {
+                stateLayout1.showLoading();
+            }
+        });
+        stateLayout1.showLoading();
+```
+
+
+
+
+
+![image-20221122113241977](https://cdn.jsdelivr.net/gh/shuiniuhss/myimages@main/imagemac2/image-20221122113241977.png)
+
+![image-20221122113210184](https://cdn.jsdelivr.net/gh/shuiniuhss/myimages@main/imagemac2/image-20221122113210184.png)
+
+
+
+![image-20221122113311321](https://cdn.jsdelivr.net/gh/shuiniuhss/myimages@main/imagemac2/image-20221122113311321.png)
+
+
+
+布局:
+
+![image-20221122113526630](https://cdn.jsdelivr.net/gh/shuiniuhss/myimages@main/imagemac2/image-20221122113526630.png)
+
+> 使用注意事项: 按view本身顺序来添加state,否则顺序会错乱
 
 # 接口定义
 
@@ -39,6 +120,12 @@ public class ViewStateConfig {
             .emptyLayout(R.layout.pager_empty)
             .errorLayout(R.layout.pager_error)
             .build();
+  
+      static ViewStateConfig globalSmallViewConfig  = new Builder()
+            .loadingLayout(R.layout.small_view_loading)
+            .emptyLayout(R.layout.small_view_place_holder)
+            .errorLayout(R.layout.small_view_error)
+            .build();
 
      @LayoutRes int emptyLayout;
      @LayoutRes int errorLayout;
@@ -61,12 +148,14 @@ public class ViewStateConfig {
 
 # api-StatefulLayout
 
-基于已有view包裹一层状态. 传入的view有无parent均可
+* 基于已有view包裹一层状态. 传入的view有无parent均可
+* 自定义整个状态的layout界面时,只支持代码传入,不支持xml里指定layout id,没这个闲工夫支持xml这种落后的配置方式.
 
 ```java
 public static StatefulLayout wrapWithState(@NonNull View view, @Nullable ViewStateConfig config)
 
-public static StatefulLayout wrapWithState(@NonNull View view, @NonNull Runnable errorClick)
+public static StatefulLayout wrapWithStateOfSmallView(@NonNull View view, @NonNull Runnable errorClick)
+public static StatefulLayout wrapWithStateOfPage(@NonNull View view,@NonNull Runnable errorClick)
 ```
 
 //已有容器,再配置
@@ -89,7 +178,7 @@ public void setContentView(View contentView)
 
 
 
-# 三种使用方式示例
+# 示例
 
 ### xml里
 

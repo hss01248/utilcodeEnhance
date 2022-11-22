@@ -56,13 +56,19 @@ public class StatefulLayout extends FrameLayout implements IViewState{
         return layout;
     }
 
-    public static StatefulLayout wrapWithState(@NonNull View view, @NonNull Runnable errorClick){
+    public static StatefulLayout wrapWithStateOfPage(@NonNull View view,@NonNull Runnable errorClick){
+        return wrapWithState(view,false,errorClick);
+    }
+    public static StatefulLayout wrapWithStateOfSmallView(@NonNull View view, @NonNull Runnable errorClick){
+        return wrapWithState(view,true,errorClick);
+    }
+
+    public static StatefulLayout wrapWithState(@NonNull View view,boolean isForSmallView, @NonNull Runnable errorClick){
         if(view == null){
             return  null;
         }
         StatefulLayout layout = new StatefulLayout(view.getContext());
-        layout.setConfig(ViewStateConfig.Builder
-                .newBuilder()
+        layout.setConfig(ViewStateConfig.newBuilder(isForSmallView ? ViewStateConfig.globalSmallViewConfig : ViewStateConfig.globalConfig)
                 .errorClick(new Runnable() {
                     @Override
                     public void run() {
@@ -108,10 +114,12 @@ public class StatefulLayout extends FrameLayout implements IViewState{
         ViewGroup parent = (ViewGroup) contentView.getParent();
         ViewGroup.LayoutParams layoutParams = contentView.getLayoutParams();
 
-        //todo margin处理
+
         parent.removeView(contentView);
         this.setLayoutParams(layoutParams);
         parent.addView(this);
+        //todo 原始view 的margin处理: 会自动抹除 ,有点牛逼
+
         return this;
     }
 
@@ -173,7 +181,10 @@ public class StatefulLayout extends FrameLayout implements IViewState{
             if(views.size() >1){
                 throw new IllegalArgumentException("only 1 child view accepted");
             }
-            contentView = views.get(0);
+            if(views.size() == 1){
+                contentView = views.get(0);
+            }
+
         }
 
 
@@ -238,20 +249,23 @@ public class StatefulLayout extends FrameLayout implements IViewState{
             msg = config.loadingMsg;
         }
         View view = pickView(LOADING);
-        if(!(view instanceof ViewGroup)){
-            return;
-        }
-        ViewGroup viewGroup = (ViewGroup) view;
-        for (int i = 0; i < viewGroup.getChildCount(); i++) {
-            View childAt = viewGroup.getChildAt(i);
-            if(childAt instanceof TextView){
-                TextView textView = (TextView) childAt;
-                if(!TextUtils.isEmpty(msg)){
-                    textView.setText(msg);
-                }
+        if(view instanceof ViewGroup){
+            ViewGroup viewGroup = (ViewGroup) view;
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                View childAt = viewGroup.getChildAt(i);
+                if(childAt instanceof TextView){
+                    TextView textView = (TextView) childAt;
+                    if(!TextUtils.isEmpty(msg)){
+                        textView.setText(msg);
+                    }
 
+                }
             }
         }
+        if(config.listener != null){
+            config.listener.onStateChanged(view,LOADING);
+        }
+
     }
 
     @Override
@@ -269,45 +283,47 @@ public class StatefulLayout extends FrameLayout implements IViewState{
             emptyClick = config.emptyClick;
         }
         View view = pickView(EMPTY);
-        if(!(view instanceof ViewGroup)){
-            return;
-        }
-        ViewGroup viewGroup = (ViewGroup) view;
-        for (int i = 0; i < viewGroup.getChildCount(); i++) {
-            View childAt = viewGroup.getChildAt(i);
-            if(childAt instanceof Button){
-                Button textView = (Button) childAt;
-                if(!TextUtils.isEmpty(btnText)){
-                    textView.setText(btnText);
-                }
-                if(emptyClick == null){
-                    textView.setVisibility(GONE);
-                }else {
-                    textView.setVisibility(VISIBLE);
-                    Runnable finalEmptyClick = emptyClick;
-                    textView.setOnClickListener(new OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            finalEmptyClick.run();
-                        }
-                    });
-                }
-            }else if(childAt instanceof TextView){
-                TextView textView = (TextView) childAt;
-                if(!TextUtils.isEmpty(msg)){
-                    textView.setText(msg);
-                }
+        if(view instanceof ViewGroup){
+            ViewGroup viewGroup = (ViewGroup) view;
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                View childAt = viewGroup.getChildAt(i);
+                if(childAt instanceof Button){
+                    Button textView = (Button) childAt;
+                    if(!TextUtils.isEmpty(btnText)){
+                        textView.setText(btnText);
+                    }
+                    if(emptyClick == null){
+                        textView.setVisibility(GONE);
+                    }else {
+                        textView.setVisibility(VISIBLE);
+                        Runnable finalEmptyClick = emptyClick;
+                        textView.setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                finalEmptyClick.run();
+                            }
+                        });
+                    }
+                }else if(childAt instanceof TextView){
+                    TextView textView = (TextView) childAt;
+                    if(!TextUtils.isEmpty(msg)){
+                        textView.setText(msg);
+                    }
 
-            }else if(childAt instanceof ImageView){
-                ImageView textView = (ImageView) childAt;
-                if(icon != 0){
-                    try {
-                        textView.setImageResource(icon);
-                    }catch (Throwable throwable){
-                        throwable.printStackTrace();
+                }else if(childAt instanceof ImageView){
+                    ImageView textView = (ImageView) childAt;
+                    if(icon != 0){
+                        try {
+                            textView.setImageResource(icon);
+                        }catch (Throwable throwable){
+                            throwable.printStackTrace();
+                        }
                     }
                 }
             }
+        }
+        if(config.listener != null){
+            config.listener.onStateChanged(view,EMPTY);
         }
     }
 
@@ -323,50 +339,62 @@ public class StatefulLayout extends FrameLayout implements IViewState{
             errorClick = config.errorClick;
         }
         View view = pickView(ERROR);
-        if(!(view instanceof ViewGroup)){
-            return;
-        }
-        ViewGroup viewGroup = (ViewGroup) view;
-        for (int i = 0; i < viewGroup.getChildCount(); i++) {
-            View childAt = viewGroup.getChildAt(i);
-            if(childAt instanceof Button){
-                Button textView = (Button) childAt;
-                if(!TextUtils.isEmpty(btnText)){
-                    textView.setText(btnText);
-                }
-                if(errorClick == null){
-                    textView.setVisibility(GONE);
-                }else {
-                    textView.setVisibility(VISIBLE);
-                    Runnable finalEmptyClick = errorClick;
-                    textView.setOnClickListener(new OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            finalEmptyClick.run();
-                        }
-                    });
-                }
-            }else if(childAt instanceof TextView){
-                TextView textView = (TextView) childAt;
-                if(!TextUtils.isEmpty(msg)){
-                    textView.setText(msg);
-                }
+        if(view instanceof ViewGroup){
+            ViewGroup viewGroup = (ViewGroup) view;
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                View childAt = viewGroup.getChildAt(i);
+                if(childAt instanceof Button){
+                    Button textView = (Button) childAt;
+                    if(!TextUtils.isEmpty(btnText)){
+                        textView.setText(btnText);
+                    }
+                    if(errorClick == null){
+                        textView.setVisibility(GONE);
+                    }else {
+                        textView.setVisibility(VISIBLE);
+                        Runnable finalEmptyClick = errorClick;
+                        textView.setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                finalEmptyClick.run();
+                            }
+                        });
+                    }
+                }else if(childAt instanceof TextView){
+                    TextView textView = (TextView) childAt;
+                    if(!TextUtils.isEmpty(msg)){
+                        textView.setText(msg);
+                    }
 
-            }else if(childAt instanceof ImageView){
-                ImageView textView = (ImageView) childAt;
-                if(icon != 0){
-                    try {
-                        textView.setImageResource(icon);
-                    }catch (Throwable throwable){
-                        throwable.printStackTrace();
+                }else if(childAt instanceof ImageView){
+                    ImageView textView = (ImageView) childAt;
+                    if(icon != 0){
+                        try {
+                            textView.setImageResource(icon);
+                        }catch (Throwable throwable){
+                            throwable.printStackTrace();
+                        }
                     }
                 }
             }
+        }
+        Runnable finalErrorClick = errorClick;
+        view.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finalErrorClick.run();
+            }
+        });
+        if(config.listener != null){
+            config.listener.onStateChanged(view,ERROR);
         }
     }
 
     @Override
     public void showContent() {
-        pickView(CONTENT);
+        View view = pickView(CONTENT);
+        if(config.listener != null){
+            config.listener.onStateChanged(view,CONTENT);
+        }
     }
 }

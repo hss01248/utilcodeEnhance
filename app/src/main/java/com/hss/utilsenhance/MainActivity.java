@@ -466,4 +466,8 @@ public class MainActivity extends AppCompatActivity {
     public void pageStateCode(View view) {
         startActivity(new Intent(this,StateActivityHasParent.class));
     }
+
+    public void smallView(View view) {
+        startActivity(new Intent(this,StateActivitySmallView.class));
+    }
 }

@@ -3,15 +3,13 @@
     android:layout_width="match_parent"
     android:background="#ffffff"
     android:orientation="vertical"
-    android:gravity="center_horizontal"
+    android:gravity="center"
     android:layout_height="match_parent" >
 
     <ImageView
         android:id="@+id/empty_icon"
         android:layout_width="204dp"
         android:layout_height="228dp"
-       android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp"
         android:src="@drawable/ic_empty_page_2" />
     <TextView
         android:id="@+id/tv_msg_empty"
@@ -23,6 +21,7 @@
         android:textColor="#666666"
         android:gravity="center"
         android:paddingLeft="16dp"
+        android:layout_marginBottom="150dp"
         android:paddingRight="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

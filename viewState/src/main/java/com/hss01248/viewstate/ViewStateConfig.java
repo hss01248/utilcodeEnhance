@@ -18,18 +18,82 @@ public class ViewStateConfig {
         ViewStateConfig.globalConfig = globalConfig;
     }
 
-    static ViewStateConfig globalConfig  = new ViewStateConfig.Builder()
+
+
+    public static ViewStateConfig getGlobalSmallViewConfig() {
+        return globalSmallViewConfig;
+    }
+
+    public static void setGlobalSmallViewConfig(ViewStateConfig globalSmallViewConfig) {
+        ViewStateConfig.globalSmallViewConfig = globalSmallViewConfig;
+    }
+
+    static ViewStateConfig globalConfig  = new Builder()
             .loadingLayout(R.layout.pager_loading)
             .emptyLayout(R.layout.pager_empty)
             .errorLayout(R.layout.pager_error)
             .build();
 
+    static ViewStateConfig globalSmallViewConfig  = new Builder()
+            .loadingLayout(R.layout.small_view_loading)
+            .emptyLayout(R.layout.small_view_place_holder)
+            .errorLayout(R.layout.small_view_error)
+            .build();
+
      @LayoutRes int emptyLayout;
      @LayoutRes int errorLayout;
      @LayoutRes int loadingLayout ;
+    OnViewStateChangedListener listener;
 
+    public int getEmptyLayout() {
+        return emptyLayout;
+    }
 
-     String loadingMsg = "";
+    public int getErrorLayout() {
+        return errorLayout;
+    }
+
+    public int getLoadingLayout() {
+        return loadingLayout;
+    }
+
+    public OnViewStateChangedListener getListener() {
+        return listener;
+    }
+
+    public String getLoadingMsg() {
+        return loadingMsg;
+    }
+
+    public String getEmptyMsg() {
+        return emptyMsg;
+    }
+
+    public int getEmptyIcon() {
+        return emptyIcon;
+    }
+
+    public int getErrorIcon() {
+        return errorIcon;
+    }
+
+    public String getErrorBtnText() {
+        return errorBtnText;
+    }
+
+    public String getEmptyBtnText() {
+        return emptyBtnText;
+    }
+
+    public Runnable getEmptyClick() {
+        return emptyClick;
+    }
+
+    public Runnable getErrorClick() {
+        return errorClick;
+    }
+
+    String loadingMsg = "";
      String emptyMsg = "";
 
      @DrawableRes int emptyIcon = 0;
@@ -45,23 +109,46 @@ public class ViewStateConfig {
         emptyLayout = builder.emptyLayout;
         errorLayout = builder.errorLayout;
         loadingLayout = builder.loadingLayout;
+        listener = builder.listener;
         loadingMsg = builder.loadingMsg;
         emptyMsg = builder.emptyMsg;
         emptyIcon = builder.emptyIcon;
         errorIcon = builder.errorIcon;
+        errorBtnText = builder.errorBtnText;
+        emptyBtnText = builder.emptyBtnText;
         emptyClick = builder.emptyClick;
         errorClick = builder.errorClick;
     }
 
+    public static Builder newBuilder(ViewStateConfig copy) {
+        Builder builder = new Builder();
+        builder.emptyLayout = copy.emptyLayout;
+        builder.errorLayout = copy.errorLayout;
+        builder.loadingLayout = copy.loadingLayout;
+        builder.listener = copy.listener;
+        builder.loadingMsg = copy.loadingMsg;
+        builder.emptyMsg = copy.getEmptyMsg();
+        builder.emptyIcon = copy.getEmptyIcon();
+        builder.errorIcon = copy.getErrorIcon();
+        builder.errorBtnText = copy.getErrorBtnText();
+        builder.emptyBtnText = copy.getEmptyBtnText();
+        builder.emptyClick = copy.getEmptyClick();
+        builder.errorClick = copy.getErrorClick();
+        return builder;
+    }
+
 
     public static final class Builder {
-        private int emptyLayout =  globalConfig == null ? 0 : globalConfig.emptyLayout;
-        private int errorLayout = globalConfig == null ? 0 :globalConfig.errorLayout;
-        private int loadingLayout = globalConfig == null ? 0 :globalConfig.loadingLayout;
+        private int emptyLayout = globalConfig == null ? 0 : globalConfig.emptyLayout;
+        private int errorLayout = globalConfig == null ? 0 : globalConfig.errorLayout;
+        private int loadingLayout = globalConfig == null ? 0 : globalConfig.loadingLayout;
+        private OnViewStateChangedListener listener;
         private String loadingMsg;
         private String emptyMsg;
         private int emptyIcon;
         private int errorIcon;
+        private String errorBtnText;
+        private String emptyBtnText;
         private Runnable emptyClick;
         private Runnable errorClick;
 
@@ -87,6 +174,11 @@ public class ViewStateConfig {
             return this;
         }
 
+        public Builder listener(OnViewStateChangedListener val) {
+            listener = val;
+            return this;
+        }
+
         public Builder loadingMsg(String val) {
             loadingMsg = val;
             return this;
@@ -104,6 +196,16 @@ public class ViewStateConfig {
 
         public Builder errorIcon(int val) {
             errorIcon = val;
+            return this;
+        }
+
+        public Builder errorBtnText(String val) {
+            errorBtnText = val;
+            return this;
+        }
+
+        public Builder emptyBtnText(String val) {
+            emptyBtnText = val;
             return this;
         }
 

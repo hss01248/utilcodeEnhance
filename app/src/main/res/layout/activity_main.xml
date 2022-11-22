@@ -199,6 +199,12 @@
             android:text="pageState-code"
             android:textAllCaps="false"
             android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:onClick="smallView"
+            android:text="smallView"
+            android:textAllCaps="false"
+            android:layout_height="wrap_content"/>
     </com.google.android.flexbox.FlexboxLayout>
 
 </ScrollView>
