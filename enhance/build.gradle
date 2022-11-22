@@ -55,6 +55,7 @@ dependencies {
     api 'androidx.lifecycle:lifecycle-common-java8:2.2.0'
     api project(path: ':toast')
     api project(path: ':openuri')
+    api project(path: ':viewState')
 
 
 
