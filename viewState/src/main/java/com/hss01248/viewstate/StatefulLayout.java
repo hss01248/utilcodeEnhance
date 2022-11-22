@@ -356,7 +356,13 @@ public class StatefulLayout extends FrameLayout implements IViewState{
                         textView.setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                finalEmptyClick.run();
+                                if (!NoNetworkHelper2.isNetWorkAvailable(v.getContext())) {
+                                    NoNetworkHelper2.showNoNetWorkDlg(v.getContext());
+                                } else {
+                                    if (finalEmptyClick != null) {
+                                        finalEmptyClick.run();
+                                    }
+                                }
                             }
                         });
                     }
@@ -382,7 +388,13 @@ public class StatefulLayout extends FrameLayout implements IViewState{
         view.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                finalErrorClick.run();
+                if (!NoNetworkHelper2.isNetWorkAvailable(v.getContext())) {
+                    NoNetworkHelper2.showNoNetWorkDlg(v.getContext());
+                } else {
+                    if (finalErrorClick != null) {
+                        finalErrorClick.run();
+                    }
+                }
             }
         });
         if(config.listener != null){

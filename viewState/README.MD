@@ -83,7 +83,7 @@
 
 ![image-20221122113526630](https://cdn.jsdelivr.net/gh/shuiniuhss/myimages@main/imagemac2/image-20221122113526630.png)
 
-> 使用注意事项: 按view本身顺序来添加state,否则顺序会错乱
+> **使用注意事项**: 按view本身顺序来添加state,否则顺序会错乱. 上面示例就是2-3顺序错乱了
 
 # 接口定义
 
@@ -107,6 +107,42 @@ public interface IViewState {
 
 }
 ```
+
+
+
+如果没有网络,则点击重试按钮会优先弹窗引导去设置页面打开网络:
+
+```java
+   if (!NoNetworkHelper2.isNetWorkAvailable(v.getContext())) {
+     	NoNetworkHelper2.showNoNetWorkDlg(v.getContext());
+   } else {
+     if (finalEmptyClick != null) {
+       finalEmptyClick.run();
+     }
+   }
+```
+
+
+
+![image-20221122142054906](https://cdn.jsdelivr.net/gh/shuiniuhss/myimages@main/imagemac2/image-20221122142054906.png)
+
+此弹窗样式可全局更改配置:
+
+```java
+public class NoNetworkHelper2 {
+
+    public static void setShowDialogImpl(IShowDialog showDialog) {
+        NoNetworkHelper2.showDialog = showDialog;
+    }
+
+    static IShowDialog showDialog;
+
+    public interface IShowDialog{
+        void showNoNetWorkDlg(final Context context);
+    }
+```
+
+
 
 
 
