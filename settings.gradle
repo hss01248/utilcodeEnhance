@@ -1,5 +1,5 @@
 include ':ext'
-include ':enhance'
+include ':lib-base'
 include ':app'
 rootProject.name = "UtilsEnhance"
 include ':common'
@@ -7,3 +7,4 @@ include ':toast'
 include ':openuri'
 include ':viewState'
 include ':IReporter'
+include ':media'

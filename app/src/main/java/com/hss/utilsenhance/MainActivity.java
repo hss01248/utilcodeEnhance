@@ -11,20 +11,23 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.blankj.utilcode.util.GsonUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.Utils;
+import com.google.gson.GsonBuilder;
 import com.hss.utils.enhance.HomeMaintaner;
 import com.hss.utils.enhance.intent.ShareUtils;
 import com.hss.utils.enhance.UrlEncodeUtil;
 import com.hss.utils.enhance.intent.SysIntentUtil;
-import com.hss.utils.enhance.media.FilePickUtil;
-import com.hss.utils.enhance.media.MediaPickUtil;
+import com.hss01248.media.pick.MediaPickUtil;
 import com.hss.utils.enhance.api.MyCommonCallback;
-import com.hss.utils.enhance.media.SafUtil;
-import com.hss.utils.enhance.media.TakePictureUtil;
-import com.hss.utils.enhance.media.VideoCaptureUtil;
+import com.hss01248.media.pick.SafUtil;
+import com.hss01248.media.pick.TakePictureUtil;
+import com.hss01248.media.pick.VideoCaptureUtil;
 import com.hss01248.media.metadata.MetaDataUtil;
+import com.hss01248.media.uri.ContentUriUtil;
+import com.hss01248.openuri.OpenUri;
 import com.hss01248.permission.MyPermissions;
 import com.hss01248.toast.MyToast;
 
@@ -34,7 +37,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 
 import org.devio.takephoto.wrap.TakeOnePhotoListener;
@@ -42,7 +44,9 @@ import org.devio.takephoto.wrap.TakePhotoUtil;
 
 import java.io.File;
 import java.net.URLDecoder;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -191,9 +195,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void local2(View view) {
 
-        MediaPickUtil.pickVideo(new MyCommonCallback<String>() {
+        MediaPickUtil.pickVideo(new MyCommonCallback<Uri>() {
             @Override
-            public void onSuccess(String s) {
+            public void onSuccess(Uri s) {
                 showMata(s);
             }
 
@@ -205,9 +209,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void pickImage(View view) {
-        MediaPickUtil.pickImage(new MyCommonCallback<String>() {
+        MediaPickUtil.pickImage(new MyCommonCallback<Uri>() {
             @Override
-            public void onSuccess(String s) {
+            public void onSuccess(Uri s) {
                 showMata(s);
             }
 
@@ -219,9 +223,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void pickVideo(View view) {
-        MediaPickUtil.pickVideo(new MyCommonCallback<String>() {
+        MediaPickUtil.pickVideo(new MyCommonCallback<Uri>() {
             @Override
-            public void onSuccess(String s) {
+            public void onSuccess(Uri s) {
                 showMata(s);
             }
 
@@ -236,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
         VideoCaptureUtil.startVideoCapture(30, 1024 * 1024 * 1024, new MyCommonCallback<String>() {
             @Override
             public void onSuccess(String path) {
-                showMata(path);
+                showMata(OpenUri.fromFile(Utils.getApp(),new File(path)));
                 LogUtils.d(path);
             }
 
@@ -247,17 +251,25 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void showMata(String path) {
+    private void showMata(Uri path0) {
+        String path = path0.toString();
         LogUtils.d(path);
-        String desc = path+"";
+        String desc = path+"\n";
+
+        Map map0 = new LinkedHashMap();
+        Map map = ContentUriUtil.getInfos(path0);
+        map0.put("uriInfo",map);
+
         if(!path.startsWith("/")){
             desc = URLDecoder.decode(path);
         }else {
             try {
                 //todo MetaDataUtil兼容fileprovider的uri,此时至少有读的权限
-                desc = MetaDataUtil.getDes(path);
+                Map map1 = MetaDataUtil.getMetaData(path);
+                map0.put("meta",map1);
             }catch (Throwable throwable){
                 throwable.printStackTrace();
+                map0.put("meta",throwable.getMessage());
                 MyPermissions.request(new PermissionUtils.FullCallback() {
                     @Override
                     public void onGranted(@NonNull List<String> granted) {
@@ -271,7 +283,7 @@ public class MainActivity extends AppCompatActivity {
                 }, Manifest.permission.READ_EXTERNAL_STORAGE);
             }
         }
-
+        desc  = path0.toString()+"\n"+  new GsonBuilder().setPrettyPrinting().create().toJson(map);
         new AlertDialog.Builder(this)
                 .setTitle("mata data")
                 .setMessage(desc)
@@ -288,7 +300,7 @@ public class MainActivity extends AppCompatActivity {
         TakePictureUtil.takePicture(new MyCommonCallback<String>() {
             @Override
             public void onSuccess(String s) {
-                showMata(s);
+                showMata(OpenUri.fromFile(Utils.getApp(),new File(s)));
                 LogUtils.d(s);
             }
 
@@ -300,9 +312,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void pickAudio(View view) {
-        MediaPickUtil.pickAudio(new MyCommonCallback<String>() {
+        MediaPickUtil.pickAudio(new MyCommonCallback<Uri>() {
             @Override
-            public void onSuccess(String s) {
+            public void onSuccess(Uri s) {
                 showMata(s);
             }
 
@@ -350,10 +362,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void pickPdf(View view) {
-        FilePickUtil.pickPdf(this, new MyCommonCallback<String>() {
+
+       /* FilePickUtil.pickPdf(this, new MyCommonCallback<String>() {
             @Override
             public void onSuccess(String s) {
-                showMata(s);
+                showMata(OpenUri.fromFile(getApplicationContext(),new File(s)));
+            }
+        });*/
+        MediaPickUtil.pickPdf(new MyCommonCallback<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                showMata(uri);
             }
         });
     }
@@ -391,7 +410,7 @@ public class MainActivity extends AppCompatActivity {
     void print(Uri uriQuery){
         ContentResolver cr = Utils.getApp().getContentResolver();
         Cursor query = cr.query(uriQuery, null, null, null, MediaStore.Files.FileColumns.DISPLAY_NAME + " DESC");
-        MediaPickUtil.doQuery(query,10);
+        ContentUriUtil.doQuery(query,10);
     }
 
     public void externalAudio(View view) {
@@ -406,7 +425,7 @@ public class MainActivity extends AppCompatActivity {
         Uri uriQuery =  MediaStore.Files.getContentUri("external");
         Cursor query = Utils.getApp().getContentResolver().query(uriQuery, null,
                 null, null, MediaStore.Files.FileColumns.DISPLAY_NAME + " DESC");
-        MediaPickUtil.groupBy(query,"mime_type");
+        ContentUriUtil.groupBy(query,"mime_type");
     }
 
     public void groupbyNone(View view) {
@@ -447,12 +466,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void pickPdf2(View view) {
-        FilePickUtil.pickDocument(this, new MyCommonCallback<String>() {
-            @Override
-            public void onSuccess(String s) {
 
-            }
-        });
     }
 
     public void saf(View view) {

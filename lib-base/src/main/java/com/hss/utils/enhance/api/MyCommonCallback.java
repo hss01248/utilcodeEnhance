@@ -9,5 +9,6 @@ public interface MyCommonCallback<T> {
     default void onError( String msg){
         onError("-1",msg,null);
     }
+
    default void onError(String code, String msg,@Nullable Throwable throwable){}
 }

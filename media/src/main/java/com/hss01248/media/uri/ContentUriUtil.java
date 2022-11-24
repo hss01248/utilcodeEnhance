@@ -1,29 +1,14 @@
-package com.hss.utils.enhance.media;
+package com.hss01248.media.uri;
 
-import static android.app.Activity.RESULT_OK;
-
-import android.Manifest;
 import android.content.ContentResolver;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContentResolverCompat;
-
-import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.Utils;
-import com.hss.utils.enhance.api.MyCommonCallback;
-import com.hss01248.activityresult.ActivityResultListener;
-import com.hss01248.activityresult.StartActivityUtil;
-import com.hss01248.permission.MyPermissions;
 
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -32,109 +17,12 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * @author: Administrator
- * @date: 2022/11/4
- * @desc: //todo
+ * @Despciption todo
+ * @Author hss
+ * @Date 24/11/2022 15:42
+ * @Version 1.0
  */
-public class MediaPickUtil {
-
-    public static void pickImage(MyCommonCallback<String> callback) {
-        pickOne("image/*", callback);
-    }
-
-    public static void pickVideo(MyCommonCallback<String> callback) {
-        pickOne("video/*", callback);
-    }
-
-    public static void pickAudio(MyCommonCallback<String> callback) {
-        pickOne("audio/*", callback);
-    }
-
-    public static void pickOne(String mimeType, MyCommonCallback<String> callback) {
-        MyPermissions.requestByMostEffort(false, true,
-                new PermissionUtils.FullCallback() {
-                    @Override
-                    public void onGranted(@NonNull List<String> granted) {
-                        startIntent(mimeType, callback);
-                    }
-
-                    @Override
-                    public void onDenied(@NonNull List<String> deniedForever, @NonNull List<String> denied) {
-                        callback.onError("permission", "[read external storage] permission denied", null);
-                    }
-                }, Manifest.permission.READ_EXTERNAL_STORAGE);
-
-    }
-
-    /**
-     * @param mimeType
-     * @param callback string可能为文件路径,可能为fileprovider形式的uri,
-     *                 如果是content://协议的uri,那么会去查询真正的path
-     */
-    private static void startIntent(String mimeType, MyCommonCallback<String> callback) {
-        //https://www.cnblogs.com/widgetbox/p/7503894.html
-        Intent intent = new Intent();
-        //intent.setType("video/*;image/*");//同时选择视频和图片
-        intent.setType(mimeType);//
-        //intent.setAction(Intent.ACTION_GET_CONTENT);
-        //打开方式有两种action，1.ACTION_PICK；2.ACTION_GET_CONTENT 区分大意为：
-        // ACTION_PICK 为打开特定数据一个列表来供用户挑选，其中数据为现有的数据。而 ACTION_GET_CONTENT 区别在于它允许用户创建一个之前并不存在的数据。
-        intent.setAction(Intent.ACTION_PICK);
-        //startActivityForResult(Intent.createChooser(intent,"选择图像..."), PICK_IMAGE_REQUEST);
-        //FragmentManager: Activity result delivered for unknown Fragment
-        StartActivityUtil.goOutAppForResult(ActivityUtils.getTopActivity(), intent, new ActivityResultListener() {
-            @Override
-            public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-                if (resultCode != RESULT_OK) {
-                    callback.onError("-1", "cancel", null);
-                    return;
-                }
-                if (data == null || data.getData() == null) {
-                    callback.onError("-2", "data is null", null);
-                    return;
-                }
-
-
-                Uri uri = data.getData();
-                //content://com.android.providers.media.documents/document/video%3A114026
-                LogUtils.i(uri);
-                if (!uri.toString().startsWith("content://")) {
-                    callback.onSuccess(uri.toString());
-                    return;
-                }
-                //content://media/external/video/media/103988
-                // content://com.android.fileexplorer.myprovider/external_files/qqmusic/song/萧敬腾&张杰&袁娅维
-                ContentResolver cr = Utils.getApp().getContentResolver();
-                /** 数据库查询操作。
-                 * 第一个参数 uri：为要查询的数据库+表的名称。
-                 * 第二个参数 projection ： 要查询的列。
-                 * 第三个参数 selection ： 查询的条件，相当于SQL where。
-                 * 第三个参数 selectionArgs ： 查询条件的参数，相当于 ？。
-                 * 第四个参数 sortOrder ： 结果排序。
-                 */
-                Cursor cursor = cr.query(uri, null, null, null, null);
-
-                List<Map<String, Object>> maps = doQuery(cursor);
-                if (maps.isEmpty()) {
-                    callback.onError("", "not found", new Throwable("file not found"));
-                    return;
-                }
-                Map<String, Object> map1 = maps.get(0);
-                Object data1 = map1.get("_data");
-                if (data1 != null && data1 instanceof String) {
-                    callback.onSuccess((String) data1);
-                    return;
-                }
-                callback.onError("-3","data query failed",null);
-            }
-
-            @Override
-            public void onActivityNotFound(Throwable e) {
-                callback.onError("", "ActivityNotFound", e);
-                //todo 用另一个action
-            }
-        });
-    }
+public class ContentUriUtil {
 
     public static Map<String, Object> queryMediaStore(Uri uri) {
         if (uri == null) {
@@ -176,8 +64,8 @@ public class MediaPickUtil {
          * */
         LogUtils.w("没有查到真实的文件路径,根据已有信息继续查询: ");
         Uri uriQuery =  MediaStore.Files.getContentUri("external");
-                //MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                //
+        //MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        //
 
         String selectionClause = MediaStore.Files.FileColumns.DISPLAY_NAME + " = ?";
         //"_display_name" + " = ?";
@@ -222,6 +110,38 @@ public class MediaPickUtil {
     }
     public static List<Map<String, Object>> doQuery(Cursor cursor){
         return doQuery(cursor,1);
+    }
+
+    public static String  getRealPath(Uri uri){
+
+        Map<String, Object> infos = getInfos(uri);
+        if(infos ==null){
+            return null;
+        }
+        Object data1 = infos.get("_data");
+        if(data1 instanceof String){
+            return (String) data1;
+        }
+        return null;
+    }
+
+    public static Map<String,Object>  getInfos(Uri uri){
+        ContentResolver cr = Utils.getApp().getContentResolver();
+        /** 数据库查询操作。
+         * 第一个参数 uri：为要查询的数据库+表的名称。
+         * 第二个参数 projection ： 要查询的列。
+         * 第三个参数 selection ： 查询的条件，相当于SQL where。
+         * 第三个参数 selectionArgs ： 查询条件的参数，相当于 ？。
+         * 第四个参数 sortOrder ： 结果排序。
+         */
+        Cursor cursor = cr.query(uri, null, null, null, null);
+        List<Map<String, Object>> maps = ContentUriUtil.doQuery(cursor);
+        if (maps.isEmpty()) {
+            return null;
+        }
+        Map<String, Object> map1 = maps.get(0);
+        return map1;
+
     }
 
     public static List<Map<String, Object>> doQuery(Uri uri){
