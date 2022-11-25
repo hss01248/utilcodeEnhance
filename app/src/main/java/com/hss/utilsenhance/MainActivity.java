@@ -20,6 +20,7 @@ import com.hss.utils.enhance.HomeMaintaner;
 import com.hss.utils.enhance.intent.ShareUtils;
 import com.hss.utils.enhance.UrlEncodeUtil;
 import com.hss.utils.enhance.intent.SysIntentUtil;
+import com.hss01248.media.pick.MediaPickOrCaptureUtil;
 import com.hss01248.media.pick.MediaPickUtil;
 import com.hss.utils.enhance.api.MyCommonCallback;
 import com.hss01248.media.pick.SafUtil;
@@ -483,5 +484,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void smallView(View view) {
         startActivity(new Intent(this,StateActivitySmallView.class));
+    }
+
+    public void takeOrSelect(View view) {
+        MediaPickOrCaptureUtil.pickImageOrTakePhoto(new MyCommonCallback<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                showMata(uri);
+            }
+        });
     }
 }

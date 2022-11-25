@@ -117,6 +117,11 @@
             android:layout_height="wrap_content"/>
         <Button
             android:layout_width="wrap_content"
+            android:onClick="takeOrSelect"
+            android:text="拍照或选图"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="wrap_content"
             android:onClick="toastSuccess"
             android:text="toast-success"
             android:layout_height="wrap_content"/>
