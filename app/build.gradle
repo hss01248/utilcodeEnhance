@@ -71,6 +71,8 @@ configurations {
     //}
     all {
         resolutionStrategy {
+            force "com.google.android.material:material:1.2.0"
+            force "androidx.appcompat:appcompat:1.2.0"
 //  force "com.squareup.okhttp3:okhttp:3.12.12"
         }
     }
