@@ -19,14 +19,14 @@ import java.io.File;
  */
 public class MediaPickOrCaptureUtil {
 
-    public static void pickImageOrTakePhoto(MyCommonCallback<Uri> callback){
+    public static void pickImageOrTakePhoto(boolean useFrontCamera,MyCommonCallback<Uri> callback){
         new XPopup.Builder(ActivityUtils.getTopActivity())
                 .asBottomList("请选择", new String[]{"拍照", "从相册选图"},
                         new OnSelectListener() {
                             @Override
                             public void onSelect(int position, String text) {
                                 if(position ==0){
-                                    TakePictureUtil.takePicture(new MyCommonCallback<String>() {
+                                    CaptureImageUtil.takePicture(useFrontCamera,new MyCommonCallback<String>() {
                                         @Override
                                         public void onSuccess(String s) {
                                             callback.onSuccess(Uri.fromFile(new File(s)));
@@ -45,14 +45,40 @@ public class MediaPickOrCaptureUtil {
                 .show();
     }
 
-    public static void pickOrRecordVideo(int maxDurationInSecondOfVideo,MyCommonCallback<Uri> callback){
+    public static void pickOrRecordAudio(MyCommonCallback<Uri> callback){
+        new XPopup.Builder(ActivityUtils.getTopActivity())
+                .asBottomList("请选择", new String[]{"录音", "选择音频"},
+                        new OnSelectListener() {
+                            @Override
+                            public void onSelect(int position, String text) {
+                                if(position ==0){
+                                    CaptureAudioUtil.startRecord(new MyCommonCallback<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri s) {
+                                            callback.onSuccess(s);
+                                        }
+
+                                        @Override
+                                        public void onError(String code, String msg, @Nullable Throwable throwable) {
+                                            callback.onError(code, msg, throwable);
+                                        }
+                                    });
+                                }else if(position ==1){
+                                    MediaPickUtil.pickAudio(callback);
+                                }
+                            }
+                        })
+                .show();
+    }
+
+    public static void pickOrRecordVideo(boolean useFrontCamera,int maxDurationInSecondOfVideo,MyCommonCallback<Uri> callback){
         new XPopup.Builder(ActivityUtils.getTopActivity())
                 .asBottomList("请选择", new String[]{"录制视频", "从相册选择视频"},
                         new OnSelectListener() {
                             @Override
                             public void onSelect(int position, String text) {
                                 if(position ==0){
-                                    VideoCaptureUtil.startVideoCapture(maxDurationInSecondOfVideo,1024*1024*1024,new MyCommonCallback<String>() {
+                                    CaptureVideoUtil.startVideoCapture(useFrontCamera,maxDurationInSecondOfVideo,1024*1024*1024,new MyCommonCallback<String>() {
                                         @Override
                                         public void onSuccess(String s) {
                                             callback.onSuccess(Uri.fromFile(new File(s)));
@@ -86,7 +112,7 @@ public class MediaPickOrCaptureUtil {
                         })
                 .show();
     }
-    public static void pickOrCaptureImageOrVideo(int maxDurationInSecondOfVideo,MyCommonCallback<Uri> callback){
+    public static void pickOrCaptureImageOrVideo(boolean useFrontCamera,int maxDurationInSecondOfVideo,MyCommonCallback<Uri> callback){
         new XPopup.Builder(ActivityUtils.getTopActivity())
                 .asBottomList("请选择", new String[]{"从相册选择图片", "从相册选择视频","拍照","录制视频"},
                         new OnSelectListener() {
@@ -97,7 +123,7 @@ public class MediaPickOrCaptureUtil {
                                 }else if(position ==1){
                                     MediaPickUtil.pickVideo(callback);
                                 }else if(position ==2){
-                                    TakePictureUtil.takePicture(new MyCommonCallback<String>() {
+                                    CaptureImageUtil.takePicture(useFrontCamera,new MyCommonCallback<String>() {
                                         @Override
                                         public void onSuccess(String s) {
                                             callback.onSuccess(Uri.fromFile(new File(s)));
@@ -109,7 +135,7 @@ public class MediaPickOrCaptureUtil {
                                         }
                                     });
                                 }else if(position ==4){
-                                    VideoCaptureUtil.startVideoCapture(maxDurationInSecondOfVideo,1024*1024*1024,new MyCommonCallback<String>() {
+                                    CaptureVideoUtil.startVideoCapture(useFrontCamera,maxDurationInSecondOfVideo,1024*1024*1024,new MyCommonCallback<String>() {
                                         @Override
                                         public void onSuccess(String s) {
                                             callback.onSuccess(Uri.fromFile(new File(s)));
@@ -127,11 +153,5 @@ public class MediaPickOrCaptureUtil {
     }
 
 
-    public static void start(MyCommonCallback<Uri> callback,boolean capture,String... mimeTypes){
-        if(capture){
-            if(MimeTypeUtil.hasImage(mimeTypes) && MimeTypeUtil.hasVideo(mimeTypes)){
 
-            }
-        }
-    }
 }

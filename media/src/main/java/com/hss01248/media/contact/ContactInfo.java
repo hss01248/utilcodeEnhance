@@ -11,4 +11,13 @@ public class ContactInfo {
     public   long sysId ;
     public String name = "";
     public String phoneNumber = "";
+
+    @Override
+    public String toString() {
+        return "ContactInfo{" +
+                "sysId=" + sysId +
+                ", name='" + name + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
+    }
 }

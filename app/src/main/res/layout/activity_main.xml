@@ -108,17 +108,22 @@
         <Button
             android:layout_width="wrap_content"
             android:onClick="takeVideo"
-            android:text="调用系统拍视频intent"
+            android:text="调用系统拍视频intent-前摄像头"
             android:layout_height="wrap_content"/>
         <Button
             android:layout_width="wrap_content"
             android:onClick="takePicture"
-            android:text="调用系统拍照intent"
+            android:text="调用系统拍照intent-前摄像头"
             android:layout_height="wrap_content"/>
         <Button
             android:layout_width="wrap_content"
             android:onClick="takeOrSelect"
-            android:text="拍照或选图"
+            android:text="拍照或选图-后置摄像头"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:onClick="captureAudio"
+            android:text="录音"
             android:layout_height="wrap_content"/>
         <Button
             android:layout_width="wrap_content"

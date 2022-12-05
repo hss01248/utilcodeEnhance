@@ -34,30 +34,30 @@ import java.util.List;
  * @Date 10/12/2021 14:14
  * @Version 1.0
  */
-public class TakePictureUtil {
+public class CaptureVideoUtil {
 
 
 
-    public static void takePicture( MyCommonCallback<String> callback){
+
+
+    public static void startVideoCapture(boolean useFrontCamera,int maxDurationInSecond, int maxFileSize, MyCommonCallback<String> callback){
         File externalFilesDir = Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_MOVIES);
         if(externalFilesDir == null){
+            //Android4.4以下:
             externalFilesDir = new File(Utils.getApp().getFilesDir(),Environment.DIRECTORY_MOVIES);
         }
         externalFilesDir.mkdirs();
-        File file = new File(externalFilesDir,System.currentTimeMillis()+".jpg");
-        takePicture(file.getAbsolutePath(),callback);
+        File file = new File(externalFilesDir,System.currentTimeMillis()+".mp4");
+        startVideoCapture(useFrontCamera,file.getAbsolutePath(),maxDurationInSecond,maxFileSize,callback);
     }
 
 
-
-
-
-    public static void takePicture(String path,  MyCommonCallback<String> callback){
+    public static void startVideoCapture(boolean useFrontCamera,String path, int maxDurationInSecond,  int maxFileSize, MyCommonCallback<String> callback){
 
         MyPermissions.request(new PermissionUtils.FullCallback() {
             @Override
             public void onGranted(@NonNull List<String> granted) {
-                videoCaptureIntent(path, callback);
+                videoCaptureIntent(useFrontCamera,path, maxDurationInSecond, maxFileSize,callback);
             }
 
             @Override
@@ -69,14 +69,20 @@ public class TakePictureUtil {
                         .replace(",","")
                         .toLowerCase() ,null);
             }
-        },Manifest.permission.CAMERA);
+        },Manifest.permission.CAMERA,Manifest.permission.RECORD_AUDIO);
 
     }
 
-    private static void videoCaptureIntent(String path,MyCommonCallback<String> callback) {
+    private static void videoCaptureIntent(boolean useFrontCamera,String path,int maxDurationInSecond, int maxFileSize,MyCommonCallback<String> callback) {
         Intent intent=new Intent();
         // 指定开启系统相机的Action
-        intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.setAction(MediaStore.ACTION_VIDEO_CAPTURE);
+        if(useFrontCamera){
+            intent.putExtra("android.intent.extras.CAMERA_FACING", android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT);
+            intent.putExtra("android.intent.extras.LENS_FACING_FRONT", 1);
+            intent.putExtra("android.intent.extra.USE_FRONT_CAMERA", true);
+        }
+
         intent.addCategory(Intent.CATEGORY_DEFAULT);
         // 根据文件地址创建文件
         File file=new File(path);
@@ -85,7 +91,13 @@ public class TakePictureUtil {
         OpenUri.addPermissionRW(intent);
         // 设置系统相机拍摄照片完成后图片文件的存放地址
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        if(maxDurationInSecond> 0){
+            intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, maxDurationInSecond);
+        }
 
+        if(maxFileSize> 0){
+            intent.putExtra(MediaStore.EXTRA_SIZE_LIMIT, maxFileSize);
+        }
         //MediaStore.EXTRA_OUTPUT：设置媒体文件的保存路径。
         //MediaStore.EXTRA_VIDEO_QUALITY：设置视频录制的质量，0为低质量，1为高质量。
         //MediaStore.EXTRA_DURATION_LIMIT：设置视频最大允许录制的时长，单位为毫秒。
@@ -98,6 +110,7 @@ public class TakePictureUtil {
                 if(resultCode == Activity.RESULT_OK){
                     if(file.exists() && file.length()> 0){
                         MediaStoreRefresher.refreshMediaCenter(Utils.getApp(),path);
+                        //私有目录,其实刷也没有用
                         callback.onSuccess(path);
                     }else {
                         callback.onError("file error","file saved error",null);

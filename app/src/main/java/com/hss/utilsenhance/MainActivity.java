@@ -20,14 +20,14 @@ import com.hss.utils.enhance.intent.ShareUtils;
 import com.hss.utils.enhance.UrlEncodeUtil;
 import com.hss.utils.enhance.intent.SysIntentUtil;
 import com.hss01248.media.contact.ContactInfo;
-import com.hss01248.media.contact.ContactListUtil;
 import com.hss01248.media.contact.ContactPickUtil;
+import com.hss01248.media.pick.CaptureAudioUtil;
 import com.hss01248.media.pick.MediaPickOrCaptureUtil;
 import com.hss01248.media.pick.MediaPickUtil;
 import com.hss.utils.enhance.api.MyCommonCallback;
 import com.hss01248.media.pick.SafUtil;
-import com.hss01248.media.pick.TakePictureUtil;
-import com.hss01248.media.pick.VideoCaptureUtil;
+import com.hss01248.media.pick.CaptureImageUtil;
+import com.hss01248.media.pick.CaptureVideoUtil;
 import com.hss01248.media.metadata.MetaDataUtil;
 import com.hss01248.media.uri.ContentUriUtil;
 import com.hss01248.openuri.OpenUri;
@@ -240,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void takeVideo(View view) {
-        VideoCaptureUtil.startVideoCapture(30, 1024 * 1024 * 1024, new MyCommonCallback<String>() {
+        CaptureVideoUtil.startVideoCapture(true,30, 1024 * 1024 * 1024, new MyCommonCallback<String>() {
             @Override
             public void onSuccess(String path) {
                 showMata(OpenUri.fromFile(Utils.getApp(),new File(path)));
@@ -300,7 +300,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void takePicture(View view) {
-        TakePictureUtil.takePicture(new MyCommonCallback<String>() {
+        CaptureImageUtil.takePicture(true,new MyCommonCallback<String>() {
             @Override
             public void onSuccess(String s) {
                 showMata(OpenUri.fromFile(Utils.getApp(),new File(s)));
@@ -489,7 +489,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void takeOrSelect(View view) {
-        MediaPickOrCaptureUtil.pickImageOrTakePhoto(new MyCommonCallback<Uri>() {
+        MediaPickOrCaptureUtil.pickImageOrTakePhoto(false,new MyCommonCallback<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
                 showMata(uri);
@@ -511,6 +511,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(ContactInfo contactInfos) {
                 LogUtils.i(contactInfos);
+            }
+        });
+    }
+
+    public void captureAudio(View view) {
+        CaptureAudioUtil.startRecord(new MyCommonCallback<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                LogUtils.i(uri);
             }
         });
     }
