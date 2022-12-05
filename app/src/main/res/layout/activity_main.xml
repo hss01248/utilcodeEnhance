@@ -93,12 +93,12 @@
         <Button
             android:layout_width="wrap_content"
             android:onClick="pickPdf"
-            android:text="选择pdf"
+            android:text="选择pdf/通用单个文件选择"
             android:layout_height="wrap_content"/>
         <Button
             android:layout_width="wrap_content"
-            android:onClick="pickPdf"
-            android:text="选择pdf"
+            android:onClick="pickMultiFiles"
+            android:text="多个文件选择"
             android:layout_height="wrap_content"/>
         <Button
             android:layout_width="wrap_content"
@@ -119,6 +119,11 @@
             android:layout_width="wrap_content"
             android:onClick="takeOrSelect"
             android:text="拍照或选图"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:onClick="pickContact"
+            android:text="选择一个联系人"
             android:layout_height="wrap_content"/>
         <Button
             android:layout_width="wrap_content"

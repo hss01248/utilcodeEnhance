@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
-import com.blankj.utilcode.util.GsonUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.Utils;
@@ -20,6 +19,9 @@ import com.hss.utils.enhance.HomeMaintaner;
 import com.hss.utils.enhance.intent.ShareUtils;
 import com.hss.utils.enhance.UrlEncodeUtil;
 import com.hss.utils.enhance.intent.SysIntentUtil;
+import com.hss01248.media.contact.ContactInfo;
+import com.hss01248.media.contact.ContactListUtil;
+import com.hss01248.media.contact.ContactPickUtil;
 import com.hss01248.media.pick.MediaPickOrCaptureUtil;
 import com.hss01248.media.pick.MediaPickUtil;
 import com.hss.utils.enhance.api.MyCommonCallback;
@@ -491,6 +493,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Uri uri) {
                 showMata(uri);
+            }
+        });
+    }
+
+    public void pickMultiFiles(View view) {
+        MediaPickUtil.pickMultiFiles(new MyCommonCallback<List<Uri>>() {
+            @Override
+            public void onSuccess(List<Uri> uris) {
+                LogUtils.i(uris);
+            }
+        });
+    }
+
+    public void pickContact(View view) {
+        ContactPickUtil.pickOneContact( new MyCommonCallback<ContactInfo>() {
+            @Override
+            public void onSuccess(ContactInfo contactInfos) {
+                LogUtils.i(contactInfos);
             }
         });
     }

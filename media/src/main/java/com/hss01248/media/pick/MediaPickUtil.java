@@ -3,6 +3,7 @@ package com.hss01248.media.pick;
 import static android.app.Activity.RESULT_OK;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,6 +14,7 @@ import android.os.Environment;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import androidx.annotation.NonNull;
@@ -74,8 +76,91 @@ public class MediaPickUtil {
         pickOne( callback,"audio/*");
     }
 
+
+    @Deprecated
     public static void pickPdf(MyCommonCallback<Uri> callback) {
         pickOne( callback,"application/pdf");
+    }
+    public static void pickOneFile(MyCommonCallback<Uri> callback) {
+        pickOne( callback,"*/*");
+    }
+    /**
+     * 多文件选择特点: 大多数响应的intent只返回单个文件,不支持多文件选择
+     * 一些系统应用比如相册会支持多文件选择
+     * 文件类型不便限定,需要自行再callback里处理
+     * @param callback
+     */
+    public static void pickMultiFiles(MyCommonCallback<List<Uri>> callback) {
+        pickMulti( callback,"*/*");
+    }
+
+
+    public static void pickMulti( MyCommonCallback<List<Uri>> callback,String... mimeTypes) {
+        String mimeType = MimeTypeUtil.buildMimeTypeWithDot(mimeTypes);
+        MyPermissions.requestByMostEffort(false, true,
+                new PermissionUtils.FullCallback() {
+                    @Override
+                    public void onGranted(@NonNull List<String> granted) {
+                        startIntent2(mimeType, callback);
+                    }
+
+                    @Override
+                    public void onDenied(@NonNull List<String> deniedForever, @NonNull List<String> denied) {
+                        callback.onError("permission", "[read external storage] permission denied", null);
+                    }
+                }, Manifest.permission.READ_EXTERNAL_STORAGE);
+
+    }
+
+    private static void startIntent2(String mimeType, MyCommonCallback<List<Uri>> callback) {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);//打开多个文件
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        StartActivityUtil.goOutAppForResult(ActivityUtils.getTopActivity(), intent, new ActivityResultListener() {
+            @Override
+            public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+                if (resultCode == Activity.RESULT_OK) {
+                    //Get the Uri of the selected file
+
+                    List<Uri> uris = new ArrayList<>();
+                    if(data.getClipData() != null) {//有选择多个文件
+                        int count = data.getClipData().getItemCount();
+                        LogUtils.i("url count ：  "+ count);
+                        int currentItem = 0;
+                        while(currentItem < count) {
+                            Uri imageUri = data.getClipData().getItemAt(currentItem).getUri();
+                            //String imgpath = ContentUriUtil.getPath(this,imageUri);
+                            uris.add(imageUri);
+                            //LogUtils.i("url "+ imageUri);
+
+                            //do something with the image (save it to some directory or whatever you need to do with it here)
+                            currentItem = currentItem + 1;
+                        }
+                        callback.onSuccess(uris);
+
+                    } else if(data.getData() != null) {//只有一个文件咯
+                        uris.add(data.getData());
+                        LogUtils.i("Single image path ---- "+ data.getData());
+                        callback.onSuccess(uris);
+                        //do something with the image (save it to some directory or whatever you need to do with it here)
+                    }else {
+                        callback.onError("result ok, but no data");
+                    }
+
+                }else {
+                    callback.onError("canceled");
+                }
+            }
+
+            @Override
+            public void onActivityNotFound(Throwable e) {
+                callback.onError(e.getClass().getSimpleName(),e.getMessage(),e);
+            }
+        });
+
     }
 
     /**
