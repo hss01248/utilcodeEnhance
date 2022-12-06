@@ -5,9 +5,13 @@ import android.net.Uri;
 import androidx.annotation.Nullable;
 
 import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.StringUtils;
 import com.hss.utils.enhance.api.MyCommonCallback;
+import com.hss01248.media.R;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.interfaces.OnSelectListener;
+import com.lxj.xpopup.interfaces.SimpleCallback;
 
 import java.io.File;
 
@@ -21,7 +25,16 @@ public class MediaPickOrCaptureUtil {
 
     public static void pickImageOrTakePhoto(boolean useFrontCamera,MyCommonCallback<Uri> callback){
         new XPopup.Builder(ActivityUtils.getTopActivity())
-                .asBottomList("请选择", new String[]{"拍照", "从相册选图"},
+                .setPopupCallback(new SimpleCallback(){
+                    @Override
+                    public void onDismiss(BasePopupView popupView) {
+                        super.onDismiss(popupView);
+                        callback.onError(StringUtils.getString(R.string.meida_pick_canceled));
+                    }
+                })
+                .asBottomList(StringUtils.getString(R.string.meida_pick_please_choose),
+                        new String[]{ StringUtils.getString(R.string.meida_pick_take_photo),
+                                StringUtils.getString(R.string.meida_pick_from_galerry)},
                         new OnSelectListener() {
                             @Override
                             public void onSelect(int position, String text) {
@@ -47,7 +60,16 @@ public class MediaPickOrCaptureUtil {
 
     public static void pickOrRecordAudio(MyCommonCallback<Uri> callback){
         new XPopup.Builder(ActivityUtils.getTopActivity())
-                .asBottomList("请选择", new String[]{"录音", "选择音频"},
+                .setPopupCallback(new SimpleCallback(){
+                    @Override
+                    public void onDismiss(BasePopupView popupView) {
+                        super.onDismiss(popupView);
+                        callback.onError(StringUtils.getString(R.string.meida_pick_canceled));
+                    }
+                })
+                .asBottomList(StringUtils.getString(R.string.meida_pick_please_choose),
+                        new String[]{StringUtils.getString(R.string.meida_pick_record_audio),
+                                StringUtils.getString(R.string.meida_pick_choose_audio_from_album)},
                         new OnSelectListener() {
                             @Override
                             public void onSelect(int position, String text) {
@@ -73,7 +95,16 @@ public class MediaPickOrCaptureUtil {
 
     public static void pickOrRecordVideo(boolean useFrontCamera,int maxDurationInSecondOfVideo,MyCommonCallback<Uri> callback){
         new XPopup.Builder(ActivityUtils.getTopActivity())
-                .asBottomList("请选择", new String[]{"录制视频", "从相册选择视频"},
+                .setPopupCallback(new SimpleCallback(){
+                    @Override
+                    public void onDismiss(BasePopupView popupView) {
+                        super.onDismiss(popupView);
+                        callback.onError(StringUtils.getString(R.string.meida_pick_canceled));
+                    }
+                })
+                .asBottomList(StringUtils.getString(R.string.meida_pick_please_choose),
+                        new String[]{StringUtils.getString(R.string.meida_pick_record_video),
+                                StringUtils.getString(R.string.meida_pick_record_video)},
                         new OnSelectListener() {
                             @Override
                             public void onSelect(int position, String text) {
@@ -99,7 +130,16 @@ public class MediaPickOrCaptureUtil {
 
     public static void pickImageOrVideo(MyCommonCallback<Uri> callback){
         new XPopup.Builder(ActivityUtils.getTopActivity())
-                .asBottomList("请选择", new String[]{"图片", "视频"},
+                .setPopupCallback(new SimpleCallback(){
+                    @Override
+                    public void onDismiss(BasePopupView popupView) {
+                        super.onDismiss(popupView);
+                        callback.onError(StringUtils.getString(R.string.meida_pick_canceled));
+                    }
+                })
+                .asBottomList(StringUtils.getString(R.string.meida_pick_please_choose), new String[]{
+                        StringUtils.getString(R.string.meida_pick_from_galerry),
+                                StringUtils.getString(R.string.meida_pick_choose_video_from_album)},
                         new OnSelectListener() {
                             @Override
                             public void onSelect(int position, String text) {
@@ -114,7 +154,18 @@ public class MediaPickOrCaptureUtil {
     }
     public static void pickOrCaptureImageOrVideo(boolean useFrontCamera,int maxDurationInSecondOfVideo,MyCommonCallback<Uri> callback){
         new XPopup.Builder(ActivityUtils.getTopActivity())
-                .asBottomList("请选择", new String[]{"从相册选择图片", "从相册选择视频","拍照","录制视频"},
+                .setPopupCallback(new SimpleCallback(){
+                    @Override
+                    public void onDismiss(BasePopupView popupView) {
+                        super.onDismiss(popupView);
+                        callback.onError(StringUtils.getString(R.string.meida_pick_canceled));
+                    }
+                })
+                .asBottomList(StringUtils.getString(R.string.meida_pick_please_choose),
+                        new String[]{StringUtils.getString(R.string.meida_pick_from_galerry),
+                                StringUtils.getString(R.string.meida_pick_choose_video_from_album),
+                                StringUtils.getString(R.string.meida_pick_take_photo),
+                                StringUtils.getString(R.string.meida_pick_record_video)},
                         new OnSelectListener() {
                             @Override
                             public void onSelect(int position, String text) {

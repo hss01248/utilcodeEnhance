@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="meida_pick_please_choose">请选择</string>
+    <string name="meida_pick_take_photo">拍照</string>
+    <string name="meida_pick_from_galerry">从相册选择图片</string>
+    <string name="meida_pick_record_video">录制视频</string>
+    <string name="meida_pick_choose_video_from_album">选择视频</string>
+    <string name="meida_pick_record_audio">录音</string>
+    <string name="meida_pick_choose_audio_from_album">选择音频</string>
+    <string name="meida_pick_choose_file">选择文件</string>
+    <string name="meida_pick_canceled">取消</string>
+</resources>
