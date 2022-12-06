@@ -112,6 +112,15 @@ public class MediaPickUtil {
 
     }
 
+    /**
+     * ACTION_PICK is not documented to support EXTRA_ALLOW_MULTIPLE. Specifically:
+     *
+     * The documentation for ACTION_PICK does not mention any supported extras
+     *
+     * The documentation for EXTRA_ALLOW_MULTIPLE only mentions ACTION_GET_CONTENT and ACTION_OPEN_DOCUMENT
+     * @param mimeType
+     * @param callback
+     */
     private static void startIntent2(String mimeType, MyCommonCallback<List<Uri>> callback) {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("*/*");

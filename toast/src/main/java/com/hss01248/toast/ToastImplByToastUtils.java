@@ -1,6 +1,8 @@
 package com.hss01248.toast;
 
+import android.app.Application;
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Looper;
@@ -11,7 +13,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.startup.Initializer;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.SizeUtils;
@@ -23,6 +27,9 @@ import com.hjq.toast.ToastUtils;
 import com.hjq.toast.config.IToastStyle;
 import com.hjq.toast.style.CustomViewToastStyle;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * @Despciption todo
@@ -30,11 +37,9 @@ import com.hjq.toast.style.CustomViewToastStyle;
  * @Date 07/11/2022 10:41
  * @Version 1.0
  */
-public class ToastImplByToastUtils implements IToast {
+public class ToastImplByToastUtils implements IToast, Initializer<String> {
     @Override
     public void success(CharSequence text) {
-        checkInit();
-
         ToastParams params = new ToastParams();
         params.style = new CustomViewToastStyle(R.layout.notice_window_success,Gravity.CENTER);
         params.text = text;
@@ -42,11 +47,12 @@ public class ToastImplByToastUtils implements IToast {
         ToastUtils.show(params);
     }
 
-    private void checkInit() {
-        if(ToastUtils.isInit()){
-            return;
-        }
-        ToastUtils.init(Utils.getApp(),new ToastStrategy(){
+    private boolean checkInit() {
+
+        /*if(ToastUtils.isInit()){
+            return true;
+        }*/
+        /*ToastUtils.init(Utils.getApp(),new ToastStrategy(){
             @Override
             public com.hjq.toast.config.IToast createToast(IToastStyle<?> style) {
                 com.hjq.toast.config.IToast toast =  super.createToast(style);
@@ -58,17 +64,34 @@ public class ToastImplByToastUtils implements IToast {
                 //
                 return toast;
             }
-        });
+        });*/
+        return false;
     }
 
     @Override
     public void error(CharSequence text) {
-        checkInit();
+
         ToastParams params = new ToastParams();
         params.style = new CustomViewToastStyle(R.layout.notice_window_error,Gravity.CENTER);
         params.text = text;
         params.toastDuration = Toast.LENGTH_LONG;
+/*                params.strategy = new ToastStrategy(){
+                    @Override
+                    public com.hjq.toast.config.IToast createToast(IToastStyle<?> style) {
+                        com.hjq.toast.config.IToast toast =  super.createToast(style);
+                        if(style instanceof CustomViewToastStyle){
+
+                        }else {
+                            toast.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL,0, SizeUtils.dp2px(30));
+                        }
+                        //
+                        return toast;
+                    }
+                };
+                params.strategy.registerStrategy(Utils.getApp());*/
+        //什么垃圾设计,还要设置context!!
         ToastUtils.show(params);
+
     }
 
     @Override
@@ -144,5 +167,30 @@ public class ToastImplByToastUtils implements IToast {
             });
         }
 
+    }
+
+    @NonNull
+    @Override
+    public String create(@NonNull Context context) {
+        ToastUtils.init(Utils.getApp(),new ToastStrategy(){
+            @Override
+            public com.hjq.toast.config.IToast createToast(IToastStyle<?> style) {
+                com.hjq.toast.config.IToast toast =  super.createToast(style);
+                if(style instanceof CustomViewToastStyle){
+
+                }else {
+                    toast.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL,0, SizeUtils.dp2px(30));
+                }
+                //
+                return toast;
+            }
+        },null);
+        return "toastutils";
+    }
+
+    @NonNull
+    @Override
+    public List<Class<? extends Initializer<?>>> dependencies() {
+        return new ArrayList<>();
     }
 }

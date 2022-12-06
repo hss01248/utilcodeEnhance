@@ -3,6 +3,7 @@ package com.hss01248.media.pick;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -32,7 +33,7 @@ public class CaptureAudioUtil {
                     public void onGranted(@NonNull List<String> granted) {
                         Intent intent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
 
-                        File externalFilesDir = Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_MOVIES);
+                        /*File externalFilesDir = Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_MOVIES);
                         if(externalFilesDir == null){
                             externalFilesDir = new File(Utils.getApp().getFilesDir(),Environment.DIRECTORY_MOVIES);
                         }
@@ -43,7 +44,13 @@ public class CaptureAudioUtil {
                         Uri uri= OpenUri.fromFile(Utils.getApp(),file);
                         OpenUri.addPermissionRW(intent);
                         // 设置系统相机拍摄照片完成后图片文件的存放地址
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);*/
+
+                        PackageManager manager = Utils.getApp().getPackageManager();
+                        if (manager.queryIntentActivities(intent, 0).size() <= 0) {
+                            MediaPickUtil.pickAudio(callback);
+                            return;
+                        }
 
 
                         StartActivityUtil.goOutAppForResult(ActivityUtils.getTopActivity(), intent,
@@ -59,7 +66,12 @@ public class CaptureAudioUtil {
                                             return;
                                         }
                                         LogUtils.i(data);
-                                        if(file.length()>0){
+                                        if(data == null || data.getData() == null){
+                                            callback.onError("return data is null");
+                                            return;
+                                        }
+                                        callback.onSuccess(data.getData());
+                                        /*if(file.length()>0){
                                             callback.onSuccess(Uri.fromFile(file));
                                         }else {
                                              if(data == null || data.getData() == null){
@@ -67,7 +79,7 @@ public class CaptureAudioUtil {
                                                 return;
                                             }
                                             callback.onSuccess(data.getData());
-                                        }
+                                        }*/
                                     }
 
                                     @Override

@@ -2,6 +2,8 @@ package com.hss.utilsenhance;
 
 import androidx.multidex.MultiDexApplication;
 
+
+
 /**
  * @Despciption todo
  * @Author hss
@@ -14,5 +16,6 @@ public class BaseApp extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         registerActivityLifecycleCallbacks(new PlayDecorviewActivityLifeycleCallback());
+
     }
 }
