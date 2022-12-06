@@ -32,7 +32,16 @@
 # 使用
 
 ```groovy
-api 'com.github.hss01248.utilcodeEnhance:enhance:1.0.0'
-api 'com.github.hss01248.utilcodeEnhance:ext:1.0.0'
+api 'com.github.hss01248.utilcodeEnhance:xxx:1.0.8'
+
+com.github.hss01248.utilcodeEnhance:lib-base:1.0.8
+com.github.hss01248.utilcodeEnhance:common:1.0.8
+com.github.hss01248.utilcodeEnhance:ext:1.0.8
+com.github.hss01248.utilcodeEnhance:iwidget:1.0.8
+com.github.hss01248.utilcodeEnhance:openuri:1.0.8
+com.github.hss01248.utilcodeEnhance:toast:1.0.8
+com.github.hss01248.utilcodeEnhance:viewState:1.0.8
+com.github.hss01248.utilcodeEnhance:media:1.0.8
+com.github.hss01248.utilcodeEnhance:IReporter:1.0.8
 ```
 
