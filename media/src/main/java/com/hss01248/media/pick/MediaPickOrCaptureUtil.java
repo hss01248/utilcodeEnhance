@@ -7,8 +7,8 @@ import androidx.annotation.Nullable;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.hss.utils.enhance.api.MyCommonCallback;
-import com.hss01248.iwidget.SingleChooseDialogImpl;
-import com.hss01248.iwidget.SingleChooseDialogListener;
+import com.hss01248.iwidget.singlechoose.SingleChooseDialogImpl;
+import com.hss01248.iwidget.singlechoose.SingleChooseDialogListener;
 import com.hss01248.media.R;
 
 import java.io.File;

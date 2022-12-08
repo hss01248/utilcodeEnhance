@@ -123,7 +123,7 @@
         <Button
             android:layout_width="wrap_content"
             android:onClick="takeOrVideo"
-            android:text="拍xxxxxxxxxxxxxxxxxxpop"
+            android:text="拍xxpop"
             android:layout_height="wrap_content"/>
         <Button
             android:layout_width="wrap_content"

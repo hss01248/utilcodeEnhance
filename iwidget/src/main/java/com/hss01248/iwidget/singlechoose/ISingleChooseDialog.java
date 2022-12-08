@@ -1,4 +1,4 @@
-package com.hss01248.iwidget;
+package com.hss01248.iwidget.singlechoose;
 
 import android.view.View;
 
@@ -10,9 +10,9 @@ import android.view.View;
  */
 public interface ISingleChooseDialog {
 
-    void showAtBottom(CharSequence title,CharSequence[] datas,SingleChooseDialogListener listener);
+    void showAtBottom(CharSequence title, CharSequence[] datas, SingleChooseDialogListener listener);
 
     void showInCenter(CharSequence title, CharSequence[] datas, SingleChooseDialogListener listener);
 
-    void showInPopMenu(View view, CharSequence[] datas, SingleChooseDialogListener listener);
+    void showInPopMenu(View view,int checkedIndex, CharSequence[] datas, SingleChooseDialogListener listener);
 }

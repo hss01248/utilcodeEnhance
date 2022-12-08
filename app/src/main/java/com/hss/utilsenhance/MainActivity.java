@@ -20,8 +20,8 @@ import com.hss.utils.enhance.HomeMaintaner;
 import com.hss.utils.enhance.intent.ShareUtils;
 import com.hss.utils.enhance.UrlEncodeUtil;
 import com.hss.utils.enhance.intent.SysIntentUtil;
-import com.hss01248.iwidget.SingleChooseDialogImpl;
-import com.hss01248.iwidget.SingleChooseDialogListener;
+import com.hss01248.iwidget.singlechoose.SingleChooseDialogImpl;
+import com.hss01248.iwidget.singlechoose.SingleChooseDialogListener;
 import com.hss01248.media.contact.ContactInfo;
 import com.hss01248.media.contact.ContactPickUtil;
 import com.hss01248.media.pick.CaptureAudioUtil;
@@ -528,12 +528,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void takeOrVideo(View view) {
-        new SingleChooseDialogImpl().showInPopMenu(view,
+        new SingleChooseDialogImpl().showInPopMenu(view,3,
                 //StringUtils.getString(com.hss01248.media.R.string.meida_pick_please_choose),
                 new CharSequence[]{
                         StringUtils.getString(com.hss01248.media.R.string.meida_pick_from_galerry),
                         StringUtils.getString(com.hss01248.media.R.string.meida_pick_choose_video_from_album),
                         StringUtils.getString(com.hss01248.media.R.string.meida_pick_take_photo),
+                       // "这里提供了国内下载节点， 如果您无法通过以上连接下载release包，可以尝试从下方连接下载(但您需要支付流量费用)",
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_record_video),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_from_galerry),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_record_video),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_from_galerry),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_record_video),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_from_galerry),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_record_video),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_from_galerry),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_record_video),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_from_galerry),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_record_video),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_from_galerry),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_record_video),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_from_galerry),
                         StringUtils.getString(com.hss01248.media.R.string.meida_pick_record_video),
                         StringUtils.getString(com.hss01248.media.R.string.meida_pick_from_galerry),
                 },
