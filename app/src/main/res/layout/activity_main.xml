@@ -122,6 +122,11 @@
             android:layout_height="wrap_content"/>
         <Button
             android:layout_width="wrap_content"
+            android:onClick="takeOrVideo"
+            android:text="拍xxxxxxxxxxxxxxxxxxpop"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="wrap_content"
             android:onClick="captureAudio"
             android:text="录音"
             android:layout_height="wrap_content"/>

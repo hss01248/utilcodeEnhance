@@ -13,12 +13,15 @@ import android.os.Bundle;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.PermissionUtils;
+import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.Utils;
 import com.google.gson.GsonBuilder;
 import com.hss.utils.enhance.HomeMaintaner;
 import com.hss.utils.enhance.intent.ShareUtils;
 import com.hss.utils.enhance.UrlEncodeUtil;
 import com.hss.utils.enhance.intent.SysIntentUtil;
+import com.hss01248.iwidget.SingleChooseDialogImpl;
+import com.hss01248.iwidget.SingleChooseDialogListener;
 import com.hss01248.media.contact.ContactInfo;
 import com.hss01248.media.contact.ContactPickUtil;
 import com.hss01248.media.pick.CaptureAudioUtil;
@@ -522,5 +525,30 @@ public class MainActivity extends AppCompatActivity {
                 LogUtils.i(uri);
             }
         });
+    }
+
+    public void takeOrVideo(View view) {
+        new SingleChooseDialogImpl().showInPopMenu(view,
+                //StringUtils.getString(com.hss01248.media.R.string.meida_pick_please_choose),
+                new CharSequence[]{
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_from_galerry),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_choose_video_from_album),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_take_photo),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_record_video),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_from_galerry),
+                },
+                new SingleChooseDialogListener(){
+
+                    @Override
+                    public void onItemClicked(int position, CharSequence text) {
+                        LogUtils.d(position+","+text);
+                    }
+
+                    @Override
+                    public void onCancel(boolean fromBackPressed, boolean fromOutsideClick, boolean fromCancelButton) {
+                        SingleChooseDialogListener.super.onCancel(fromBackPressed, fromOutsideClick, fromCancelButton);
+                        //callback.onError(StringUtils.getString(com.hss01248.media.R.string.meida_pick_canceled));
+                    }
+                });
     }
 }

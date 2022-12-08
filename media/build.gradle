@@ -33,6 +33,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
     api project(path: ':lib-base')
+    api project(path: ':iwidget')
     api 'androidx.documentfile:documentfile:1.0.1'
     api ('com.github.li-xiaojun:XPopup:2.9.15'){
         exclude group: "com.davemorrissey.labs", module: "subsampling-scale-image-view-androidx"
