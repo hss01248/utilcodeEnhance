@@ -1,15 +1,9 @@
 package com.hss01248.iwidget.msg;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
-import android.view.View;
 
-import com.blankj.utilcode.util.ActivityUtils;
-import com.blankj.utilcode.util.Utils;
-import com.hss01248.dialog.StyledDialog;
-import com.hss01248.dialog.interfaces.MyDialogListener;
 import com.hss01248.iwidget.BaseDialogListener;
-import com.maple.msdialog.AlertDialog;
+
 
 /**
  * @Despciption todo
@@ -21,7 +15,7 @@ public class AlertDialogImplByXStyleDialog implements IAlertDialog{
     @Override
     public Dialog showMsg(CharSequence title, CharSequence msg, CharSequence positiveBtnText, CharSequence negtiveBtnText, BaseDialogListener listener) {
 
-        final boolean[] fromAction = {false};
+       /* final boolean[] fromAction = {false};
         final boolean[] fromCancelBtn = {false};
 
         AlertDialog alertDialog =  new AlertDialog(ActivityUtils.getTopActivity());
@@ -53,7 +47,7 @@ public class AlertDialogImplByXStyleDialog implements IAlertDialog{
                        listener.onConfirm();
                     }
                 })
-                .show();
+                .show();*/
 
         return null;
 
