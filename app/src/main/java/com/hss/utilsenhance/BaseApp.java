@@ -4,6 +4,7 @@ import androidx.multidex.MultiDexApplication;
 
 
 
+
 /**
  * @Despciption todo
  * @Author hss
@@ -15,6 +16,7 @@ public class BaseApp extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+
         registerActivityLifecycleCallbacks(new PlayDecorviewActivityLifeycleCallback());
 
     }

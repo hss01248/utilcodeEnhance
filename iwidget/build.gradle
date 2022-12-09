@@ -37,5 +37,13 @@ dependencies {
         exclude group: "com.davemorrissey.labs", module: "subsampling-scale-image-view-androidx"
     }
     api 'com.blankj:utilcodex:1.30.0'//基底
-    api "com.github.kongzue.DialogX:DialogX:0.0.46"
+    api "com.github.kongzue.DialogX:DialogX:0.0.46"  //使用其中的popMenu
+    //msg dialog或alert dialog
+    implementation 'com.github.shaoshuai904:XStyleDialog:2.0.5'
+    api ('com.github.hss01248:DialogUtil:3.0.0'){
+        exclude group: 'com.android.support'
+    }
+    implementation 'com.github.mamumu:mmDialog:1.2.0'
+
+
 }

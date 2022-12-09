@@ -20,6 +20,10 @@ import com.hss.utils.enhance.HomeMaintaner;
 import com.hss.utils.enhance.intent.ShareUtils;
 import com.hss.utils.enhance.UrlEncodeUtil;
 import com.hss.utils.enhance.intent.SysIntentUtil;
+import com.hss01248.iwidget.BaseDialogListener;
+import com.hss01248.iwidget.msg.AlertDialogImplByDialogUtil;
+import com.hss01248.iwidget.msg.AlertDialogImplByMmDialog;
+import com.hss01248.iwidget.msg.AlertDialogImplByXStyleDialog;
 import com.hss01248.iwidget.singlechoose.SingleChooseDialogImpl;
 import com.hss01248.iwidget.singlechoose.SingleChooseDialogListener;
 import com.hss01248.media.contact.ContactInfo;
@@ -565,5 +569,137 @@ public class MainActivity extends AppCompatActivity {
                         //callback.onError(StringUtils.getString(com.hss01248.media.R.string.meida_pick_canceled));
                     }
                 });
+    }
+
+    public void alertByDialogUtil(View view) {
+        new AlertDialogImplByDialogUtil().showMsg("普通标题",
+                "想要监控对话框的生命周期，可以实现其 .setDialogLifecycleCallback(...) 接口，建议使用build()方法构建对话框",
+                "确认", "取消",
+                new BaseDialogListener() {
+                    @Override
+                    public void onConfirm() {
+                        BaseDialogListener.super.onConfirm();
+                    }
+                });
+
+        new AlertDialogImplByDialogUtil().showMsg("超长标题超长标题超长标题超长标题超长标题超长标题超长标题超长标题超长标题超长标题超长标题超长标题超长标题",
+                "说明\n" +
+                        "创建CI流水线，使用KubeSphere DevOps完成源码编译、镜像构建并推送到Harbor仓库或其他云仓库，最后以git commit方式更新yaml仓库中image字段。\n" +
+                        "\n" +
+                        "CD部分我们使用Argo CD来做，Argo CD持续监测yaml仓库配置文件变动，当 CI 部分执行git push时便会触发 Argo CD 更新 yaml 文件到 k8s 集群。\n" +
+                        "\n" +
+                        "准备工作\n" +
+                        "安装 kubesphere，启用 KubeSphere DevOps系统。\n" +
+                        "\n" +
+                        "需要有一个 Docker Hub帐户，也可以自建Harbor，我这里使用的是免费阿里云仓库。\n" +
+                        "\n" +
+                        "需要创建一个企业空间、一个 DevOps 工程和一个帐户 (project-regular)，必须邀请该帐户至DevOps工程中并赋予operator角色。如果尚未创建，请参见 创建企业空间、项目、帐户和角色。\n" +
+                        "\n" +
+                        "设置 CI 专用节点来运行流水线（可选）。有关更多信息，请参见 为缓存依赖项设置 CI 节点\n" +
+                        "\n" +
+                        "配置邮件告警（可选）。请参见 为 KubeSphere 流水线设置电子邮件服务器，我这里计划对接微信告警。\n" +
+                        "\n" +
+                        "配置 SonarQube 将代码分析纳入流水线中（可选）。有关更多信息，请参见 将 SonarQube 集成到流水线。\n" +
+                        "-----------------------------------\n" +
+                        "©著作权归作者所有：来自51CTO博客作者品鉴初心的原创作品，请联系作者获取转载授权，否则将追究法律责任\n" +
+                        "使用 KubeSphere 创建DevOps工程\n" +
+                        "https://blog.51cto.com/wutengfei/3264097",
+                "确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认",
+                "取消取消取消取消取消取消取消取消取消取消取消取消取消取消取消",
+                new BaseDialogListener() {
+                    @Override
+                    public void onConfirm() {
+                        BaseDialogListener.super.onConfirm();
+                    }
+                });
+    }
+
+    public void alertByXStyleDialog(View view) {
+        new AlertDialogImplByXStyleDialog().showMsg("普通标题",
+                "想要监控对话框的生命周期，可以实现其 .setDialogLifecycleCallback(...) 接口，建议使用build()方法构建对话框",
+                "确认", "取消",
+                new BaseDialogListener() {
+                    @Override
+                    public void onConfirm() {
+                        BaseDialogListener.super.onConfirm();
+                    }
+                });
+
+        new AlertDialogImplByXStyleDialog().showMsg("超长标题超长标题超长标题超长标题超长标题超长标题超长标题超长标题超长标题超长标题超长标题超长标题超长标题",
+                "说明\n" +
+                        "创建CI流水线，使用KubeSphere DevOps完成源码编译、镜像构建并推送到Harbor仓库或其他云仓库，最后以git commit方式更新yaml仓库中image字段。\n" +
+                        "\n" +
+                        "CD部分我们使用Argo CD来做，Argo CD持续监测yaml仓库配置文件变动，当 CI 部分执行git push时便会触发 Argo CD 更新 yaml 文件到 k8s 集群。\n" +
+                        "\n" +
+                        "准备工作\n" +
+                        "安装 kubesphere，启用 KubeSphere DevOps系统。\n" +
+                        "\n" +
+                        "需要有一个 Docker Hub帐户，也可以自建Harbor，我这里使用的是免费阿里云仓库。\n" +
+                        "\n" +
+                        "需要创建一个企业空间、一个 DevOps 工程和一个帐户 (project-regular)，必须邀请该帐户至DevOps工程中并赋予operator角色。如果尚未创建，请参见 创建企业空间、项目、帐户和角色。\n" +
+                        "\n" +
+                        "设置 CI 专用节点来运行流水线（可选）。有关更多信息，请参见 为缓存依赖项设置 CI 节点\n" +
+                        "\n" +
+                        "配置邮件告警（可选）。请参见 为 KubeSphere 流水线设置电子邮件服务器，我这里计划对接微信告警。\n" +
+                        "\n" +
+                        "配置 SonarQube 将代码分析纳入流水线中（可选）。有关更多信息，请参见 将 SonarQube 集成到流水线。\n" +
+                        "-----------------------------------\n" +
+                        "©著作权归作者所有：来自51CTO博客作者品鉴初心的原创作品，请联系作者获取转载授权，否则将追究法律责任\n" +
+                        "使用 KubeSphere 创建DevOps工程\n" +
+                        "https://blog.51cto.com/wutengfei/3264097",
+                "确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认",
+                "取消取消取消取消取消取消取消取消取消取消取消取消取消取消取消",
+                new BaseDialogListener() {
+                    @Override
+                    public void onConfirm() {
+                        BaseDialogListener.super.onConfirm();
+                    }
+                });
+    }
+
+    public void alertByMmDialog(View view) {
+        new AlertDialogImplByMmDialog().showMsg("普通标题",
+                "想要监控对话框的生命周期，可以实现其 .setDialogLifecycleCallback(...) 接口，建议使用build()方法构建对话框",
+                "确认", "取消",
+                new BaseDialogListener() {
+                    @Override
+                    public void onConfirm() {
+                        BaseDialogListener.super.onConfirm();
+                    }
+                });
+
+        new AlertDialogImplByMmDialog().showMsg("超长标题超长标题超长标题超长标题超长标题超长标题超长标题超长标题超长标题超长标题超长标题超长标题超长标题",
+                "说明\n" +
+                        "创建CI流水线，使用KubeSphere DevOps完成源码编译、镜像构建并推送到Harbor仓库或其他云仓库，最后以git commit方式更新yaml仓库中image字段。\n" +
+                        "\n" +
+                        "CD部分我们使用Argo CD来做，Argo CD持续监测yaml仓库配置文件变动，当 CI 部分执行git push时便会触发 Argo CD 更新 yaml 文件到 k8s 集群。\n" +
+                        "\n" +
+                        "准备工作\n" +
+                        "安装 kubesphere，启用 KubeSphere DevOps系统。\n" +
+                        "\n" +
+                        "需要有一个 Docker Hub帐户，也可以自建Harbor，我这里使用的是免费阿里云仓库。\n" +
+                        "\n" +
+                        "需要创建一个企业空间、一个 DevOps 工程和一个帐户 (project-regular)，必须邀请该帐户至DevOps工程中并赋予operator角色。如果尚未创建，请参见 创建企业空间、项目、帐户和角色。\n" +
+                        "\n" +
+                        "设置 CI 专用节点来运行流水线（可选）。有关更多信息，请参见 为缓存依赖项设置 CI 节点\n" +
+                        "\n" +
+                        "配置邮件告警（可选）。请参见 为 KubeSphere 流水线设置电子邮件服务器，我这里计划对接微信告警。\n" +
+                        "\n" +
+                        "配置 SonarQube 将代码分析纳入流水线中（可选）。有关更多信息，请参见 将 SonarQube 集成到流水线。\n" +
+                        "-----------------------------------\n" +
+                        "©著作权归作者所有：来自51CTO博客作者品鉴初心的原创作品，请联系作者获取转载授权，否则将追究法律责任\n" +
+                        "使用 KubeSphere 创建DevOps工程\n" +
+                        "https://blog.51cto.com/wutengfei/3264097",
+                "确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认确认",
+                "取消取消取消取消取消取消取消取消取消取消取消取消取消取消取消",
+                new BaseDialogListener() {
+                    @Override
+                    public void onConfirm() {
+                        BaseDialogListener.super.onConfirm();
+                    }
+                });
+    }
+
+    public void pop(View view) {
     }
 }

@@ -16,5 +16,7 @@ public interface BaseDialogListener {
         LogUtils.d("fromBackPressed-"+fromBackPressed+",fromOutsideClick-"+fromOutsideClick+",fromCancelButton-"+fromCancelButton+",fromAction-"+fromAction);
     }
 
-    default  void onConfirm(){}
+    default  void onConfirm(){
+        LogUtils.i("onConfirm : ");
+    }
 }

@@ -21,7 +21,6 @@ import com.lxj.xpopup.interfaces.OnSelectListener;
 import com.lxj.xpopup.interfaces.SimpleCallback;
 
 
-
 /**
  * @Despciption todo
  * @Author hss
@@ -31,7 +30,7 @@ import com.lxj.xpopup.interfaces.SimpleCallback;
 public class SingleChooseDialogImpl implements ISingleChooseDialog {
     @Override
     public void showAtBottom(CharSequence title, CharSequence[] datas, SingleChooseDialogListener listener) {
-        showList(title, datas,true, listener);
+        showList(title, datas, true, listener);
     }
 
     private void showList(CharSequence title, CharSequence[] datas, boolean bottom, SingleChooseDialogListener listener) {
@@ -69,27 +68,27 @@ public class SingleChooseDialogImpl implements ISingleChooseDialog {
                         return super.onBackPressed(popupView);
                     }
                 });
-        if(bottom){
-              builder.asBottomList(title,datas2,
-                    new OnSelectListener() {
-                        @Override
-                        public void onSelect(int position, String text) {
-                            fromAction[0] = true;
-                            LogUtils.d(text+","+position);
-                            listener.onItemClicked(position,text);
-                        }
-                    })
+        if (bottom) {
+            builder.asBottomList(title, datas2,
+                            new OnSelectListener() {
+                                @Override
+                                public void onSelect(int position, String text) {
+                                    fromAction[0] = true;
+                                    LogUtils.d(text + "," + position);
+                                    listener.onItemClicked(position, text);
+                                }
+                            })
                     .show();
-        }else {
-             builder .asCenterList(title,datas2,
-                    new OnSelectListener() {
-                        @Override
-                        public void onSelect(int position, String text) {
-                            fromAction[0] = true;
-                            LogUtils.w(text+","+position);
-                            listener.onItemClicked(position,text);
-                        }
-                    })
+        } else {
+            builder.asCenterList(title, datas2,
+                            new OnSelectListener() {
+                                @Override
+                                public void onSelect(int position, String text) {
+                                    fromAction[0] = true;
+                                    LogUtils.w(text + "," + position);
+                                    listener.onItemClicked(position, text);
+                                }
+                            })
                     .show();
         }
 
@@ -97,43 +96,44 @@ public class SingleChooseDialogImpl implements ISingleChooseDialog {
 
     @Override
     public void showInCenter(CharSequence title, CharSequence[] datas, SingleChooseDialogListener listener) {
-        showList(title, datas,false, listener);
+        showList(title, datas, false, listener);
     }
 
     /**
      * https://github.com/kongzue/DialogX/wiki/%E4%B8%8A%E4%B8%8B%E6%96%87%E8%8F%9C%E5%8D%95-PopMenu
+     *
      * @param view
      * @param datas
      * @param listener
      */
     @Override
-    public void showInPopMenu(View view,int checkedIndex, CharSequence[] datas, SingleChooseDialogListener listener) {
+    public void showInPopMenu(View view, int checkedIndex, CharSequence[] datas, SingleChooseDialogListener listener) {
         final boolean[] fromAction = {false};
         //左右15dp*2+16sp*文字
         String max = "";
         for (CharSequence data : datas) {
-            if(data.toString().length() > max.length()){
+            if (data.toString().length() > max.length()) {
                 max = data.toString();
             }
         }
         TextView textView = new TextView(view.getContext());
         textView.setTextSize(16);
         textView.setText(max);
-        textView.measure(View.MeasureSpec.UNSPECIFIED,View.MeasureSpec.UNSPECIFIED);
+        textView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         int width = textView.getMeasuredWidth() + SizeUtils.dp2px(30);
 
 
         String finalMax = max;
-        PopMenu menu =  PopMenu.build()
-                .setMenuList( datas);
-        if(checkedIndex >=0 && checkedIndex< datas.length){
-             menu.setOnIconChangeCallBack(new OnIconChangeCallBack<PopMenu>(false) {
-                 @Override
-                 public int getIcon(PopMenu dialog, int index, String menuText) {
-                     return index == checkedIndex ? R.drawable.icon_checked_addr : R.drawable.icon_unchecked_addr;
-                 }
-             });
-            width = width + SizeUtils.dp2px(35+8);
+        PopMenu menu = PopMenu.build()
+                .setMenuList(datas);
+        if (checkedIndex >= 0 && checkedIndex < datas.length) {
+            menu.setOnIconChangeCallBack(new OnIconChangeCallBack<PopMenu>(false) {
+                @Override
+                public int getIcon(PopMenu dialog, int index, String menuText) {
+                    return index == checkedIndex ? R.drawable.icon_checked_addr : R.drawable.icon_unchecked_addr;
+                }
+            });
+            width = width + SizeUtils.dp2px(35 + 8);
             //menu.setWidth(ScreenUtils.getScreenWidth());
         }
 
@@ -141,7 +141,7 @@ public class SingleChooseDialogImpl implements ISingleChooseDialog {
         LogUtils.w("view width: " + view.getMeasuredWidth() + ", max Length text: " + finalWidth + ",text: " + finalMax);
 
         menu.setBaseView(view);
-        if (finalWidth > view.getMeasuredWidth() ) {
+        if (finalWidth > view.getMeasuredWidth()) {
             //&& !(checkedIndex >=0 && checkedIndex< datas.length)
             menu.setWidth(finalWidth);
         }
@@ -163,15 +163,15 @@ public class SingleChooseDialogImpl implements ISingleChooseDialog {
                                 for (int i = 0; i < menuView.getChildCount(); i++) {
                                     ViewGroup viewGroup = (ViewGroup) menuView.getChildAt(i);
                                     View viewById = viewGroup.findViewById(R.id.space_dialogx_right_padding);
-                                    if(viewById != null){
+                                    if (viewById != null) {
                                         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) viewById.getLayoutParams();
                                         layoutParams.leftMargin = 0;
-                                        layoutParams.width =0;
+                                        layoutParams.width = 0;
                                         viewById.setLayoutParams(layoutParams);
                                     }
                                 }
                             }
-                        },300);
+                        }, 300);
 
                     }
 
