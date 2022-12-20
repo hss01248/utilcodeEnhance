@@ -22,9 +22,23 @@ public class SysIntentShareDispatcherActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         LogUtils.i("获取到intent",getIntent());
         TextView textView = new TextView(this);
-        textView.setBackground(new ColorDrawable(Color.GRAY));
+        textView.setBackground(new ColorDrawable(Color.WHITE));
         textView.setPadding(60,60,60,60);
-        textView.setText(getIntent()+"");
+        textView.setText(msg());
+        textView.setTextColor(Color.BLACK);
         setContentView(textView);
+    }
+
+    private String msg() {
+        String str =  getIntent().toString();
+        Bundle extras = getIntent().getExtras();
+        if(extras == null){
+            return str;
+        }
+        str += "\nextras: "+ extras.size();
+        for (String s : extras.keySet()) {
+           str = str+ "\n"+s+" : "+ extras.get(s);
+        }
+        return str;
     }
 }
