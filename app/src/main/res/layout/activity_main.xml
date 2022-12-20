@@ -233,6 +233,12 @@
                 android:text="smallView"
                 android:textAllCaps="false"
                 android:layout_height="wrap_content"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:onClick="qrScan"
+                android:text="扫码获取结果"
+                android:textAllCaps="false"
+                android:layout_height="wrap_content"/>
         </com.google.android.flexbox.FlexboxLayout>
         <TextView
             android:layout_margin="10dp"

@@ -11,15 +11,18 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.StringUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
 import com.google.gson.GsonBuilder;
 import com.hss.utils.enhance.HomeMaintaner;
 import com.hss.utils.enhance.intent.ShareUtils;
 import com.hss.utils.enhance.UrlEncodeUtil;
 import com.hss.utils.enhance.intent.SysIntentUtil;
+import com.hss01248.basewebview.BaseWebviewActivity;
 import com.hss01248.iwidget.BaseDialogListener;
 import com.hss01248.iwidget.msg.AlertDialogImplByDialogUtil;
 import com.hss01248.iwidget.msg.AlertDialogImplByMmDialog;
@@ -39,6 +42,7 @@ import com.hss01248.media.metadata.MetaDataUtil;
 import com.hss01248.media.uri.ContentUriUtil;
 import com.hss01248.openuri.OpenUri;
 import com.hss01248.permission.MyPermissions;
+import com.hss01248.qrscan.ScanCodeActivity;
 import com.hss01248.toast.MyToast;
 
 import androidx.annotation.NonNull;
@@ -57,6 +61,8 @@ import java.net.URLDecoder;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import io.reactivex.functions.Consumer;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -701,5 +707,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void pop(View view) {
+    }
+
+    public void qrScan(View view) {
+        ScanCodeActivity.scanForResult(new Consumer<String>() {
+            @Override
+            public void accept(String s) throws Exception {
+                ToastUtils.showLong(s);
+                BaseWebviewActivity.start(ActivityUtils.getTopActivity(),s);
+            }
+        });
+
     }
 }
