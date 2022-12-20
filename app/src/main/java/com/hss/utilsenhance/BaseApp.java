@@ -17,7 +17,7 @@ public class BaseApp extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
 
-        registerActivityLifecycleCallbacks(new PlayDecorviewActivityLifeycleCallback());
+        //registerActivityLifecycleCallbacks(new PlayDecorviewActivityLifeycleCallback());
 
     }
 }

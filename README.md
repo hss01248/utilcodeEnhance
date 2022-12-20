@@ -43,5 +43,33 @@ com.github.hss01248.utilcodeEnhance:toast:1.0.8
 com.github.hss01248.utilcodeEnhance:viewState:1.0.8
 com.github.hss01248.utilcodeEnhance:media:1.0.8
 com.github.hss01248.utilcodeEnhance:IReporter:1.0.8
+com.github.hss01248.utilcodeEnhance:qr-scan:1.0.8
 ```
 
+
+
+# 二维码和条形码扫码
+
+内部基于 com.github.bingoogolapple.BGAQRCode-Android:zbar:1.3.8
+
+```groovy
+api 'com.github.hss01248.utilcodeEnhance:qr-scan:1.0.8'
+```
+
+
+
+```java
+ScanCodeActivity.scanForResult(new Consumer<String>() {
+            @Override
+            public void accept(String s) throws Exception {
+                ToastUtils.showLong(s);
+                BaseWebviewActivity.start(ActivityUtils.getTopActivity(),s);
+            }
+        });
+```
+
+
+
+
+
+![image-20221220175628125](https://cdn.jsdelivr.net/gh/shuiniuhss/myimages@main/imagemac3/image-20221220175628125.png)
