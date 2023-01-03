@@ -66,4 +66,8 @@ public class MainActivity extends AppCompatActivity {
     public void jsInputFileCapture(View view) {
         BaseWebviewActivity.start(this,"https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/capture");
     }
+
+    public void toTest(View view) {
+        BaseWebviewActivity.start(this,"https://navi.hss01248.tech/tabShare/12");
+    }
 }
