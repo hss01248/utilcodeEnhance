@@ -41,6 +41,7 @@ import com.hss01248.pagestate.PageStateManager;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.AgentWebUIControllerImplBase;
 import com.just.agentweb.WebViewClient;
+import com.konstantinschubert.writeinterceptingwebview.OkhttpProxyForWebviewClient;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -274,6 +275,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
     public JsCreateNewWinImpl jsCreateNewWin = new JsCreateNewWinImpl();
 
     private void initWebView() {
+        OkhttpProxyForWebviewClient okhttpProxyForWebviewClient = new OkhttpProxyForWebviewClient();
         preAgentWeb = AgentWeb.with((Activity) getContext())//传入Activity or Fragment
                 .setAgentWebParent(this,
                         new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
@@ -412,6 +414,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                 })
                 .useMiddlewareWebChrome(new JsPermissionImpl())
                 .useMiddlewareWebChrome(new FileChooseImpl())
+                .useMiddlewareWebClient(okhttpProxyForWebviewClient)
                 //.useMiddlewareWebChrome(new JsNewWindowImpl())
                 //.useMiddlewareWebChrome(new VideoFullScreenImpl())
               // .setMainFrameErrorView(R.layout.pager_error,R.id.error_btn_retry)
@@ -422,6 +425,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
         mAgentWeb = preAgentWeb.get();
 
         webView = mAgentWeb.getWebCreator().getWebView();
+        okhttpProxyForWebviewClient.addAjaxInterceptorJsInterface(webView);
         stateManager = PageStateManager.initWhenUse(mAgentWeb.getWebCreator().getWebParentLayout(), new PageStateConfig() {
 
             @Override

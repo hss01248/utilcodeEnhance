@@ -1,0 +1,754 @@
+Starting a Gradle Daemon, 1 busy Daemon could not be reused, use --status for details
+
+> Configure project :
+---->afterEvaluate:root project 'UtilsEnhance'
+
+> Configure project :app
+---->afterEvaluate:project ':app'
+---->gradle.addListener(new CollectTaskTimeListener()):project ':app'
+---->isLocal():false
+apply plugin: 'com.hujiang.android-aspectjx' by hss01248/flipperUtil, add flipper networkinterceptor to okhttpclient automatically
+dokit插件默认为关闭状态, 你可以在properties文件中配置flipper_use_dokit=true来打开它
+应用deps相关任务到--->app
+WARNING: DSL element 'android.viewBinding.enabled' is obsolete and has been replaced with 'android.buildFeatures.viewBinding'.
+It will be removed in version 5.0 of the Android Gradle plugin.
+ImgCompressPlugin  call app  gradle:build 'UtilsEnhance' false
+parseDeps--->variant debug
+parseDeps--->variant release
+
+> Configure project :baseWebview
+WARNING: DSL element 'android.viewBinding.enabled' is obsolete and has been replaced with 'android.buildFeatures.viewBinding'.
+It will be removed in version 5.0 of the Android Gradle plugin.
+---->afterEvaluate:project ':baseWebview'
+WARNING: DSL element 'android.viewBinding.enabled' is obsolete and has been replaced with 'android.buildFeatures.viewBinding'.
+It will be removed in version 5.0 of the Android Gradle plugin.
+
+> Configure project :basewebview-ajax-proxy
+WARNING: Configuration 'compile' is obsolete and has been replaced with 'implementation' and 'api'.
+It will be removed in version 5.0 of the Android Gradle plugin.
+For more information, see http://d.android.com/r/tools/update-dependency-configurations.html.
+WARNING: Configuration 'testCompile' is obsolete and has been replaced with 'testImplementation'.
+It will be removed in version 5.0 of the Android Gradle plugin.
+For more information, see http://d.android.com/r/tools/update-dependency-configurations.html.
+---->afterEvaluate:project ':basewebview-ajax-proxy'
+WARNING: DSL element 'android.viewBinding.enabled' is obsolete and has been replaced with 'android.buildFeatures.viewBinding'.
+It will be removed in version 5.0 of the Android Gradle plugin.
+
+> Configure project :basewebviewdemo
+---->afterEvaluate:project ':basewebviewdemo'
+---->isLocal():false
+apply plugin: 'com.hujiang.android-aspectjx' by hss01248/flipperUtil, add flipper networkinterceptor to okhttpclient automatically
+dokit插件默认为关闭状态, 你可以在properties文件中配置flipper_use_dokit=true来打开它
+应用deps相关任务到--->basewebviewdemo
+WARNING: DSL element 'android.viewBinding.enabled' is obsolete and has been replaced with 'android.buildFeatures.viewBinding'.
+It will be removed in version 5.0 of the Android Gradle plugin.
+ImgCompressPlugin  call basewebviewdemo  gradle:build 'UtilsEnhance' false
+parseDeps--->variant debug
+parseDeps--->variant release
+
+> Configure project :common
+---->afterEvaluate:project ':common'
+WARNING: DSL element 'android.viewBinding.enabled' is obsolete and has been replaced with 'android.buildFeatures.viewBinding'.
+It will be removed in version 5.0 of the Android Gradle plugin.
+
+> Configure project :ext
+---->afterEvaluate:project ':ext'
+WARNING: DSL element 'android.viewBinding.enabled' is obsolete and has been replaced with 'android.buildFeatures.viewBinding'.
+It will be removed in version 5.0 of the Android Gradle plugin.
+
+> Configure project :IReporter
+---->afterEvaluate:project ':IReporter'
+WARNING: DSL element 'android.viewBinding.enabled' is obsolete and has been replaced with 'android.buildFeatures.viewBinding'.
+It will be removed in version 5.0 of the Android Gradle plugin.
+
+> Configure project :iwidget
+---->afterEvaluate:project ':iwidget'
+WARNING: DSL element 'android.viewBinding.enabled' is obsolete and has been replaced with 'android.buildFeatures.viewBinding'.
+It will be removed in version 5.0 of the Android Gradle plugin.
+
+> Configure project :lib-base
+WARNING: DSL element 'android.viewBinding.enabled' is obsolete and has been replaced with 'android.buildFeatures.viewBinding'.
+It will be removed in version 5.0 of the Android Gradle plugin.
+---->afterEvaluate:project ':lib-base'
+WARNING: DSL element 'android.viewBinding.enabled' is obsolete and has been replaced with 'android.buildFeatures.viewBinding'.
+It will be removed in version 5.0 of the Android Gradle plugin.
+
+> Configure project :media
+---->afterEvaluate:project ':media'
+WARNING: DSL element 'android.viewBinding.enabled' is obsolete and has been replaced with 'android.buildFeatures.viewBinding'.
+It will be removed in version 5.0 of the Android Gradle plugin.
+
+> Configure project :openuri
+WARNING: Configuration 'compile' is obsolete and has been replaced with 'implementation' and 'api'.
+It will be removed in version 5.0 of the Android Gradle plugin.
+For more information, see http://d.android.com/r/tools/update-dependency-configurations.html.
+---->afterEvaluate:project ':openuri'
+WARNING: DSL element 'android.viewBinding.enabled' is obsolete and has been replaced with 'android.buildFeatures.viewBinding'.
+It will be removed in version 5.0 of the Android Gradle plugin.
+
+> Configure project :qr-scan
+---->afterEvaluate:project ':qr-scan'
+WARNING: DSL element 'android.viewBinding.enabled' is obsolete and has been replaced with 'android.buildFeatures.viewBinding'.
+It will be removed in version 5.0 of the Android Gradle plugin.
+
+> Configure project :toast
+---->afterEvaluate:project ':toast'
+WARNING: DSL element 'android.viewBinding.enabled' is obsolete and has been replaced with 'android.buildFeatures.viewBinding'.
+It will be removed in version 5.0 of the Android Gradle plugin.
+
+> Configure project :viewState
+---->afterEvaluate:project ':viewState'
+WARNING: DSL element 'android.viewBinding.enabled' is obsolete and has been replaced with 'android.buildFeatures.viewBinding'.
+It will be removed in version 5.0 of the Android Gradle plugin.
+解析依赖: projectsEvaluated--->
+
+> Task :basewebviewdemo:dependencies
+
+------------------------------------------------------------
+Project :basewebviewdemo
+------------------------------------------------------------
+
+debugRuntimeClasspath - Resolved configuration for runtime for variant: debug
++--- com.github.hss01248:arouter-api-onActivitResult:1.5.0-004
+|    +--- androidx.appcompat:appcompat:1.1.0 -> 1.4.2
+|    |    +--- androidx.annotation:annotation:1.3.0
+|    |    +--- androidx.core:core:1.7.0
+|    |    |    +--- androidx.annotation:annotation:1.2.0 -> 1.3.0
+|    |    |    +--- androidx.annotation:annotation-experimental:1.1.0
+|    |    |    +--- androidx.lifecycle:lifecycle-runtime:2.3.1 -> 2.4.0
+|    |    |    |    +--- androidx.arch.core:core-runtime:2.1.0
+|    |    |    |    |    +--- androidx.annotation:annotation:1.1.0 -> 1.3.0
+|    |    |    |    |    \--- androidx.arch.core:core-common:2.1.0
+|    |    |    |    |         \--- androidx.annotation:annotation:1.1.0 -> 1.3.0
+|    |    |    |    +--- androidx.lifecycle:lifecycle-common:2.4.0
+|    |    |    |    |    +--- androidx.annotation:annotation:1.1.0 -> 1.3.0
+|    |    |    |    |    \--- androidx.lifecycle:lifecycle-common-java8:2.4.0 (c)
+|    |    |    |    +--- androidx.arch.core:core-common:2.1.0 (*)
+|    |    |    |    \--- androidx.annotation:annotation:1.1.0 -> 1.3.0
+|    |    |    +--- androidx.versionedparcelable:versionedparcelable:1.1.1
+|    |    |    |    +--- androidx.annotation:annotation:1.1.0 -> 1.3.0
+|    |    |    |    \--- androidx.collection:collection:1.0.0 -> 1.1.0
+|    |    |    |         \--- androidx.annotation:annotation:1.1.0 -> 1.3.0
+|    |    |    +--- androidx.collection:collection:1.0.0 -> 1.1.0 (*)
+|    |    |    \--- androidx.concurrent:concurrent-futures:1.0.0
+|    |    |         +--- com.google.guava:listenablefuture:1.0 -> 9999.0-empty-to-avoid-conflict-with-guava
+|    |    |         \--- androidx.annotation:annotation:1.1.0 -> 1.3.0
+|    |    +--- androidx.cursoradapter:cursoradapter:1.0.0
+|    |    |    \--- androidx.annotation:annotation:1.0.0 -> 1.3.0
+|    |    +--- androidx.activity:activity:1.2.4
+|    |    |    +--- androidx.annotation:annotation:1.1.0 -> 1.3.0
+|    |    |    +--- androidx.core:core:1.1.0 -> 1.7.0 (*)
+|    |    |    +--- androidx.lifecycle:lifecycle-runtime:2.3.1 -> 2.4.0 (*)
+|    |    |    +--- androidx.lifecycle:lifecycle-viewmodel:2.3.1
+|    |    |    |    \--- androidx.annotation:annotation:1.1.0 -> 1.3.0
+|    |    |    +--- androidx.savedstate:savedstate:1.1.0
+|    |    |    |    +--- androidx.annotation:annotation:1.1.0 -> 1.3.0
+|    |    |    |    +--- androidx.arch.core:core-common:2.0.1 -> 2.1.0 (*)
+|    |    |    |    \--- androidx.lifecycle:lifecycle-common:2.0.0 -> 2.4.0 (*)
+|    |    |    +--- androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.1
+|    |    |    |    +--- androidx.annotation:annotation:1.0.0 -> 1.3.0
+|    |    |    |    +--- androidx.savedstate:savedstate:1.1.0 (*)
+|    |    |    |    +--- androidx.lifecycle:lifecycle-livedata-core:2.3.1
+|    |    |    |    |    +--- androidx.arch.core:core-common:2.1.0 (*)
+|    |    |    |    |    +--- androidx.arch.core:core-runtime:2.1.0 (*)
+|    |    |    |    |    \--- androidx.lifecycle:lifecycle-common:2.3.1 -> 2.4.0 (*)
+|    |    |    |    \--- androidx.lifecycle:lifecycle-viewmodel:2.3.1 (*)
+|    |    |    +--- androidx.collection:collection:1.0.0 -> 1.1.0 (*)
+|    |    |    \--- androidx.tracing:tracing:1.0.0
+|    |    |         \--- androidx.annotation:annotation:1.1.0 -> 1.3.0
+|    |    +--- androidx.fragment:fragment:1.3.6
+|    |    |    +--- androidx.annotation:annotation:1.1.0 -> 1.3.0
+|    |    |    +--- androidx.core:core:1.2.0 -> 1.7.0 (*)
+|    |    |    +--- androidx.collection:collection:1.1.0 (*)
+|    |    |    +--- androidx.viewpager:viewpager:1.0.0
+|    |    |    |    +--- androidx.annotation:annotation:1.0.0 -> 1.3.0
+|    |    |    |    +--- androidx.core:core:1.0.0 -> 1.7.0 (*)
+|    |    |    |    \--- androidx.customview:customview:1.0.0 -> 1.1.0
+|    |    |    |         +--- androidx.annotation:annotation:1.1.0 -> 1.3.0
+|    |    |    |         +--- androidx.core:core:1.3.0 -> 1.7.0 (*)
+|    |    |    |         \--- androidx.collection:collection:1.1.0 (*)
+|    |    |    +--- androidx.loader:loader:1.0.0
+|    |    |    |    +--- androidx.annotation:annotation:1.0.0 -> 1.3.0
+|    |    |    |    +--- androidx.core:core:1.0.0 -> 1.7.0 (*)
+|    |    |    |    +--- androidx.lifecycle:lifecycle-livedata:2.0.0 -> 2.2.0
+|    |    |    |    |    +--- androidx.arch.core:core-runtime:2.1.0 (*)
+|    |    |    |    |    +--- androidx.lifecycle:lifecycle-livedata-core:2.2.0 -> 2.3.1 (*)
+|    |    |    |    |    \--- androidx.arch.core:core-common:2.1.0 (*)
+|    |    |    |    \--- androidx.lifecycle:lifecycle-viewmodel:2.0.0 -> 2.3.1 (*)
+|    |    |    +--- androidx.activity:activity:1.2.4 (*)
+|    |    |    +--- androidx.lifecycle:lifecycle-livedata-core:2.3.1 (*)
+|    |    |    +--- androidx.lifecycle:lifecycle-viewmodel:2.3.1 (*)
+|    |    |    +--- androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.1 (*)
+|    |    |    +--- androidx.savedstate:savedstate:1.1.0 (*)
+|    |    |    \--- androidx.annotation:annotation-experimental:1.0.0 -> 1.1.0
+|    |    +--- androidx.appcompat:appcompat-resources:1.4.2
+|    |    |    +--- androidx.collection:collection:1.0.0 -> 1.1.0 (*)
+|    |    |    +--- androidx.annotation:annotation:1.2.0 -> 1.3.0
+|    |    |    +--- androidx.core:core:1.0.1 -> 1.7.0 (*)
+|    |    |    +--- androidx.vectordrawable:vectordrawable:1.1.0
+|    |    |    |    +--- androidx.annotation:annotation:1.1.0 -> 1.3.0
+|    |    |    |    +--- androidx.core:core:1.1.0 -> 1.7.0 (*)
+|    |    |    |    \--- androidx.collection:collection:1.1.0 (*)
+|    |    |    \--- androidx.vectordrawable:vectordrawable-animated:1.1.0
+|    |    |         +--- androidx.vectordrawable:vectordrawable:1.1.0 (*)
+|    |    |         +--- androidx.interpolator:interpolator:1.0.0
+|    |    |         |    \--- androidx.annotation:annotation:1.0.0 -> 1.3.0
+|    |    |         \--- androidx.collection:collection:1.1.0 (*)
+|    |    +--- androidx.drawerlayout:drawerlayout:1.0.0 -> 1.1.1
+|    |    |    +--- androidx.annotation:annotation:1.1.0 -> 1.3.0
+|    |    |    +--- androidx.core:core:1.2.0 -> 1.7.0 (*)
+|    |    |    \--- androidx.customview:customview:1.1.0 (*)
+|    |    +--- androidx.savedstate:savedstate:1.1.0 (*)
+|    |    +--- androidx.emoji2:emoji2:1.0.0
+|    |    |    +--- androidx.collection:collection:1.1.0 (*)
+|    |    |    +--- androidx.annotation:annotation:1.2.0 -> 1.3.0
+|    |    |    +--- androidx.lifecycle:lifecycle-process:2.4.0
+|    |    |    |    +--- androidx.lifecycle:lifecycle-runtime:2.4.0 (*)
+|    |    |    |    \--- androidx.startup:startup-runtime:1.0.0 -> 1.1.0
+|    |    |    |         +--- androidx.annotation:annotation:1.1.0 -> 1.3.0
+|    |    |    |         \--- androidx.tracing:tracing:1.0.0 (*)
+|    |    |    +--- androidx.core:core:1.3.0 -> 1.7.0 (*)
+|    |    |    \--- androidx.startup:startup-runtime:1.0.0 -> 1.1.0 (*)
+|    |    +--- androidx.emoji2:emoji2-views-helper:1.0.0
+|    |    |    +--- androidx.emoji2:emoji2:1.0.0 (*)
+|    |    |    +--- androidx.collection:collection:1.1.0 (*)
+|    |    |    \--- androidx.core:core:1.3.0 -> 1.7.0 (*)
+|    |    +--- androidx.collection:collection:1.0.0 -> 1.1.0 (*)
+|    |    +--- androidx.lifecycle:lifecycle-runtime:2.3.1 -> 2.4.0 (*)
+|    |    +--- androidx.lifecycle:lifecycle-viewmodel:2.3.1 (*)
+|    |    \--- androidx.resourceinspection:resourceinspection-annotation:1.0.0
+|    |         \--- androidx.annotation:annotation:1.1.0 -> 1.3.0
+|    +--- com.alibaba:arouter-annotation:1.0.6
+|    \--- com.github.hss01248.StartActivityResult:activityresult:1.1.5 -> 1.1.6
+|         +--- androidx.appcompat:appcompat:1.1.0 -> 1.4.2 (*)
+|         +--- androidx.activity:activity:1.1.0 -> 1.2.4 (*)
+|         +--- androidx.fragment:fragment:1.1.0 -> 1.3.6 (*)
+|         \--- com.github.hss01248.StartActivityResult:transfrag:1.1.6
+|              \--- androidx.appcompat:appcompat:1.1.0 -> 1.4.2 (*)
++--- com.github.hss01248.AppStartUp:startup-tasks:1.1.0
+|    +--- androidx.appcompat:appcompat:1.4.2 (*)
+|    +--- com.google.android.material:material:1.6.1
+|    |    +--- androidx.annotation:annotation:1.2.0 -> 1.3.0
+|    |    +--- androidx.appcompat:appcompat:1.1.0 -> 1.4.2 (*)
+|    |    +--- androidx.cardview:cardview:1.0.0
+|    |    |    \--- androidx.annotation:annotation:1.0.0 -> 1.3.0
+|    |    +--- androidx.coordinatorlayout:coordinatorlayout:1.1.0
+|    |    |    +--- androidx.annotation:annotation:1.1.0 -> 1.3.0
+|    |    |    +--- androidx.core:core:1.1.0 -> 1.7.0 (*)
+|    |    |    +--- androidx.customview:customview:1.0.0 -> 1.1.0 (*)
+|    |    |    \--- androidx.collection:collection:1.0.0 -> 1.1.0 (*)
+|    |    +--- androidx.constraintlayout:constraintlayout:2.0.1 -> 2.1.4
+|    |    |    +--- androidx.appcompat:appcompat:1.2.0 -> 1.4.2 (*)
+|    |    |    +--- androidx.core:core:1.3.2 -> 1.7.0 (*)
+|    |    |    \--- androidx.constraintlayout:constraintlayout-core:1.0.4
+|    |    +--- androidx.core:core:1.5.0 -> 1.7.0 (*)
+|    |    +--- androidx.drawerlayout:drawerlayout:1.1.1 (*)
+|    |    +--- androidx.dynamicanimation:dynamicanimation:1.0.0
+|    |    |    +--- androidx.core:core:1.0.0 -> 1.7.0 (*)
+|    |    |    +--- androidx.collection:collection:1.0.0 -> 1.1.0 (*)
+|    |    |    \--- androidx.legacy:legacy-support-core-utils:1.0.0
+|    |    |         +--- androidx.annotation:annotation:1.0.0 -> 1.3.0
+|    |    |         +--- androidx.core:core:1.0.0 -> 1.7.0 (*)
+|    |    |         +--- androidx.documentfile:documentfile:1.0.0 -> 1.0.1
+|    |    |         |    \--- androidx.annotation:annotation:1.0.2 -> 1.3.0
+|    |    |         +--- androidx.loader:loader:1.0.0 (*)
+|    |    |         +--- androidx.localbroadcastmanager:localbroadcastmanager:1.0.0
+|    |    |         |    \--- androidx.annotation:annotation:1.0.0 -> 1.3.0
+|    |    |         \--- androidx.print:print:1.0.0
+|    |    |              \--- androidx.annotation:annotation:1.0.0 -> 1.3.0
+|    |    +--- androidx.annotation:annotation-experimental:1.0.0 -> 1.1.0
+|    |    +--- androidx.fragment:fragment:1.2.5 -> 1.3.6 (*)
+|    |    +--- androidx.lifecycle:lifecycle-runtime:2.0.0 -> 2.4.0 (*)
+|    |    +--- androidx.recyclerview:recyclerview:1.0.0 -> 1.2.1
+|    |    |    +--- androidx.annotation:annotation:1.1.0 -> 1.3.0
+|    |    |    +--- androidx.core:core:1.3.2 -> 1.7.0 (*)
+|    |    |    +--- androidx.customview:customview:1.0.0 -> 1.1.0 (*)
+|    |    |    \--- androidx.collection:collection:1.0.0 -> 1.1.0 (*)
+|    |    +--- androidx.transition:transition:1.2.0
+|    |    |    +--- androidx.annotation:annotation:1.1.0 -> 1.3.0
+|    |    |    +--- androidx.core:core:1.0.1 -> 1.7.0 (*)
+|    |    |    \--- androidx.collection:collection:1.0.0 -> 1.1.0 (*)
+|    |    +--- androidx.vectordrawable:vectordrawable:1.1.0 (*)
+|    |    \--- androidx.viewpager2:viewpager2:1.0.0
+|    |         +--- androidx.annotation:annotation:1.1.0 -> 1.3.0
+|    |         +--- androidx.fragment:fragment:1.1.0 -> 1.3.6 (*)
+|    |         +--- androidx.recyclerview:recyclerview:1.1.0 -> 1.2.1 (*)
+|    |         +--- androidx.core:core:1.1.0 -> 1.7.0 (*)
+|    |         \--- androidx.collection:collection:1.1.0 (*)
+|    +--- com.blankj:utilcodex:1.30.0 -> 1.30.6
+|    |    +--- org.jetbrains.kotlin:kotlin-android-extensions-runtime:1.3.72 -> 1.6.10
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10
+|    |    |         +--- org.jetbrains:annotations:13.0
+|    |    |         \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10
+|    |    \--- com.google.code.gson:gson:2.8.5 -> 2.8.6
+|    \--- androidx.startup:startup-runtime:1.1.0 (*)
++--- androidx.databinding:viewbinding:4.1.2 -> 4.2.2
+|    \--- androidx.annotation:annotation:1.0.0 -> 1.3.0
++--- androidx.multidex:multidex:2.0.0 -> 2.0.1
++--- androidx.appcompat:appcompat:1.2.0 -> 1.4.2 (*)
++--- com.google.android.material:material:1.2.0 -> 1.6.1 (*)
++--- androidx.constraintlayout:constraintlayout:2.1.4 (*)
++--- com.google.android:flexbox:0.3.1
+|    +--- androidx.core:core:1.0.0 -> 1.7.0 (*)
+|    \--- androidx.recyclerview:recyclerview:1.0.0 -> 1.2.1 (*)
++--- project :baseWebview
+|    +--- com.github.Justson.AgentWeb:agentweb-core:v5.0.6-androidx
+|    +--- com.github.Justson.AgentWeb:agentweb-filechooser:v5.0.6-androidx
+|    |    \--- com.github.Justson.AgentWeb:agentweb-core:v5.0.6-androidx
+|    +--- com.github.Justson:Downloader:v5.0.4-androidx
+|    |    \--- com.github.Justson:dispatch-queue:v1.0.5
+|    +--- com.github.hss01248:PageStateManager:3.0.5
+|    |    \--- androidx.appcompat:appcompat:1.1.0 -> 1.4.2 (*)
+|    +--- androidx.lifecycle:lifecycle-common-java8:2.1.0 -> 2.4.0
+|    |    +--- androidx.lifecycle:lifecycle-common:2.4.0 (*)
+|    |    \--- androidx.annotation:annotation:1.1.0 -> 1.3.0
+|    +--- com.github.skyNet2017:webviewdebug:1.2.2-from117
+|    |    \--- com.squareup.okhttp3:okhttp:3.12.1 -> 3.12.12
+|    |         \--- com.squareup.okio:okio:1.15.0
+|    +--- com.github.hss01248:UI:0.0.1
+|    |    +--- androidx.appcompat:appcompat:1.3.0 -> 1.4.2 (*)
+|    |    \--- com.google.android.material:material:1.3.0 -> 1.6.1 (*)
+|    +--- org.apache.commons:commons-lang3:3.12.0
+|    +--- com.blankj:utilcodex:1.30.6 (*)
+|    +--- com.github.hss01248.MyPermission:location:2.2.5
+|    |    +--- androidx.appcompat:appcompat:1.2.0 -> 1.4.2 (*)
+|    |    +--- com.google.android.material:material:1.2.0 -> 1.6.1 (*)
+|    |    +--- com.google.android.gms:play-services-location:16.0.0
+|    |    |    +--- com.google.android.gms:play-services-base:16.0.1
+|    |    |    |    +--- com.google.android.gms:play-services-basement:16.0.1
+|    |    |    |    |    \--- androidx.legacy:legacy-support-v4:1.0.0
+|    |    |    |    |         +--- androidx.core:core:1.0.0 -> 1.7.0 (*)
+|    |    |    |    |         +--- androidx.media:media:1.0.0
+|    |    |    |    |         |    +--- androidx.annotation:annotation:1.0.0 -> 1.3.0
+|    |    |    |    |         |    +--- androidx.core:core:1.0.0 -> 1.7.0 (*)
+|    |    |    |    |         |    \--- androidx.versionedparcelable:versionedparcelable:1.0.0 -> 1.1.1 (*)
+|    |    |    |    |         +--- androidx.legacy:legacy-support-core-utils:1.0.0 (*)
+|    |    |    |    |         +--- androidx.legacy:legacy-support-core-ui:1.0.0
+|    |    |    |    |         |    +--- androidx.annotation:annotation:1.0.0 -> 1.3.0
+|    |    |    |    |         |    +--- androidx.core:core:1.0.0 -> 1.7.0 (*)
+|    |    |    |    |         |    +--- androidx.legacy:legacy-support-core-utils:1.0.0 (*)
+|    |    |    |    |         |    +--- androidx.customview:customview:1.0.0 -> 1.1.0 (*)
+|    |    |    |    |         |    +--- androidx.viewpager:viewpager:1.0.0 (*)
+|    |    |    |    |         |    +--- androidx.coordinatorlayout:coordinatorlayout:1.0.0 -> 1.1.0 (*)
+|    |    |    |    |         |    +--- androidx.drawerlayout:drawerlayout:1.0.0 -> 1.1.1 (*)
+|    |    |    |    |         |    +--- androidx.slidingpanelayout:slidingpanelayout:1.0.0
+|    |    |    |    |         |    |    +--- androidx.annotation:annotation:1.0.0 -> 1.3.0
+|    |    |    |    |         |    |    +--- androidx.core:core:1.0.0 -> 1.7.0 (*)
+|    |    |    |    |         |    |    \--- androidx.customview:customview:1.0.0 -> 1.1.0 (*)
+|    |    |    |    |         |    +--- androidx.interpolator:interpolator:1.0.0 (*)
+|    |    |    |    |         |    +--- androidx.swiperefreshlayout:swiperefreshlayout:1.0.0
+|    |    |    |    |         |    |    +--- androidx.annotation:annotation:1.0.0 -> 1.3.0
+|    |    |    |    |         |    |    +--- androidx.core:core:1.0.0 -> 1.7.0 (*)
+|    |    |    |    |         |    |    \--- androidx.interpolator:interpolator:1.0.0 (*)
+|    |    |    |    |         |    +--- androidx.asynclayoutinflater:asynclayoutinflater:1.0.0
+|    |    |    |    |         |    |    +--- androidx.annotation:annotation:1.0.0 -> 1.3.0
+|    |    |    |    |         |    |    \--- androidx.core:core:1.0.0 -> 1.7.0 (*)
+|    |    |    |    |         |    \--- androidx.cursoradapter:cursoradapter:1.0.0 (*)
+|    |    |    |    |         \--- androidx.fragment:fragment:1.0.0 -> 1.3.6 (*)
+|    |    |    |    \--- com.google.android.gms:play-services-tasks:16.0.1
+|    |    |    |         \--- com.google.android.gms:play-services-basement:16.0.1 (*)
+|    |    |    +--- com.google.android.gms:play-services-basement:16.0.1 (*)
+|    |    |    +--- com.google.android.gms:play-services-places-placereport:16.0.0
+|    |    |    |    \--- com.google.android.gms:play-services-basement:16.0.1 (*)
+|    |    |    \--- com.google.android.gms:play-services-tasks:16.0.1 (*)
+|    |    +--- com.blankj:utilcodex:1.30.0 -> 1.30.6 (*)
+|    |    +--- com.github.hss01248.MyPermission:permission:2.2.5
+|    |    |    +--- androidx.appcompat:appcompat:1.3.1 -> 1.4.2 (*)
+|    |    |    +--- com.google.android.material:material:1.2.0 -> 1.6.1 (*)
+|    |    |    +--- com.blankj:utilcodex:1.30.0 -> 1.30.6 (*)
+|    |    |    \--- com.github.hss01248.StartActivityResult:activityresult:1.1.5 -> 1.1.6 (*)
+|    |    +--- io.reactivex.rxjava2:rxandroid:2.1.1
+|    |    |    \--- io.reactivex.rxjava2:rxjava:2.2.6 -> 2.2.9
+|    |    |         \--- org.reactivestreams:reactive-streams:1.0.2
+|    |    +--- io.reactivex.rxjava2:rxjava:2.2.9 (*)
+|    |    \--- com.google.code.gson:gson:2.8.5 -> 2.8.6
+|    +--- project :media
+|    |    +--- project :lib-base
+|    |    |    +--- androidx.documentfile:documentfile:1.0.1 (*)
+|    |    |    +--- com.github.hss01248.MyPermission:permission:1.1.8 -> 2.2.5 (*)
+|    |    |    +--- com.github.hss01248.HttpUtil2:openuri:3.1.4
+|    |    |    |    \--- androidx.appcompat:appcompat:1.0.0 -> 1.4.2 (*)
+|    |    |    +--- com.github.hss01248.StartActivityResult:activityresult:1.1.6 (*)
+|    |    |    +--- com.blankj:utilcodex:1.30.0 -> 1.30.6 (*)
+|    |    |    +--- io.reactivex.rxjava2:rxjava:2.2.6 -> 2.2.9 (*)
+|    |    |    +--- io.reactivex.rxjava2:rxandroid:2.1.0 -> 2.1.1 (*)
+|    |    |    +--- com.google.code.gson:gson:2.8.5 -> 2.8.6
+|    |    |    +--- com.squareup.okhttp3:okhttp:3.12.12 (*)
+|    |    |    +--- com.github.hss01248:MyDataStore:1.0.1
+|    |    |    |    +--- com.tencent:mmkv-static:1.2.8
+|    |    |    |    |    \--- androidx.annotation:annotation:1.2.0 -> 1.3.0
+|    |    |    |    +--- com.getkeepsafe.relinker:relinker:1.4.1
+|    |    |    |    +--- com.google.code.gson:gson:2.8.6
+|    |    |    |    +--- androidx.startup:startup-runtime:1.0.0 -> 1.1.0 (*)
+|    |    |    |    +--- androidx.appcompat:appcompat:1.1.0 -> 1.4.2 (*)
+|    |    |    |    \--- com.google.android.material:material:1.1.0 -> 1.6.1 (*)
+|    |    |    +--- androidx.lifecycle:lifecycle-common-java8:2.2.0 -> 2.4.0 (*)
+|    |    |    +--- project :toast
+|    |    |    |    +--- com.blankj:utilcodex:1.30.0 -> 1.30.6 (*)
+|    |    |    |    +--- androidx.startup:startup-runtime:1.1.0 (*)
+|    |    |    |    +--- androidx.databinding:viewbinding:4.1.2 -> 4.2.2 (*)
+|    |    |    |    +--- androidx.appcompat:appcompat:1.2.0 -> 1.4.2 (*)
+|    |    |    |    +--- com.google.android.material:material:1.2.0 -> 1.6.1 (*)
+|    |    |    |    \--- com.github.getActivity:ToastUtils:11.0
+|    |    |    +--- project :openuri
+|    |    |    |    +--- androidx.databinding:viewbinding:4.1.2 -> 4.2.2 (*)
+|    |    |    |    \--- androidx.appcompat:appcompat:1.0.0 -> 1.4.2 (*)
+|    |    |    +--- project :viewState
+|    |    |    |    +--- com.blankj:utilcodex:1.30.0 -> 1.30.6 (*)
+|    |    |    |    +--- androidx.databinding:viewbinding:4.1.2 -> 4.2.2 (*)
+|    |    |    |    +--- androidx.appcompat:appcompat:1.2.0 -> 1.4.2 (*)
+|    |    |    |    \--- com.google.android.material:material:1.2.0 -> 1.6.1 (*)
+|    |    |    +--- com.github.hss01248.AndoridBus:bus:2.0.5
+|    |    |    |    +--- androidx.appcompat:appcompat:1.2.0 -> 1.4.2 (*)
+|    |    |    |    +--- com.google.android.material:material:1.2.0 -> 1.6.1 (*)
+|    |    |    |    \--- androidx.lifecycle:lifecycle-common-java8:2.2.0 -> 2.4.0 (*)
+|    |    |    +--- androidx.databinding:viewbinding:4.1.2 -> 4.2.2 (*)
+|    |    |    +--- androidx.appcompat:appcompat:1.2.0 -> 1.4.2 (*)
+|    |    |    \--- com.google.android.material:material:1.2.0 -> 1.6.1 (*)
+|    |    +--- project :iwidget
+|    |    |    +--- com.github.li-xiaojun:XPopup:2.9.15
+|    |    |    |    +--- androidx.appcompat:appcompat:1.3.1 -> 1.4.2 (*)
+|    |    |    |    +--- com.google.android.material:material:1.4.0 -> 1.6.1 (*)
+|    |    |    |    +--- androidx.recyclerview:recyclerview:1.2.1 (*)
+|    |    |    |    +--- com.github.li-xiaojun:EasyAdapter:1.2.8
+|    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-android-extensions-runtime:1.6.10 (*)
+|    |    |    |    |    +--- androidx.appcompat:appcompat:1.1.0 -> 1.4.2 (*)
+|    |    |    |    |    +--- androidx.recyclerview:recyclerview:1.1.0 -> 1.2.1 (*)
+|    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.0
+|    |    |    |    |         \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.0 -> 1.6.10 (*)
+|    |    |    |    \--- com.github.bumptech.glide:glide:4.12.0
+|    |    |    |         +--- com.github.bumptech.glide:gifdecoder:4.12.0
+|    |    |    |         |    \--- androidx.annotation:annotation:1.0.0 -> 1.3.0
+|    |    |    |         +--- com.github.bumptech.glide:disklrucache:4.12.0
+|    |    |    |         +--- com.github.bumptech.glide:annotations:4.12.0
+|    |    |    |         +--- androidx.fragment:fragment:1.0.0 -> 1.3.6 (*)
+|    |    |    |         +--- androidx.vectordrawable:vectordrawable-animated:1.0.0 -> 1.1.0 (*)
+|    |    |    |         \--- androidx.exifinterface:exifinterface:1.2.0 -> 1.3.2
+|    |    |    |              \--- androidx.annotation:annotation:1.1.0 -> 1.3.0
+|    |    |    +--- com.blankj:utilcodex:1.30.0 -> 1.30.6 (*)
+|    |    |    +--- com.github.kongzue.DialogX:DialogX:0.0.46
+|    |    |    |    +--- androidx.appcompat:appcompat:1.2.0+ -> 1.4.2 (*)
+|    |    |    |    \--- androidx.constraintlayout:constraintlayout:2.0.4+ -> 2.1.4 (*)
+|    |    |    +--- com.github.hss01248:DialogUtil:3.0.1
+|    |    |    |    +--- androidx.appcompat:appcompat:1.0.0 -> 1.4.2 (*)
+|    |    |    |    +--- androidx.recyclerview:recyclerview:1.0.0 -> 1.2.1 (*)
+|    |    |    |    +--- com.google.android.material:material:1.0.0 -> 1.6.1 (*)
+|    |    |    |    +--- androidx.startup:startup-runtime:1.1.0 (*)
+|    |    |    |    \--- androidx.cardview:cardview:1.0.0 (*)
+|    |    |    +--- androidx.databinding:viewbinding:4.1.2 -> 4.2.2 (*)
+|    |    |    +--- androidx.appcompat:appcompat:1.2.0 -> 1.4.2 (*)
+|    |    |    \--- com.google.android.material:material:1.2.0 -> 1.6.1 (*)
+|    |    +--- androidx.documentfile:documentfile:1.0.1 (*)
+|    |    +--- com.github.li-xiaojun:XPopup:2.9.15 (*)
+|    |    +--- androidx.databinding:viewbinding:4.1.2 -> 4.2.2 (*)
+|    |    +--- androidx.appcompat:appcompat:1.2.0 -> 1.4.2 (*)
+|    |    +--- com.google.android.material:material:1.2.0 -> 1.6.1 (*)
+|    |    \--- androidx.recyclerview:recyclerview:1.2.1 (*)
+|    +--- project :qr-scan
+|    |    +--- com.github.bingoogolapple.BGAQRCode-Android:zbar:1.3.8
+|    |    |    \--- com.github.bingoogolapple.BGAQRCode-Android:qrcodecore:1.3.8
+|    |    +--- androidx.percentlayout:percentlayout:1.0.0
+|    |    |    \--- androidx.core:core:1.0.0 -> 1.7.0 (*)
+|    |    +--- project :lib-base (*)
+|    |    +--- project :media (*)
+|    |    +--- com.github.getActivity:TitleBar:9.6
+|    |    +--- com.github.skyNet2017.Luban:luban:3.2.2
+|    |    |    +--- androidx.exifinterface:exifinterface:1.3.2 (*)
+|    |    |    \--- com.github.hss01248.metadata:metadata:1.1.1 -> 1.1.6
+|    |    |         +--- androidx.exifinterface:exifinterface:1.3.2 (*)
+|    |    |         \--- com.google.code.gson:gson:2.8.5 -> 2.8.6
+|    |    +--- androidx.databinding:viewbinding:4.1.2 -> 4.2.2 (*)
+|    |    +--- androidx.appcompat:appcompat:1.2.0 -> 1.4.2 (*)
+|    |    \--- com.google.android.material:material:1.2.0 -> 1.6.1 (*)
+|    +--- project :iwidget (*)
+|    +--- project :basewebview-ajax-proxy
+|    |    +--- org.jsoup:jsoup:1.7.2 -> 1.13.1
+|    |    +--- com.github.Justson.AgentWeb:agentweb-core:v5.0.6-androidx
+|    |    +--- com.blankj:utilcodex:1.30.6 (*)
+|    |    +--- androidx.databinding:viewbinding:4.1.2 -> 4.2.2 (*)
+|    |    +--- com.squareup.okhttp3:okhttp:3.12.12 (*)
+|    |    \--- androidx.appcompat:appcompat:1.2.0 -> 1.4.2 (*)
+|    +--- androidx.databinding:viewbinding:4.1.2 -> 4.2.2 (*)
+|    +--- androidx.appcompat:appcompat:1.2.0 -> 1.4.2 (*)
+|    +--- com.google.android.material:material:1.2.0 -> 1.6.1 (*)
+|    +--- com.github.hss01248.StartActivityResult:activityresult:1.1.6 (*)
+|    \--- com.github.hss01248.HttpUtil2:openuri:3.1.2 -> 3.1.4 (*)
++--- androidx.multidex:multidex:2.0.1
++--- com.github.hss01248.flipperUtil:flipper:1.7.04-dev
+|    +--- com.facebook.flipper:flipper:0.94.1
+|    |    +--- com.facebook.fbjni:fbjni:0.2.2
+|    |    |    \--- com.facebook.soloader:nativeloader:0.10.1
+|    |    +--- com.facebook.soloader:soloader:0.10.1
+|    |    |    +--- com.facebook.soloader:annotation:0.10.1
+|    |    |    \--- com.facebook.soloader:nativeloader:0.10.1
+|    |    +--- com.google.code.findbugs:jsr305:3.0.2
+|    |    +--- androidx.appcompat:appcompat:1.1.0 -> 1.4.2 (*)
+|    |    \--- androidx.sqlite:sqlite-framework:2.1.0
+|    |         +--- androidx.annotation:annotation:1.0.0 -> 1.3.0
+|    |         \--- androidx.sqlite:sqlite:2.1.0
+|    |              \--- androidx.annotation:annotation:1.0.0 -> 1.3.0
+|    +--- com.github.ddyos:flipper-plugin-mmkv-viewer:1.0.0
+|    |    \--- org.jetbrains.kotlin:kotlin-android-extensions-runtime:1.3.61 -> 1.6.10 (*)
+|    +--- com.facebook.soloader:soloader:0.10.1 (*)
+|    +--- com.squareup.okhttp3:okhttp:3.12.12 (*)
+|    +--- org.aspectj:aspectjrt:1.9.5
+|    +--- androidx.startup:startup-runtime:1.1.0 (*)
+|    +--- com.blankj:utilcodex:1.30.0 -> 1.30.6 (*)
+|    +--- com.github.hss01248.flipperUtil:flipper-collector:1.7.04-dev
+|    |    +--- androidx.appcompat:appcompat:1.2.0 -> 1.4.2 (*)
+|    |    +--- com.google.android.material:material:1.2.0 -> 1.6.1 (*)
+|    |    \--- com.facebook.flipper:flipper:0.94.1 (*)
+|    +--- com.github.hss01248.flipperUtil:network:1.7.04-dev
+|    |    +--- com.facebook.flipper:flipper:0.94.1 (*)
+|    |    +--- com.squareup.okhttp3:okhttp-urlconnection:3.12.12
+|    |    |    \--- com.squareup.okhttp3:okhttp:3.12.12 (*)
+|    |    +--- com.squareup.okhttp3:okhttp:3.12.12 (*)
+|    |    +--- com.github.hss01248.flipperUtil:network-hook:1.7.04-dev
+|    |    |    +--- androidx.appcompat:appcompat:1.2.0 -> 1.4.2 (*)
+|    |    |    +--- com.google.android.material:material:1.2.0 -> 1.6.1 (*)
+|    |    |    +--- org.aspectj:aspectjrt:1.9.5
+|    |    |    +--- com.squareup.okhttp3:okhttp:3.12.12 (*)
+|    |    |    +--- androidx.startup:startup-runtime:1.1.0 (*)
+|    |    |    \--- com.blankj:utilcodex:1.30.0 -> 1.30.6 (*)
+|    |    \--- com.github.hss01248.flipperUtil:network-body-meta-interceptor:1.7.04-dev
+|    |         +--- androidx.appcompat:appcompat:1.2.0 -> 1.4.2 (*)
+|    |         +--- com.google.android.material:material:1.2.0 -> 1.6.1 (*)
+|    |         +--- com.google.code.gson:gson:2.8.5 -> 2.8.6
+|    |         +--- com.github.tiann:FreeReflection:3.1.0
+|    |         +--- com.github.hss01248.metadata:metadata:1.1.6 (*)
+|    |         +--- com.blankj:utilcodex:1.30.0 -> 1.30.6 (*)
+|    |         \--- com.squareup.okhttp3:okhttp:3.12.12 (*)
+|    +--- com.github.hss01248.flipperUtil:network-hooks-chucker:1.7.04-dev
+|    |    +--- androidx.appcompat:appcompat:1.2.0 -> 1.4.2 (*)
+|    |    +--- com.google.android.material:material:1.2.0 -> 1.6.1 (*)
+|    |    +--- com.github.hss01248.flipperUtil:network-hook:1.7.04-dev (*)
+|    |    +--- com.github.hss01248.flipperUtil:network-body-meta-interceptor:1.7.04-dev (*)
+|    |    \--- com.github.skyNet2017.chucker:library:6.0.7-from340
+|    |         +--- com.squareup.okhttp3:okhttp:3.12.10 -> 3.12.12 (*)
+|    |         +--- com.github.hss01248.flipperUtil:network-body-meta-interceptor:1.5.04-dev -> 1.7.04-dev (*)
+|    |         +--- androidx.databinding:viewbinding:4.1.0 -> 4.2.2 (*)
+|    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.4.10 -> 1.6.10 (*)
+|    |         +--- com.google.android.material:material:1.2.1 -> 1.6.1 (*)
+|    |         +--- androidx.constraintlayout:constraintlayout:2.0.4 -> 2.1.4 (*)
+|    |         +--- androidx.palette:palette-ktx:1.0.0
+|    |         |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.2.50 -> 1.6.10 (*)
+|    |         |    \--- androidx.palette:palette:1.0.0
+|    |         |         +--- androidx.core:core:1.0.0 -> 1.7.0 (*)
+|    |         |         \--- androidx.legacy:legacy-support-core-utils:1.0.0 (*)
+|    |         +--- androidx.fragment:fragment-ktx:1.2.5
+|    |         |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.3.50 -> 1.6.10 (*)
+|    |         |    +--- androidx.fragment:fragment:1.2.5 -> 1.3.6 (*)
+|    |         |    +--- androidx.activity:activity-ktx:1.1.0 -> 1.2.3
+|    |         |    |    +--- androidx.activity:activity:1.2.3 -> 1.2.4 (*)
+|    |         |    |    +--- androidx.core:core-ktx:1.1.0 -> 1.3.0
+|    |         |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.3.71 -> 1.6.10 (*)
+|    |         |    |    |    +--- androidx.annotation:annotation:1.1.0 -> 1.3.0
+|    |         |    |    |    \--- androidx.core:core:1.3.0 -> 1.7.0 (*)
+|    |         |    |    +--- androidx.lifecycle:lifecycle-runtime-ktx:2.3.1
+|    |         |    |    |    +--- androidx.lifecycle:lifecycle-runtime:2.3.1 -> 2.4.0 (*)
+|    |         |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.4.20 -> 1.6.10 (*)
+|    |         |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1
+|    |         |    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1
+|    |         |    |    |    |    |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.4.1
+|    |         |    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.4.0 -> 1.6.10 (*)
+|    |         |    |    |    |    |         \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.4.0 -> 1.6.10
+|    |         |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.4.0 -> 1.6.10 (*)
+|    |         |    |    |    \--- androidx.annotation:annotation:1.0.0 -> 1.3.0
+|    |         |    |    +--- androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1
+|    |         |    |    |    +--- androidx.lifecycle:lifecycle-viewmodel:2.3.1 (*)
+|    |         |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.4.20 -> 1.6.10 (*)
+|    |         |    |    |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1 (*)
+|    |         |    |    +--- androidx.savedstate:savedstate-ktx:1.1.0
+|    |         |    |    |    +--- androidx.savedstate:savedstate:1.1.0 (*)
+|    |         |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.4.20 -> 1.6.10 (*)
+|    |         |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.4.20 -> 1.6.10 (*)
+|    |         |    +--- androidx.core:core-ktx:1.1.0 -> 1.3.0 (*)
+|    |         |    +--- androidx.collection:collection-ktx:1.1.0
+|    |         |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.3.20 -> 1.6.10 (*)
+|    |         |    |    \--- androidx.collection:collection:1.1.0 (*)
+|    |         |    +--- androidx.lifecycle:lifecycle-livedata-core-ktx:2.2.0
+|    |         |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.3.50 -> 1.6.10 (*)
+|    |         |    |    \--- androidx.lifecycle:lifecycle-livedata-core:2.2.0 -> 2.3.1 (*)
+|    |         |    \--- androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0 -> 2.3.1 (*)
+|    |         +--- androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0 -> 2.3.1 (*)
+|    |         +--- androidx.lifecycle:lifecycle-livedata-ktx:2.2.0
+|    |         |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.3.50 -> 1.6.10 (*)
+|    |         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0 -> 1.4.1 (*)
+|    |         |    +--- androidx.lifecycle:lifecycle-livedata:2.2.0 (*)
+|    |         |    \--- androidx.lifecycle:lifecycle-livedata-core-ktx:2.2.0 (*)
+|    |         +--- androidx.room:room-ktx:2.2.5
+|    |         |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.3.41 -> 1.6.10 (*)
+|    |         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.0 -> 1.4.1 (*)
+|    |         |    +--- androidx.room:room-common:2.2.5
+|    |         |    |    \--- androidx.annotation:annotation:1.1.0 -> 1.3.0
+|    |         |    \--- androidx.room:room-runtime:2.2.5
+|    |         |         +--- androidx.room:room-common:2.2.5 (*)
+|    |         |         +--- androidx.sqlite:sqlite-framework:2.0.1 -> 2.1.0 (*)
+|    |         |         +--- androidx.sqlite:sqlite:2.0.1 -> 2.1.0 (*)
+|    |         |         \--- androidx.arch.core:core-runtime:2.0.1 -> 2.1.0 (*)
+|    |         +--- androidx.room:room-runtime:2.2.5 (*)
+|    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0 -> 1.4.1 (*)
+|    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.0 -> 1.4.1 (*)
+|    |         \--- com.google.code.gson:gson:2.8.6
+|    +--- com.github.hss01248.flipperUtil:network-hooks-logging:1.7.04-dev
+|    |    +--- androidx.appcompat:appcompat:1.2.0 -> 1.4.2 (*)
+|    |    +--- com.google.android.material:material:1.2.0 -> 1.6.1 (*)
+|    |    +--- com.github.hss01248.flipperUtil:network-hook:1.7.04-dev (*)
+|    |    \--- com.squareup.okhttp3:logging-interceptor:3.12.12
+|    |         \--- com.squareup.okhttp3:okhttp:3.12.12 (*)
+|    +--- com.github.hss01248.flipperUtil:network-hooks-ssl-ignore:1.7.04-dev
+|    |    +--- androidx.appcompat:appcompat:1.2.0 -> 1.4.2 (*)
+|    |    +--- com.google.android.material:material:1.2.0 -> 1.6.1 (*)
+|    |    \--- com.github.hss01248.flipperUtil:network-hook:1.7.04-dev (*)
+|    \--- com.github.hss01248.flipperUtil:network-urlconnection:1.7.04-dev
+|         +--- androidx.appcompat:appcompat:1.2.0 -> 1.4.2 (*)
+|         +--- com.google.android.material:material:1.2.0 -> 1.6.1 (*)
+|         +--- androidx.startup:startup-runtime:1.0.0 -> 1.1.0 (*)
+|         +--- com.github.hss01248.flipperUtil:network-hook:1.7.04-dev (*)
+|         \--- com.squareup.okhttp3:okhttp-urlconnection:3.12.12 (*)
++--- com.github.hss01248.flipperUtil:dokit:1.7.04-dev
+|    +--- androidx.appcompat:appcompat:1.2.0 -> 1.4.2 (*)
+|    +--- com.google.android.material:material:1.2.0 -> 1.6.1 (*)
+|    +--- io.github.didi.dokit:dokitx:3.5.0.1
+|    |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.72
+|    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.3.72 -> 1.6.10 (*)
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.72 -> 1.5.0 (*)
+|    |    +--- androidx.lifecycle:lifecycle-common-java8:2.3.1 -> 2.4.0 (*)
+|    |    +--- androidx.constraintlayout:constraintlayout:1.1.3 -> 2.1.4 (*)
+|    |    +--- androidx.appcompat:appcompat:1.1.0 -> 1.4.2 (*)
+|    |    +--- androidx.cardview:cardview:1.0.0 (*)
+|    |    +--- androidx.recyclerview:recyclerview:1.1.0 -> 1.2.1 (*)
+|    |    +--- androidx.core:core-ktx:1.3.0 (*)
+|    |    +--- androidx.activity:activity-ktx:1.2.3 (*)
+|    |    +--- androidx.webkit:webkit:1.3.0
+|    |    |    +--- androidx.annotation:annotation:1.1.0 -> 1.3.0
+|    |    |    \--- androidx.core:core:1.1.0 -> 1.7.0 (*)
+|    |    +--- com.android.volley:volley:1.1.1
+|    |    +--- com.google.zxing:core:3.3.0
+|    |    +--- com.github.ybq:Android-SpinKit:1.4.0
+|    |    +--- com.squareup.okhttp:okhttp:2.7.5
+|    |    |    \--- com.squareup.okio:okio:1.6.0 -> 1.15.0
+|    |    +--- androidx.room:room-runtime:2.0.0 -> 2.2.5 (*)
+|    |    +--- org.jsoup:jsoup:1.13.1
+|    |    +--- io.github.didi.dokit:dokitx-okhttp-api:3.5.0.1
+|    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.72 (*)
+|    |    |    +--- io.github.didi.dokit:dokitx-okhttp-v3:3.5.0.1
+|    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.72 (*)
+|    |    |    |    \--- com.squareup.okhttp3:okhttp:3.14.7 -> 3.12.12 (*)
+|    |    |    \--- io.github.didi.dokit:dokitx-okhttp-v4:3.5.0.1
+|    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.72 (*)
+|    |    |         \--- androidx.annotation:annotation:1.1.0 -> 1.3.0
+|    |    +--- io.github.didi.dokit:dokitx-util:3.5.0.1
+|    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.72 (*)
+|    |    |    +--- androidx.annotation:annotation:1.1.0 -> 1.3.0
+|    |    |    +--- androidx.fragment:fragment:1.3.5 -> 1.3.6 (*)
+|    |    |    +--- androidx.drawerlayout:drawerlayout:1.1.1 (*)
+|    |    |    +--- com.google.android.material:material:1.1.0 -> 1.6.1 (*)
+|    |    |    \--- com.google.code.gson:gson:2.8.2 -> 2.8.6
+|    |    +--- com.google.auto.service:auto-service:1.0
+|    |    |    +--- com.google.auto.service:auto-service-annotations:1.0
+|    |    |    +--- com.google.auto:auto-common:1.0
+|    |    |    |    \--- com.google.guava:guava:30.1.1-jre
+|    |    |    |         +--- com.google.guava:failureaccess:1.0.1
+|    |    |    |         +--- com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava
+|    |    |    |         +--- com.google.code.findbugs:jsr305:3.0.2
+|    |    |    |         +--- org.checkerframework:checker-qual:3.8.0
+|    |    |    |         +--- com.google.errorprone:error_prone_annotations:2.5.1
+|    |    |    |         \--- com.google.j2objc:j2objc-annotations:1.3
+|    |    |    \--- com.google.guava:guava:30.1.1-jre (*)
+|    |    +--- com.google.code.gson:gson:2.8.2 -> 2.8.6
+|    |    +--- androidx.databinding:databinding-common:4.2.2
+|    |    +--- androidx.databinding:databinding-runtime:4.2.2
+|    |    |    +--- androidx.databinding:viewbinding:4.2.2 (*)
+|    |    |    +--- androidx.lifecycle:lifecycle-runtime:2.0.0 -> 2.4.0 (*)
+|    |    |    +--- androidx.collection:collection:1.0.0 -> 1.1.0 (*)
+|    |    |    \--- androidx.databinding:databinding-common:4.2.2
+|    |    \--- androidx.databinding:databinding-adapters:4.2.2
+|    |         +--- androidx.databinding:databinding-common:4.2.2
+|    |         \--- androidx.databinding:databinding-runtime:4.2.2 (*)
+|    +--- com.glance.guolindev:glance:1.0.0
+|    |    +--- androidx.databinding:viewbinding:4.1.2 -> 4.2.2 (*)
+|    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.4.30 -> 1.6.10 (*)
+|    |    +--- androidx.appcompat:appcompat:1.2.0 -> 1.4.2 (*)
+|    |    +--- androidx.startup:startup-runtime:1.0.0 -> 1.1.0 (*)
+|    |    +--- androidx.recyclerview:recyclerview:1.1.0 -> 1.2.1 (*)
+|    |    +--- androidx.paging:paging-runtime:3.0.0-alpha06
+|    |    |    +--- androidx.paging:paging-common:3.0.0-alpha06
+|    |    |    |    +--- androidx.annotation:annotation:1.1.0 -> 1.3.0
+|    |    |    |    +--- androidx.arch.core:core-common:2.0.1 -> 2.1.0 (*)
+|    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.3.71 -> 1.6.10 (*)
+|    |    |    |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7 -> 1.4.1 (*)
+|    |    |    +--- androidx.paging:paging-common-ktx:3.0.0-alpha06
+|    |    |    |    \--- androidx.paging:paging-common:3.0.0-alpha06 (*)
+|    |    |    +--- androidx.lifecycle:lifecycle-runtime-ktx:2.2.0 -> 2.3.1 (*)
+|    |    |    +--- androidx.lifecycle:lifecycle-livedata-ktx:2.2.0 (*)
+|    |    |    +--- androidx.recyclerview:recyclerview:1.2.0-alpha04 -> 1.2.1 (*)
+|    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.3.71 -> 1.6.10 (*)
+|    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.7 -> 1.4.1 (*)
+|    |    |    \--- androidx.core:core-ktx:1.2.0 -> 1.3.0 (*)
+|    |    +--- androidx.lifecycle:lifecycle-extensions:2.2.0
+|    |    |    +--- androidx.lifecycle:lifecycle-runtime:2.2.0 -> 2.4.0 (*)
+|    |    |    +--- androidx.arch.core:core-common:2.1.0 (*)
+|    |    |    +--- androidx.arch.core:core-runtime:2.1.0 (*)
+|    |    |    +--- androidx.fragment:fragment:1.2.0 -> 1.3.6 (*)
+|    |    |    +--- androidx.lifecycle:lifecycle-common:2.2.0 -> 2.4.0 (*)
+|    |    |    +--- androidx.lifecycle:lifecycle-livedata:2.2.0 (*)
+|    |    |    +--- androidx.lifecycle:lifecycle-process:2.2.0 -> 2.4.0 (*)
+|    |    |    +--- androidx.lifecycle:lifecycle-service:2.2.0
+|    |    |    |    \--- androidx.lifecycle:lifecycle-runtime:2.2.0 -> 2.4.0 (*)
+|    |    |    \--- androidx.lifecycle:lifecycle-viewmodel:2.2.0 -> 2.3.1 (*)
+|    |    +--- androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0 -> 2.3.1 (*)
+|    |    +--- androidx.lifecycle:lifecycle-runtime-ktx:2.3.0 -> 2.3.1 (*)
+|    |    +--- androidx.constraintlayout:constraintlayout:2.0.4 -> 2.1.4 (*)
+|    |    +--- com.google.code.gson:gson:2.8.6
+|    |    +--- com.google.android.material:material:1.3.0 -> 1.6.1 (*)
+|    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1 (*)
+|    |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1 (*)
+|    +--- com.github.hss01248:ActivityTaskView:5.1.2
+|    |    +--- androidx.startup:startup-runtime:1.0.0 -> 1.1.0 (*)
+|    |    +--- com.github.hss01248.StartActivityResult:activityresult:1.1.2 -> 1.1.6 (*)
+|    |    +--- androidx.databinding:databinding-common:4.1.0 -> 4.2.2
+|    |    +--- androidx.databinding:databinding-runtime:4.1.0 -> 4.2.2 (*)
+|    |    +--- androidx.databinding:databinding-adapters:4.1.0 -> 4.2.2 (*)
+|    |    +--- androidx.appcompat:appcompat:1.1.0 -> 1.4.2 (*)
+|    |    +--- androidx.constraintlayout:constraintlayout:1.1.3 -> 2.1.4 (*)
+|    |    \--- com.google.android.material:material:1.1.0-alpha10 -> 1.6.1 (*)
+|    +--- me.ele:uetool:1.2.3
+|    |    +--- me.ele:uetool-base:1.2.3
+|    |    |    +--- androidx.appcompat:appcompat:1.0.0 -> 1.4.2 (*)
+|    |    |    +--- androidx.recyclerview:recyclerview:1.0.0 -> 1.2.1 (*)
+|    |    |    \--- androidx.legacy:legacy-support-v4:1.0.0 (*)
+|    |    +--- com.jakewharton.scalpel:scalpel:1.1.2
+|    |    \--- com.github.bmelnychuk:atv:1.2.9
+|    |         \--- androidx.appcompat:appcompat:1.0.0 -> 1.4.2 (*)
+|    +--- androidx.startup:startup-runtime:1.1.0 (*)
+|    +--- com.github.hss01248.StartActivityResult:activityresult:1.1.6 (*)
+|    +--- org.aspectj:aspectjrt:1.9.5
+|    \--- com.blankj:utilcodex:1.30.0 -> 1.30.6 (*)
++--- com.github.simplepeng.SpiderMan:spiderman:v1.1.8
+|    \--- androidx.appcompat:appcompat:1.1.0 -> 1.4.2 (*)
+\--- org.aspectj:aspectjrt:1.9.5
+
+(c) - dependency constraint
+(*) - dependencies omitted (listed previously)
+
+A web-based, searchable dependency report is available by adding the --scan option.
+:basewebviewdemo:dependencies took 1672ms
+:basewebviewdemo:dependencies spend 1677ms
+:basewebviewdemo:dependencies spend 1671ms
+
+======================================================
+Task timings(sorted): 
+:basewebviewdemo:dependencies                       1672ms         
+
+
+Total Tasks took 0min 1s 672ms
+      00:01.67   :basewebviewdemo:dependencies
+      00:01.67   :basewebviewdemo:dependencies
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 7.0.
+Use '--warning-mode all' to show the individual deprecation warnings.
+See https://docs.gradle.org/6.5/userguide/command_line_interface.html#sec:command_line_warnings
+
+BUILD SUCCESSFUL in 21s
+1 actionable task: 1 executed
