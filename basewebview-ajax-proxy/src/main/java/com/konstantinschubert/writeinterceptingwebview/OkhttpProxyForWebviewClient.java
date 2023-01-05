@@ -40,8 +40,8 @@ public class OkhttpProxyForWebviewClient extends WriteHandlingWebViewClient{
 
     private OkHttpClient initDefaultClient() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        builder.followRedirects(false);
-        builder.followSslRedirects(false);//测试: http://www.baidu.com
+        builder.followRedirects(true);
+        builder.followSslRedirects(true);//测试: http://www.baidu.com
         builder.protocols(Arrays.asList(Protocol.HTTP_1_1));
         //OkhttpAspect.fixOkHttpBug(builder);
         return builder.build();
@@ -129,6 +129,7 @@ public class OkhttpProxyForWebviewClient extends WriteHandlingWebViewClient{
                 //message不能为空
                 message = "OK";
             }
+            //statusCode can't be in the [300, 399] range.
             webResourceResponse.setStatusCodeAndReasonPhrase(code, message);
 
             //响应头
@@ -145,7 +146,7 @@ public class OkhttpProxyForWebviewClient extends WriteHandlingWebViewClient{
             webResourceResponse = new WebResourceResponse("text/plain","utf-8",
                     //todo body为空的情况
                     new ByteArrayInputStream("".getBytes(StandardCharsets.UTF_8)));
-            webResourceResponse.setStatusCodeAndReasonPhrase(510, e.getClass().getSimpleName()+" : "+e.getMessage());
+            webResourceResponse.setStatusCodeAndReasonPhrase(566, e.getClass().getSimpleName()+" : "+e.getMessage());
         }
 
         return webResourceResponse;

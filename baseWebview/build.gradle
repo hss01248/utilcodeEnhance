@@ -38,7 +38,7 @@ dependencies {
 
     //api 'com.github.Justson.AgentWeb:agentweb-core:v4.1.9-androidx' // (必选)
     api 'com.github.Justson.AgentWeb:agentweb-core:v5.0.6-androidx' // (必选)
-    api 'com.github.Justson.AgentWeb:agentweb-filechooser:v5.0.6-androidx' // (可选)
+    //api 'com.github.Justson.AgentWeb:agentweb-filechooser:v5.0.6-androidx' // (可选) 功能不好用,bug多,适配不全
     api 'com.github.Justson:Downloader:v5.0.4-androidx' // (可选)
 
 

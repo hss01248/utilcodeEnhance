@@ -414,7 +414,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                 })
                 .useMiddlewareWebChrome(new JsPermissionImpl())
                 .useMiddlewareWebChrome(new FileChooseImpl())
-                .useMiddlewareWebClient(okhttpProxyForWebviewClient)
+                //.useMiddlewareWebClient(okhttpProxyForWebviewClient)
                 //.useMiddlewareWebChrome(new JsNewWindowImpl())
                 //.useMiddlewareWebChrome(new VideoFullScreenImpl())
               // .setMainFrameErrorView(R.layout.pager_error,R.id.error_btn_retry)
@@ -425,7 +425,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
         mAgentWeb = preAgentWeb.get();
 
         webView = mAgentWeb.getWebCreator().getWebView();
-        okhttpProxyForWebviewClient.addAjaxInterceptorJsInterface(webView);
+        //okhttpProxyForWebviewClient.addAjaxInterceptorJsInterface(webView);
         stateManager = PageStateManager.initWhenUse(mAgentWeb.getWebCreator().getWebParentLayout(), new PageStateConfig() {
 
             @Override

@@ -10,6 +10,7 @@ import android.webkit.WebViewClient;
 
 import androidx.annotation.RequiresApi;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.just.agentweb.MiddlewareWebClientBase;
 import com.just.agentweb.WebViewClientDelegate;
 
@@ -57,7 +58,7 @@ public abstract class WriteHandlingWebViewClient extends MiddlewareWebClientBase
         if (webResourceResponse == null) {
             return webResourceResponse;
         } else {
-            return injectIntercept(webResourceResponse, view.getContext());
+            return injectIntercept(uri,webResourceResponse, view.getContext());
         }
     }
 
@@ -100,11 +101,12 @@ public abstract class WriteHandlingWebViewClient extends MiddlewareWebClientBase
         return body;
     }
 
-    private WebResourceResponse injectIntercept(WebResourceResponse response, Context context) {
+    private WebResourceResponse injectIntercept(Uri uri, WebResourceResponse response, Context context) {
         String encoding = response.getEncoding();
         String mime = response.getMimeType();
         InputStream responseData = response.getData();
         InputStream injectedResponseData = injectInterceptToStream(
+                uri,
                 context,
                 responseData,
                 mime,
@@ -114,7 +116,7 @@ public abstract class WriteHandlingWebViewClient extends MiddlewareWebClientBase
     }
 
     private InputStream injectInterceptToStream(
-            Context context,
+            Uri uri, Context context,
             InputStream is,
             String mime,
             String charset
@@ -129,7 +131,8 @@ public abstract class WriteHandlingWebViewClient extends MiddlewareWebClientBase
 
             return new ByteArrayInputStream(pageContents);
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            LogUtils.w(uri.toString(),e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 }
