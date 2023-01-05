@@ -73,8 +73,10 @@ public class WebConfigger {
         cookieManager.setAcceptCookie(true);
         //mWebSettings.setTextZoom(100);
         //设置自适应屏幕，两者合用
-        //mWebSettings.setLoadWithOverviewMode(true); // 缩放至屏幕的大小
-       // mWebSettings.setUseWideViewPort(true); //将图片调整到适合webView的大小
+        mWebSettings.setLoadWithOverviewMode(true); // 缩放至屏幕的大小
+        mWebSettings.setUseWideViewPort(true); //将图片调整到适合webView的大小
+        // //第一个方法设置webview推荐使用的窗口，设置为true。第二个方法是设置webview加载的页面的模式，也设置为true。
+        //        //这方法可以让你的页面适应手机屏幕的分辨率，完整的显示在屏幕上，可以放大缩小。
 
         mWebSettings.setNeedInitialFocus(true); //当webView调用requestFocus时为webView设置节点
 
@@ -105,6 +107,10 @@ public class WebConfigger {
                 mWebSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);//没网，则从本地获取，即离线加载
             }
         }*/
+
+
+
+
 
 
 

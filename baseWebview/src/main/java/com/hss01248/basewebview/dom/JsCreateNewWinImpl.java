@@ -2,12 +2,17 @@ package com.hss01248.basewebview.dom;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.text.TextUtils;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,11 +35,13 @@ public class JsCreateNewWinImpl {
 
      public static void enableMultipulWindow(WebView webView, boolean supportMultiplWindow){
          WebSettings mWebSettings = webView.getSettings();
-         mWebSettings.setSupportMultipleWindows(true);
-         mWebSettings.setJavaScriptCanOpenWindowsAutomatically(true);//支持通过js打开新的窗口
+         mWebSettings.setSupportMultipleWindows(supportMultiplWindow);
+         mWebSettings.setJavaScriptCanOpenWindowsAutomatically(supportMultiplWindow);//支持通过js打开新的窗口
      }
 
     public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
+         //下载,以及其他协议的链接,就不要打开新webview
+        LogUtils.w(view.getUrl(),view.getOriginalUrl());
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
@@ -45,6 +52,40 @@ public class JsCreateNewWinImpl {
     }
 
     private void onCreateWindow2(WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
+
+         //todo 先打开
+        BaseQuickWebview baseQuickWebview = new BaseQuickWebview(view.getContext());
+        WebView  newWebView = baseQuickWebview.getWebView();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            WebViewClient webViewClient = newWebView.getWebViewClient();
+            newWebView.setWebViewClient(new WebViewClient(){
+                //todo  其他的使用原webviewclient
+
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                    Uri uri = request.getUrl();
+                    if("https".equals(uri.getScheme()) || "http".equals(uri.getScheme())){
+                        //todo  判断是不是下载链接,如果是,直接调用下载,如果不是,才开启新的activity来承载
+
+                    }else {
+                        //todo 弹窗提示是否跳到app打开
+                        return true;
+                    }
+                    return super.shouldOverrideUrlLoading(view, request);
+                }
+            });
+
+        }
+
+
+        WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
+        transport.setWebView(newWebView);
+
+        resultMsg.sendToTarget();
+
+
+
         Intent intent = new Intent(ActivityUtils.getTopActivity(), WebConfigger.getInit().html5ActivityClass());
         intent.putExtra(ISetWebviewHolder.setWebviewHolderByOutSide,true);
         StartActivityUtil.startActivity(ActivityUtils.getTopActivity(),
@@ -66,13 +107,16 @@ public class JsCreateNewWinImpl {
 
                             //相当于load url
                            WebView  newWebView = quickWebview.getWebView();
-                            LogUtils.w("webdebug", "onCreateWindow:isDialog:" + isDialog +
-                                    ",isUserGesture:" + isUserGesture + ",msg:" + resultMsg + "\n chromeclient:" + this+","+newWebView);
+
                             WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
                             transport.setWebView(newWebView);
                             resultMsg.sendToTarget();
 
+                            LogUtils.w("debugwebview", "onCreateWindow:isDialog:" + isDialog +
+                                    ",isUserGesture:" + isUserGesture + ",msg:" + resultMsg + "\n chromeclient:" + this+","+newWebView,
+                                    newWebView.getUrl(),newWebView.getOriginalUrl(),resultMsg.obj);
 
+                            //shouldOverrideUrlLoading()
                             //给新打开的webview响应closewindow用
                             //quickWebview.jsCreateNewWin = JsCreateNewWinImpl.this;
                             quickWebview.jsCreateNewWin.activity = activity;
