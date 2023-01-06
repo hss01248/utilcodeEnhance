@@ -148,8 +148,15 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
         activity.getLifecycle().addObserver(this);
         BarUtils.setStatusBarColor(activity, Color.WHITE);
         BarUtils.setStatusBarLightMode(activity,true);
+    }
 
-
+    public void resetLifecycleOwner(LifecycleOwner lifecycleOwner){
+        AppCompatActivity activity0 = (AppCompatActivity) WebDebugger.getActivityFromContext(getContext());
+        if(activity0 == lifecycleOwner){
+            return;
+        }
+        activity0.getLifecycle().removeObserver(this);
+        lifecycleOwner.getLifecycle().addObserver(this);
     }
 
     public TitlebarForWebviewBinding getTitleBar() {
