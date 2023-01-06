@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 
@@ -40,6 +41,8 @@ import com.hss01248.pagestate.PageStateConfig;
 import com.hss01248.pagestate.PageStateManager;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.AgentWebUIControllerImplBase;
+import com.just.agentweb.MiddlewareWebChromeBase;
+import com.just.agentweb.MiddlewareWebClientBase;
 import com.just.agentweb.WebViewClient;
 import com.konstantinschubert.writeinterceptingwebview.OkhttpProxyForWebviewClient;
 
@@ -91,6 +94,15 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
     }
 
     WebPageInfo info;
+    MiddlewareWebChromeBase middlewareWebChrome;
+    MiddlewareWebClientBase middlewareWebClient;
+
+    public BaseQuickWebview(Context context,MiddlewareWebChromeBase middlewareWebChrome,MiddlewareWebClientBase middlewareWebClient) {
+        super(context);
+        this.middlewareWebChrome = middlewareWebChrome;
+        this.middlewareWebClient = middlewareWebClient;
+        init(context);
+    }
 
     public BaseQuickWebview(Context context) {
         super(context);
@@ -123,6 +135,20 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
             addLifecycle(owner);
         }
         initWebView();
+    }
+
+    public void resetContext(Context context){
+        AppCompatActivity activity0 = (AppCompatActivity) WebDebugger.getActivityFromContext(getContext());
+        AppCompatActivity activity = (AppCompatActivity) WebDebugger.getActivityFromContext(context);
+        if(activity == activity0){
+            return;
+        }
+        activity0.getLifecycle().removeObserver(this);
+        activity.getLifecycle().addObserver(this);
+        BarUtils.setStatusBarColor(activity, Color.WHITE);
+        BarUtils.setStatusBarLightMode(activity,true);
+
+
     }
 
     public TitlebarForWebviewBinding getTitleBar() {
@@ -275,8 +301,8 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
     public JsCreateNewWinImpl jsCreateNewWin = new JsCreateNewWinImpl();
 
     private void initWebView() {
-        OkhttpProxyForWebviewClient okhttpProxyForWebviewClient = new OkhttpProxyForWebviewClient();
-        preAgentWeb = AgentWeb.with((Activity) getContext())//传入Activity or Fragment
+        //OkhttpProxyForWebviewClient okhttpProxyForWebviewClient = new OkhttpProxyForWebviewClient();
+        AgentWeb.CommonBuilder builder = AgentWeb.with((Activity) getContext())//传入Activity or Fragment
                 .setAgentWebParent(this,
                         new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
                 //传入AgentWeb 的父控件 ，如果父控件为 RelativeLayout ， 那么第二参数需要传入 RelativeLayout.LayoutParams ,第一个参数和第二个参数应该对应。
@@ -413,13 +439,19 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                     }
                 })
                 .useMiddlewareWebChrome(new JsPermissionImpl())
-                .useMiddlewareWebChrome(new FileChooseImpl())
+                .useMiddlewareWebChrome(new FileChooseImpl());
+        if(middlewareWebClient != null){
+            builder.useMiddlewareWebClient(middlewareWebClient);
+        }
+        if(middlewareWebChrome != null){
+            builder.useMiddlewareWebChrome(middlewareWebChrome);
+        }
                 //.useMiddlewareWebClient(okhttpProxyForWebviewClient)
                 //.useMiddlewareWebChrome(new JsNewWindowImpl())
                 //.useMiddlewareWebChrome(new VideoFullScreenImpl())
               // .setMainFrameErrorView(R.layout.pager_error,R.id.error_btn_retry)
                 //.setMainFrameErrorView(errorLayout)
-                .createAgentWeb()//
+               preAgentWeb = builder .createAgentWeb()//
                 .ready();
 
         mAgentWeb = preAgentWeb.get();
