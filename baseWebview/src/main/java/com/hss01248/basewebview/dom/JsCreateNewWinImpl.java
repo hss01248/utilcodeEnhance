@@ -286,6 +286,7 @@ public class JsCreateNewWinImpl {
                 //到了这里,才是用activity打开页面
                 activity.setContentView(quickWebview);
                 activity.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+                //todo 做一个展开动画,防止闪屏
                 JsNewWindowFragment.configView(quickWebview);
                 return false;
                 //return super.shouldOverrideUrlLoading(view, request);
