@@ -12,32 +12,23 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
-import android.webkit.URLUtil;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LifecycleOwner;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.BarUtils;
 import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.ScreenUtils;
-import com.blankj.utilcode.util.SizeUtils;
 import com.hss.utils.enhance.UrlEncodeUtil;
 import com.hss01248.activityresult.StartActivityUtil;
 import com.hss01248.activityresult.TheActivityListener;
@@ -78,8 +69,9 @@ public class JsCreateNewWinImpl {
 
     private void onCreateWindow2(WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
 
-         //todo 先打开
-        BaseQuickWebview baseQuickWebview = new BaseQuickWebview(view.getContext(),null,new MiddlewareWebClientBase(){
+        showInNewActivity(view,isDialog,isUserGesture,resultMsg);
+
+        /*BaseQuickWebview baseQuickWebview = new BaseQuickWebview(view.getContext(),null,new MiddlewareWebClientBase(){
             boolean isFirstOverride =true;
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
@@ -137,63 +129,6 @@ public class JsCreateNewWinImpl {
                 showInNewDialog(view0,request,view,isDialog,isUserGesture,resultMsg,quickWebview);
 
                 //到了这里,才是用activity打开页面
-               /* Intent intent = new Intent(ActivityUtils.getTopActivity(), WebConfigger.getInit().html5ActivityClass());
-                intent.putExtra(ISetWebviewHolder.setWebviewHolderByOutSide,true);
-                StartActivityUtil.startActivity(ActivityUtils.getTopActivity(),
-                        WebConfigger.getInit().html5ActivityClass(),intent,
-                        false, new TheActivityListener<AppCompatActivity>(){
-
-                            @Override
-                            protected void onActivityCreated(@NonNull AppCompatActivity activity, @Nullable Bundle savedInstanceState) {
-                                super.onActivityCreated(activity, savedInstanceState);
-                                if(activity instanceof ISetWebviewHolder){
-                        *//*    BaseQuickWebview quickWebview = new BaseQuickWebview(activity);
-                            ViewGroup.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
-                            quickWebview.setLayoutParams(layoutParams);*//*
-                                    ISetWebviewHolder holder = (ISetWebviewHolder) activity;
-
-                                    activity.setContentView(quickWebview);
-                                    quickWebview.resetContext(activity);
-
-
-                                    ViewGroup.LayoutParams layoutParams = quickWebview.getChildAt(1).getLayoutParams();
-                                    layoutParams.width = ScreenUtils.getScreenWidth();
-                                    quickWebview.getChildAt(1).setLayoutParams(layoutParams);
-                                    int dp45 = SizeUtils.dp2px(45)+ BarUtils.getStatusBarHeight();
-                                    quickWebview.getChildAt(1).getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                                        @Override
-                                        public void onGlobalLayout() {
-                                            //quickWebview.getChildAt(1).getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                                            View childAt = quickWebview.getChildAt(1);
-                                            if(childAt.getLeft() != 0){
-                                                childAt.setLeft(0);
-                                            }
-                                            LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) childAt.getLayoutParams();
-                                            if(layoutParams1.topMargin != dp45){
-                                                layoutParams1.topMargin = dp45;
-                                                childAt.setLayoutParams(layoutParams1);
-                                            }
-                                        }
-                                    });
-
-                                    //BaseQuickWebview quickWebview = activity.findViewById(R.id.root_ll);
-                                    holder.setWebviewHolder(quickWebview);
-
-
-
-                                   *//* LogUtils.w("debugwebview", "onCreateWindow:isDialog:" + isDialog +
-                                                    ",isUserGesture:" + isUserGesture + ",msg:" + resultMsg + "\n chromeclient:" + this+","+newWebView,
-                                            newWebView.getUrl(),newWebView.getOriginalUrl(),resultMsg.obj);*//*
-
-                                    //shouldOverrideUrlLoading()
-                                    //给新打开的webview响应closewindow用
-                                    //quickWebview.jsCreateNewWin = JsCreateNewWinImpl.this;
-                                    quickWebview.jsCreateNewWin.activity = activity;
-                                }
-                            }
-                        });*/
-
-
                 return false;
                 //return super.shouldOverrideUrlLoading(view, request);
             }
@@ -202,7 +137,7 @@ public class JsCreateNewWinImpl {
         WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
         transport.setWebView(baseQuickWebview.getWebView());
 
-        resultMsg.sendToTarget();
+        resultMsg.sendToTarget();*/
 
     }
 
@@ -250,7 +185,7 @@ public class JsCreateNewWinImpl {
 
     }
 
-    private void showInNewWindow(WebView view0, WebResourceRequest request, WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg, BaseQuickWebview quickWebview) {
+    private void showInNewActivity(WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
         Intent intent = new Intent(ActivityUtils.getTopActivity(), WebConfigger.getInit().html5ActivityClass());
         intent.putExtra(ISetWebviewHolder.setWebviewHolderByOutSide,true);
         StartActivityUtil.startActivity(ActivityUtils.getTopActivity(),
@@ -261,13 +196,14 @@ public class JsCreateNewWinImpl {
                     protected void onActivityCreated(@NonNull AppCompatActivity activity, @Nullable Bundle savedInstanceState) {
                         super.onActivityCreated(activity, savedInstanceState);
                         if(activity instanceof ISetWebviewHolder){
-                        /*    BaseQuickWebview quickWebview = new BaseQuickWebview(activity);
-                            ViewGroup.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
-                            quickWebview.setLayoutParams(layoutParams);*/
+
                             ISetWebviewHolder holder = (ISetWebviewHolder) activity;
 
-                            activity.setContentView(R.layout.default_webview_container);
-                            BaseQuickWebview quickWebview = activity.findViewById(R.id.root_ll);
+                            //activity.setContentView(R.layout.default_webview_container);
+                            //BaseQuickWebview quickWebview = activity.findViewById(R.id.root_ll);
+                            BaseQuickWebview quickWebview = buildWebview(activity,view,isDialog,isUserGesture);
+
+
                             holder.setWebviewHolder(quickWebview);
 
                             //相当于load url
@@ -285,6 +221,77 @@ public class JsCreateNewWinImpl {
                         }
                     }
                 });
+        ActivityUtils.getTopActivity().overridePendingTransition(0,0);
+    }
+
+    private BaseQuickWebview buildWebview(AppCompatActivity activity, WebView view, boolean isDialog, boolean isUserGesture) {
+        BaseQuickWebview baseQuickWebview = new BaseQuickWebview(activity,null,new MiddlewareWebClientBase(){
+            boolean isFirstOverride =true;
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view0, WebResourceRequest request) {
+                if(!isFirstOverride){
+                    return super.shouldOverrideUrlLoading(view0, request);
+                }
+                isFirstOverride = false;
+                BaseQuickWebview quickWebview  = (BaseQuickWebview) view0.getParent().getParent().getParent();
+                Uri uri = request.getUrl();
+                if("https".equals(uri.getScheme()) || "http".equals(uri.getScheme())){
+                    //todo  判断是不是下载链接,如果是,直接调用下载,如果不是,才开启新的activity来承载
+                    String path = uri.getPath();
+                    //String name = URLUtil.guessFileName()
+                    if(path.contains(".") && !path.endsWith(".")){
+                        //String name = path.substring(path.lastIndexOf(".")+1);
+                        String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(uri.toString()));
+                        if(!TextUtils.isEmpty(mime)){
+                            if(mime.startsWith("image") || mime.contains("text") || mime.contains("xml") || mime.contains("json")){
+
+                            }else {
+                                //这里触发下载:
+                                view.loadUrl(uri.toString());
+                                activity.finish();
+                                return true;
+                            }
+                        }
+                    }
+
+                }else {
+                    // 弹窗提示是否跳到app打开
+                    //todo URLUtil.isAboutUrl()
+                    activity.finish();
+                    //WebDebugger.getActivityFromContext(view.getContext()).
+                    new AlertDialogImplByDialogUtil().showMsg("跳转", "是否打开此链接?\n" + UrlEncodeUtil.decode(uri.toString()),
+                            "打开", "取消", new BaseDialogListener() {
+                                @Override
+                                public void onConfirm() {
+                                    try {
+                                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                                        intent.setData(uri);
+                                        ActivityUtils.getTopActivity().startActivity(intent);
+                                    }catch (Throwable throwable){
+                                        LogUtils.w(throwable);
+                                        MyToast.error("没有应用能打开这个链接: \n"+ UrlEncodeUtil.decode(uri.toString()));
+                                    }
+
+                                }
+                            });
+                    return true;
+                }
+
+                //showInNewWindow(view0,request,view,isDialog,isUserGesture,resultMsg,quickWebview);
+
+                //showInNewFragment(view0,request,view,isDialog,isUserGesture,resultMsg,quickWebview);
+                //showInNewDialog(view0,request,view,isDialog,isUserGesture,resultMsg,quickWebview);
+
+                //到了这里,才是用activity打开页面
+                activity.setContentView(quickWebview);
+                activity.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+                JsNewWindowFragment.configView(quickWebview);
+                return false;
+                //return super.shouldOverrideUrlLoading(view, request);
+            }
+        });
+        return baseQuickWebview;
     }
 
 

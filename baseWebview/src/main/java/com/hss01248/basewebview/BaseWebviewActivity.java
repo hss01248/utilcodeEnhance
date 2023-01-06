@@ -57,6 +57,11 @@ public class BaseWebviewActivity extends AppCompatActivity implements ISetWebvie
         if(quickWebview == null || !quickWebview.onBackPressed()){
             super.onBackPressed();
         }
+    }
 
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0, 0);
     }
 }
