@@ -32,19 +32,20 @@ import androidx.lifecycle.LifecycleOwner;
 import com.blankj.utilcode.util.BarUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.hss.utils.enhance.UrlEncodeUtil;
 import com.hss01248.basewebview.databinding.TitlebarForWebviewBinding;
 import com.hss01248.basewebview.dom.FileChooseImpl;
 import com.hss01248.basewebview.dom.JsCreateNewWinImpl;
 import com.hss01248.basewebview.dom.JsPermissionImpl;
 import com.hss01248.basewebview.menus.DefaultMenus;
-import com.hss01248.pagestate.PageStateConfig;
-import com.hss01248.pagestate.PageStateManager;
+import com.hss01248.iwidget.BaseDialogListener;
+import com.hss01248.iwidget.msg.AlertDialogImplByDialogUtil;
+import com.hss01248.viewstate.StatefulLayout;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.AgentWebUIControllerImplBase;
 import com.just.agentweb.MiddlewareWebChromeBase;
 import com.just.agentweb.MiddlewareWebClientBase;
 import com.just.agentweb.WebViewClient;
-import com.konstantinschubert.writeinterceptingwebview.OkhttpProxyForWebviewClient;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -296,7 +297,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
 
 
 
-    PageStateManager stateManager;
+    StatefulLayout stateManager;
 
     public JsCreateNewWinImpl jsCreateNewWin = new JsCreateNewWinImpl();
 
@@ -310,7 +311,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                 .setAgentWebUIController(new AgentWebUIControllerImplBase(){
                     @Override
                     public void onMainFrameError(WebView view, int errorCode, String description, String failingUrl) {
-                        super.onMainFrameError(view, errorCode, description, failingUrl);
+                        //super.onMainFrameError(view, errorCode, description, failingUrl);
                         if(stateManager != null){
                             stateManager.showError(errorCode+"\n"+description+"\n on url:"+failingUrl);
                         }
@@ -318,11 +319,22 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
 
                     @Override
                     public void onShowMainFrame() {
-                        super.onShowMainFrame();
+                        //super.onShowMainFrame();
                         if(stateManager != null){
                             stateManager.showContent();
                         }
+                    }
 
+                    @Override
+                    public void onJsAlert(WebView view, String url, String message) {
+                        //super.onJsAlert(view, url, message);
+                        new AlertDialogImplByDialogUtil().showMsg("tips", "来自" + UrlEncodeUtil.decode(view.getUrl()) + "的信息:\n" + message, "好的", "",
+                                new BaseDialogListener() {
+                                    @Override
+                                    public void onConfirm() {
+                                        BaseDialogListener.super.onConfirm();
+                                    }
+                                });
                     }
                 })
                 .setWebViewClient(new WebViewClient(){
@@ -399,12 +411,27 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
 
                     @Override
                     public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-                        super.onReceivedSslError(view, handler, error);
-                        if(stateManager != null){
-                            stateManager.showError("SslError:\n"+error.toString());
-                        }
 
-                    }
+                        new AlertDialogImplByDialogUtil().showMsg("https证书有误",
+                                "http证书错误,是否继续请求?\n(证书错误表示网站可能不安全)\n证书信息如下:\n" + error.toString(),
+                                "忽略错误,继续请求", "终止请求", new BaseDialogListener() {
+                                    @Override
+                                    public void onCancel(boolean fromBackPressed, boolean fromOutsideClick, boolean fromCancelButton) {
+                                        handler.cancel();
+                                        if(error.getUrl().equals(view.getUrl())){
+                                            if(stateManager != null){
+                                                stateManager.showError("SslError:\n"+error.toString());
+                                            }
+                                        }
+
+                                    }
+
+                                    @Override
+                                    public void onConfirm() {
+                                        handler.proceed();
+                                    }
+                                });
+                }
                 })
                 .setWebChromeClient(new com.just.agentweb.WebChromeClient(){
 
@@ -458,24 +485,17 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
 
         webView = mAgentWeb.getWebCreator().getWebView();
         //okhttpProxyForWebviewClient.addAjaxInterceptorJsInterface(webView);
-        stateManager = PageStateManager.initWhenUse(mAgentWeb.getWebCreator().getWebParentLayout(), new PageStateConfig() {
-
+        stateManager = StatefulLayout.wrapWithState(mAgentWeb.getWebCreator().getWebParentLayout(), false, new Runnable() {
             @Override
-            public boolean isFirstStateLoading() {
-                return false;
-            }
-
-            @Override
-            public void onRetry(View retryView) {
+            public void run() {
                 stateManager.showContent();
                 webView.reload();
-
             }
         });
+        stateManager.showContent();
         WebConfigger.config(webView);
         debugger =  new WebDebugger();
         debugger.setWebviewDebug(webView);
-
     }
 
 

@@ -42,7 +42,7 @@ dependencies {
     api 'com.github.Justson:Downloader:v5.0.4-androidx' // (可选)
 
 
-    api 'com.github.hss01248:PageStateManager:3.0.5'
+    //api 'com.github.hss01248:PageStateManager:3.0.5'
     api "androidx.lifecycle:lifecycle-common-java8:2.1.0"
     implementation "com.github.hss01248.StartActivityResult:activityresult:1.1.6"
     api 'com.github.skyNet2017:webviewdebug:1.2.2-from117'
@@ -57,6 +57,7 @@ dependencies {
     api project(path: ':media')
     api project(path: ':qr-scan')
     api project(path: ':iwidget')
+    api project(path: ':viewState')
     api project(path: ':basewebview-ajax-proxy')
     //':writeintercept'
 

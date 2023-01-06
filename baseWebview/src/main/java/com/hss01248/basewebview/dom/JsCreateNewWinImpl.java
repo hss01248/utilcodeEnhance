@@ -9,13 +9,16 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.webkit.MimeTypeMap;
 import android.webkit.URLUtil;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LifecycleOwner;
 
 import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.BarUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.SizeUtils;
@@ -137,11 +141,27 @@ public class JsCreateNewWinImpl {
 
                                     activity.setContentView(quickWebview);
                                     quickWebview.resetContext(activity);
-                                    quickWebview.getChildAt(1).setLeft(0);
+
 
                                     ViewGroup.LayoutParams layoutParams = quickWebview.getChildAt(1).getLayoutParams();
                                     layoutParams.width = ScreenUtils.getScreenWidth();
                                     quickWebview.getChildAt(1).setLayoutParams(layoutParams);
+                                    int dp45 = SizeUtils.dp2px(45)+ BarUtils.getStatusBarHeight();
+                                    quickWebview.getChildAt(1).getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                                        @Override
+                                        public void onGlobalLayout() {
+                                            //quickWebview.getChildAt(1).getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                                            View childAt = quickWebview.getChildAt(1);
+                                            if(childAt.getLeft() != 0){
+                                                childAt.setLeft(0);
+                                            }
+                                            LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) childAt.getLayoutParams();
+                                            if(layoutParams1.topMargin != dp45){
+                                                layoutParams1.topMargin = dp45;
+                                                childAt.setLayoutParams(layoutParams1);
+                                            }
+                                        }
+                                    });
 
                                     //BaseQuickWebview quickWebview = activity.findViewById(R.id.root_ll);
                                     holder.setWebviewHolder(quickWebview);
