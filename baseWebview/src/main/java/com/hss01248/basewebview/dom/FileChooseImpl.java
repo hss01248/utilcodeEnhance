@@ -61,7 +61,7 @@ public class FileChooseImpl extends MiddlewareWebChromeBase {
                 //Use getAcceptTypes to determine suitable capture devices.  caputure="user" 前置摄像头,但传不过来
                 intent0);
         String[] washMimeTypes = MimeTypeUtil.washMimeType(fileChooserParams.getAcceptTypes());
-        LogUtils.d(washMimeTypes);
+       // LogUtils.d(washMimeTypes);
         if(fileChooserParams.getMode() == FileChooserParams.MODE_OPEN_MULTIPLE){
             MediaPickUtil.pickMultiFiles(new MyCommonCallback<List<Uri>>() {
                 @Override

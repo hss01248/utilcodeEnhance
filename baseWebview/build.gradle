@@ -61,4 +61,20 @@ dependencies {
     api project(path: ':basewebview-ajax-proxy')
     //':writeintercept'
 
+    implementation 'org.greenrobot:greendao:3.3.0'
+    api "com.google.code.gson:gson:2.8.5"
+    // implementation "net.zetetic:android-database-sqlcipher:4.4.3"
+    api "androidx.sqlite:sqlite:2.0.1"
+    api 'io.github.yuweiguocn:GreenDaoUpgradeHelper:v2.2.1'
+
+}
+
+apply plugin: 'org.greenrobot.greendao'
+greendao {
+    schemaVersion 1 //数据库版本号
+    daoPackage 'com.hss01248.basewebview.history.db'
+// 设置DaoMaster、DaoSession、Dao 包名
+    targetGenDir 'src/main/java'//设置DaoMaster、DaoSession、Dao目录,请注意，这里路径用/不要用.
+    generateTests false //设置为true以自动生成单元测试。
+    targetGenDirTests 'src/main/java' //应存储生成的单元测试的基本目录。默认为 src / androidTest / java。
 }
