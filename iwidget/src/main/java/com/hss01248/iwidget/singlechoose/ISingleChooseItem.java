@@ -52,4 +52,37 @@ public interface ISingleChooseItem<T> {
         });
         floatMenu.showAsDropDown(targetView);*/
     }
+
+    static <T> void showAtBottom( List<ISingleChooseItem<T>> menus, T info){
+        CharSequence[] strs = new CharSequence[menus.size()];
+        int selectedIdx = -1;
+        for (int i = 0; i < menus.size(); i++) {
+            strs[i] = menus.get(i).text();
+            if(menus.get(i).isSelected()){
+                selectedIdx = i;
+            }
+        }
+        new SingleChooseDialogImpl().showAtBottom("请选择", strs, new SingleChooseDialogListener() {
+            @Override
+            public void onItemClicked(int position, CharSequence text) {
+                menus.get(position).onItemClicked(position,info);
+            }
+        });
+    }
+    static <T> void showInCenter( List<ISingleChooseItem<T>> menus, T info){
+        CharSequence[] strs = new CharSequence[menus.size()];
+        int selectedIdx = -1;
+        for (int i = 0; i < menus.size(); i++) {
+            strs[i] = menus.get(i).text();
+            if(menus.get(i).isSelected()){
+                selectedIdx = i;
+            }
+        }
+        new SingleChooseDialogImpl().showInCenter("请选择", strs, new SingleChooseDialogListener() {
+            @Override
+            public void onItemClicked(int position, CharSequence text) {
+                menus.get(position).onItemClicked(position,info);
+            }
+        });
+    }
 }
