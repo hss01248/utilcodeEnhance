@@ -30,7 +30,7 @@ public class MyDbUtil {
     }
 
 
-    private static DaoSession  ;
+    private static DaoSession  daoSession;
     public static DaoSession getDaoSession() {
         if(daoSession ==null){
             initGreenDao(Utils.getApp());

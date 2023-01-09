@@ -6,9 +6,13 @@ import com.blankj.utilcode.util.ActivityUtils;
 import com.hss.utils.enhance.intent.ShareUtils;
 import com.hss01248.basewebview.BaseQuickWebview;
 import com.hss01248.basewebview.IShowRightMenus;
+import com.hss01248.iwidget.singlechoose.ISingleChooseItem;
 import com.hss01248.iwidget.singlechoose.SingleChooseDialogImpl;
 import com.hss01248.iwidget.singlechoose.SingleChooseDialogListener;
 import com.hss01248.qrscan.ScanCodeActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.functions.Consumer;
 
@@ -19,32 +23,52 @@ import io.reactivex.functions.Consumer;
  * @Version 1.0
  */
 public class DefaultMenus implements IShowRightMenus {
-    @Override
-    public void showMenus(WebView view, BaseQuickWebview quickWebview) {
 
-        String[] items = {"扫码","收藏当前网页","查看收藏","分享","切换为全功能浏览器模式"};
-        new SingleChooseDialogImpl()
-                .showInPopMenu(quickWebview.getTitleBar().ivMenu, -1,
-                        items,
-                        new SingleChooseDialogListener() {
-                            @Override
-                            public void onItemClicked(int position, CharSequence text) {
-                                if(position ==0){
-                                    ScanCodeActivity.scanForResult(new Consumer<String>() {
-                                        @Override
-                                        public void accept(String s) throws Exception {
-                                            quickWebview.loadUrl(s);
-                                        }
-                                    });
-                                }else if(position ==4){
-                                    quickWebview.getTitlebarHolder().setFullWebBrowserMode(true);
-                                }
-                                else if(position == 3){
-                                    ShareUtils.shareMsg(ActivityUtils.getTopActivity(),"分享到",
-                                            "网页分享: "+ quickWebview.getCurrentTitle(),
-                                            quickWebview.getCurrentUrl(), null);
-                                }
-                            }
-                        });
+
+    @Override
+    public List<ISingleChooseItem<BaseQuickWebview>> addMenus(BaseQuickWebview quickWebview) {
+        List<ISingleChooseItem<BaseQuickWebview>> menus = new ArrayList<>();
+        menus.add(new ISingleChooseItem<BaseQuickWebview>() {
+            @Override
+            public String text() {
+                return "扫码";
+            }
+
+            @Override
+            public void onItemClicked(int position, BaseQuickWebview bean) {
+                ScanCodeActivity.scanForResult(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) throws Exception {
+                        quickWebview.loadUrl(s);
+                    }
+                });
+            }
+        });
+        menus.add(new ISingleChooseItem<BaseQuickWebview>() {
+            @Override
+            public String text() {
+                return "切换为全功能浏览器模式";
+            }
+
+            @Override
+            public void onItemClicked(int position, BaseQuickWebview bean) {
+                quickWebview.getTitlebarHolder().setFullWebBrowserMode(true);
+            }
+        });
+        menus.add(new ISingleChooseItem<BaseQuickWebview>() {
+            @Override
+            public String text() {
+                return "分享";
+            }
+
+            @Override
+            public void onItemClicked(int position, BaseQuickWebview bean) {
+                ShareUtils.shareMsg(ActivityUtils.getTopActivity(),"分享到",
+                        "网页分享: "+ quickWebview.getCurrentTitle(),
+                        quickWebview.getCurrentUrl(), null);
+            }
+        });
+
+        return menus;
     }
 }

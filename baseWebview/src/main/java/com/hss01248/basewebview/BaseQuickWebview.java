@@ -40,6 +40,7 @@ import com.hss01248.basewebview.dom.JsPermissionImpl;
 import com.hss01248.basewebview.menus.DefaultMenus;
 import com.hss01248.iwidget.BaseDialogListener;
 import com.hss01248.iwidget.msg.AlertDialogImplByDialogUtil;
+import com.hss01248.iwidget.singlechoose.ISingleChooseItem;
 import com.hss01248.viewstate.StatefulLayout;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.AgentWebUIControllerImplBase;
@@ -49,6 +50,8 @@ import com.just.agentweb.WebViewClient;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleObserver {
@@ -65,11 +68,14 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
     long delayAfterOnFinish;
     AgentWeb.PreAgentWeb preAgentWeb;
 
-    public void setShowRightMenus(IShowRightMenus showRightMenus) {
-        this.showRightMenus = showRightMenus;
+    public void addRightMenus(IShowRightMenus showRightMenus) {
+        List<ISingleChooseItem<BaseQuickWebview>> ms = showRightMenus.addMenus(this);
+        if(ms != null){
+            menus.addAll(ms);
+        }
     }
 
-    IShowRightMenus showRightMenus = new DefaultMenus();
+
 
     public WebView getWebView() {
         return webView;
@@ -97,6 +103,8 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
     WebPageInfo info;
     MiddlewareWebChromeBase middlewareWebChrome;
     MiddlewareWebClientBase middlewareWebClient;
+    List<ISingleChooseItem<BaseQuickWebview>> menus = new ArrayList<>();
+
 
     public BaseQuickWebview(Context context,MiddlewareWebChromeBase middlewareWebChrome,MiddlewareWebClientBase middlewareWebClient) {
         super(context);
@@ -136,6 +144,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
             addLifecycle(owner);
         }
         initWebView();
+        menus.addAll(new DefaultMenus().addMenus(this));
     }
 
     public void resetContext(Context context){
@@ -187,11 +196,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
     }
 
     protected void showMenu() {
-        if(showRightMenus != null){
-            showRightMenus.showMenus(webView,this);
-        }else {
-            ToastUtils.showLong("show menu");
-        }
+        ISingleChooseItem.showAsMenu(titleBar.ivMenu,menus,this);
     }
 
     public void getSource(ValueCallback<String> valueCallback){
