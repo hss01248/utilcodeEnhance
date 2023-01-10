@@ -1,4 +1,12 @@
-# 常用widget
+# 常用ui组件
+
+[![](https://jitpack.io/v/hss01248/utilcodeEnhance.svg)](https://jitpack.io/#hss01248/utilcodeEnhance)
+
+```groovy
+api "com.github.hss01248.utilcodeEnhance:iwidget:1.1.3"
+```
+
+
 
 # alert dialog
 
