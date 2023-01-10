@@ -39,7 +39,7 @@ dependencies {
     api 'com.blankj:utilcodex:1.30.0'//基底
     api "com.github.kongzue.DialogX:DialogX:0.0.46"  //使用其中的popMenu
     //msg dialog或alert dialog
-    api 'com.github.hss01248:DialogUtil:3.0.1'
+    api 'com.github.hss01248:DialogUtil:3.0.2'
     //implementation 'com.github.shaoshuai904:XStyleDialog:2.0.5' 不能自适应,辣鸡
    // implementation 'com.github.mamumu:mmDialog:1.2.0' 不能自适应,辣鸡
 
