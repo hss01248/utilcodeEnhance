@@ -6,6 +6,7 @@ import com.blankj.utilcode.util.ActivityUtils;
 import com.hss.utils.enhance.intent.ShareUtils;
 import com.hss01248.basewebview.BaseQuickWebview;
 import com.hss01248.basewebview.IShowRightMenus;
+import com.hss01248.basewebview.history.db.MyDbUtil;
 import com.hss01248.iwidget.singlechoose.ISingleChooseItem;
 import com.hss01248.iwidget.singlechoose.SingleChooseDialogImpl;
 import com.hss01248.iwidget.singlechoose.SingleChooseDialogListener;
@@ -66,6 +67,29 @@ public class DefaultMenus implements IShowRightMenus {
                 ShareUtils.shareMsg(ActivityUtils.getTopActivity(),"分享到",
                         "网页分享: "+ quickWebview.getCurrentTitle(),
                         quickWebview.getCurrentUrl(), null);
+            }
+        });
+        menus.add(new ISingleChooseItem<BaseQuickWebview>() {
+            @Override
+            public String text() {
+                return "添加到收藏";
+            }
+
+            @Override
+            public void onItemClicked(int position, BaseQuickWebview bean) {
+                //bean.getCurrentTitle()
+                //MyDbUtil.getDaoSession().insert()
+            }
+        });
+        menus.add(new ISingleChooseItem<BaseQuickWebview>() {
+            @Override
+            public String text() {
+                return "查看收藏/历史记录";
+            }
+
+            @Override
+            public void onItemClicked(int position, BaseQuickWebview bean) {
+                //bean.getCurrentTitle()
             }
         });
 

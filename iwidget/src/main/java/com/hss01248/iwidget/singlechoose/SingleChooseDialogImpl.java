@@ -10,6 +10,8 @@ import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.SizeUtils;
 import com.blankj.utilcode.util.ThreadUtils;
+import com.hss01248.dialog.StyledDialog;
+import com.hss01248.dialog.interfaces.MyItemDialogListener;
 import com.hss01248.iwidget.R;
 import com.kongzue.dialogx.dialogs.PopMenu;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
@@ -19,6 +21,8 @@ import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.interfaces.OnSelectListener;
 import com.lxj.xpopup.interfaces.SimpleCallback;
+
+import java.util.Arrays;
 
 
 /**
@@ -97,6 +101,12 @@ public class SingleChooseDialogImpl implements ISingleChooseDialog {
     @Override
     public void showInCenter(CharSequence title, CharSequence[] datas, SingleChooseDialogListener listener) {
         showList(title, datas, false, listener);
+        /*StyledDialog.buildIosSingleChoose(Arrays.asList(datas), new MyItemDialogListener() {
+            @Override
+            public void onItemClick(CharSequence text, int position) {
+                listener.onItemClicked(position,text);
+            }
+        }).show();*/
     }
 
     /**

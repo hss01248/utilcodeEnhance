@@ -580,7 +580,7 @@ public class MainActivity extends AppCompatActivity {
     public void alertByDialogUtil(View view) {
         new AlertDialogImplByDialogUtil().showMsg("普通标题",
                 "想要监控对话框的生命周期，可以实现其 .setDialogLifecycleCallback(...) 接口，建议使用build()方法构建对话框",
-                "确认", "取消",
+                "确认", "",
                 new BaseDialogListener() {
                     @Override
                     public void onConfirm() {
@@ -718,5 +718,45 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void centerList(View view) {
+        new SingleChooseDialogImpl().showInCenter("我是标题",
+                //StringUtils.getString(com.hss01248.media.R.string.meida_pick_please_choose),
+                new CharSequence[]{
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_from_galerry),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_choose_video_from_album),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_take_photo),
+                         "这里提供了国内下载节点， 如果您无法通过以上连接下载release包，可以尝试从下方连接下载(但您需要支付流量费用)",
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_record_video),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_from_galerry),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_record_video),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_from_galerry),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_record_video),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_from_galerry),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_record_video),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_from_galerry),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_record_video),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_from_galerry),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_record_video),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_from_galerry),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_record_video),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_from_galerry),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_record_video),
+                        StringUtils.getString(com.hss01248.media.R.string.meida_pick_from_galerry),
+                },
+                new SingleChooseDialogListener(){
+
+                    @Override
+                    public void onItemClicked(int position, CharSequence text) {
+                        LogUtils.d(position+","+text);
+                    }
+
+                    @Override
+                    public void onCancel(boolean fromBackPressed, boolean fromOutsideClick, boolean fromCancelButton) {
+                        SingleChooseDialogListener.super.onCancel(fromBackPressed, fromOutsideClick, fromCancelButton);
+                        //callback.onError(StringUtils.getString(com.hss01248.media.R.string.meida_pick_canceled));
+                    }
+                });
     }
 }
