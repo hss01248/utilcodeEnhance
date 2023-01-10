@@ -13,3 +13,5 @@ include ':qr-scan'
 include ':basewebviewdemo'
 include ':baseWebview'
 include ':basewebview-ajax-proxy'
+include ':refresh-loadmore'
+

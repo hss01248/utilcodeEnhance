@@ -13,8 +13,10 @@ import org.greenrobot.greendao.annotation.Index;
 @Entity
 public class BrowserHistoryInfo {
 
-    @Id
+    @Index
     public String url;
+    @Id
+    public Long id;
 
     public int isCollect;
     public String iconUrl;
@@ -27,11 +29,12 @@ public class BrowserHistoryInfo {
 
     public int hasSynced;
 
-    @Generated(hash = 1150657521)
-    public BrowserHistoryInfo(String url, int isCollect, String iconUrl,
+    @Generated(hash = 301714128)
+    public BrowserHistoryInfo(String url, Long id, int isCollect, String iconUrl,
             long updateTime, long viewTimes, String title, String group,
             int hasSynced) {
         this.url = url;
+        this.id = id;
         this.isCollect = isCollect;
         this.iconUrl = iconUrl;
         this.updateTime = updateTime;
@@ -51,6 +54,14 @@ public class BrowserHistoryInfo {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public int getIsCollect() {
@@ -108,5 +119,8 @@ public class BrowserHistoryInfo {
     public void setHasSynced(int hasSynced) {
         this.hasSynced = hasSynced;
     }
+
+
+
 
 }

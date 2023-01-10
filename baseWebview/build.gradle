@@ -59,6 +59,9 @@ dependencies {
     api project(path: ':iwidget')
     api project(path: ':viewState')
     api project(path: ':basewebview-ajax-proxy')
+    api project(path: ':refresh-loadmore')
+
+    api 'com.github.hackware1993:MagicIndicator:1.7.0'
     //':writeintercept'
 
     implementation 'org.greenrobot:greendao:3.3.0'

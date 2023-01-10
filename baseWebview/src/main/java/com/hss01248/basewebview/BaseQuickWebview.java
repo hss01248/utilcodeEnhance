@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.SslErrorHandler;
+import android.webkit.URLUtil;
 import android.webkit.ValueCallback;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
@@ -37,6 +38,7 @@ import com.hss01248.basewebview.databinding.TitlebarForWebviewBinding;
 import com.hss01248.basewebview.dom.FileChooseImpl;
 import com.hss01248.basewebview.dom.JsCreateNewWinImpl;
 import com.hss01248.basewebview.dom.JsPermissionImpl;
+import com.hss01248.basewebview.history.db.MyDbUtil;
 import com.hss01248.basewebview.menus.DefaultMenus;
 import com.hss01248.iwidget.BaseDialogListener;
 import com.hss01248.iwidget.msg.AlertDialogImplByDialogUtil;
@@ -379,6 +381,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                     @Override
                     public void onPageFinished(WebView view, String url) {
                         super.onPageFinished(view, url);
+
                         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -396,6 +399,9 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                             if(stateManager != null){
                                 stateManager.showError("not url : \n"+originalUrl );
                             }
+                        }
+                        if(URLUtil.isNetworkUrl(url)){
+                            MyDbUtil.addHistory(getCurrentTitle(),url,"");
                         }
 
                     }

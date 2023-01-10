@@ -7,6 +7,7 @@ import com.hss.utils.enhance.intent.ShareUtils;
 import com.hss01248.basewebview.BaseQuickWebview;
 import com.hss01248.basewebview.IShowRightMenus;
 import com.hss01248.basewebview.history.db.MyDbUtil;
+import com.hss01248.basewebview.history.ui.HistoryCollectVpHolder;
 import com.hss01248.iwidget.singlechoose.ISingleChooseItem;
 import com.hss01248.iwidget.singlechoose.SingleChooseDialogImpl;
 import com.hss01248.iwidget.singlechoose.SingleChooseDialogListener;
@@ -79,6 +80,7 @@ public class DefaultMenus implements IShowRightMenus {
             public void onItemClicked(int position, BaseQuickWebview bean) {
                 //bean.getCurrentTitle()
                 //MyDbUtil.getDaoSession().insert()
+                MyDbUtil.addCollect(bean.getCurrentTitle(),bean.getCurrentUrl(),"");
             }
         });
         menus.add(new ISingleChooseItem<BaseQuickWebview>() {
@@ -90,6 +92,7 @@ public class DefaultMenus implements IShowRightMenus {
             @Override
             public void onItemClicked(int position, BaseQuickWebview bean) {
                 //bean.getCurrentTitle()
+                HistoryCollectVpHolder.showInDialog(bean);
             }
         });
 

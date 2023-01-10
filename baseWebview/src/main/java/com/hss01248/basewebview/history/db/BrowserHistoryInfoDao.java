@@ -13,7 +13,7 @@ import org.greenrobot.greendao.database.DatabaseStatement;
 /** 
  * DAO for table "BROWSER_HISTORY_INFO".
 */
-public class BrowserHistoryInfoDao extends AbstractDao<BrowserHistoryInfo, String> {
+public class BrowserHistoryInfoDao extends AbstractDao<BrowserHistoryInfo, Long> {
 
     public static final String TABLENAME = "BROWSER_HISTORY_INFO";
 
@@ -22,14 +22,15 @@ public class BrowserHistoryInfoDao extends AbstractDao<BrowserHistoryInfo, Strin
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Url = new Property(0, String.class, "url", true, "URL");
-        public final static Property IsCollect = new Property(1, int.class, "isCollect", false, "IS_COLLECT");
-        public final static Property IconUrl = new Property(2, String.class, "iconUrl", false, "ICON_URL");
-        public final static Property UpdateTime = new Property(3, long.class, "updateTime", false, "UPDATE_TIME");
-        public final static Property ViewTimes = new Property(4, long.class, "viewTimes", false, "VIEW_TIMES");
-        public final static Property Title = new Property(5, String.class, "title", false, "TITLE");
-        public final static Property Group = new Property(6, String.class, "group", false, "GROUP");
-        public final static Property HasSynced = new Property(7, int.class, "hasSynced", false, "HAS_SYNCED");
+        public final static Property Url = new Property(0, String.class, "url", false, "URL");
+        public final static Property Id = new Property(1, Long.class, "id", true, "_id");
+        public final static Property IsCollect = new Property(2, int.class, "isCollect", false, "IS_COLLECT");
+        public final static Property IconUrl = new Property(3, String.class, "iconUrl", false, "ICON_URL");
+        public final static Property UpdateTime = new Property(4, long.class, "updateTime", false, "UPDATE_TIME");
+        public final static Property ViewTimes = new Property(5, long.class, "viewTimes", false, "VIEW_TIMES");
+        public final static Property Title = new Property(6, String.class, "title", false, "TITLE");
+        public final static Property Group = new Property(7, String.class, "group", false, "GROUP");
+        public final static Property HasSynced = new Property(8, int.class, "hasSynced", false, "HAS_SYNCED");
     }
 
 
@@ -45,15 +46,18 @@ public class BrowserHistoryInfoDao extends AbstractDao<BrowserHistoryInfo, Strin
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"BROWSER_HISTORY_INFO\" (" + //
-                "\"URL\" TEXT PRIMARY KEY NOT NULL ," + // 0: url
-                "\"IS_COLLECT\" INTEGER NOT NULL ," + // 1: isCollect
-                "\"ICON_URL\" TEXT," + // 2: iconUrl
-                "\"UPDATE_TIME\" INTEGER NOT NULL ," + // 3: updateTime
-                "\"VIEW_TIMES\" INTEGER NOT NULL ," + // 4: viewTimes
-                "\"TITLE\" TEXT," + // 5: title
-                "\"GROUP\" TEXT," + // 6: group
-                "\"HAS_SYNCED\" INTEGER NOT NULL );"); // 7: hasSynced
+                "\"URL\" TEXT," + // 0: url
+                "\"_id\" INTEGER PRIMARY KEY ," + // 1: id
+                "\"IS_COLLECT\" INTEGER NOT NULL ," + // 2: isCollect
+                "\"ICON_URL\" TEXT," + // 3: iconUrl
+                "\"UPDATE_TIME\" INTEGER NOT NULL ," + // 4: updateTime
+                "\"VIEW_TIMES\" INTEGER NOT NULL ," + // 5: viewTimes
+                "\"TITLE\" TEXT," + // 6: title
+                "\"GROUP\" TEXT," + // 7: group
+                "\"HAS_SYNCED\" INTEGER NOT NULL );"); // 8: hasSynced
         // Add Indexes
+        db.execSQL("CREATE INDEX " + constraint + "IDX_BROWSER_HISTORY_INFO_URL ON \"BROWSER_HISTORY_INFO\"" +
+                " (\"URL\" ASC);");
         db.execSQL("CREATE INDEX " + constraint + "IDX_BROWSER_HISTORY_INFO_UPDATE_TIME ON \"BROWSER_HISTORY_INFO\"" +
                 " (\"UPDATE_TIME\" ASC);");
     }
@@ -72,25 +76,30 @@ public class BrowserHistoryInfoDao extends AbstractDao<BrowserHistoryInfo, Strin
         if (url != null) {
             stmt.bindString(1, url);
         }
-        stmt.bindLong(2, entity.getIsCollect());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(2, id);
+        }
+        stmt.bindLong(3, entity.getIsCollect());
  
         String iconUrl = entity.getIconUrl();
         if (iconUrl != null) {
-            stmt.bindString(3, iconUrl);
+            stmt.bindString(4, iconUrl);
         }
-        stmt.bindLong(4, entity.getUpdateTime());
-        stmt.bindLong(5, entity.getViewTimes());
+        stmt.bindLong(5, entity.getUpdateTime());
+        stmt.bindLong(6, entity.getViewTimes());
  
         String title = entity.getTitle();
         if (title != null) {
-            stmt.bindString(6, title);
+            stmt.bindString(7, title);
         }
  
         String group = entity.getGroup();
         if (group != null) {
-            stmt.bindString(7, group);
+            stmt.bindString(8, group);
         }
-        stmt.bindLong(8, entity.getHasSynced());
+        stmt.bindLong(9, entity.getHasSynced());
     }
 
     @Override
@@ -101,43 +110,49 @@ public class BrowserHistoryInfoDao extends AbstractDao<BrowserHistoryInfo, Strin
         if (url != null) {
             stmt.bindString(1, url);
         }
-        stmt.bindLong(2, entity.getIsCollect());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(2, id);
+        }
+        stmt.bindLong(3, entity.getIsCollect());
  
         String iconUrl = entity.getIconUrl();
         if (iconUrl != null) {
-            stmt.bindString(3, iconUrl);
+            stmt.bindString(4, iconUrl);
         }
-        stmt.bindLong(4, entity.getUpdateTime());
-        stmt.bindLong(5, entity.getViewTimes());
+        stmt.bindLong(5, entity.getUpdateTime());
+        stmt.bindLong(6, entity.getViewTimes());
  
         String title = entity.getTitle();
         if (title != null) {
-            stmt.bindString(6, title);
+            stmt.bindString(7, title);
         }
  
         String group = entity.getGroup();
         if (group != null) {
-            stmt.bindString(7, group);
+            stmt.bindString(8, group);
         }
-        stmt.bindLong(8, entity.getHasSynced());
+        stmt.bindLong(9, entity.getHasSynced());
     }
 
     @Override
-    public String readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0);
+    public Long readKey(Cursor cursor, int offset) {
+        return cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1);
     }    
 
     @Override
     public BrowserHistoryInfo readEntity(Cursor cursor, int offset) {
         BrowserHistoryInfo entity = new BrowserHistoryInfo( //
             cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // url
-            cursor.getInt(offset + 1), // isCollect
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // iconUrl
-            cursor.getLong(offset + 3), // updateTime
-            cursor.getLong(offset + 4), // viewTimes
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // title
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // group
-            cursor.getInt(offset + 7) // hasSynced
+            cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // id
+            cursor.getInt(offset + 2), // isCollect
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // iconUrl
+            cursor.getLong(offset + 4), // updateTime
+            cursor.getLong(offset + 5), // viewTimes
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // title
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // group
+            cursor.getInt(offset + 8) // hasSynced
         );
         return entity;
     }
@@ -145,24 +160,26 @@ public class BrowserHistoryInfoDao extends AbstractDao<BrowserHistoryInfo, Strin
     @Override
     public void readEntity(Cursor cursor, BrowserHistoryInfo entity, int offset) {
         entity.setUrl(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
-        entity.setIsCollect(cursor.getInt(offset + 1));
-        entity.setIconUrl(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setUpdateTime(cursor.getLong(offset + 3));
-        entity.setViewTimes(cursor.getLong(offset + 4));
-        entity.setTitle(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setGroup(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setHasSynced(cursor.getInt(offset + 7));
+        entity.setId(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
+        entity.setIsCollect(cursor.getInt(offset + 2));
+        entity.setIconUrl(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setUpdateTime(cursor.getLong(offset + 4));
+        entity.setViewTimes(cursor.getLong(offset + 5));
+        entity.setTitle(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setGroup(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setHasSynced(cursor.getInt(offset + 8));
      }
     
     @Override
-    protected final String updateKeyAfterInsert(BrowserHistoryInfo entity, long rowId) {
-        return entity.getUrl();
+    protected final Long updateKeyAfterInsert(BrowserHistoryInfo entity, long rowId) {
+        entity.setId(rowId);
+        return rowId;
     }
     
     @Override
-    public String getKey(BrowserHistoryInfo entity) {
+    public Long getKey(BrowserHistoryInfo entity) {
         if(entity != null) {
-            return entity.getUrl();
+            return entity.getId();
         } else {
             return null;
         }
@@ -170,7 +187,7 @@ public class BrowserHistoryInfoDao extends AbstractDao<BrowserHistoryInfo, Strin
 
     @Override
     public boolean hasKey(BrowserHistoryInfo entity) {
-        return entity.getUrl() != null;
+        return entity.getId() != null;
     }
 
     @Override
