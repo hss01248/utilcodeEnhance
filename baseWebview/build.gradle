@@ -70,6 +70,8 @@ dependencies {
     api "androidx.sqlite:sqlite:2.0.1"
     api 'io.github.yuweiguocn:GreenDaoUpgradeHelper:v2.2.1'
 
+    api 'com.github.hss01248.ImageLoader:bigimageviewpager:3.5.3'
+
 }
 
 apply plugin: 'org.greenrobot.greendao'

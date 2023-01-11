@@ -147,6 +147,8 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
         }
         initWebView();
         menus.addAll(new DefaultMenus().addMenus(this));
+
+        webView.setOnLongClickListener(new TheLongPressListener(this));
     }
 
     public void resetContext(Context context){
