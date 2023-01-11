@@ -32,18 +32,23 @@
 # 使用
 
 ```groovy
-api 'com.github.hss01248.utilcodeEnhance:xxx:1.0.8'
+api 'com.github.hss01248.utilcodeEnhance:xxx:1.2.0'
 
-com.github.hss01248.utilcodeEnhance:lib-base:1.0.8
-com.github.hss01248.utilcodeEnhance:common:1.0.8
-com.github.hss01248.utilcodeEnhance:ext:1.0.8
-com.github.hss01248.utilcodeEnhance:iwidget:1.0.8
-com.github.hss01248.utilcodeEnhance:openuri:1.0.8
-com.github.hss01248.utilcodeEnhance:toast:1.0.8
-com.github.hss01248.utilcodeEnhance:viewState:1.0.8
-com.github.hss01248.utilcodeEnhance:media:1.0.8
-com.github.hss01248.utilcodeEnhance:IReporter:1.0.8
-com.github.hss01248.utilcodeEnhance:qr-scan:1.0.8
+com.github.hss01248.utilcodeEnhance:ext:1.2.0
+com.github.hss01248.utilcodeEnhance:lib-base:1.2.0   //核心库
+com.github.hss01248.utilcodeEnhance:common:1.2.0
+com.github.hss01248.utilcodeEnhance:media:1.2.0   //媒体文件选择/拍照,录制
+com.github.hss01248.utilcodeEnhance:qr-scan:1.2.0
+com.github.hss01248.utilcodeEnhance:fullScreenDialog:1.2.0
+com.github.hss01248.utilcodeEnhance:toast:1.2.0
+com.github.hss01248.utilcodeEnhance:search-history-api:1.2.0
+com.github.hss01248.utilcodeEnhance:iwidget:1.2.0
+com.github.hss01248.utilcodeEnhance:openuri:1.2.0
+com.github.hss01248.utilcodeEnhance:refresh-loadmore:1.2.0
+com.github.hss01248.utilcodeEnhance:basewebview-ajax-proxy:1.2.0
+com.github.hss01248.utilcodeEnhance:baseWebview:1.2.0
+com.github.hss01248.utilcodeEnhance:viewState:1.2.0
+com.github.hss01248.utilcodeEnhance:IReporter:1.2.0
 ```
 
 
