@@ -73,3 +73,30 @@ ScanCodeActivity.scanForResult(new Consumer<String>() {
 
 
 ![image-20221220175628125](https://cdn.jsdelivr.net/gh/shuiniuhss/myimages@main/imagemac3/image-20221220175628125.png)
+
+# 软键盘适配
+
+```java
+//内部自动在ondestory时取消
+new MyKeyboardUtil(this)
+        .addOnKeyBoardStateListener(new MyKeyboardUtil.OnKeyBoardStateListener() {
+            @Override
+            public void onSoftKeyBoardShow(int keyboardHeight) {
+                ViewGroup.LayoutParams layoutParams = quickWebview.getLayoutParams();
+                layoutParams.height = totalHeight - keyboardHeight;
+                quickWebview.setLayoutParams(layoutParams);
+            }
+
+            @Override
+            public void onSoftKeyBoardHide() {
+                ViewGroup.LayoutParams layoutParams = quickWebview.getLayoutParams();
+                layoutParams.height = totalHeight ;
+                quickWebview.setLayoutParams(layoutParams);
+            }
+        });
+
+//对应activity需要配置:
+      <activity android:name=".BaseWebviewActivity"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize"
+            android:windowSoftInputMode="adjustPan"
+```

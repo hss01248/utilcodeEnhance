@@ -52,7 +52,7 @@ public class JsNewWindowFragment extends Fragment {
         quickWebview.setLayoutParams(layoutParams1);
 
 
-        ViewGroup.LayoutParams layoutParams = quickWebview.getChildAt(1).getLayoutParams();
+        /*ViewGroup.LayoutParams layoutParams = quickWebview.getChildAt(1).getLayoutParams();
         layoutParams.width = ScreenUtils.getScreenWidth();
         quickWebview.getChildAt(1).setLayoutParams(layoutParams);
         int dp45 = SizeUtils.dp2px(45)+ BarUtils.getStatusBarHeight();
@@ -70,6 +70,6 @@ public class JsNewWindowFragment extends Fragment {
                     childAt.setLayoutParams(layoutParams1);
                 }
             }
-        });
+        });*/
     }
 }

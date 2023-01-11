@@ -63,6 +63,12 @@ public class WebViewTitlebarHolder extends MyViewHolder<TitlebarForWebviewBindin
                 data.getWebView().reload();
             }
         });
+        binding.ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActivityUtils.getTopActivity().finish();
+            }
+        });
 
         binding.tvTitle.setOnClickListener(new View.OnClickListener() {
             @Override

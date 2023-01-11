@@ -34,6 +34,22 @@ api "com.github.hss01248.utilcodeEnhance:iwidget:1.1.3"
 
 
 
+### 中间msg的gravity的自适应
+
+> 单行或每行都很短时,居中
+>
+> 多行且行很长时,居左
+>
+> json文本,居左
+
+![image-20230111200203261](https://cdn.jsdelivr.net/gh/shuiniuhss/myimages@main/imagemac3/image-20230111200203261.png)
+
+
+
+![image-20230111200325254](https://cdn.jsdelivr.net/gh/shuiniuhss/myimages@main/imagemac3/image-20230111200325254.png)
+
+
+
 # 对Androidx里alertDialog的样式全局修改:
 
 > 可全局改成上方的DialogUtil样式. 

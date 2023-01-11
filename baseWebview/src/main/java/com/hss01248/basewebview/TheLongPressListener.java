@@ -54,8 +54,8 @@ public class TheLongPressListener implements View.OnLongClickListener {
 
                     FullScreenDialog dialog = new FullScreenDialog(v.getContext());
                     dialog.setContentView(myViewPager);
-                    BarUtils.setStatusBarLightMode(dialog.getWindow(),false);
                     dialog.show();
+                    BarUtils.setStatusBarLightMode(dialog.getWindow(),true);
                 }
             });
             items.add(new ISingleChooseItem<String>() {

@@ -4,12 +4,16 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.blankj.utilcode.util.KeyboardUtils;
 import com.blankj.utilcode.util.LogUtils;
+import com.hss.utils.enhance.MyKeyboardUtil;
 
 
 public class BaseWebviewActivity extends AppCompatActivity implements ISetWebviewHolder{
@@ -34,7 +38,44 @@ public class BaseWebviewActivity extends AppCompatActivity implements ISetWebvie
 
             initWebview2(quickWebview);
            quickWebview.loadUrl(url);
+           initKeyBoard();
         }
+    }
+
+    KeyboardUtils.OnSoftInputChangedListener inputChangedListener;
+    int totalHeight = 0;
+    private void initKeyBoard() {
+        quickWebview.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+
+                if(totalHeight ==0){
+                    totalHeight = quickWebview.getMeasuredHeight();
+                    if(totalHeight>0){
+                        quickWebview.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    }
+
+                }
+            }
+        });
+
+        //内部自动在ondestory时取消
+        new MyKeyboardUtil(this)
+                .addOnKeyBoardStateListener(new MyKeyboardUtil.OnKeyBoardStateListener() {
+                    @Override
+                    public void onSoftKeyBoardShow(int keyboardHeight) {
+                        ViewGroup.LayoutParams layoutParams = quickWebview.getLayoutParams();
+                        layoutParams.height = totalHeight - keyboardHeight;
+                        quickWebview.setLayoutParams(layoutParams);
+                    }
+
+                    @Override
+                    public void onSoftKeyBoardHide() {
+                        ViewGroup.LayoutParams layoutParams = quickWebview.getLayoutParams();
+                        layoutParams.height = totalHeight ;
+                        quickWebview.setLayoutParams(layoutParams);
+                    }
+                });
     }
 
     protected  void initWebview2(BaseQuickWebview quickWebview) {
@@ -50,6 +91,7 @@ public class BaseWebviewActivity extends AppCompatActivity implements ISetWebvie
     @Override
     public void setWebviewHolder(BaseQuickWebview webview) {
         this.quickWebview = webview;
+        initKeyBoard();
     }
 
     @Override

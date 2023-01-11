@@ -3,7 +3,8 @@
     package="com.hss01248.basewebview">
     <application>
         <activity android:name=".BaseWebviewActivity"
-            android:configChanges="orientation|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize"
+            android:windowSoftInputMode="adjustPan"
             android:theme="@style/webviewTrans" />
     </application>
 </manifest>
