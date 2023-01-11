@@ -92,7 +92,7 @@ public class DefaultMenus implements IShowRightMenus {
             @Override
             public void onItemClicked(int position, BaseQuickWebview bean) {
                 //bean.getCurrentTitle()
-                HistoryCollectVpHolder.showInDialog(bean);
+                new HistoryCollectVpHolder(quickWebview.getContext()).assignDataAndEvent(quickWebview).showInFullScreenDialog();
             }
         });
 

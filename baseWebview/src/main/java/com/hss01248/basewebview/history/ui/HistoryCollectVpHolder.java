@@ -36,12 +36,12 @@ import java.util.List;
  * @Version 1.0
  */
 public class HistoryCollectVpHolder extends MyViewHolder<VpHistoryCollectBinding,BaseQuickWebview> {
-    public HistoryCollectVpHolder(ViewGroup parent) {
+    public HistoryCollectVpHolder(Context parent) {
         super(parent);
         init2(parent);
     }
 
-    private void init2(ViewGroup parent) {
+    private void init2(Context parent) {
         String[] titles = {"收藏","历史"};
         MagicIndicator magicIndicator = binding.magicIndicator;
         CommonNavigator commonNavigator = new CommonNavigator(binding.getRoot().getContext());
@@ -102,22 +102,19 @@ public class HistoryCollectVpHolder extends MyViewHolder<VpHistoryCollectBinding
         }));
     }
 
-    public static Dialog dialog;
-    public static Dialog showInDialog(BaseQuickWebview bean){
-        HistoryCollectVpHolder holder = new HistoryCollectVpHolder(ActivityUtils.getTopActivity().findViewById(android.R.id.content));
-        holder.assignDataAndEvent(bean);
-        FullScreenDialog dialog = new FullScreenDialog(ActivityUtils.getTopActivity());
-
-        dialog.setContentView(holder.getRootView());
-        dialog.show();
-        BarUtils.setStatusBarLightMode(dialog.getWindow(),true);
-        HistoryCollectVpHolder.dialog = dialog;
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+    @Override
+    public Dialog showInFullScreenDialog() {
+        Dialog  dialog0 =  super.showInFullScreenDialog();
+        dialog = dialog0;
+        dialog0.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
-            public void onDismiss(DialogInterface dialog) {
-                HistoryCollectVpHolder.dialog = null;
+            public void onDismiss(DialogInterface dialog1) {
+                dialog = null;
             }
         });
-        return dialog;
+        return dialog0;
     }
+
+    public static Dialog dialog;
+
 }

@@ -137,6 +137,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
     }
 
     private void init(Context context) {
+        setOrientation(LinearLayout.VERTICAL);
         info = new WebPageInfo();
         initTitlebar(context);
 
@@ -468,10 +469,10 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                     @Override
                     public void onReceivedIcon(WebView view, Bitmap icon) {
                         super.onReceivedIcon(view, icon);
-                        if(titlebarHolder.isFullWebBrowserMode){
+                        /*if(titlebarHolder.isFullWebBrowserMode){
                             titleBar.ivBack.setScaleType(ImageView.ScaleType.FIT_CENTER);
                             titleBar.ivBack.setImageBitmap(icon);
-                        }
+                        }*/
 
                     }
 

@@ -15,3 +15,5 @@ include ':baseWebview'
 include ':basewebview-ajax-proxy'
 include ':refresh-loadmore'
 
+include ':search-history-api'
+include ':fullScreenDialog'

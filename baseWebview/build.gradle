@@ -60,6 +60,7 @@ dependencies {
     api project(path: ':viewState')
     api project(path: ':basewebview-ajax-proxy')
     api project(path: ':refresh-loadmore')
+    api project(path: ':search-history-api')
 
     api 'com.github.hackware1993:MagicIndicator:1.7.0'
     //':writeintercept'
@@ -71,6 +72,8 @@ dependencies {
     api 'io.github.yuweiguocn:GreenDaoUpgradeHelper:v2.2.1'
 
     api 'com.github.hss01248.ImageLoader:bigimageviewpager:3.5.3'
+
+    api 'com.github.pinguo-zhouwei:CustomPopwindow:2.1.1'
 
 }
 

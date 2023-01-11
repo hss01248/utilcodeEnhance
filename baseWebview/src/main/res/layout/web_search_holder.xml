@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/ll_top"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:gravity="center_vertical"
+        android:layout_height="45dp">
+        <ImageView
+            android:id="@+id/iv_close"
+            android:layout_width="40dp"
+            android:visibility="visible"
+            android:src="@drawable/icon_website_default"
+            android:scaleType="centerInside"
+            android:layout_height="40dp"/>
+        <EditText
+            android:visibility="visible"
+            android:padding="8dp"
+            android:id="@+id/et_input"
+            android:background="@drawable/bg_button_normal_trans"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:focusable="true"
+            android:imeOptions="actionSearch"
+            android:focusableInTouchMode="true"
+            android:gravity="left"
+            android:singleLine="true"
+            android:textColor="#333333"
+            android:textSize="12sp" />
+        <ImageView
+            android:id="@+id/iv_clear"
+            android:layout_width="30dp"
+            android:visibility="visible"
+            android:src="@drawable/ic_clear_black_18dp"
+            android:scaleType="centerInside"
+            android:layout_height="30dp"/>
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="wrap_content"
+            android:text="取消"
+            android:padding="10dp"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/rl_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </RelativeLayout>
+
+</LinearLayout>

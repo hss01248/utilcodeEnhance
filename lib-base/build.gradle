@@ -56,6 +56,7 @@ dependencies {
     api project(path: ':toast')
     api project(path: ':openuri')
     api project(path: ':viewState')
+    api project(path: ':fullScreenDialog')
     api "com.github.hss01248.AndoridBus:bus:2.0.5"
 
 

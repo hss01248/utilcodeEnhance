@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginRight="12dp"
+    android:layout_marginTop="12dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:textSize="12dp"
+        android:textColor="#333333"
+        android:padding="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:id="@+id/tv_history_name"
+       android:text="xxxxx"
+        android:background="@drawable/my_search_history_item_bg"
+        android:layout_height="wrap_content"/>
+    <ImageView
+        android:id="@+id/iv_delete_item"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_clear_black_18dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="-5dp"
+        app:tint="#999999"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

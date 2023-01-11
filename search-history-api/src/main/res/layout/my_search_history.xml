@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#ffffff"
+    android:paddingLeft="16dp"
+    android:paddingTop="16dp"
+    android:layout_height="match_parent">
+    <TextView
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:id="@+id/tv_desc"
+      android:text="@string/my_search_history"
+        android:layout_marginTop="2dp"
+        app:constraint_referenced_ids="tv_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_marginRight="16dp"
+        android:id="@+id/iv_delete"
+        android:src="@drawable/my_search_delete_history"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_height="20dp"/>
+  <!--  <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/ll"
+        android:padding="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:flexDirection="row"
+        app:flexWrap="wrap"
+        app:justifyContent="space_between"
+        app:alignItems="stretch"
+        app:layout_constraintTop_toBottomOf="@id/tv_desc"
+        android:layout_marginTop="20dp"
+        app:alignContent="stretch">
+    </com.google.android.flexbox.FlexboxLayout>-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:id="@+id/recycler_view"
+        android:layout_marginRight="4dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_desc"
+        android:layout_height="wrap_content"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
