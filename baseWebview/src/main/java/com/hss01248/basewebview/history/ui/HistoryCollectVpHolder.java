@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.BarUtils;
 import com.hss.utils.enhance.viewholder.MyViewHolder;
 import com.hss.utils.enhance.viewholder.viewpager.BasePagerAdapter;
 import com.hss.utils.enhance.viewholder.viewpager.IViewPagerInstantiateItem;
@@ -44,6 +45,7 @@ public class HistoryCollectVpHolder extends MyViewHolder<VpHistoryCollectBinding
         String[] titles = {"收藏","历史"};
         MagicIndicator magicIndicator = binding.magicIndicator;
         CommonNavigator commonNavigator = new CommonNavigator(binding.getRoot().getContext());
+        commonNavigator.setAdjustMode(true);
         commonNavigator.setAdapter(new CommonNavigatorAdapter() {
 
             @Override
@@ -69,7 +71,7 @@ public class HistoryCollectVpHolder extends MyViewHolder<VpHistoryCollectBinding
             @Override
             public IPagerIndicator getIndicator(Context context) {
                 LinePagerIndicator indicator = new LinePagerIndicator(context);
-                indicator.setMode(LinePagerIndicator.MODE_WRAP_CONTENT);
+                indicator.setMode(LinePagerIndicator.MODE_MATCH_EDGE);
                 return indicator;
             }
         });
@@ -94,7 +96,7 @@ public class HistoryCollectVpHolder extends MyViewHolder<VpHistoryCollectBinding
             public View initView(ViewGroup container, List<Boolean> datas, int position) {
                 HistoryOrCollectViewHolder viewHolder = new HistoryOrCollectViewHolder(container);
                 viewHolder.isCollect = datas.get(position);
-                viewHolder.assignDataAndEventReal(data);
+                viewHolder.assignDataAndEvent(data);
                 return viewHolder.binding.getRoot();
             }
         }));
@@ -105,8 +107,10 @@ public class HistoryCollectVpHolder extends MyViewHolder<VpHistoryCollectBinding
         HistoryCollectVpHolder holder = new HistoryCollectVpHolder(ActivityUtils.getTopActivity().findViewById(android.R.id.content));
         holder.assignDataAndEvent(bean);
         FullScreenDialog dialog = new FullScreenDialog(ActivityUtils.getTopActivity());
+
         dialog.setContentView(holder.getRootView());
         dialog.show();
+        BarUtils.setStatusBarLightMode(dialog.getWindow(),true);
         HistoryCollectVpHolder.dialog = dialog;
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override

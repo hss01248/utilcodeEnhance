@@ -65,12 +65,12 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
 
     public void setAdapter(BaseQuickAdapter<T, BaseViewHolder> adapter) {
         this.adapter = adapter;
+        binding.recyclerView.setAdapter(adapter);
     }
 
     BaseQuickAdapter<T, BaseViewHolder> adapter;
 
     PagerDto<T> dto = new PagerDto<>();
-    List<T> datas = new ArrayList<>();
 
     public void setLoadDataImpl(ILoadData<T> loadDataImpl) {
         this.loadDataImpl = loadDataImpl;
@@ -159,7 +159,7 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
                    binding.getRoot().showEmpty(emptyMsg,0,null,null);
                }else {
                    binding.getRoot().showContent();
-                   adapter.addData(tPagerDto.datas);
+                   adapter.replaceData(tPagerDto.datas);
                    dto = tPagerDto;
                }
            }

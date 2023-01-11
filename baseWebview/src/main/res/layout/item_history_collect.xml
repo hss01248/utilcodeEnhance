@@ -2,15 +2,19 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:id="@+id/rl_root"
-    android:layout_height="40dp">
+    android:padding="5dp"
+    android:layout_height="wrap_content">
 
     <ImageView
         android:layout_centerVertical="true"
         android:id="@+id/iv_icon"
+        android:src="@drawable/icon_website_default"
         android:layout_marginRight="10dp"
         android:layout_width="30dp"
         android:layout_height="30dp"/>
     <TextView
+        android:textSize="12sp"
+        android:textColor="#333333"
         android:id="@+id/tv_title"
         android:singleLine="true"
         android:ellipsize="end"
@@ -19,6 +23,8 @@
         android:layout_height="wrap_content"/>
     <TextView
         android:id="@+id/tv_url"
+        android:textSize="11sp"
+        android:textColor="#999999"
         android:layout_toRightOf="@id/iv_icon"
       android:layout_alignParentBottom="true"
         android:singleLine="true"

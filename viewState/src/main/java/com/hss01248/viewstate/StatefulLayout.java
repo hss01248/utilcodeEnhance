@@ -153,8 +153,11 @@ public class StatefulLayout extends FrameLayout implements IViewState{
         super.onLayout(changed, left, top, right, bottom);
         if(firstIn && contentView == null){
             //&& contentView == null
-            firstIn = false;
+
             init2(null);
+            if(contentView != null){
+                firstIn = false;
+            }
         }
     }
 
@@ -204,14 +207,20 @@ public class StatefulLayout extends FrameLayout implements IViewState{
             viewGroup =  subViews.get(state);
         }else {
             viewGroup = createView(state);
+            if(viewGroup != null){
+                subViews.put(state,viewGroup);
+                //NullPointerException
+                if(viewGroup.getParent() == this){
 
-            subViews.put(state,viewGroup);
-            if(viewGroup.getParent() == this){
-                //写在xml里的contentview
-            }else {
-                addView(viewGroup);
+                }else {
+                    addView(viewGroup);
+                }
             }
-
+        }
+        if(viewGroup == null){
+            //写在xml里的contentview
+            viewGroup = getChildAt(0);
+            subViews.put(state,viewGroup);
         }
         LogUtils.d("state:"+state+",vg:"+viewGroup);
         for (Integer integer : subViews.keySet()) {
