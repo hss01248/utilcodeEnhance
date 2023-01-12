@@ -12,6 +12,7 @@ import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 
 import com.blankj.utilcode.util.KeyboardUtils;
+import com.hss.utils.enhance.lifecycle.LifecycleObjectUtil;
 
 /**
  * @Despciption activity xml设置:   android:windowSoftInputMode="adjustPan"
@@ -107,6 +108,42 @@ public class MyKeyboardUtil implements DefaultLifecycleObserver {
     public void onDestroy(@NonNull LifecycleOwner owner) {
         DefaultLifecycleObserver.super.onDestroy(owner);
         removeOnKeyBoardStateListener();
+    }
+
+
+    public static void adaptView(View innerScrollableView){
+        final int[] totalHeight = {0};
+        innerScrollableView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+
+                if(totalHeight[0] ==0){
+                    totalHeight[0] = innerScrollableView.getMeasuredHeight();
+                    if(totalHeight[0] >0){
+                        innerScrollableView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    }
+
+                }
+            }
+        });
+
+        //内部自动在ondestory时取消
+        new MyKeyboardUtil((AppCompatActivity) LifecycleObjectUtil.getActivityFromContext(innerScrollableView.getContext()))
+                .addOnKeyBoardStateListener(new MyKeyboardUtil.OnKeyBoardStateListener() {
+                    @Override
+                    public void onSoftKeyBoardShow(int keyboardHeight) {
+                        ViewGroup.LayoutParams layoutParams = innerScrollableView.getLayoutParams();
+                        layoutParams.height = totalHeight[0] - keyboardHeight;
+                        innerScrollableView.setLayoutParams(layoutParams);
+                    }
+
+                    @Override
+                    public void onSoftKeyBoardHide() {
+                        ViewGroup.LayoutParams layoutParams = innerScrollableView.getLayoutParams();
+                        layoutParams.height = totalHeight[0] ;
+                        innerScrollableView.setLayoutParams(layoutParams);
+                    }
+                });
     }
 
 

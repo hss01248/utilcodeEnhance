@@ -33,6 +33,7 @@ import androidx.lifecycle.LifecycleOwner;
 import com.blankj.utilcode.util.BarUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.hss.utils.enhance.MyKeyboardUtil;
 import com.hss.utils.enhance.UrlEncodeUtil;
 import com.hss01248.basewebview.adblock.AdBlockClient;
 import com.hss01248.basewebview.databinding.TitlebarForWebviewBinding;
@@ -151,6 +152,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
         menus.addAll(new DefaultMenus().addMenus(this));
 
         webView.setOnLongClickListener(new TheLongPressListener(this));
+        MyKeyboardUtil.adaptView(this);
     }
 
     public void resetContext(Context context){
