@@ -34,6 +34,7 @@ import com.blankj.utilcode.util.BarUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.hss.utils.enhance.UrlEncodeUtil;
+import com.hss01248.basewebview.adblock.AdBlockClient;
 import com.hss01248.basewebview.databinding.TitlebarForWebviewBinding;
 import com.hss01248.basewebview.dom.FileChooseImpl;
 import com.hss01248.basewebview.dom.JsCreateNewWinImpl;
@@ -487,6 +488,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                     }
                 })
                 .useMiddlewareWebChrome(new JsPermissionImpl())
+                .useMiddlewareWebClient(new AdBlockClient(getContext()))
                 .useMiddlewareWebChrome(new FileChooseImpl());
         if(middlewareWebClient != null){
             builder.useMiddlewareWebClient(middlewareWebClient);

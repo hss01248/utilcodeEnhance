@@ -37,6 +37,7 @@ import com.hss01248.basewebview.ISetWebviewHolder;
 import com.hss01248.basewebview.R;
 import com.hss01248.basewebview.WebConfigger;
 import com.hss01248.basewebview.WebDebugger;
+import com.hss01248.basewebview.adblock.AdBlockClient;
 import com.hss01248.basewebview.subwindow.JsNewWindowFragment;
 import com.hss01248.iwidget.BaseDialogListener;
 import com.hss01248.iwidget.msg.AlertDialogImplByDialogUtil;
@@ -68,77 +69,7 @@ public class JsCreateNewWinImpl {
     }
 
     private void onCreateWindow2(WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
-
         showInNewActivity(view,isDialog,isUserGesture,resultMsg);
-
-        /*BaseQuickWebview baseQuickWebview = new BaseQuickWebview(view.getContext(),null,new MiddlewareWebClientBase(){
-            boolean isFirstOverride =true;
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view0, WebResourceRequest request) {
-                if(!isFirstOverride){
-                    return super.shouldOverrideUrlLoading(view0, request);
-                }
-                isFirstOverride = false;
-                BaseQuickWebview quickWebview  = (BaseQuickWebview) view0.getParent().getParent().getParent();
-                Uri uri = request.getUrl();
-                if("https".equals(uri.getScheme()) || "http".equals(uri.getScheme())){
-                    //todo  判断是不是下载链接,如果是,直接调用下载,如果不是,才开启新的activity来承载
-                    String path = uri.getPath();
-                    //String name = URLUtil.guessFileName()
-                    if(path.contains(".") && !path.endsWith(".")){
-                        //String name = path.substring(path.lastIndexOf(".")+1);
-                        String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(uri.toString()));
-                        if(!TextUtils.isEmpty(mime)){
-                            if(mime.startsWith("image") || mime.contains("text") || mime.contains("xml") || mime.contains("json")){
-
-                            }else {
-                                //这里触发下载:
-                                view.loadUrl(uri.toString());
-                                quickWebview.onDestroy((LifecycleOwner) WebDebugger.getActivityFromContext(view.getContext()));
-                                return true;
-                            }
-                        }
-                    }
-
-                }else {
-                    // 弹窗提示是否跳到app打开
-                    //todo URLUtil.isAboutUrl()
-                    new AlertDialogImplByDialogUtil().showMsg("跳转", "是否打开此链接?\n" + UrlEncodeUtil.decode(uri.toString()),
-                            "打开", "取消", new BaseDialogListener() {
-                                @Override
-                                public void onConfirm() {
-                                    try {
-                                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                                        intent.setData(uri);
-                                        ActivityUtils.getTopActivity().startActivity(intent);
-                                    }catch (Throwable throwable){
-                                        LogUtils.w(throwable);
-                                        MyToast.error("没有应用能打开这个链接: \n"+ UrlEncodeUtil.decode(uri.toString()));
-                                    }
-
-                                }
-                            });
-                    quickWebview.onDestroy((LifecycleOwner) WebDebugger.getActivityFromContext(view.getContext()));
-                    return true;
-                }
-
-                //showInNewWindow(view0,request,view,isDialog,isUserGesture,resultMsg,quickWebview);
-
-                //showInNewFragment(view0,request,view,isDialog,isUserGesture,resultMsg,quickWebview);
-                showInNewDialog(view0,request,view,isDialog,isUserGesture,resultMsg,quickWebview);
-
-                //到了这里,才是用activity打开页面
-                return false;
-                //return super.shouldOverrideUrlLoading(view, request);
-            }
-        });
-
-        WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
-        transport.setWebView(baseQuickWebview.getWebView());
-
-        resultMsg.sendToTarget();*/
-
     }
 
 
@@ -236,6 +167,11 @@ public class JsCreateNewWinImpl {
                 isFirstOverride = false;
                 BaseQuickWebview quickWebview  = (BaseQuickWebview) view0.getParent().getParent().getParent();
                 Uri uri = request.getUrl();
+                if(AdBlockClient.isAd(uri.toString())){
+                    activity.finish();
+                    return true;
+                }
+
                 if("https".equals(uri.getScheme()) || "http".equals(uri.getScheme())){
                     //todo  判断是不是下载链接,如果是,直接调用下载,如果不是,才开启新的activity来承载
                     String path = uri.getPath();
