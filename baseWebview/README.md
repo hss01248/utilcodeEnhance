@@ -26,9 +26,7 @@ https://navi.hss01248.tech/tabShare/12
 
 ![image-20230112163605022](https://cdn.jsdelivr.net/gh/shuiniuhss/myimages@main/imagemac3/image-20230112163605022.png)
 
-# webchromeClient的所有回调方法的含义
 
-https://www.jianshu.com/p/a7ac66691359
 
 
 
@@ -42,6 +40,30 @@ https://www.jianshu.com/p/a7ac66691359
 
 
 ![image-20230112163219210](https://cdn.jsdelivr.net/gh/shuiniuhss/myimages@main/imagemac3/image-20230112163219210.png)
+
+# webviewClient相关
+
+## 一些非http/https协议的拦截:
+
+弹窗引导用户使用系统intent打开:
+
+![image-20230112170546659](https://cdn.jsdelivr.net/gh/shuiniuhss/myimages@main/imagemac3/image-20230112170546659.png)
+
+![image-20230112170612011](https://cdn.jsdelivr.net/gh/shuiniuhss/myimages@main/imagemac3/image-20230112170612011.png)
+
+## 用okhttp代理chrome内核的请求的问题
+
+get请求可代理
+
+post无法拿到body
+
+
+
+# webchromeClient相关
+
+## webchromeClient的所有回调方法的含义
+
+https://www.jianshu.com/p/a7ac66691359
 
 ## 一些js弹窗
 
@@ -71,7 +93,7 @@ a标签 target=blank
 
 对一些下载,广告的新弹窗进行的处理.
 
-禁用了activity退出动画,避免闪屏
+禁用了activity退出动画,且将activity背景设置为透明,以避免闪屏. 
 
 
 
@@ -171,9 +193,18 @@ public void addRightMenus(IShowRightMenus showRightMenus)
 MyKeyboardUtil.adaptView(this);
 ```
 
+对应activity需要配置:
+
+```xml
+  android:configChanges="orientation|keyboardHidden|keyboard|screenSize"
+  android:windowSoftInputMode="adjustPan"
+```
+
+
+
 内部通过context取appcompactActivity,添加生命周期,自动注销监听.
 
-![image-20230112155438447](https://cdn.jsdelivr.net/gh/shuiniuhss/myimages@main/imagemac3/image-20230112155438447.png)
+![img](https://cdn.jsdelivr.net/gh/shuiniuhss/myimages@main/imagemac3/nruqo-j1kl9.gif)
 
 
 
@@ -184,6 +215,16 @@ MyKeyboardUtil.adaptView(this);
 内置广告域名/path黑名单
 
 在shouldInterceptRequest以及新开window的shouldOverrideUrlLoading拦截.
+
+> 黑名单模式会存在误杀的情况
+
+
+
+## 一些更好的广告拦截实现
+
+[stackoverflow.com](https://stackoverflow.com/questions/45176864/how-to-block-any-ads-in-webvew-like-adblock-or-adblock-plus-in-browsers)
+
+https://github.com/adblockplus/libadblockplus-android
 
 
 
