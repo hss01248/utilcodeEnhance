@@ -226,6 +226,8 @@ MyKeyboardUtil.adaptView(this);
 
 https://github.com/adblockplus/libadblockplus-android
 
+https://greasyfork.org/en/scripts/452314-adblock-script-for-webview
+
 
 
 # 小说网页开启阅读模式和预下载

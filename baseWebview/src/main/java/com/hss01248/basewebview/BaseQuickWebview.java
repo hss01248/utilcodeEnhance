@@ -328,6 +328,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                         new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
                 //传入AgentWeb 的父控件 ，如果父控件为 RelativeLayout ， 那么第二参数需要传入 RelativeLayout.LayoutParams ,第一个参数和第二个参数应该对应。
                 .useDefaultIndicator()// 使用默认进度条
+                //.setWebView(new WrappedWebview(getContext()))
                 .setAgentWebUIController(new AgentWebUIControllerImplBase(){
                     @Override
                     public void onMainFrameError(WebView view, int errorCode, String description, String failingUrl) {

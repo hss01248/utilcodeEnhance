@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.hss01248.basewebview">
+    <uses-sdk tools:overrideLibrary="org.adblockplus.libadblockplus.android.webview"/>
     <application>
         <activity android:name=".BaseWebviewActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize"
