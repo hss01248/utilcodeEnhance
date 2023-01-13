@@ -33,4 +33,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     api project(path: ':lib-base')
+    api project(path: ':refresh-loadmore')
+    api 'com.liulishuo.filedownloader:library:1.7.7'
+    api "androidx.startup:startup-runtime:1.1.0"
+    api "com.github.hss01248.HttpUtil2:http:3.1.4"
 }
