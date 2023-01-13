@@ -10,6 +10,7 @@ import android.view.Window;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
+import androidx.core.graphics.ColorUtils;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
@@ -22,7 +23,7 @@ import com.blankj.utilcode.util.ThreadUtils;
 import java.util.List;
 
 /**
- * @Despciption todo
+ * @Despciption https://zhuanlan.zhihu.com/p/528604535
  * @Author hss
  * @Date 13/01/2023 14:06
  * @Version 1.0
@@ -52,6 +53,7 @@ public class BarColorUtil  {
         View decorView = window.getDecorView();
         decorView.setDrawingCacheEnabled(true);
         Bitmap drawingCache = decorView.getDrawingCache();
+        decorView.setDrawingCacheEnabled(false);
         ThreadUtils.executeByCpu(new ThreadUtils.SimpleTask<Integer>() {
             @Override
             public Integer doInBackground() throws Throwable {
@@ -76,12 +78,29 @@ public class BarColorUtil  {
 
             @Override
             public void onSuccess(Integer result) {
-                BarUtils.setStatusBarLightMode(window, isLightColor(result));
+                double luminance = ColorUtils.calculateLuminance(result);
+                //BarUtils.setStatusBarLightMode(window, isLightColor(result));
+                // 当luminance小于0.5时，我们认为这是一个深色值.
+                if (luminance < 0.5) {
+                    setDarkStatusBar(window);
+                } else {
+                    setLightStatusBar(window);
+                }
             }
         });
 
     }
     public static boolean isLightColor(@ColorInt int color) {
         return 0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color) >= 127.5;
+    }
+
+    public static void setLightStatusBar(Window window) {
+        int flags = window.getDecorView().getSystemUiVisibility();
+        window.getDecorView().setSystemUiVisibility(flags | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+    }
+
+    public static void setDarkStatusBar(Window window) {
+        int flags =  window.getDecorView().getSystemUiVisibility() | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+        window.getDecorView().setSystemUiVisibility(flags ^ View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
     }
 }

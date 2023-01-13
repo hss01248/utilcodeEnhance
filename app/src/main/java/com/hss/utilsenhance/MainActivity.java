@@ -15,6 +15,7 @@ import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.StringUtils;
+import com.blankj.utilcode.util.ThreadUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
 import com.google.gson.GsonBuilder;
@@ -140,7 +141,13 @@ public class MainActivity extends AppCompatActivity {
             decorView.setSystemUiVisibility(option);
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
-        BarColorUtil.autoFitStatusBarLightModeNow(getWindow());
+        ThreadUtils.getMainHandler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                BarColorUtil.autoFitStatusBarLightModeNow(getWindow());
+            }
+        },1000);
+
     }
 
     /**
