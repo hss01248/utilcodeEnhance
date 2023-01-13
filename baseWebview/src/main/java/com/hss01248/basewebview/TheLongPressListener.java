@@ -1,5 +1,6 @@
 package com.hss01248.basewebview;
 
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -97,6 +98,7 @@ public class TheLongPressListener implements View.OnLongClickListener {
             @Override
             public void onItemClicked(int position, String bean) {
                 MyViewPager myViewPager = new MyViewPager(v.getContext());
+                myViewPager.setBackgroundColor(Color.BLACK);
                 List<String> ulrs = new ArrayList<>();
                 ulrs.add(pic);
                 ViewPager viewPager = LargeImageViewer.showBig(v.getContext(), myViewPager, ulrs, 0);
@@ -104,7 +106,7 @@ public class TheLongPressListener implements View.OnLongClickListener {
                 FullScreenDialog dialog = new FullScreenDialog(v.getContext());
                 dialog.setContentView(myViewPager);
                 dialog.show();
-                BarUtils.setStatusBarLightMode(dialog.getWindow(),true);
+                BarUtils.setStatusBarLightMode(dialog.getWindow(),false);
             }
         });
         items.add(new ISingleChooseItem<String>() {

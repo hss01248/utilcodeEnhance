@@ -18,6 +18,7 @@ import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
 import com.google.gson.GsonBuilder;
+import com.hss.utils.enhance.BarColorUtil;
 import com.hss.utils.enhance.HomeMaintaner;
 import com.hss.utils.enhance.intent.ShareUtils;
 import com.hss.utils.enhance.UrlEncodeUtil;
@@ -139,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
             decorView.setSystemUiVisibility(option);
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
+        BarColorUtil.autoFitStatusBarLightModeNow(getWindow());
     }
 
     /**
@@ -161,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
         View decorView = getWindow().getDecorView();
         int option = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(option);
+        BarColorUtil.autoFitStatusBarLightModeNow(getWindow());
     }
 
     public void hideNaviBar(View view) {

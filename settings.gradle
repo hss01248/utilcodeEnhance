@@ -17,3 +17,4 @@ include ':refresh-loadmore'
 
 include ':search-history-api'
 include ':fullScreenDialog'
+include ':download-list'

@@ -59,6 +59,8 @@ dependencies {
     api project(path: ':fullScreenDialog')
     api "com.github.hss01248.AndoridBus:bus:2.0.5"
 
+    api 'androidx.palette:palette:1.0.0'
+
 
 
 
