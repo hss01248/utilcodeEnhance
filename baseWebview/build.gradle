@@ -62,7 +62,8 @@ dependencies {
     api project(path: ':refresh-loadmore')
     api project(path: ':search-history-api')
 
-    api 'com.github.skyNet2017.Luban:luban:3.2.6'
+    api 'com.github.skyNet2017.Luban:luban:3.2.7'
+    //api 'com.github.skyNet2017.Luban:showResult:3.2.7'
 
     api 'com.github.hackware1993:MagicIndicator:1.7.0'
     //':writeintercept'

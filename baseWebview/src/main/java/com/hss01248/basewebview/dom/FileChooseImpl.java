@@ -11,6 +11,7 @@ import androidx.annotation.RequiresApi;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.StringUtils;
+import com.blankj.utilcode.util.UriUtils;
 import com.hss.utils.enhance.api.MyCommonCallback;
 import com.hss01248.basewebview.R;
 import com.hss01248.iwidget.singlechoose.SingleChooseDialogImpl;
@@ -102,8 +103,9 @@ public class FileChooseImpl extends MiddlewareWebChromeBase {
                 MediaPickOrCaptureUtil.pickImageOrTakePhoto(false,new MyCommonCallback<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        //todo 压缩
-                        Uri[] uris1 = {uri};
+                        //压缩
+                        File file = LubanUtil.compressWithNoResize(UriUtils.uri2File(uri).getAbsolutePath());
+                        Uri[] uris1 = {Uri.fromFile(file)};
                         filePathCallback.onReceiveValue(uris1);
                     }
                     @Override
@@ -197,7 +199,9 @@ public class FileChooseImpl extends MiddlewareWebChromeBase {
                 MediaPickOrCaptureUtil.pickOrCaptureImageOrVideo(true,30, new MyCommonCallback<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        Uri[] uris1 = {uri};
+                        //Uri[] uris1 = {uri};
+                        File file = LubanUtil.compressWithNoResize(UriUtils.uri2File(uri).getAbsolutePath());
+                        Uri[] uris1 = {Uri.fromFile(file)};
                         filePathCallback.onReceiveValue(uris1);
                     }
                     @Override
@@ -247,7 +251,9 @@ public class FileChooseImpl extends MiddlewareWebChromeBase {
         MediaPickUtil.pickOne(new MyCommonCallback<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                Uri[] uris1 = {uri};
+                //Uri[] uris1 = {uri};
+                File file = LubanUtil.compressWithNoResize(UriUtils.uri2File(uri).getAbsolutePath());
+                Uri[] uris1 = {Uri.fromFile(file)};
                 filePathCallback.onReceiveValue(uris1);
             }
 

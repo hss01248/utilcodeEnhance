@@ -7,12 +7,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.hss01248.basewebview.BaseWebviewActivity;
 
+
+import top.zibin.luban.LubanUtil;
+
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        LubanUtil.setEnableLog(true,true);
     }
 
     public void geoLocation(View view) {
