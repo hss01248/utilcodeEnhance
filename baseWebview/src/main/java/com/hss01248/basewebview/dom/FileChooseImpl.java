@@ -26,6 +26,8 @@ import com.just.agentweb.MiddlewareWebChromeBase;
 import java.io.File;
 import java.util.List;
 
+import top.zibin.luban.LubanUtil;
+
 /**
  * @Despciption
  * 不使用file类型input也能触发文件上传
@@ -86,7 +88,8 @@ public class FileChooseImpl extends MiddlewareWebChromeBase {
                 CaptureImageUtil.takePicture(false,new MyCommonCallback<String>() {
                     @Override
                     public void onSuccess(String s) {
-                        Uri[] uris1 = {Uri.fromFile(new File(s))};
+                        File file = LubanUtil.compressWithNoResize(s);
+                        Uri[] uris1 = {Uri.fromFile(file)};
                         filePathCallback.onReceiveValue(uris1);
                     }
                     @Override
@@ -99,6 +102,7 @@ public class FileChooseImpl extends MiddlewareWebChromeBase {
                 MediaPickOrCaptureUtil.pickImageOrTakePhoto(false,new MyCommonCallback<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
+                        //todo 压缩
                         Uri[] uris1 = {uri};
                         filePathCallback.onReceiveValue(uris1);
                     }
@@ -169,7 +173,8 @@ public class FileChooseImpl extends MiddlewareWebChromeBase {
                                     CaptureImageUtil.takePicture(false,new MyCommonCallback<String>() {
                                         @Override
                                         public void onSuccess(String s) {
-                                            Uri[] uris1 = {Uri.fromFile(new File(s))};
+                                            File file = LubanUtil.compressWithNoResize(s);
+                                            Uri[] uris1 = {Uri.fromFile(file)};
                                             filePathCallback.onReceiveValue(uris1);
                                         }
                                         @Override
