@@ -37,6 +37,7 @@ dependencies {
     api  'io.github.scwang90:refresh-footer-ball:2.0.5'        //球脉冲加载
     api  'io.github.scwang90:refresh-footer-classics:2.0.5'    //经典加载
     api project(path: ':lib-base')
+    api project(path: ':iwidget')
     api project(path: ':search-history-api')
     api "com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.46"
 

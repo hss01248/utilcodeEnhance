@@ -21,7 +21,7 @@ public class LoadDataByHistoryDb implements ILoadData<BrowserHistoryInfo> {
 
     boolean isCollect;
     @Override
-    public void loadData(PagerDto<BrowserHistoryInfo> pager, MyCommonCallback<PagerDto<BrowserHistoryInfo>> callback) {
+    public void queryData(PagerDto<BrowserHistoryInfo> pager, MyCommonCallback<PagerDto<BrowserHistoryInfo>> callback) {
         try {
             PagerDto<BrowserHistoryInfo> browserHistoryInfoPagerDto = MyDbUtil.loadByPager(pager,isCollect);
             callback.onSuccess(browserHistoryInfoPagerDto);
@@ -30,4 +30,12 @@ public class LoadDataByHistoryDb implements ILoadData<BrowserHistoryInfo> {
             callback.onError(throwable.getClass().getSimpleName(),throwable.getMessage(),throwable);
         }
     }
+
+    @Override
+    public boolean deleteData(BrowserHistoryInfo data, int position) {
+        MyDbUtil.getDaoSession().getBrowserHistoryInfoDao().delete(data);
+        return true;
+    }
+
+
 }

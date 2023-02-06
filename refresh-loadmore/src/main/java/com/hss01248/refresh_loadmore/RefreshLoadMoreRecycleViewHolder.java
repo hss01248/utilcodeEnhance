@@ -2,6 +2,7 @@ package com.hss01248.refresh_loadmore;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.view.View;
 import android.view.ViewGroup;
 
 
@@ -69,6 +70,35 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
 
     public void setAdapter(BaseQuickAdapter<T, BaseViewHolder> adapter) {
         this.adapter = adapter;
+
+        BaseQuickAdapter.OnItemClickListener originalListener = adapter.getOnItemClickListener();
+        BaseQuickAdapter.OnItemLongClickListener onItemLongClickListener = adapter.getOnItemLongClickListener();
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                if(!loadDataImpl.onItemClicked(view, (T) adapter.getData().get(position),position)){
+                    if(originalListener != null){
+                        originalListener.onItemClick(adapter, view, position);
+                    }
+
+                }
+            }
+        });
+        adapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+               if(! loadDataImpl.onItemLongPressed(view, (T) adapter.getData().get(position),position)){
+                   if(onItemLongClickListener != null){
+                      return onItemLongClickListener.onItemLongClick(adapter, view, position);
+                   }
+                   return false;
+               }else {
+                   return true;
+               }
+
+            }
+        });
+
         binding.recyclerView.setAdapter(adapter);
     }
 
@@ -101,7 +131,7 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
             public void onRefresh(RefreshLayout refreshlayout) {
                 //refreshlayout.finishRefresh(2000/*,false*/);//传入false表示刷新失败
                 PagerDto<T> firstPage = dto.firstPage();
-                loadDataImpl.loadData(firstPage, new MyCommonCallback<PagerDto<T>>() {
+                loadDataImpl.queryData(firstPage, new MyCommonCallback<PagerDto<T>>() {
                     @Override
                     public void onSuccess(PagerDto<T> tPagerDto) {
                         binding.getRoot().showContent();
@@ -140,7 +170,7 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
                 PagerDto<T> copy = dto.copy();
                 copy.pageIndex++;
                 copy.offset += copy.pageSize;
-                loadDataImpl.loadData(copy, new MyCommonCallback<PagerDto<T>>() {
+                loadDataImpl.queryData(copy, new MyCommonCallback<PagerDto<T>>() {
                     @Override
                     public void onSuccess(PagerDto<T> tPagerDto) {
 
@@ -180,7 +210,7 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
         PagerDto<T> firstPage = dto.firstPage();
         firstPage.searchText = searchKey;
         firstPage.searchParams = data;
-        loadDataImpl.loadData(firstPage, new MyCommonCallback<PagerDto<T>>() {
+        loadDataImpl.queryData(firstPage, new MyCommonCallback<PagerDto<T>>() {
             @Override
             public void onSuccess(PagerDto<T> tPagerDto) {
                 hasSucceed = true;

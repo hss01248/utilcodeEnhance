@@ -24,6 +24,9 @@ import java.util.HashMap;
 public class SearchViewHolder<T> extends MyViewHolder<CommonSearchViewHolderBinding,String> {
     public SearchViewHolder(Context context) {
         super(context);
+        initView();
+        initEvent();
+        initContentView();
     }
 
     public SearchHistoryViewHolder getHistoryViewHolder() {
@@ -39,14 +42,16 @@ public class SearchViewHolder<T> extends MyViewHolder<CommonSearchViewHolderBind
     RefreshLoadMoreRecycleViewHolder<T> loadMoreRecycleViewHolder;
     @Override
     protected void assignDataAndEventReal(String data) {
-        initView();
-        initEvent();
-        initContentView();
+
     }
 
     private void initContentView() {
         loadMoreRecycleViewHolder = new RefreshLoadMoreRecycleViewHolder<T>(getRootView().getContext());
        // loadMoreRecycleViewHolder.setLoadDataImpl();
+        binding.rlContainer.addView(loadMoreRecycleViewHolder.getRootView());
+        loadMoreRecycleViewHolder.getStatefulLayout().showContent();
+        //loadMoreRecycleViewHolder.getRootView()
+
     }
 
     private void initView() {
@@ -66,18 +71,18 @@ public class SearchViewHolder<T> extends MyViewHolder<CommonSearchViewHolderBind
         binding.etInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                historyViewHolder.getRootView().setVisibility(View.VISIBLE);
-                historyViewHolder.refreshData();
+                historyViewHolder.assignDataAndEvent("");
             }
         });
         historyViewHolder.setItemClickListener(new OnHistoryItemClickListener() {
             @Override
             public void onHistoryItemClick(String text) {
-                doSearch(text);
+                binding.etInput.setText(text);
+                //doSearch(text);
             }
         });
 
-        binding.tvDoSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        binding.etInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (i == EditorInfo.IME_ACTION_SEARCH ) {

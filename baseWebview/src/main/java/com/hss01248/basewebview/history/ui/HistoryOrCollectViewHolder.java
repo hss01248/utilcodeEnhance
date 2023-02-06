@@ -9,7 +9,9 @@ import com.hss01248.basewebview.BaseQuickWebview;
 import com.hss01248.basewebview.R;
 import com.hss01248.basewebview.databinding.ContainerHistoryCollectBinding;
 import com.hss01248.basewebview.history.db.BrowserHistoryInfo;
+import com.hss01248.history.api.SearchHistoryViewHolder;
 import com.hss01248.refresh_loadmore.RefreshLoadMoreRecycleViewHolder;
+import com.hss01248.refresh_loadmore.search.SearchViewHolder;
 
 import java.util.HashMap;
 
@@ -26,18 +28,23 @@ public class HistoryOrCollectViewHolder extends MyViewHolder<ContainerHistoryCol
 
     boolean isCollect;
 
-    RefreshLoadMoreRecycleViewHolder<BrowserHistoryInfo> holder;
+    SearchViewHolder<BrowserHistoryInfo> holder;
     @Override
     protected void assignDataAndEventReal(BaseQuickWebview data) {
-        holder = new RefreshLoadMoreRecycleViewHolder<>(binding.getRoot());
+        holder = new SearchViewHolder<BrowserHistoryInfo>(binding.getRoot().getContext());
         binding.getRoot().addView(holder.binding.getRoot());
         //binding.getRoot().setPadding(0, BarUtils.getStatusBarHeight(),0,0);
 
-        holder.setEmptyMsg("xxx 为空");
-        holder.setLoadDataImpl(new LoadDataByHistoryDb(isCollect));
+        holder.getLoadMoreRecycleViewHolder().getDto().pageSize = 60;
+        holder.getLoadMoreRecycleViewHolder().initRecyclerViewDefault();
+
+        holder.getLoadMoreRecycleViewHolder().setEmptyMsg(isCollect? "收藏": "访问记录"+" 为空");
+        holder.getLoadMoreRecycleViewHolder().setLoadDataImpl(new LoadDataByHistoryDb(isCollect));
         BrowserHistoryAdapter adapter = new BrowserHistoryAdapter(R.layout.item_history_collect);
         adapter.setQuickWebview(data);
-        holder.setAdapter(adapter);
-        holder.assignDataAndEvent(new HashMap());
+        holder.getLoadMoreRecycleViewHolder().setAdapter(adapter);
+        holder.getLoadMoreRecycleViewHolder().assignDataAndEvent(new HashMap<>());
+
+        //holder.getHistoryViewHolder().assignDataAndEvent("");
     }
 }

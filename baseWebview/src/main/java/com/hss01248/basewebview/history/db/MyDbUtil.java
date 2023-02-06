@@ -9,6 +9,7 @@ import com.blankj.utilcode.util.Utils;
 import com.hss01248.refresh_loadmore.PagerDto;
 
 import org.greenrobot.greendao.database.Database;
+import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.util.List;
 
@@ -106,12 +107,16 @@ public class MyDbUtil {
         return loadByPager(pagerDto,true);
     }
    public static PagerDto<BrowserHistoryInfo> loadByPager(PagerDto pagerDto,boolean isCollect){
-        List<BrowserHistoryInfo> list = getDaoSession().getBrowserHistoryInfoDao().queryBuilder()
+       QueryBuilder<BrowserHistoryInfo> builder = getDaoSession().getBrowserHistoryInfoDao().queryBuilder()
                 .where(BrowserHistoryInfoDao.Properties.IsCollect.eq(isCollect? 1: 0))
                 .orderDesc(BrowserHistoryInfoDao.Properties.UpdateTime)
                 .limit(pagerDto.pageSize)
-                .offset((int) pagerDto.offset)
-                .list();
+                .offset((int) pagerDto.offset);
+       if(!TextUtils.isEmpty(pagerDto.searchText)){
+           builder.whereOr(BrowserHistoryInfoDao.Properties.Title.like("%"+pagerDto.searchText+"%"),
+                   BrowserHistoryInfoDao.Properties.Url.like("%"+pagerDto.searchText+"%"));
+       }
+       List<BrowserHistoryInfo> list = builder.list();
         PagerDto<BrowserHistoryInfo> pagerDto1 = new PagerDto<BrowserHistoryInfo>();
         pagerDto1.isLast = list.size() < pagerDto.pageSize;
         pagerDto1.datas = list;

@@ -36,6 +36,11 @@ public abstract  class MyViewHolder<VB extends ViewBinding,T> implements Default
 
     public VB binding;
     public T data;
+
+    public StatefulLayout getStatefulLayout() {
+        return statefulLayout;
+    }
+
     protected StatefulLayout statefulLayout;
 
 
@@ -52,7 +57,7 @@ public abstract  class MyViewHolder<VB extends ViewBinding,T> implements Default
 
     public View getRootView(){
         if(statefulLayout == null){
-            return binding.getRoot();
+            return   binding.getRoot();
         }
         return statefulLayout;
     }
@@ -96,6 +101,9 @@ public abstract  class MyViewHolder<VB extends ViewBinding,T> implements Default
         }
 
         onCreateReal();
+        if(binding.getRoot() instanceof StatefulLayout){
+            statefulLayout = (StatefulLayout) binding.getRoot();
+        }
     }
 
 
