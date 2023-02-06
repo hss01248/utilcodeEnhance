@@ -5,14 +5,14 @@ buildscript{
         maven {//google()
              url  'https://dl.google.com/dl/android/maven2/'
         }
-        maven {//jcenter()
-             url  'https://jcenter.bintray.com/'
-        }
         maven {//mavenCentral()
              url  'https://repo.maven.apache.org/maven2/'
         }
         maven {
              url  'https://jitpack.io'
+        }
+        maven {
+             url  'https://maven.aliyun.com/repository/jcenter'
         }
         maven {
              url  'https://artifact.bytedance.com/repository/byteX/'
@@ -30,6 +30,7 @@ dependencies {
      classpath "com.tencent.mm:AndResGuard-gradle-plugin:1.2.21"
      classpath "io.github.didi.dokit:dokitx-plugin:3.5.0.1"
      classpath "io.github.duking666:ImgCompressPlugin:1.2.1"
+     classpath "org.greenrobot:greendao-gradle-plugin:3.3.0"
   }
 }
 
@@ -44,11 +45,12 @@ dependencies {
 // [class:class org.gradle.api.plugins.BasePlugin]
 // [class:class org.gradle.api.plugins.ReportingBasePlugin]
 // [class:class org.gradle.api.plugins.JavaBasePlugin]
-// [extension:extension 'android', projectType:0, moduleLoader:com.android.build.gradle.internal.plugins.LintModuleLoader@1ed87ec1, class:class com.android.build.gradle.internal.plugins.AppPlugin, packagePublished:false, analyticsPluginType:APPLICATION, extensionClass:class com.android.build.gradle.internal.dsl.BaseAppModuleExtension, variantInputModel:com.android.build.gradle.internal.variant.LegacyVariantInputManager@473da4ef, variantManager:com.android.build.gradle.internal.VariantManager@635cab54]
+// [extension:extension 'android', projectType:0, moduleLoader:com.android.build.gradle.internal.plugins.LintModuleLoader@79c9bf78, class:class com.android.build.gradle.internal.plugins.AppPlugin, packagePublished:false, analyticsPluginType:APPLICATION, extensionClass:class com.android.build.gradle.internal.dsl.BaseAppModuleExtension, variantInputModel:com.android.build.gradle.internal.variant.LegacyVariantInputManager@3e4dac38, variantManager:com.android.build.gradle.internal.VariantManager@425dcd7c]
 // [extension:extension 'android', class:class com.android.build.gradle.AppPlugin]
 // [class:class com.google.gradle.osdetector.OsDetectorPlugin]
 // [class:class com.tencent.gradle.AndResGuardPlugin]
 // [class:class com.hujiang.gradle.plugin.android.aspectjx.AJXPlugin]
+// [class:class com.didichuxing.doraemonkit.plugin.DoKitPlugin]
 // [class:class com.dorongold.gradle.tasktree.TaskTreePlugin]
 // [class:class com.alibaba.android.arouter.register.launch.PluginLaunch]
 // [class:class com.kingkingdu.ImgCompressPlugin]
