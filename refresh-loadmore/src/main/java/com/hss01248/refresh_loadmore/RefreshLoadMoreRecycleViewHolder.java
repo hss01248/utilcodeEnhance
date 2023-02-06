@@ -1,16 +1,15 @@
 package com.hss01248.refresh_loadmore;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.view.ViewGroup;
 
 
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.blankj.utilcode.util.SizeUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.fondesa.recyclerviewdivider.DividerDecoration;
 import com.hss.utils.enhance.api.MyCommonCallback;
 import com.hss.utils.enhance.viewholder.MyViewHolder;
 import com.hss01248.refresh_loadmore.databinding.CommonRefreshLoadmoreRecyclerviewBinding;
@@ -21,7 +20,6 @@ import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,14 +28,20 @@ import java.util.Map;
  * @Date 10/01/2023 17:50
  * @Version 1.0
  */
-public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefreshLoadmoreRecyclerviewBinding, Map> {
-    public RefreshLoadMoreRecycleViewHolder(ViewGroup parent) {
-        super(parent);
-        init2(parent);
-        defaultRecyclerView();
+public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefreshLoadmoreRecyclerviewBinding, Map<String,Object>> {
+    public RefreshLoadMoreRecycleViewHolder(Context context) {
+        super(context);
+        init2();
+        //initRecyclerViewDefault();
     }
 
-    private void defaultRecyclerView() {
+    public RefreshLoadMoreRecycleViewHolder(ViewGroup parent) {
+        super(parent);
+        init2();
+        //initRecyclerViewDefault();
+    }
+
+    public void initRecyclerViewDefault() {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
        /* RecyclerView.ItemDecoration itemDecoration = (RecyclerView.ItemDecoration) DividerDecoration.builder(binding.getRoot().getContext())
                 .color(Color.parseColor("#eeeeee"))
@@ -70,16 +74,25 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
 
     BaseQuickAdapter<T, BaseViewHolder> adapter;
 
-    PagerDto<T> dto = new PagerDto<>();
+    public PagerDto<T> getDto() {
+        return dto;
+    }
+
+    PagerDto<T> dto = new PagerDto<T>().firstPage();
 
     public void setLoadDataImpl(ILoadData<T> loadDataImpl) {
         this.loadDataImpl = loadDataImpl;
     }
 
+    public void loadByNewParams(String searchKey,Map<String,Object> params){
+
+        loadFirstTime(searchKey,params);
+    }
+
     ILoadData<T> loadDataImpl;
     boolean hasSucceed;
 
-    private void init2(ViewGroup parent) {
+    private void init2() {
         RefreshLayout refreshLayout = binding.refreshLayout;
         //refreshLayout.setRefreshHeader(new MaterialHeader(parent.getContext()));
         //refreshLayout.setRefreshFooter(new ClassicsFooter(parent.getContext()));
@@ -87,8 +100,8 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
                 //refreshlayout.finishRefresh(2000/*,false*/);//传入false表示刷新失败
-                PagerDto<T> pagerDto1 = new PagerDto<>();
-                loadDataImpl.loadData(pagerDto1, new MyCommonCallback<PagerDto<T>>() {
+                PagerDto<T> firstPage = dto.firstPage();
+                loadDataImpl.loadData(firstPage, new MyCommonCallback<PagerDto<T>>() {
                     @Override
                     public void onSuccess(PagerDto<T> tPagerDto) {
                         binding.getRoot().showContent();
@@ -100,7 +113,10 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
                         }else {
                             binding.getRoot().showContent();
                             adapter.replaceData(tPagerDto.datas);
-                            dto = tPagerDto;
+                            //dto = tPagerDto;
+                            RefreshLoadMoreRecycleViewHolder.this.dto = firstPage;
+                            RefreshLoadMoreRecycleViewHolder.this.dto.isLast = tPagerDto.isLast;
+
                         }
                     }
 
@@ -121,7 +137,10 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
             @Override
             public void onLoadMore(RefreshLayout refreshlayout) {
                 //refreshlayout.finishLoadMore(2000/*,false*/);//传入false表示加载失败
-                loadDataImpl.loadData(dto, new MyCommonCallback<PagerDto<T>>() {
+                PagerDto<T> copy = dto.copy();
+                copy.pageIndex++;
+                copy.offset += copy.pageSize;
+                loadDataImpl.loadData(copy, new MyCommonCallback<PagerDto<T>>() {
                     @Override
                     public void onSuccess(PagerDto<T> tPagerDto) {
 
@@ -130,7 +149,10 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
                         }else {
                             refreshlayout.finishLoadMore(true);
                             adapter.addData(tPagerDto.datas);
-                            dto = tPagerDto;
+
+                            dto.pageIndex = copy.pageIndex;
+                            dto.offset = copy.offset;
+                            dto.isLast = tPagerDto.isLast;
                         }
                     }
 
@@ -147,28 +169,38 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
 
 
     @Override
-    protected void assignDataAndEventReal(Map data) {
+    protected void assignDataAndEventReal(Map<String,Object> data) {
+
+
+        loadFirstTime("",data);
+    }
+
+    private void loadFirstTime(String searchKey,Map<String,Object> data) {
         binding.getRoot().showLoading();
+        PagerDto<T> firstPage = dto.firstPage();
+        firstPage.searchText = searchKey;
+        firstPage.searchParams = data;
+        loadDataImpl.loadData(firstPage, new MyCommonCallback<PagerDto<T>>() {
+            @Override
+            public void onSuccess(PagerDto<T> tPagerDto) {
+                hasSucceed = true;
+                if(tPagerDto.datas == null || tPagerDto.datas.isEmpty()){
+                    dto = firstPage;
+                    dto.isLast = true;
+                    binding.getRoot().showEmpty(emptyMsg,0,null,null);
+                }else {
+                    dto = firstPage;
+                    dto.isLast = tPagerDto.isLast;
+                    binding.getRoot().showContent();
+                    adapter.replaceData(tPagerDto.datas);
+                }
+            }
 
-        dto.offset = 0;
-       loadDataImpl.loadData(dto, new MyCommonCallback<PagerDto<T>>() {
-           @Override
-           public void onSuccess(PagerDto<T> tPagerDto) {
-               hasSucceed = true;
-               if(tPagerDto.datas == null || tPagerDto.datas.isEmpty()){
-                   binding.getRoot().showEmpty(emptyMsg,0,null,null);
-               }else {
-                   binding.getRoot().showContent();
-                   adapter.replaceData(tPagerDto.datas);
-                   dto = tPagerDto;
-               }
-           }
-
-           @Override
-           public void onError(String msg) {
-               MyCommonCallback.super.onError(msg);
-               binding.getRoot().showError(msg);
-           }
-       });
+            @Override
+            public void onError(String msg) {
+                MyCommonCallback.super.onError(msg);
+                binding.getRoot().showError(msg);
+            }
+        });
     }
 }
