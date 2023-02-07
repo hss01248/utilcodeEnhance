@@ -5,6 +5,7 @@ buildscript {
     apply from: 'https://raw.githubusercontent.com/hss01248/flipperUtil/dev/z_config/git_branch_info.gradle'
     apply from: "app/configs/componentized.gradle"
     apply from: "app/configs/apk_shrink.gradle"
+    apply from: 'https://raw.githubusercontent.com/skyNet2017/AppUpdate/master/uploadToPyger.gradle'
 
 
     dependencies {
