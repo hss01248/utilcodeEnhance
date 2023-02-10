@@ -42,3 +42,8 @@ dependencies {
 
 
 }
+
+configurations {
+    //com.github.hss01248:DialogUtil
+    all*.exclude group: 'com.github.hss01248', module: 'DialogUtil'
+}

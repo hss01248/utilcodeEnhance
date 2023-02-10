@@ -101,12 +101,6 @@ public class SingleChooseDialogImpl implements ISingleChooseDialog {
     @Override
     public void showInCenter(CharSequence title, CharSequence[] datas, SingleChooseDialogListener listener) {
         showList(title, datas, false, listener);
-        /*StyledDialog.buildIosSingleChoose(Arrays.asList(datas), new MyItemDialogListener() {
-            @Override
-            public void onItemClick(CharSequence text, int position) {
-                listener.onItemClicked(position,text);
-            }
-        }).show();*/
     }
 
     /**

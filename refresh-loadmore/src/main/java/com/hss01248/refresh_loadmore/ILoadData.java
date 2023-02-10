@@ -1,6 +1,14 @@
 package com.hss01248.refresh_loadmore;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.PopupWindow;
+import android.widget.TextView;
+
+import androidx.core.widget.PopupWindowCompat;
 
 import com.hss.utils.enhance.api.MyCommonCallback;
 import com.hss01248.iwidget.BaseDialogListener;
@@ -34,7 +42,27 @@ public interface ILoadData<T> {
                                 });
             }
         });
-        ISingleChooseItem.showAsMenu(view, chooseItems, data);
+       // ISingleChooseItem.showAsMenu(view, chooseItems, data);
+
+        PopupWindow pop = new PopupWindow(view.getContext());
+        TextView textView = new TextView(view.getContext());
+        textView.setText("xxxxxxxxxxxxxxxxxxxxxxxx");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            //textView.setClipToOutline(true);
+        }
+        textView.setGravity(Gravity.CENTER);
+        textView.setBackgroundColor(Color.GREEN);
+        //textView.setPadding(20,20,20,20);
+        //textView.setBackgroundColor(Color.GREEN);
+        pop.setContentView(textView);
+        pop.setOutsideTouchable(true);
+       //pop.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            pop.setElevation(10);
+        }
+
+        PopupWindowCompat.showAsDropDown(pop,view,0,0, Gravity.LEFT);
+
         return true;
     }
 
