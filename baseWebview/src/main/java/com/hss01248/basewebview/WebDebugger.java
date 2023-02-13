@@ -21,6 +21,7 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.SizeUtils;
 
 import java.net.URLDecoder;
@@ -30,7 +31,7 @@ import uk.co.alt236.webviewdebug.DebugWebViewClient;
 
 public class WebDebugger {
 
-    public static boolean debug = true;
+    public static boolean debug = AppUtils.isAppDebug();
     DebugWebChromeClient debugWebChromeClient;
     DebugWebViewClient debugWebViewClient;
 

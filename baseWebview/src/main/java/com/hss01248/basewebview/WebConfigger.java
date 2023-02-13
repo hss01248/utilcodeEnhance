@@ -8,6 +8,8 @@ import android.webkit.CookieSyncManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
+import com.blankj.utilcode.util.AppUtils;
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
 import com.hss01248.basewebview.dom.JsCreateNewWinImpl;
 import com.hss01248.basewebview.download.WebviewDownladListenerImpl;
@@ -27,9 +29,39 @@ public class WebConfigger {
 
 
 
-     static void config(WebView webView){
+    static void config(WebView webView){
         init(webView);
         setDownloader(webView);
+        setUA(webView);
+    }
+
+    /**
+     * agentweb什么辣鸡玩意,直接被谷歌屏蔽ua
+     * Mozilla/5.0 (Linux; Android 12; M2102K1C Build/SKQ1.211006.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/109.0.5414.117 Mobile Safari/537.36 AgentWeb/5.0.0  UCBrowser/11.6.4.950
+     * @param webView
+     */
+    private static void setUA(WebView webView) {
+ /*       String userAgentString = webView.getSettings().getUserAgentString();
+        userAgentString = userAgentString.replace(AbsAgentWebSettings.USERAGENT_AGENTWEB,"")
+                .replace(AbsAgentWebSettings.USERAGENT_UC,"")
+                .replace(AbsAgentWebSettings.USERAGENT_QQ_BROWSER,"");*/
+        String userAgentString =  new WebView(webView.getContext()).getSettings().getUserAgentString();
+        LogUtils.i("normal userAgentString: "+ userAgentString);
+        //if(WebDebugger.debug){
+        userAgentString = userAgentString+" "+ AppUtils.getAppName()+"/"+AppUtils.getAppVersionName()+"/"+AppUtils.getAppVersionCode();
+        LogUtils.i("normal userAgentString2: "+ userAgentString);
+        //}
+
+        webView.getSettings().setUserAgentString(userAgentString);
+        //System.getProperty("http.agent");
+
+        //Mozilla/5.0 (Linux; Android 12; M2102K1C Build/SKQ1.211006.001; wv) AppleWebKit/537.36 (KHTML, like Gecko)
+        // Version/4.0 Chrome/109.0.5414.117 Mobile Safari/537.36
+
+        //Mozilla/5.0 (Linux; Android 10; HRY-AL00a Build/HONORHRY-AL00a) AppleWebKit/537.36 (KHTML, like Gecko)
+        // Chrome/80.0.3987.99 Mobile Safari/537.36 webviewdemo/4.5.8-debug rnBundleVersion/
+
+
     }
 
     private static void setDownloader(WebView webView) {
