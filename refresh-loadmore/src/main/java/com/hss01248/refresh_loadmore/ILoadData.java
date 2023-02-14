@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.core.widget.PopupWindowCompat;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hss.utils.enhance.api.MyCommonCallback;
 import com.hss01248.iwidget.BaseDialogListener;
 import com.hss01248.iwidget.msg.AlertDialogImplByDialogUtil;
@@ -22,7 +23,7 @@ public interface ILoadData<T> {
 
     void queryData(PagerDto<T> pager, MyCommonCallback<PagerDto<T>> callback);
 
-    default boolean onItemLongPressed(View view, T data, int position) {
+    default boolean onItemLongPressed(View view, BaseQuickAdapter adapter, T data, int position) {
         List<ISingleChooseItem<T>> chooseItems = new ArrayList<>();
         chooseItems.add(new ISingleChooseItem<T>() {
             @Override
@@ -38,6 +39,9 @@ public interface ILoadData<T> {
                                     @Override
                                     public void onConfirm() {
                                         boolean delete = deleteData(data, position);
+                                        if(delete){
+                                            adapter.remove(position);
+                                        }
                                     }
                                 });
             }

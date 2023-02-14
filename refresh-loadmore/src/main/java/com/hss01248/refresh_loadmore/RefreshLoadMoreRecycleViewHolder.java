@@ -87,7 +87,7 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
         adapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
-               if(! loadDataImpl.onItemLongPressed(view, (T) adapter.getData().get(position),position)){
+               if(! loadDataImpl.onItemLongPressed(view, adapter,(T) adapter.getData().get(position),position)){
                    if(onItemLongClickListener != null){
                       return onItemLongClickListener.onItemLongClick(adapter, view, position);
                    }
