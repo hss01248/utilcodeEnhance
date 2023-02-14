@@ -4,6 +4,8 @@ import android.view.View;
 
 import androidx.annotation.DrawableRes;
 
+import com.noober.menu.FloatMenu;
+
 import java.util.List;
 
 public interface ISingleChooseItem<T> {
@@ -21,6 +23,21 @@ public interface ISingleChooseItem<T> {
     void  onItemClicked(int position, T bean);
 
 
+     static <T> void showAsMenu2(View targetView, List<ISingleChooseItem<T>> menus,T info){
+        final FloatMenu floatMenu = new FloatMenu(targetView.getContext(), targetView);
+        String[] desc = new String[menus.size()];
+        for (int i = 0; i < menus.size(); i++) {
+            desc[i] = menus.get(i).text();
+        }
+        floatMenu.items(desc);
+        floatMenu.setOnItemClickListener(new FloatMenu.OnItemClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                menus.get(position).onItemClicked(position,info);
+            }
+        });
+        floatMenu.showAsDropDown(targetView);
+    }
 
      static <T> void showAsMenu(View targetView, List<ISingleChooseItem<T>> menus, T info){
         CharSequence[] strs = new CharSequence[menus.size()];

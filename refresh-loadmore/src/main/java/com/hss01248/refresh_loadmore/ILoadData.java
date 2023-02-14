@@ -42,9 +42,9 @@ public interface ILoadData<T> {
                                 });
             }
         });
-       // ISingleChooseItem.showAsMenu(view, chooseItems, data);
+        ISingleChooseItem.showAsMenu2(view, chooseItems, data);
 
-        PopupWindow pop = new PopupWindow(view.getContext());
+/*        PopupWindow pop = new PopupWindow(view.getContext());
         TextView textView = new TextView(view.getContext());
         textView.setText("xxxxxxxxxxxxxxxxxxxxxxxx");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -61,7 +61,7 @@ public interface ILoadData<T> {
             pop.setElevation(10);
         }
 
-        PopupWindowCompat.showAsDropDown(pop,view,0,0, Gravity.LEFT);
+        PopupWindowCompat.showAsDropDown(pop,view,0,0, Gravity.LEFT);*/
 
         return true;
     }

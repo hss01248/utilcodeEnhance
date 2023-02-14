@@ -64,7 +64,7 @@ dependencies {
 configurations {
     //com.github.hss01248:DialogUtil
     all*.exclude group: 'com.blankj', module: 'utilcode'
-    all*.exclude group: 'com.github.hss01248', module: 'DialogUtil'
+    //all*.exclude group: 'com.github.hss01248', module: 'DialogUtil'
     all*.exclude group: 'com.github.hss01248.utilcodeEnhance'
     all*.exclude group: 'com.github.hss01248.HttpUtil2' , module:'logforaop'
     all*.exclude group: 'org.jetbrains', module: 'annotations-java5'
