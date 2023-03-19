@@ -1,0 +1,37 @@
+
+dependencies {
+    //图片库 3.4.8
+    api "com.github.hss01248.ImageLoader:glidev4:3.4.8"
+    api "com.github.hss01248.ImageLoader:compressor:3.4.8"
+    api "com.github.hss01248.ImageLoader:imageDebugger:3.4.8"
+    api "com.github.hss01248.ImageLoader:bigimageviewpager:3.4.8"
+    /*com.github.hss01248.ImageLoader:MediaStoreApi:3.4.7
+com.github.hss01248.ImageLoader:imageloader:3.4.7
+com.github.hss01248.ImageLoader:avif:3.4.7
+com.github.hss01248.ImageLoader:compressor:3.4.7
+com.github.hss01248.ImageLoader:fileOperation:3.4.7
+com.github.hss01248.ImageLoader:frescoGlideBridge:3.4.7
+com.github.hss01248.ImageLoader:avif-decoder:3.4.7
+com.github.hss01248.ImageLoader:downloader:3.4.7
+com.github.hss01248.ImageLoader:imageDebugger:3.4.7
+com.github.hss01248.ImageLoader:baseWebview:3.4.7
+com.github.hss01248.ImageLoader:glidebase:3.4.7
+com.github.hss01248.ImageLoader:bigimageviewpager:3.4.7
+com.github.hss01248.ImageLoader:webviewspider:3.4.7
+com.github.hss01248.ImageLoader:glidev4:3.4.7
+com.github.hss01248.ImageLoader:imagelist:3.4.7*/
+
+    api "com.github.hss01248.metadata:metadata:1.1.9"
+    //图片压缩
+    api "com.github.skyNet2017.Luban:luban:3.2.2"
+    api "com.github.skyNet2017.Luban:showResult:3.2.2"
+    /*com.github.skyNet2017.Luban:dataForPhotoSelet:3.2.2  --> demo数据
+com.github.skyNet2017.Luban:lubanturbo:3.2.2
+com.github.skyNet2017.Luban:showResult:3.2.2
+com.github.skyNet2017.Luban:luban:3.2.2*/
+
+    //选图
+    debugApi "com.github.skyNet2017.Luban:dataForPhotoSelet:3.2.2"  //--> demo数据
+    //拍照或选图,系统功能,其实更推荐MediaPickUtil,自己写的
+    api  "com.github.skyNet2017:TakePhoto:4.2.1"
+}

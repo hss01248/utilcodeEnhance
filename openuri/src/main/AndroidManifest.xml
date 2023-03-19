@@ -1,0 +1,21 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+
+    package="com.hss01248.openuri2">
+
+    <application
+        android:allowBackup="true"
+        android:supportsRtl="true">
+        <!--http://blog.csdn.net/R3lish/article/details/58147225-->
+        <provider
+            android:name="com.hss01248.openuri2.HttpFileProvider2"
+            android:authorities="${applicationId}.fileprovider2"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths_http2" />
+        </provider>
+
+    </application>
+
+</manifest>

@@ -1,0 +1,51 @@
+plugins {
+    id 'com.android.library'
+}
+
+android {
+    //namespace 'com.hss01248.iwidget'
+    compileSdkVersion 32
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 32
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.2.0'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    api ('com.github.li-xiaojun:XPopup:2.9.15'){
+        exclude group: "com.davemorrissey.labs", module: "subsampling-scale-image-view-androidx"
+    }
+    api 'com.blankj:utilcodex:1.30.0'//基底
+    api "com.github.kongzue.DialogX:DialogX:0.0.46"  //使用其中的popMenu
+    //msg dialog或alert dialog
+    api 'com.github.hss01248:DialogUtil:3.0.2'
+    //api project(path: ":dialog")
+    //implementation 'com.github.shaoshuai904:XStyleDialog:2.0.5' 不能自适应,辣鸡
+   // implementation 'com.github.mamumu:mmDialog:1.2.0' 不能自适应,辣鸡
+    api project(path: ':toast')
+    api 'io.github.razerdp:BasePopup:3.2.1'
+
+    api 'com.noober.floatmenu:common:1.0.4'
+
+}

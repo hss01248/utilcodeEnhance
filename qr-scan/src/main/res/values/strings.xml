@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="qr_title">QR/Bar Code</string>
+    <string name="qr_not_recognised">QR/Bar Code not recognised</string>
+    <string name="qr_from_code_scan">from code scan</string>
+
+
+</resources>

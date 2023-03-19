@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/ll_search"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="45dp">
+        <ImageView
+            android:visibility="gone"
+            android:scaleType="centerInside"
+            android:src="@drawable/icon_back"
+            android:id="@+id/iv_back"
+            android:layout_width="45dp"
+            android:layout_height="45dp"/>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="0dp"
+            android:layout_height="match_parent">
+            <EditText
+                android:id="@+id/et_input"
+                android:layout_marginRight="30dp"
+                android:imeOptions="actionSearch"
+                android:singleLine="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <ImageView
+                android:src="@drawable/icon_clear"
+                android:id="@+id/iv_clear"
+                android:scaleType="centerInside"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_do_search"
+            android:text="搜索"
+            android:padding="10dp"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/rl_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

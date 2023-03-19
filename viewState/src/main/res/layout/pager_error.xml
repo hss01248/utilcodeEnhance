@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="#ffffff"
+    android:layout_height="match_parent" >-->
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/ic_error_page" />
+
+        <TextView
+            android:id="@+id/tv_msg_error"
+            android:text="@string/pagestate_error_occurs"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <android.widget.Button
+            android:id="@+id/error_btn_retry"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:textAllCaps="false"
+            android:background="@drawable/page_error_btn_bg_selector"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            android:text="@string/pagestate_click_to_retry"
+            android:textColor="#666666"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+<!--
+</RelativeLayout>-->

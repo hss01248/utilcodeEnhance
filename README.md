@@ -32,7 +32,76 @@
 # 使用
 
 ```groovy
-api 'com.github.hss01248.utilcodeEnhance:enhance:1.0.0'
-api 'com.github.hss01248.utilcodeEnhance:ext:1.0.0'
+api 'com.github.hss01248.utilcodeEnhance:xxx:1.2.0'
+
+com.github.hss01248.utilcodeEnhance:ext:1.2.0
+com.github.hss01248.utilcodeEnhance:lib-base:1.2.0   //核心库
+com.github.hss01248.utilcodeEnhance:common:1.2.0
+com.github.hss01248.utilcodeEnhance:media:1.2.0   //媒体文件选择/拍照,录制
+com.github.hss01248.utilcodeEnhance:qr-scan:1.2.0
+com.github.hss01248.utilcodeEnhance:fullScreenDialog:1.2.0
+com.github.hss01248.utilcodeEnhance:toast:1.2.0
+com.github.hss01248.utilcodeEnhance:search-history-api:1.2.0
+com.github.hss01248.utilcodeEnhance:iwidget:1.2.0
+com.github.hss01248.utilcodeEnhance:openuri:1.2.0
+com.github.hss01248.utilcodeEnhance:refresh-loadmore:1.2.0
+com.github.hss01248.utilcodeEnhance:basewebview-ajax-proxy:1.2.0
+com.github.hss01248.utilcodeEnhance:baseWebview:1.2.0
+com.github.hss01248.utilcodeEnhance:viewState:1.2.0
+com.github.hss01248.utilcodeEnhance:IReporter:1.2.0
 ```
 
+
+
+# 二维码和条形码扫码
+
+内部基于 com.github.bingoogolapple.BGAQRCode-Android:zbar:1.3.8
+
+```groovy
+api 'com.github.hss01248.utilcodeEnhance:qr-scan:1.0.8'
+```
+
+
+
+```java
+ScanCodeActivity.scanForResult(new Consumer<String>() {
+            @Override
+            public void accept(String s) throws Exception {
+                ToastUtils.showLong(s);
+                BaseWebviewActivity.start(ActivityUtils.getTopActivity(),s);
+            }
+        });
+```
+
+
+
+
+
+![image-20221220175628125](https://cdn.jsdelivr.net/gh/shuiniuhss/myimages@main/imagemac3/image-20221220175628125.png)
+
+# 软键盘适配
+
+```java
+//内部自动在ondestory时取消
+new MyKeyboardUtil(this)
+        .addOnKeyBoardStateListener(new MyKeyboardUtil.OnKeyBoardStateListener() {
+            @Override
+            public void onSoftKeyBoardShow(int keyboardHeight) {
+                ViewGroup.LayoutParams layoutParams = quickWebview.getLayoutParams();
+                layoutParams.height = totalHeight - keyboardHeight;
+                quickWebview.setLayoutParams(layoutParams);
+            }
+
+            @Override
+            public void onSoftKeyBoardHide() {
+                ViewGroup.LayoutParams layoutParams = quickWebview.getLayoutParams();
+                layoutParams.height = totalHeight ;
+                quickWebview.setLayoutParams(layoutParams);
+            }
+        });
+
+//对应activity需要配置:
+      <activity android:name=".BaseWebviewActivity"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize"
+            android:windowSoftInputMode="adjustPan"
+```

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="qr_title">二维码/条形码</string>
+    <string name="qr_not_recognised">未识别出二维码/条形码</string>
+    <string name="qr_from_code_scan">扫码识别结果</string>
+
+</resources>

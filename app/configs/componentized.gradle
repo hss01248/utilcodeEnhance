@@ -1,0 +1,87 @@
+
+rootProject.buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.alibaba:arouter-register:1.0.2"
+
+        //classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.32"
+    }
+}
+
+gradle.addProjectEvaluationListener(new ProjectEvaluationListener() {
+    @Override
+    void beforeEvaluate(Project project) {
+
+    }
+
+    @Override
+    void afterEvaluate(Project project, ProjectState projectState) {
+        if(project.plugins.findPlugin('com.android.application') == null
+                && project.plugins.findPlugin('com.android.library') == null){
+            return
+        }
+        if(project.plugins.findPlugin('com.android.application') != null){
+            applyArouterAndLifecyclePlugin(project)
+            project.android{
+                viewBinding {
+                    enabled = true
+                }
+            }
+            project.configurations {
+               all*.exclude group: 'com.alibaba', module: 'arouter-api'
+            }
+            project.dependencies {
+                //额外功能: application oncreate的有向无环图启动
+                //https://github.com/aiceking/AppStartFaster
+                api "com.github.hss01248.AppStartUp:startup-tasks:1.1.0"
+            }
+        }else if (project.plugins.findPlugin('com.android.library') != null){
+            if(project.getName().startsWith("module")){
+                applyArouterAndLifecyclePlugin(project)
+            }
+            project.android{
+                viewBinding {
+                    enabled = true
+                }
+            }
+        }
+    }
+
+    private void applyArouterAndLifecyclePlugin(Project project) {
+        project.apply plugin: 'com.alibaba.arouter'
+        project.dependencies {
+            api "com.github.hss01248:arouter-api-onActivitResult:1.5.0-004"
+
+        }
+        project.dependencies {
+            annotationProcessor "com.github.hss01248.AppStartUp:startup-compile:1.1.0"
+            annotationProcessor 'com.alibaba:arouter-compiler:1.5.2'
+        }
+        project.android {
+            defaultConfig {
+                javaCompileOptions {
+                    annotationProcessorOptions {
+                        arguments = [AROUTER_MODULE_NAME: project.getName(), AROUTER_GENERATE_DOC: "enable"]
+                    }
+                }
+            }
+        }
+        if (project.plugins.findPlugin('kotlin-kapt') != null) {
+            println("has kotlin apt: "+ project.getName())
+            project.dependencies {
+                kapt "com.github.hss01248.AppStartUp:startup-compile:1.1.0"
+                kapt 'com.alibaba:arouter-compiler:1.5.2'
+            }
+            project.kapt {
+                arguments {
+                    arg("AROUTER_MODULE_NAME", project.getName())
+                    arg("AROUTER_GENERATE_DOC", "enable")
+                }
+            }
+        } else {
+
+        }
+    }
+})

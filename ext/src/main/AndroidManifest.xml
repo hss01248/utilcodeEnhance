@@ -3,9 +3,35 @@
     package="com.hss01248.utils.ext">
 
     <application>
-        <activity android:name=".intent.SysIntentShareDispatcherActivity" >
+        <activity android:name=".intent.SysIntentShareDispatcherActivity" android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="*/*" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:scheme="https"/>
+                <data
+                    android:scheme="http"/>
+                <data
+                    android:scheme="content"/>
+                <data
+                    android:scheme="file"/>
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.PICK"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="*/*" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.GET_CONTENT"/>
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="*/*" />
             </intent-filter>

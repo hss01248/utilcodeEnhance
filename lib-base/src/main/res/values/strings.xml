@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="main_click_again_to_home">click again to quit app</string>
+    <string name="deliver_error_save_failed">Saved Failed</string>
+    <string name="saved_success">Saved Successfully!</string>
+    <string name="share_app_not_install">"application Not installed"</string>
+    <string name="open_no_activity">"no application can open this type of file"</string>
+    <string name="no_browser">I\'m sorry that your phone does not have a browser installed and cannot open this link. Please download the browser</string>
+</resources>
