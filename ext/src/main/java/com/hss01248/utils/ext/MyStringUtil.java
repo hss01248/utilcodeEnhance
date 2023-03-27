@@ -3,6 +3,7 @@ package com.hss01248.utils.ext;
 import android.app.Activity;
 
 import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.Utils;
@@ -23,6 +24,9 @@ public class MyStringUtil {
             }
             return Utils.getApp().getString(stringId, args);
         }catch (Throwable throwable){
+            if(AppUtils.isAppDebug()){
+                throw new RuntimeException(throwable);
+            }
             LogUtils.w(throwable);
             return "string res not found: "+ stringId;
         }

@@ -1,5 +1,6 @@
 package com.hss01248.utils.ext;
 
+import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.GsonUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.google.gson.reflect.TypeToken;
@@ -32,6 +33,9 @@ public class MyJson {
         try {
             return GsonUtils.fromJson(json,type);
         }catch (Throwable throwable){
+            if(AppUtils.isAppDebug()){
+                throw new RuntimeException(throwable);
+            }
             LogUtils.w(throwable);
             return null;
         }
@@ -41,6 +45,9 @@ public class MyJson {
         try {
             return GsonUtils.fromJson(json,tClass);
         }catch (Throwable throwable){
+            if(AppUtils.isAppDebug()){
+                throw new RuntimeException(throwable);
+            }
             LogUtils.w(throwable);
             return null;
         }
