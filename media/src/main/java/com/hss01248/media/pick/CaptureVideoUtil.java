@@ -107,18 +107,19 @@ public class CaptureVideoUtil {
             @Override
             public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
                 LogUtils.d(resultCode,data);
-                if(resultCode == Activity.RESULT_OK){
-                    if(file.exists() && file.length()> 0){
-                        MediaStoreRefresher.refreshMediaCenter(Utils.getApp(),path);
-                        //私有目录,其实刷也没有用
-                        callback.onSuccess(path);
-                    }else {
-                        callback.onError("file error","file saved error",null);
-                    }
+                if(resultCode == Activity.RESULT_CANCELED){
+                    callback.onError("cancel","you have canceled the recoding",null);
+                    return;
+                }
+                if(resultCode != Activity.RESULT_OK){
+                    LogUtils.w("result code is not RESULT_OK:"+resultCode);
+                }
+                if(file.exists() && file.length()> 0){
+                    MediaStoreRefresher.refreshMediaCenter(Utils.getApp(),path);
+                    //私有目录,其实刷也没有用
+                    callback.onSuccess(path);
                 }else {
-                    if(resultCode == Activity.RESULT_CANCELED){
-                        callback.onError("cancel","you have canceled the recoding",null);
-                    }
+                    callback.onError("file error","file saved error",null);
                 }
 
             }

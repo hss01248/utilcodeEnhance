@@ -99,24 +99,26 @@ public class CaptureImageUtil {
             @Override
             public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
                 LogUtils.d(resultCode,data);
-                if(resultCode == Activity.RESULT_OK){
-                    if(file.exists() && file.length()> 0){
-                        MediaStoreRefresher.refreshMediaCenter(Utils.getApp(),path);
-                        callback.onSuccess(path);
-                    }else {
-                        callback.onError("file error","file saved error",null);
-                    }
-                }else {
-                    if(resultCode == Activity.RESULT_CANCELED){
-                        callback.onError("cancel","you have canceled the recoding",null);
-                    }
+                if(resultCode == Activity.RESULT_CANCELED){
+                    callback.onError("cancel","you have canceled the recoding",null);
+                    return;
                 }
+                if(resultCode != Activity.RESULT_OK){
+                    LogUtils.w("result code is not RESULT_OK:"+resultCode);
+                }
+                if(file.exists() && file.length()> 0){
+                    MediaStoreRefresher.refreshMediaCenter(Utils.getApp(),path);
+                    callback.onSuccess(path);
+                }else {
+                    callback.onError("file error","file saved error",null);
+                }
+
 
             }
 
             @Override
             public void onActivityNotFound(Throwable e) {
-                callback.onError("onActivityNotFound","no application to record video",null);
+                callback.onError("onActivityNotFound","no application to record video",e);
             }
         });
     }
