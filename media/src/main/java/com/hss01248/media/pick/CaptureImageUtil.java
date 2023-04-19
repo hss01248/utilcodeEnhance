@@ -39,9 +39,9 @@ public class CaptureImageUtil {
 
 
     public static void takePicture(boolean useFrontCamera, MyCommonCallback<String> callback){
-        File externalFilesDir = Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_MOVIES);
+        File externalFilesDir = Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_DCIM);
         if(externalFilesDir == null){
-            externalFilesDir = new File(Utils.getApp().getFilesDir(),Environment.DIRECTORY_MOVIES);
+            externalFilesDir = new File(Utils.getApp().getFilesDir(),Environment.DIRECTORY_DCIM);
         }
         externalFilesDir.mkdirs();
         File file = new File(externalFilesDir,System.currentTimeMillis()+".jpg");
