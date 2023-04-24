@@ -332,7 +332,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onError(String code, String msg, @Nullable Throwable throwable) {
-
+                LogUtils.w(code+"-"+msg);
             }
         });
     }
