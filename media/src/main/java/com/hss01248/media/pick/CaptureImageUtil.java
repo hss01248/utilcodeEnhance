@@ -39,9 +39,9 @@ public class CaptureImageUtil {
 
 
     public static void takePicture(boolean useFrontCamera, MyCommonCallback<String> callback){
-        File externalFilesDir = Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_MOVIES);
+        File externalFilesDir = Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_DCIM);
         if(externalFilesDir == null){
-            externalFilesDir = new File(Utils.getApp().getFilesDir(),Environment.DIRECTORY_MOVIES);
+            externalFilesDir = new File(Utils.getApp().getFilesDir(),Environment.DIRECTORY_DCIM);
         }
         externalFilesDir.mkdirs();
         File file = new File(externalFilesDir,System.currentTimeMillis()+".jpg");
@@ -99,24 +99,26 @@ public class CaptureImageUtil {
             @Override
             public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
                 LogUtils.d(resultCode,data);
-                if(resultCode == Activity.RESULT_OK){
-                    if(file.exists() && file.length()> 0){
-                        MediaStoreRefresher.refreshMediaCenter(Utils.getApp(),path);
-                        callback.onSuccess(path);
-                    }else {
-                        callback.onError("file error","file saved error",null);
-                    }
-                }else {
-                    if(resultCode == Activity.RESULT_CANCELED){
-                        callback.onError("cancel","you have canceled the recoding",null);
-                    }
+                if(resultCode == Activity.RESULT_CANCELED){
+                    callback.onError("cancel","you have canceled the recoding",null);
+                    return;
                 }
+                if(resultCode != Activity.RESULT_OK){
+                    LogUtils.w("result code is not RESULT_OK:"+resultCode);
+                }
+                if(file.exists() && file.length()> 0){
+                    MediaStoreRefresher.refreshMediaCenter(Utils.getApp(),path);
+                    callback.onSuccess(path);
+                }else {
+                    callback.onError("file error","file saved error",null);
+                }
+
 
             }
 
             @Override
             public void onActivityNotFound(Throwable e) {
-                callback.onError("onActivityNotFound","no application to record video",null);
+                callback.onError("onActivityNotFound","no application to record video",e);
             }
         });
     }
