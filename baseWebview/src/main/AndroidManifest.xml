@@ -2,7 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.hss01248.basewebview">
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
     <uses-sdk tools:overrideLibrary="org.adblockplus.libadblockplus.android.webview"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
     <application>
         <activity android:name=".BaseWebviewActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize"

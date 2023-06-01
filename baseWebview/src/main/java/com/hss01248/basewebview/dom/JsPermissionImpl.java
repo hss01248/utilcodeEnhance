@@ -40,7 +40,9 @@ public class JsPermissionImpl extends MiddlewareWebChromeBase {
         //super.onPermissionRequest(request);
         LogUtils.d(request.getOrigin(),request.getResources());
         String[] resources = request.getResources();
+        //web_contents_delegate.cc(218)] WebContentsDelegate::CheckMediaAccessPermission: Not supported.
         if(isOnlyAudio(resources)){
+            //cr_media: Requires MODIFY_AUDIO_SETTINGS and RECORD_AUDIO. Selected device will not be available for recording
             MyPermissions.requestByMostEffort(false, true, new PermissionUtils.FullCallback() {
                 @Override
                 public void onGranted(@NonNull List<String> granted) {
@@ -51,7 +53,7 @@ public class JsPermissionImpl extends MiddlewareWebChromeBase {
                 public void onDenied(@NonNull List<String> deniedForever, @NonNull List<String> denied) {
                     request.deny();
                 }
-            }, Manifest.permission.RECORD_AUDIO);
+            }, Manifest.permission.RECORD_AUDIO,Manifest.permission.MODIFY_AUDIO_SETTINGS);
         }else if(isVideo(resources)){
             MyPermissions.requestByMostEffort(false, true, new PermissionUtils.FullCallback() {
                 @Override
@@ -63,7 +65,7 @@ public class JsPermissionImpl extends MiddlewareWebChromeBase {
                 public void onDenied(@NonNull List<String> deniedForever, @NonNull List<String> denied) {
                     request.deny();
                 }
-            }, Manifest.permission.RECORD_AUDIO,Manifest.permission.CAMERA);
+            }, Manifest.permission.RECORD_AUDIO,Manifest.permission.CAMERA,Manifest.permission.MODIFY_AUDIO_SETTINGS);
         }
 
     }

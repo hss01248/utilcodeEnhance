@@ -268,6 +268,68 @@ public class FileChooseImpl extends MiddlewareWebChromeBase {
         return true;
     }
 
+    @Override
+    public void openFileChooser(ValueCallback<Uri> valueCallback) {
+        openFileChooser(valueCallback,"*/*");
+    }
+
+    @Override
+    public void openFileChooser(ValueCallback valueCallback, String acceptType) {
+        openFileChooser(valueCallback, acceptType,"");
+    }
+
+    @Override
+    public void openFileChooser(ValueCallback<Uri> uploadFile, String acceptType, String capture) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            FileChooserParams fileChooserParams = new FileChooserParams() {
+                @Override
+                public int getMode() {
+                    return FileChooserParams.MODE_OPEN;
+                }
+
+                @Override
+                public String[] getAcceptTypes() {
+                    return new String[]{acceptType};
+                }
+
+                @Override
+                public boolean isCaptureEnabled() {
+                    return false;
+                }
+
+                @Nullable
+                @Override
+                public CharSequence getTitle() {
+                    return "choose";
+                }
+
+                @Nullable
+                @Override
+                public String getFilenameHint() {
+                    return null;
+                }
+
+                @Override
+                public Intent createIntent() {
+                    return null;
+                }
+            };
+            onShowFileChooser(null, new ValueCallback<Uri[]>() {
+                @Override
+                public void onReceiveValue(Uri[] value) {
+                    if(value != null && value.length>0){
+                        uploadFile.onReceiveValue(value[0]);
+                    }else {
+                        uploadFile.onReceiveValue(null);
+                    }
+
+                }
+            },fileChooserParams);
+        }else {
+            LogUtils.w("版本太低,不予兼容");
+        }
+    }
+
     private boolean isOnlyImage(String[] washMimeTypes) {
         for (String washMimeType : washMimeTypes) {
             if(!washMimeType.startsWith("image")){

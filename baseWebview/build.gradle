@@ -58,7 +58,7 @@ dependencies {
     api project(path: ':qr-scan')
     api project(path: ':iwidget')
     api project(path: ':viewState')
-    api project(path: ':basewebview-ajax-proxy')
+    //api project(path: ':basewebview-ajax-proxy')
     api project(path: ':refresh-loadmore')
     api project(path: ':search-history-api')
 
