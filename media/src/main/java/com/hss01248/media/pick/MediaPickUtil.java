@@ -1,5 +1,6 @@
 package com.hss01248.media.pick;
 
+import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
 import android.Manifest;
@@ -242,7 +243,7 @@ public class MediaPickUtil {
             @Override
             public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
                 LogUtils.i(data);
-                if (resultCode != RESULT_OK) {
+                if (resultCode == RESULT_CANCELED) {
                     callback.onError("-1", "cancel", null);
                     return;
                 }
