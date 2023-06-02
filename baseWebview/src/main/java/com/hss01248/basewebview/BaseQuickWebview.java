@@ -1,9 +1,14 @@
 package com.hss01248.basewebview;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Handler;
@@ -26,13 +31,19 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 
+import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.BarUtils;
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ResourceUtils;
+import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.blankj.utilcode.util.Utils;
 import com.hss.utils.enhance.MyKeyboardUtil;
 import com.hss.utils.enhance.UrlEncodeUtil;
 import com.hss01248.basewebview.adblock.AdBlockClient;
@@ -48,8 +59,10 @@ import com.hss01248.iwidget.singlechoose.ISingleChooseItem;
 import com.hss01248.viewstate.StatefulLayout;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.AgentWebUIControllerImplBase;
+import com.just.agentweb.AgentWebUtils;
 import com.just.agentweb.MiddlewareWebChromeBase;
 import com.just.agentweb.MiddlewareWebClientBase;
+import com.just.agentweb.WebChromeClient;
 import com.just.agentweb.WebViewClient;
 
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -339,6 +352,56 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                     }
 
                     @Override
+                    public void onOpenPagePrompt(WebView view, String url, Handler.Callback callback) {
+                        //super.onOpenPagePrompt(view, url, callback);
+
+                        //ResolveInfo{e935c3a com.android.browser/.BrowserActivity m=0x208000}
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse(url));
+                        List<ResolveInfo> resolveInfos = Utils.getApp().getPackageManager().queryIntentActivities(intent, 0);
+                        StringBuilder sb = new StringBuilder("(");
+                        if(resolveInfos != null && !resolveInfos.isEmpty()){
+                            for (ResolveInfo resolveInfo : resolveInfos) {
+                                //LogUtils.i(resolveInfo.resolvePackageName);
+                                LogUtils.i(resolveInfo.toString());
+                               // LogUtils.i(resolveInfo.labelRes);
+                                String packageName = resolveInfo.resolvePackageName;
+                                String appName = AppUtils.getAppName(packageName);
+                                if(TextUtils.isEmpty(appName)){
+                                    appName = packageName;
+                                }
+                                sb.append(appName).append(",");
+                            }
+                        }
+                        sb.append(")");
+
+                        Dialog mAskOpenOtherAppDialog = new AlertDialog
+                                    .Builder(ActivityUtils.getTopActivity())
+                                    .setMessage(StringUtils.getString(R.string.agentweb_leave_app_and_go_other_page,
+                                            AgentWebUtils.getApplicationName(ActivityUtils.getTopActivity()))+": "+sb.toString())
+                                    .setTitle(StringUtils.getString(R.string.agentweb_tips))
+                                    .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            if (callback != null) {
+                                                callback.handleMessage(Message.obtain(null, -1));
+                                            }
+                                        }
+                                    })//
+                                    .setPositiveButton(StringUtils.getString(R.string.agentweb_leave), new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            if (callback != null) {
+                                                callback.handleMessage(Message.obtain(null, 1));
+                                            }
+                                        }
+                                    })
+                                    .create();
+
+                        mAskOpenOtherAppDialog.show();
+                    }
+
+                    @Override
                     public void onShowMainFrame() {
                         //super.onShowMainFrame();
                         if(stateManager != null){
@@ -458,7 +521,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                                 });
                 }
                 })
-                .setWebChromeClient(new com.just.agentweb.WebChromeClient(){
+                .setWebChromeClient(new WebChromeClient(){
 
                     @Override
                     public void onReceivedTitle(WebView view, String title) {
