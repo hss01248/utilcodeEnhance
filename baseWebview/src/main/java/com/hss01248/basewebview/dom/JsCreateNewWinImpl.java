@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
+import android.webkit.URLUtil;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -29,6 +30,7 @@ import androidx.lifecycle.LifecycleOwner;
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.BarUtils;
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.hss.utils.enhance.UrlEncodeUtil;
 import com.hss01248.activityresult.StartActivityUtil;
 import com.hss01248.activityresult.TheActivityListener;
@@ -195,6 +197,11 @@ public class JsCreateNewWinImpl {
                     // 弹窗提示是否跳到app打开
                     //todo URLUtil.isAboutUrl()
                     activity.finish();
+                    String url = uri.toString();
+                    if(URLUtil.isAboutUrl(url) || URLUtil.isJavaScriptUrl(url)){
+                        ToastUtils.showLong("clicked --> "+ UrlEncodeUtil.decode(url));
+                        return true;
+                    }
                     //WebDebugger.getActivityFromContext(view.getContext()).
                     new AlertDialogImplByDialogUtil().showMsg("跳转", "是否打开此链接?\n" + UrlEncodeUtil.decode(uri.toString()),
                             "打开", "取消", new BaseDialogListener() {

@@ -353,52 +353,10 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
 
                     @Override
                     public void onOpenPagePrompt(WebView view, String url, Handler.Callback callback) {
-                        //super.onOpenPagePrompt(view, url, callback);
+                        super.onOpenPagePrompt(view, url, callback);
 
                         //ResolveInfo{e935c3a com.android.browser/.BrowserActivity m=0x208000}
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse(url));
-                        List<ResolveInfo> resolveInfos = Utils.getApp().getPackageManager().queryIntentActivities(intent, 0);
-                        StringBuilder sb = new StringBuilder("(");
-                        if(resolveInfos != null && !resolveInfos.isEmpty()){
-                            for (ResolveInfo resolveInfo : resolveInfos) {
-                                //LogUtils.i(resolveInfo.resolvePackageName);
-                                LogUtils.i(resolveInfo.toString());
-                               // LogUtils.i(resolveInfo.labelRes);
-                                String packageName = resolveInfo.resolvePackageName;
-                                String appName = AppUtils.getAppName(packageName);
-                                if(TextUtils.isEmpty(appName)){
-                                    appName = packageName;
-                                }
-                                sb.append(appName).append(",");
-                            }
-                        }
-                        sb.append(")");
 
-                        Dialog mAskOpenOtherAppDialog = new AlertDialog
-                                    .Builder(ActivityUtils.getTopActivity())
-                                    .setMessage(StringUtils.getString(R.string.agentweb_leave_app_and_go_other_page,
-                                            AgentWebUtils.getApplicationName(ActivityUtils.getTopActivity()))+": "+sb.toString())
-                                    .setTitle(StringUtils.getString(R.string.agentweb_tips))
-                                    .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            if (callback != null) {
-                                                callback.handleMessage(Message.obtain(null, -1));
-                                            }
-                                        }
-                                    })//
-                                    .setPositiveButton(StringUtils.getString(R.string.agentweb_leave), new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            if (callback != null) {
-                                                callback.handleMessage(Message.obtain(null, 1));
-                                            }
-                                        }
-                                    })
-                                    .create();
-
-                        mAskOpenOtherAppDialog.show();
                     }
 
                     @Override
@@ -427,6 +385,65 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                     public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
                         //return new OkhttpProxyForWebview().shouldInterceptRequest(view,request);
                         return  super.shouldInterceptRequest(view, request);
+                    }
+
+                    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+                    @Override
+                    public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                        String scheme = request.getUrl().getScheme();
+                        String url = request.toString();
+                        if(!TextUtils.isEmpty(scheme) &&
+                                (scheme.startsWith("http") || scheme.startsWith("about")||scheme.startsWith("javascript"))){
+                            return super.shouldOverrideUrlLoading(view, request);
+                        }
+
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(request.getUrl());
+                        List<ResolveInfo> resolveInfos = Utils.getApp().getPackageManager().queryIntentActivities(intent, 0);
+                        StringBuilder sb = new StringBuilder("(");
+                        if(resolveInfos != null && !resolveInfos.isEmpty()){
+                            for (ResolveInfo resolveInfo : resolveInfos) {
+                                //LogUtils.i(resolveInfo.resolvePackageName);
+                                LogUtils.i(resolveInfo.toString());
+                                // LogUtils.i(resolveInfo.labelRes);
+                                String packageName = resolveInfo.activityInfo.packageName;
+                                String appName = AppUtils.getAppName(packageName);
+                                if(TextUtils.isEmpty(appName)){
+                                    appName = packageName;
+                                }
+                                sb.append(appName).append(",");
+                            }
+                        }
+                        String str = sb.toString();
+                        if(str.endsWith(",")){
+                            str = str.substring(0,str.length()-1);
+                        }
+                        str = str +")";
+
+                        Dialog mAskOpenOtherAppDialog = new AlertDialog
+                                .Builder(ActivityUtils.getTopActivity())
+                                .setMessage(StringUtils.getString(R.string.agentweb_leave_app_and_go_other_page,
+                                        AgentWebUtils.getApplicationName(ActivityUtils.getTopActivity()))+"\n"+str)
+                                .setTitle(StringUtils.getString(R.string.agentweb_tips))
+                                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+
+                                    }
+                                })//
+                                .setPositiveButton(StringUtils.getString(R.string.agentweb_leave), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        ActivityUtils.getTopActivity().startActivity(intent);
+                                    }
+                                })
+                                .create();
+
+                        mAskOpenOtherAppDialog.show();
+                        return true;
                     }
 
                     @Override
