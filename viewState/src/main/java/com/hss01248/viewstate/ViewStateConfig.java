@@ -99,6 +99,12 @@ public class ViewStateConfig {
      @DrawableRes int emptyIcon = 0;
      @DrawableRes int errorIcon = 0;
 
+     boolean darkMode ;
+
+    public boolean isDarkMode() {
+        return darkMode;
+    }
+
     String errorBtnText = "";
     String emptyBtnText = "";
      Runnable emptyClick = null;
@@ -114,6 +120,7 @@ public class ViewStateConfig {
         emptyMsg = builder.emptyMsg;
         emptyIcon = builder.emptyIcon;
         errorIcon = builder.errorIcon;
+        darkMode = builder.darkMode;
         errorBtnText = builder.errorBtnText;
         emptyBtnText = builder.emptyBtnText;
         emptyClick = builder.emptyClick;
@@ -122,14 +129,15 @@ public class ViewStateConfig {
 
     public static Builder newBuilder(ViewStateConfig copy) {
         Builder builder = new Builder();
-        builder.emptyLayout = copy.emptyLayout;
-        builder.errorLayout = copy.errorLayout;
-        builder.loadingLayout = copy.loadingLayout;
-        builder.listener = copy.listener;
-        builder.loadingMsg = copy.loadingMsg;
+        builder.emptyLayout = copy.getEmptyLayout();
+        builder.errorLayout = copy.getErrorLayout();
+        builder.loadingLayout = copy.getLoadingLayout();
+        builder.listener = copy.getListener();
+        builder.loadingMsg = copy.getLoadingMsg();
         builder.emptyMsg = copy.getEmptyMsg();
         builder.emptyIcon = copy.getEmptyIcon();
         builder.errorIcon = copy.getErrorIcon();
+        builder.darkMode = copy.isDarkMode();
         builder.errorBtnText = copy.getErrorBtnText();
         builder.emptyBtnText = copy.getEmptyBtnText();
         builder.emptyClick = copy.getEmptyClick();
@@ -147,6 +155,7 @@ public class ViewStateConfig {
         private String emptyMsg;
         private int emptyIcon;
         private int errorIcon;
+        private boolean darkMode = false;
         private String errorBtnText;
         private String emptyBtnText;
         private Runnable emptyClick;
@@ -196,6 +205,11 @@ public class ViewStateConfig {
 
         public Builder errorIcon(int val) {
             errorIcon = val;
+            return this;
+        }
+
+        public Builder darkMode(boolean darkMode) {
+            this.darkMode = darkMode;
             return this;
         }
 

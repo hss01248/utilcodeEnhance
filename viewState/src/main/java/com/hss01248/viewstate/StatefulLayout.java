@@ -1,6 +1,8 @@
 package com.hss01248.viewstate;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -230,10 +232,32 @@ public class StatefulLayout extends FrameLayout implements IViewState{
                 subViews.get(integer).setVisibility(GONE);
             }
         }
-
+        if(config.isDarkMode()){
+            viewGroup.setBackgroundColor(Color.BLACK);
+            findChildTextviewAndSetWhite(viewGroup);
+        }
 
         return viewGroup;
 
+    }
+
+    private void findChildTextviewAndSetWhite(View view) {
+        if(view instanceof ViewGroup){
+            ViewGroup viewGroup = (ViewGroup) view;
+            int childCount = viewGroup.getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                View child = viewGroup.getChildAt(i);
+                findChildTextviewAndSetWhite(child);
+            }
+        }else if(view instanceof TextView ){
+            TextView textView = (TextView) view;
+            textView.setTextColor(Color.WHITE);
+            Drawable background = textView.getBackground();
+            //Log.w("setDarkMode","background "+background);
+            if(background != null){
+                textView.setBackgroundColor(Color.parseColor("#333333"));
+            }
+        }
     }
 
     private View createView(int state) {
