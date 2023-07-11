@@ -252,7 +252,7 @@ public class StatefulLayout extends FrameLayout implements IViewState{
                 View child = viewGroup.getChildAt(i);
                 findChildTextviewAndSetWhite(child);
             }
-        }else if(view instanceof TextView ){
+        }else if(view instanceof TextView  && !(view instanceof Button)){
             TextView textView = (TextView) view;
             textView.setTextColor(Color.WHITE);
             Drawable background = textView.getBackground();
