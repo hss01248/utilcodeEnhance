@@ -18,7 +18,7 @@ import java.util.Random;
  * @Date 21/11/2022 17:42
  * @Version 1.0
  */
-public class StateActivity1 extends AppCompatActivity {
+public class StateActivityXml extends AppCompatActivity {
 
     ActivityViewStateBinding binding;
 
@@ -30,6 +30,7 @@ public class StateActivity1 extends AppCompatActivity {
         setContentView(binding.getRoot());
         binding.stateLayout.setConfig(ViewStateConfig.Builder
                 .newBuilder()
+                        .darkMode(true)
                 .errorClick(new Runnable() {
                     @Override
                     public void run() {
@@ -52,7 +53,12 @@ public class StateActivity1 extends AppCompatActivity {
                         binding.stateLayout.showError("稍候重试");
                         break;
                     case StatefulLayout.EMPTY:
-                        binding.stateLayout.showEmpty();
+                        binding.stateLayout.showEmpty("空空如也", 0, "点击重试2", new Runnable() {
+                            @Override
+                            public void run() {
+                                doNet();
+                            }
+                        });
                         break;
                     case StatefulLayout.CONTENT:
                         binding.stateLayout.showContent();

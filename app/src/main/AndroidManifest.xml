@@ -23,7 +23,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".StateActivity1" />
+        <activity android:name=".StateActivityXml" />
         <activity android:name=".StateActivityHasParent" />
         <activity android:name=".StateActivitySmallView" />
     </application>

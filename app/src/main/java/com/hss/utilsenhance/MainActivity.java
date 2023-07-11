@@ -500,7 +500,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void pageStateXml(View view) {
-        startActivity(new Intent(this,StateActivity1.class));
+        startActivity(new Intent(this, StateActivityXml.class));
     }
 
     public void pageStateCode(View view) {

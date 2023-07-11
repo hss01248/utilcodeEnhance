@@ -233,8 +233,11 @@ public class StatefulLayout extends FrameLayout implements IViewState{
             }
         }
         if(config.isDarkMode()){
-            viewGroup.setBackgroundColor(Color.BLACK);
-            findChildTextviewAndSetWhite(viewGroup);
+            if(state != CONTENT){
+                viewGroup.setBackgroundColor(Color.BLACK);
+                findChildTextviewAndSetWhite(viewGroup);
+            }
+
         }
 
         return viewGroup;
