@@ -51,10 +51,10 @@ public class AdBlockClient extends MiddlewareWebClientBase {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-        /*String url = request.getUrl().toString().toLowerCase();
+        String url = request.getUrl().toString().toLowerCase();
         if(isAd(url)){
             return true;
-        }*/
+        }
         return super.shouldOverrideUrlLoading(view, request);
     }
 }
