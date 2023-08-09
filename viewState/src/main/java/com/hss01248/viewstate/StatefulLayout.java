@@ -21,6 +21,7 @@ import androidx.annotation.RequiresApi;
 
 
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ThreadUtils;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -281,168 +282,202 @@ public class StatefulLayout extends FrameLayout implements IViewState{
 
     @Override
     public void showLoading(@Nullable CharSequence msg) {
-        if(TextUtils.isEmpty(msg)){
-            msg = config.loadingMsg;
-        }
-        View view = pickView(LOADING);
-        if(view instanceof ViewGroup){
-            ViewGroup viewGroup = (ViewGroup) view;
-            for (int i = 0; i < viewGroup.getChildCount(); i++) {
-                View childAt = viewGroup.getChildAt(i);
-                if(childAt instanceof TextView){
-                    TextView textView = (TextView) childAt;
-                    if(!TextUtils.isEmpty(msg)){
-                        textView.setText(msg);
-                    }
-
+        final CharSequence[] msg1 = {msg};
+        ThreadUtils.getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                if(TextUtils.isEmpty(msg1[0])){
+                    msg1[0] = config.loadingMsg;
                 }
-            }
-        }
-        if(config.listener != null){
-            config.listener.onStateChanged(view,LOADING);
-        }
-
-    }
-
-    @Override
-    public void showEmpty(@Nullable CharSequence msg, @Nullable int icon, @Nullable  CharSequence btnText,@Nullable Runnable emptyClick) {
-        if(TextUtils.isEmpty(msg)){
-            msg = config.emptyMsg;
-        }
-        if(icon == 0){
-            icon = config.emptyIcon;
-        }
-        if(TextUtils.isEmpty(btnText)){
-            btnText = config.emptyBtnText;
-        }
-        if(emptyClick == null){
-            emptyClick = config.emptyClick;
-        }
-        View view = pickView(EMPTY);
-        if(view instanceof ViewGroup){
-            ViewGroup viewGroup = (ViewGroup) view;
-            for (int i = 0; i < viewGroup.getChildCount(); i++) {
-                View childAt = viewGroup.getChildAt(i);
-                if(childAt instanceof Button){
-                    Button textView = (Button) childAt;
-                    if(!TextUtils.isEmpty(btnText)){
-                        textView.setText(btnText);
-                    }
-                    if(emptyClick == null){
-                        textView.setVisibility(GONE);
-                    }else {
-                        textView.setVisibility(VISIBLE);
-                        Runnable finalEmptyClick = emptyClick;
-                        textView.setOnClickListener(new OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                finalEmptyClick.run();
+                View view = pickView(LOADING);
+                if(view instanceof ViewGroup){
+                    ViewGroup viewGroup = (ViewGroup) view;
+                    for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                        View childAt = viewGroup.getChildAt(i);
+                        if(childAt instanceof TextView){
+                            TextView textView = (TextView) childAt;
+                            if(!TextUtils.isEmpty(msg1[0])){
+                                textView.setText(msg1[0]);
                             }
-                        });
-                    }
-                }else if(childAt instanceof TextView){
-                    TextView textView = (TextView) childAt;
-                    if(!TextUtils.isEmpty(msg)){
-                        textView.setText(msg);
-                    }
 
-                }else if(childAt instanceof ImageView){
-                    ImageView textView = (ImageView) childAt;
-                    if(icon != 0){
-                        try {
-                            textView.setImageResource(icon);
-                        }catch (Throwable throwable){
-                            throwable.printStackTrace();
                         }
                     }
                 }
+                if(config.listener != null){
+                    config.listener.onStateChanged(view,LOADING);
+                }
             }
-        }
-        if(config.listener != null){
-            config.listener.onStateChanged(view,EMPTY);
-        }
+        });
+    }
+
+    @Override
+    public void showEmpty(@Nullable  CharSequence msg,
+                          @Nullable  int icon,
+                          @Nullable  CharSequence btnText,
+                          @Nullable  Runnable emptyClick) {
+         CharSequence[] msg0 = {msg};
+         int[] icon0 = {icon};
+         CharSequence[] btnText0 = {btnText};
+         Runnable[] emptyClick0 = {emptyClick};
+        ThreadUtils.getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                if(TextUtils.isEmpty(msg0[0])){
+                    msg0[0] = config.emptyMsg;
+                }
+                if(icon0[0] == 0){
+                    icon0[0] = config.emptyIcon;
+                }
+                if(TextUtils.isEmpty(btnText0[0])){
+                    btnText0[0] = config.emptyBtnText;
+                }
+                if(emptyClick0[0] == null){
+                    emptyClick0[0] = config.emptyClick;
+                }
+                View view = pickView(EMPTY);
+                if(view instanceof ViewGroup){
+                    ViewGroup viewGroup = (ViewGroup) view;
+                    for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                        View childAt = viewGroup.getChildAt(i);
+                        if(childAt instanceof Button){
+                            Button textView = (Button) childAt;
+                            if(!TextUtils.isEmpty(btnText0[0])){
+                                textView.setText(btnText0[0]);
+                            }
+                            if(emptyClick0[0] == null){
+                                textView.setVisibility(GONE);
+                            }else {
+                                textView.setVisibility(VISIBLE);
+                                Runnable finalEmptyClick = emptyClick0[0];
+                                textView.setOnClickListener(new OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        finalEmptyClick.run();
+                                    }
+                                });
+                            }
+                        }else if(childAt instanceof TextView){
+                            TextView textView = (TextView) childAt;
+                            if(!TextUtils.isEmpty(msg0[0])){
+                                textView.setText(msg0[0]);
+                            }
+
+                        }else if(childAt instanceof ImageView){
+                            ImageView textView = (ImageView) childAt;
+                            if(icon0[0] != 0){
+                                try {
+                                    textView.setImageResource(icon0[0]);
+                                }catch (Throwable throwable){
+                                    throwable.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                }
+                if(config.listener != null){
+                    config.listener.onStateChanged(view,EMPTY);
+                }
+            }
+        });
+
     }
 
     @Override
     public void showError(@Nullable CharSequence msg, @Nullable int icon, @Nullable  CharSequence btnText,@Nullable Runnable errorClick) {
-        if(icon == 0){
-            icon = config.errorIcon;
-        }
-        if(TextUtils.isEmpty(btnText)){
-            btnText = config.errorBtnText;
-        }
-        if(errorClick == null){
-            errorClick = config.errorClick;
-        }
-        View view = pickView(ERROR);
-        if(view instanceof ViewGroup){
-            ViewGroup viewGroup = (ViewGroup) view;
-            for (int i = 0; i < viewGroup.getChildCount(); i++) {
-                View childAt = viewGroup.getChildAt(i);
-                if(childAt instanceof Button){
-                    Button textView = (Button) childAt;
-                    if(!TextUtils.isEmpty(btnText)){
-                        textView.setText(btnText);
-                    }
-                    if(errorClick == null){
-                        textView.setVisibility(GONE);
-                    }else {
-                        textView.setVisibility(VISIBLE);
-                        Runnable finalEmptyClick = errorClick;
-                        textView.setOnClickListener(new OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if (!NoNetworkHelper2.isNetWorkAvailable(v.getContext())) {
-                                    NoNetworkHelper2.showNoNetWorkDlg(v.getContext());
-                                } else {
-                                    if (finalEmptyClick != null) {
-                                        finalEmptyClick.run();
+        CharSequence[] msg0 = {msg};
+        int[] icon0 = {icon};
+        CharSequence[] btnText0 = {btnText};
+        Runnable[] errorClick0 = {errorClick};
+        ThreadUtils.getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                if(icon0[0] == 0){
+                    icon0[0] = config.errorIcon;
+                }
+                if(TextUtils.isEmpty(btnText0[0])){
+                    btnText0[0] = config.errorBtnText;
+                }
+                if(errorClick0[0] == null){
+                    errorClick0[0] = config.errorClick;
+                }
+                View view = pickView(ERROR);
+                if(view instanceof ViewGroup){
+                    ViewGroup viewGroup = (ViewGroup) view;
+                    for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                        View childAt = viewGroup.getChildAt(i);
+                        if(childAt instanceof Button){
+                            Button textView = (Button) childAt;
+                            if(!TextUtils.isEmpty(btnText0[0])){
+                                textView.setText(btnText0[0]);
+                            }
+                            if(errorClick0[0] == null){
+                                textView.setVisibility(GONE);
+                            }else {
+                                textView.setVisibility(VISIBLE);
+                                Runnable finalEmptyClick = errorClick0[0];
+                                textView.setOnClickListener(new OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        if (!NoNetworkHelper2.isNetWorkAvailable(v.getContext())) {
+                                            NoNetworkHelper2.showNoNetWorkDlg(v.getContext());
+                                        } else {
+                                            if (finalEmptyClick != null) {
+                                                finalEmptyClick.run();
+                                            }
+                                        }
                                     }
+                                });
+                            }
+                        }else if(childAt instanceof TextView){
+                            TextView textView = (TextView) childAt;
+                            if(!TextUtils.isEmpty(msg0[0])){
+                                textView.setText(msg0[0]);
+                            }
+
+                        }else if(childAt instanceof ImageView){
+                            ImageView textView = (ImageView) childAt;
+                            if(icon0[0] != 0){
+                                try {
+                                    textView.setImageResource(icon0[0]);
+                                }catch (Throwable throwable){
+                                    throwable.printStackTrace();
                                 }
                             }
-                        });
-                    }
-                }else if(childAt instanceof TextView){
-                    TextView textView = (TextView) childAt;
-                    if(!TextUtils.isEmpty(msg)){
-                        textView.setText(msg);
-                    }
-
-                }else if(childAt instanceof ImageView){
-                    ImageView textView = (ImageView) childAt;
-                    if(icon != 0){
-                        try {
-                            textView.setImageResource(icon);
-                        }catch (Throwable throwable){
-                            throwable.printStackTrace();
                         }
                     }
                 }
-            }
-        }
-        Runnable finalErrorClick = errorClick;
-        view.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!NoNetworkHelper2.isNetWorkAvailable(v.getContext())) {
-                    NoNetworkHelper2.showNoNetWorkDlg(v.getContext());
-                } else {
-                    if (finalErrorClick != null) {
-                        finalErrorClick.run();
+                Runnable finalErrorClick = errorClick0[0];
+                view.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (!NoNetworkHelper2.isNetWorkAvailable(v.getContext())) {
+                            NoNetworkHelper2.showNoNetWorkDlg(v.getContext());
+                        } else {
+                            if (finalErrorClick != null) {
+                                finalErrorClick.run();
+                            }
+                        }
                     }
+                });
+                if(config.listener != null){
+                    config.listener.onStateChanged(view,ERROR);
                 }
             }
         });
-        if(config.listener != null){
-            config.listener.onStateChanged(view,ERROR);
-        }
+
     }
 
     @Override
     public void showContent() {
-        View view = pickView(CONTENT);
-        if(config.listener != null){
-            config.listener.onStateChanged(view,CONTENT);
-        }
+        ThreadUtils.getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                View view = pickView(CONTENT);
+                if(config.listener != null){
+                    config.listener.onStateChanged(view,CONTENT);
+                }
+            }
+        });
+
     }
 }
