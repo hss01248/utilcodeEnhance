@@ -41,6 +41,7 @@ import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.BarUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ResourceUtils;
+import com.blankj.utilcode.util.SPStaticUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
@@ -53,6 +54,7 @@ import com.hss01248.basewebview.dom.JsCreateNewWinImpl;
 import com.hss01248.basewebview.dom.JsPermissionImpl;
 import com.hss01248.basewebview.history.db.MyDbUtil;
 import com.hss01248.basewebview.menus.DefaultMenus;
+import com.hss01248.basewebview.search.WebSearchViewHolder;
 import com.hss01248.iwidget.BaseDialogListener;
 import com.hss01248.iwidget.msg.AlertDialogImplByDialogUtil;
 import com.hss01248.iwidget.singlechoose.ISingleChooseItem;
@@ -323,7 +325,14 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
             go(url);
         }else {
             //调用百度/谷歌搜索
-            String url2 = "https://www.baidu.com/s?wd="+url;
+            int anInt = SPStaticUtils.getInt(WebSearchViewHolder.KEY_ENGIN);
+            String[] arr = {
+                    "https://www.baidu.com/s?wd="+url,
+                    "https://www.google.com/search?q="+url,
+                    "https://www.bing.com/search?q="+url
+
+            };
+            String url2 = arr[anInt];
             go(url2);
         }
     }
