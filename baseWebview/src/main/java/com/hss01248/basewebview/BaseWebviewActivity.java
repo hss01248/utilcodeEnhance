@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import com.blankj.utilcode.util.LogUtils;
 import com.hss.utils.enhance.MyKeyboardUtil;
 
 
+@Keep
 public class BaseWebviewActivity extends AppCompatActivity implements ISetWebviewHolder{
 
 

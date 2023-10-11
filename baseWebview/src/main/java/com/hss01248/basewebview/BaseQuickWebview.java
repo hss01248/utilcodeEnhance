@@ -2,6 +2,7 @@ package com.hss01248.basewebview;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,13 +12,14 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.SslErrorHandler;
 import android.webkit.URLUtil;
@@ -25,7 +27,6 @@ import android.webkit.ValueCallback;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -40,9 +41,9 @@ import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.BarUtils;
 import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.ResourceUtils;
 import com.blankj.utilcode.util.SPStaticUtils;
 import com.blankj.utilcode.util.StringUtils;
+import com.blankj.utilcode.util.ThreadUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
 import com.hss.utils.enhance.MyKeyboardUtil;
@@ -55,6 +56,8 @@ import com.hss01248.basewebview.dom.JsPermissionImpl;
 import com.hss01248.basewebview.history.db.MyDbUtil;
 import com.hss01248.basewebview.menus.DefaultMenus;
 import com.hss01248.basewebview.search.WebSearchViewHolder;
+import com.hss01248.download_list2.DownloadCallback;
+import com.hss01248.download_list2.DownloadImplByFileDownloaderLib;
 import com.hss01248.iwidget.BaseDialogListener;
 import com.hss01248.iwidget.msg.AlertDialogImplByDialogUtil;
 import com.hss01248.iwidget.singlechoose.ISingleChooseItem;
@@ -68,13 +71,21 @@ import com.just.agentweb.WebChromeClient;
 import com.just.agentweb.WebViewClient;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleObserver {
-
 
 
     String currentUrl = "";
@@ -89,11 +100,10 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
 
     public void addRightMenus(IShowRightMenus showRightMenus) {
         List<ISingleChooseItem<BaseQuickWebview>> ms = showRightMenus.addMenus(this);
-        if(ms != null){
+        if (ms != null) {
             menus.addAll(ms);
         }
     }
-
 
 
     public WebView getWebView() {
@@ -125,7 +135,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
     List<ISingleChooseItem<BaseQuickWebview>> menus = new ArrayList<>();
 
 
-    public BaseQuickWebview(Context context,MiddlewareWebChromeBase middlewareWebChrome,MiddlewareWebClientBase middlewareWebClient) {
+    public BaseQuickWebview(Context context, MiddlewareWebChromeBase middlewareWebChrome, MiddlewareWebClientBase middlewareWebClient) {
         super(context);
         this.middlewareWebChrome = middlewareWebChrome;
         this.middlewareWebClient = middlewareWebClient;
@@ -159,7 +169,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
         initTitlebar(context);
 
         Activity activity = WebDebugger.getActivityFromContext(context);
-        if(activity instanceof LifecycleOwner){
+        if (activity instanceof LifecycleOwner) {
             LifecycleOwner owner = (LifecycleOwner) activity;
             addLifecycle(owner);
         }
@@ -170,21 +180,21 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
         MyKeyboardUtil.adaptView(this);
     }
 
-    public void resetContext(Context context){
+    public void resetContext(Context context) {
         AppCompatActivity activity0 = (AppCompatActivity) WebDebugger.getActivityFromContext(getContext());
         AppCompatActivity activity = (AppCompatActivity) WebDebugger.getActivityFromContext(context);
-        if(activity == activity0){
+        if (activity == activity0) {
             return;
         }
         activity0.getLifecycle().removeObserver(this);
         activity.getLifecycle().addObserver(this);
         BarUtils.setStatusBarColor(activity, Color.WHITE);
-        BarUtils.setStatusBarLightMode(activity,true);
+        BarUtils.setStatusBarLightMode(activity, true);
     }
 
-    public void resetLifecycleOwner(LifecycleOwner lifecycleOwner){
+    public void resetLifecycleOwner(LifecycleOwner lifecycleOwner) {
         AppCompatActivity activity0 = (AppCompatActivity) WebDebugger.getActivityFromContext(getContext());
-        if(activity0 == lifecycleOwner){
+        if (activity0 == lifecycleOwner) {
             return;
         }
         activity0.getLifecycle().removeObserver(this);
@@ -202,15 +212,16 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
     }
 
     WebViewTitlebarHolder titlebarHolder;
+
     private void initTitlebar(Context context) {
 
         Activity activity = WebDebugger.getActivityFromContext(context);
         BarUtils.setStatusBarColor(activity, Color.WHITE);
-        BarUtils.setStatusBarLightMode(activity,true);
+        BarUtils.setStatusBarLightMode(activity, true);
 
         titlebarHolder = new WebViewTitlebarHolder(this);
         titleBar = titlebarHolder.binding;
-        titleBar.getRoot().setPadding(0,BarUtils.getStatusBarHeight(),0,0);
+        titleBar.getRoot().setPadding(0, BarUtils.getStatusBarHeight(), 0, 0);
 
         addView(titleBar.getRoot());
 
@@ -219,18 +230,18 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
     }
 
     protected void showMenu() {
-        ISingleChooseItem.showAsMenu(titleBar.ivMenu,menus,this);
+        ISingleChooseItem.showAsMenu(titleBar.ivMenu, menus, this);
     }
 
-    public void getSource(ValueCallback<String> valueCallback){
-        if(!TextUtils.isEmpty(source)){
+    public void getSource(ValueCallback<String> valueCallback) {
+        if (!TextUtils.isEmpty(source)) {
             valueCallback.onReceiveValue(source);
             return;
         }
         loadSource(valueCallback);
     }
 
-    public static BaseQuickWebview loadHtml(Context context,String url,long delayAfterOnFinish,ValueCallback<WebPageInfo> sourceLoadListener){
+    public static BaseQuickWebview loadHtml(Context context, String url, long delayAfterOnFinish, ValueCallback<WebPageInfo> sourceLoadListener) {
         BaseQuickWebview quickWebview = new BaseQuickWebview(context);
         quickWebview.needBlockImageLoad = true;
         quickWebview.delayAfterOnFinish = delayAfterOnFinish;
@@ -251,12 +262,11 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
         });*/
 
 
-
         quickWebview.setSourceLoadListener(new ValueCallback<WebPageInfo>() {
             @Override
             public void onReceiveValue(WebPageInfo value) {
                 sourceLoadListener.onReceiveValue(value);
-                if(quickWebview.getAgentWeb() != null){
+                if (quickWebview.getAgentWeb() != null) {
                     quickWebview.getAgentWeb().destroy();
                 }
             }
@@ -265,6 +275,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
         return quickWebview;
 
     }
+
     ValueCallback<WebPageInfo> sourceLoadListener;
 
 
@@ -273,14 +284,15 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
     }
 
     boolean needBlockImageLoad;
-    public void setSourceLoadListener(ValueCallback<WebPageInfo> sourceLoadListener){
-       this.sourceLoadListener = sourceLoadListener;
+
+    public void setSourceLoadListener(ValueCallback<WebPageInfo> sourceLoadListener) {
+        this.sourceLoadListener = sourceLoadListener;
     }
 
 
-    public void loadSource(ValueCallback<String> valueCallback){
-        if(webView == null){
-            Log.w("loadSource","webview is null");
+    public void loadSource(ValueCallback<String> valueCallback) {
+        if (webView == null) {
+            Log.w("loadSource", "webview is null");
             return;
         }
 //        if(TextUtils.isEmpty(source)){
@@ -295,14 +307,14 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                 @Override
                 public void onReceiveValue(String value) {
                     source = StringEscapeUtils.unescapeJava(value);
-                    if(source.startsWith("\"")){
+                    if (source.startsWith("\"")) {
                         source = source.substring(1);
                     }
-                    if(source.endsWith("\"")){
-                        source = source.substring(0,source.length()-1);
+                    if (source.endsWith("\"")) {
+                        source = source.substring(0, source.length() - 1);
                     }
                     //source = "<html>"+source +"</html>";
-                    source = "<body>"+source +"</body>";
+                    source = "<body>" + source + "</body>";
                     LogUtils.v(source);
                     info.htmlSource = source;
                     valueCallback.onReceiveValue(source);
@@ -312,31 +324,31 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
     }
 
     boolean hasAdd;
-    private void addLifecycle(LifecycleOwner lifecycleOwner){
-        if(hasAdd){
+
+    private void addLifecycle(LifecycleOwner lifecycleOwner) {
+        if (hasAdd) {
             return;
         }
         lifecycleOwner.getLifecycle().addObserver(this);
         hasAdd = true;
     }
 
-    public void loadUrl(String url){
-        if(url.startsWith("http")){
+    public void loadUrl(String url) {
+        if (url.startsWith("http")) {
             go(url);
-        }else {
+        } else {
             //调用百度/谷歌搜索
             int anInt = SPStaticUtils.getInt(WebSearchViewHolder.KEY_ENGIN);
             String[] arr = {
-                    "https://www.baidu.com/s?wd="+url,
-                    "https://www.google.com/search?q="+url,
-                    "https://www.bing.com/search?q="+url
+                    "https://www.baidu.com/s?wd=" + url,
+                    "https://www.google.com/search?q=" + url,
+                    "https://www.bing.com/search?q=" + url
 
             };
             String url2 = arr[anInt];
             go(url2);
         }
     }
-
 
 
     StatefulLayout stateManager;
@@ -351,12 +363,12 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                 //传入AgentWeb 的父控件 ，如果父控件为 RelativeLayout ， 那么第二参数需要传入 RelativeLayout.LayoutParams ,第一个参数和第二个参数应该对应。
                 .useDefaultIndicator()// 使用默认进度条
                 //.setWebView(new WrappedWebview(getContext()))
-                .setAgentWebUIController(new AgentWebUIControllerImplBase(){
+                .setAgentWebUIController(new AgentWebUIControllerImplBase() {
                     @Override
                     public void onMainFrameError(WebView view, int errorCode, String description, String failingUrl) {
                         //super.onMainFrameError(view, errorCode, description, failingUrl);
-                        if(stateManager != null){
-                            stateManager.showError(errorCode+"\n"+description+"\n on url:"+failingUrl);
+                        if (stateManager != null) {
+                            stateManager.showError(errorCode + "\n" + description + "\n on url:" + failingUrl);
                         }
                     }
 
@@ -371,7 +383,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                     @Override
                     public void onShowMainFrame() {
                         //super.onShowMainFrame();
-                        if(stateManager != null){
+                        if (stateManager != null) {
                             stateManager.showContent();
                         }
                     }
@@ -388,12 +400,12 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                                 });
                     }
                 })
-                .setWebViewClient(new WebViewClient(){
+                .setWebViewClient(new WebViewClient() {
                     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                     @Override
                     public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
                         //return new OkhttpProxyForWebview().shouldInterceptRequest(view,request);
-                        return  super.shouldInterceptRequest(view, request);
+                        return super.shouldInterceptRequest(view, request);
                     }
 
                     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -401,8 +413,8 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                     public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                         String scheme = request.getUrl().getScheme();
                         String url = request.toString();
-                        if(!TextUtils.isEmpty(scheme) &&
-                                (scheme.startsWith("http") || scheme.startsWith("about")||scheme.startsWith("javascript"))){
+                        if (!TextUtils.isEmpty(scheme) &&
+                                (scheme.startsWith("http") || scheme.startsWith("about") || scheme.startsWith("javascript"))) {
                             return super.shouldOverrideUrlLoading(view, request);
                         }
 
@@ -410,29 +422,29 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                         intent.setData(request.getUrl());
                         List<ResolveInfo> resolveInfos = Utils.getApp().getPackageManager().queryIntentActivities(intent, 0);
                         StringBuilder sb = new StringBuilder("(");
-                        if(resolveInfos != null && !resolveInfos.isEmpty()){
+                        if (resolveInfos != null && !resolveInfos.isEmpty()) {
                             for (ResolveInfo resolveInfo : resolveInfos) {
                                 //LogUtils.i(resolveInfo.resolvePackageName);
                                 LogUtils.i(resolveInfo.toString());
                                 // LogUtils.i(resolveInfo.labelRes);
                                 String packageName = resolveInfo.activityInfo.packageName;
                                 String appName = AppUtils.getAppName(packageName);
-                                if(TextUtils.isEmpty(appName)){
+                                if (TextUtils.isEmpty(appName)) {
                                     appName = packageName;
                                 }
                                 sb.append(appName).append(",");
                             }
                         }
                         String str = sb.toString();
-                        if(str.endsWith(",")){
-                            str = str.substring(0,str.length()-1);
+                        if (str.endsWith(",")) {
+                            str = str.substring(0, str.length() - 1);
                         }
-                        str = str +")";
+                        str = str + ")";
 
                         Dialog mAskOpenOtherAppDialog = new AlertDialog
                                 .Builder(ActivityUtils.getTopActivity())
                                 .setMessage(StringUtils.getString(R.string.agentweb_leave_app_and_go_other_page,
-                                        AgentWebUtils.getApplicationName(ActivityUtils.getTopActivity()))+"\n"+str)
+                                        AgentWebUtils.getApplicationName(ActivityUtils.getTopActivity())) + "\n" + str)
                                 .setTitle(StringUtils.getString(R.string.agentweb_tips))
                                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                                     @Override
@@ -464,9 +476,10 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                         info.htmlSource = "";
                         info.url = url;
                         info.title = "";
-                        if(needBlockImageLoad){
+                        if (needBlockImageLoad) {
                             view.getSettings().setBlockNetworkImage(needBlockImageLoad);
                         }
+
                     }
 
                     /**
@@ -478,34 +491,47 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                     public void onPageFinished(WebView view, String url) {
                         super.onPageFinished(view, url);
 
+//注入js:
+                        /*String js = "var newscript = document.createElement(\"script\");";
+                        js += "newscript.src=\"https://cdnjs.cloudflare.com/ajax/libs/eruda/3.0.1/eruda.min.js\";";
+                        js += "document.body.appendChild(newscript);";
+
+                        js += "var newscript2 = document.createElement(\"script\");";
+                        js += "newscript2.text=\"eruda.init();\";";
+                        js += "document.body.appendChild(newscript2);";
+                        view.loadUrl("javascript:"+js);*/
+
+                        //checkIfTouTiao(view,url);
                         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 loadSource(new ValueCallback<String>() {
                                     @Override
                                     public void onReceiveValue(String value) {
-                                        if(sourceLoadListener != null){
+                                        if (sourceLoadListener != null) {
                                             sourceLoadListener.onReceiveValue(info);
                                         }
+                                        checkIfTouTiao2(value, url);
                                     }
                                 });
                             }
-                        },delayAfterOnFinish);
-                        if("about:blank".equals(url)){
-                            if(stateManager != null){
-                                stateManager.showError("not url : \n"+originalUrl );
+                        }, delayAfterOnFinish);
+                        if ("about:blank".equals(url)) {
+                            if (stateManager != null) {
+                                stateManager.showError("not url : \n" + originalUrl);
                             }
                         }
-                        if(URLUtil.isNetworkUrl(url)){
-                            MyDbUtil.addHistory(getCurrentTitle(),url,"");
+                        if (URLUtil.isNetworkUrl(url)) {
+                            MyDbUtil.addHistory(getCurrentTitle(), url, "");
                         }
 
                     }
+
                     @Override
                     public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                         super.onReceivedError(view, errorCode, description, failingUrl);
-                        if(stateManager != null){
-                            stateManager.showError(errorCode+"\n"+description+"\n on url:"+failingUrl);
+                        if (stateManager != null) {
+                            stateManager.showError(errorCode + "\n" + description + "\n on url:" + failingUrl);
                         }
 
                     }
@@ -514,9 +540,9 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                     public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
                         super.onReceivedHttpError(view, request, errorResponse);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            if(request.isForMainFrame()){
-                                if(stateManager != null){
-                                    stateManager.showError(errorResponse.getStatusCode()+"\n"+errorResponse.getReasonPhrase()+"\n on url:"+request.getUrl());
+                            if (request.isForMainFrame()) {
+                                if (stateManager != null) {
+                                    stateManager.showError(errorResponse.getStatusCode() + "\n" + errorResponse.getReasonPhrase() + "\n on url:" + request.getUrl());
                                 }
 
                             }
@@ -532,9 +558,9 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                                     @Override
                                     public void onCancel(boolean fromBackPressed, boolean fromOutsideClick, boolean fromCancelButton) {
                                         handler.cancel();
-                                        if(error.getUrl().equals(view.getUrl())){
-                                            if(stateManager != null){
-                                                stateManager.showError("SslError:\n"+error.toString());
+                                        if (error.getUrl().equals(view.getUrl())) {
+                                            if (stateManager != null) {
+                                                stateManager.showError("SslError:\n" + error.toString());
                                             }
                                         }
 
@@ -545,9 +571,9 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                                         handler.proceed();
                                     }
                                 });
-                }
+                    }
                 })
-                .setWebChromeClient(new WebChromeClient(){
+                .setWebChromeClient(new WebChromeClient() {
 
                     @Override
                     public void onReceivedTitle(WebView view, String title) {
@@ -582,18 +608,18 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                 .useMiddlewareWebChrome(new JsPermissionImpl())
                 .useMiddlewareWebClient(new AdBlockClient(getContext()))
                 .useMiddlewareWebChrome(new FileChooseImpl());
-        if(middlewareWebClient != null){
+        if (middlewareWebClient != null) {
             builder.useMiddlewareWebClient(middlewareWebClient);
         }
-        if(middlewareWebChrome != null){
+        if (middlewareWebChrome != null) {
             builder.useMiddlewareWebChrome(middlewareWebChrome);
         }
-                //.useMiddlewareWebClient(okhttpProxyForWebviewClient)
-                //.useMiddlewareWebChrome(new JsNewWindowImpl())
-                //.useMiddlewareWebChrome(new VideoFullScreenImpl())
-              // .setMainFrameErrorView(R.layout.pager_error,R.id.error_btn_retry)
-                //.setMainFrameErrorView(errorLayout)
-               preAgentWeb = builder .createAgentWeb()//
+        //.useMiddlewareWebClient(okhttpProxyForWebviewClient)
+        //.useMiddlewareWebChrome(new JsNewWindowImpl())
+        //.useMiddlewareWebChrome(new VideoFullScreenImpl())
+        // .setMainFrameErrorView(R.layout.pager_error,R.id.error_btn_retry)
+        //.setMainFrameErrorView(errorLayout)
+        preAgentWeb = builder.createAgentWeb()//
                 .ready();
 
         mAgentWeb = preAgentWeb.get();
@@ -609,21 +635,183 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
         });
         stateManager.showContent();
         WebConfigger.config(webView);
-        debugger =  new WebDebugger();
+        debugger = new WebDebugger();
         debugger.setWebviewDebug(webView);
     }
 
+    private void checkIfTouTiao2(String value, String url) {
+        if (!url.startsWith("https://m.toutiao.com/") && !url.startsWith("https://www.iesdouyin.com/") ) {
+            return;
+        }
+        try {
+            Document doc = Jsoup.parse(value);
+            String url1 = "";
+            if(url.startsWith("https://m.toutiao.com/")){
+                Element video = doc.selectFirst("video");
+                url1 = video.childNode(1).attr("src");
+            }else if(url.startsWith("https://www.iesdouyin.com/")){
+                Element video = doc.selectFirst("video");
+                if(video == null){
+                    return;
+                }
+                url1 = video.attr("src");
+                if(!url1.startsWith("http")){
+                    url1 = "https://www.iesdouyin.com"+url1;
+                    //需要301重定向
+                }
+            }
+            if(TextUtils.isEmpty(url1)){
+                return;
+            }
+
+            ToastUtils.showShort("检测到视频url,开始下载: \n" + url1);
+
+            String fileName = info.title + ".mp4";
+
+
+            new DownloadImplByFileDownloaderLib()
+                    .download(url1, null, fileName, null, new DownloadCallback() {
+                        @Override
+                        public void onStart(String url) {
+
+                        }
+
+                        @Override
+                        public void onProgress(float progress, long total) {
+
+                        }
+
+                        @Override
+                        public void onError(String msg) {
+                            DownloadCallback.super.onError(msg);
+                            ToastUtils.showShort("文件下载失败: \n" + msg);
+                        }
+
+                        @Override
+                        public void onSuccess(File file) {
+                            ///storage/emulated/0/Android/data/com.hss01248.basewebviewdemo
+                            // /files/Download/胆子真大，竟然选择在山沟里修房子，不怕泥石流吗-今日头条.mp4
+                            LogUtils.d("文件路径: " + file.getAbsolutePath());
+                            //ToastUtils.showShort("文件下载成功: \n" + file.getAbsolutePath());
+                            //然后保存到mediastore:
+                            ThreadUtils.executeByIo(new ThreadUtils.SimpleTask<Object>() {
+                                @Override
+                                public Object doInBackground() throws Throwable {
+                                    copyFileToDownloadsDir(file);
+                                    return null;
+                                }
+
+                                @Override
+                                public void onSuccess(Object result) {
+
+                                }
+                            });
+
+                        }
+                    });
+
+        } catch (Throwable throwable) {
+            LogUtils.w(throwable);
+            ToastUtils.showLong(throwable.getMessage());
+        }
+
+
+    }
+
+    private void copyFileToDownloadsDir(File file) {
+        Uri uri = MediaStore.Files.getContentUri("external");
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/ttv");
+        // 设置文件名称
+        contentValues.put(MediaStore.Downloads.DISPLAY_NAME, file.getName());
+        // 设置文件标题, 一般是删除后缀, 可以不设置
+        //contentValues.put(MediaStore.Downloads.TITLE, "hello");
+        // uri 表示操作哪个数据库 , contentValues 表示要插入的数据内容
+        Uri insert = Utils.getApp().getContentResolver().insert(uri, contentValues);
+        // 向 Download/hello/hello.txt 文件中插入数据
+
+        try {
+            int sBufferSize = 524288;
+            InputStream is = new FileInputStream(file);
+            OutputStream os = Utils.getApp().getContentResolver().openOutputStream(insert);
+            try {
+                os = new BufferedOutputStream(os, sBufferSize);
+
+                double totalSize = is.available();
+                int curSize = 0;
+
+                byte[] data = new byte[sBufferSize];
+                for (int len; (len = is.read(data)) != -1; ) {
+                    os.write(data, 0, len);
+                    curSize += len;
+                }
+                os.flush();
+                LogUtils.i("拷贝文件到download文件夹: download/ttv/" + file.getName());
+                ToastUtils.showLong("文件下载到download文件夹: download/ttv/"+ file.getName());
+
+            } catch (IOException e) {
+                LogUtils.w(e);
+
+            } finally {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    LogUtils.w(e);
+                }
+                try {
+                    if (os != null) {
+                        os.close();
+                    }
+                } catch (IOException e) {
+                    LogUtils.w(e);
+                }
+            }
+        } catch (Exception e) {
+            LogUtils.w(e);
+        }
+    }
+
+    private void checkIfTouTiao(WebView view, String url) {
+        String js = "var vi = document.getElementsByTagName(\"video\")[0]\n" +
+                "      vi.addEventListener(\"play\",()=>{\n" +
+                "        console.log(\"开始播放: src: \"+vi.getElementsByTagName(\"source\")[1].getAttribute(\"src\"));\n" +
+                "        //console.log(\"开始播放: src0: \"+vi.getAttribute(\"src\"));\n" +
+                "        //parent.replaceChild (newnode,oldnode ) ；\n" +
+                "        var div = document.createElement(\"div\")\n" +
+                "\n" +
+                "        //div.style.position = \"relative\"\n" +
+                "\n" +
+                "        let htmlButtonElement = document.createElement(\"button\");\n" +
+                "        htmlButtonElement.textContent = \"下载视频\"\n" +
+                "        //htmlButtonElement.style.position = \"absolute\"\n" +
+                "        //htmlButtonElement.style.zIndex = \"999\";\n" +
+                "        div.appendChild(htmlButtonElement);\n" +
+                "\n" +
+                "        let br = document.createElement(\"br\");\n" +
+                "        div.appendChild(br);\n" +
+                "\n" +
+                "        vi.parentNode.replaceChild(div,vi);\n" +
+                "        div.appendChild(vi);\n" +
+                "        //vi.style.zIndex = \"1\";\n" +
+                "\n" +
+                "        htmlButtonElement.addEventListener(\"click\",()=>{\n" +
+                "          //alert(\"发起视频下载:\");\n" +
+                "          window.location.href = vi.getElementsByTagName(\"source\")[1].getAttribute(\"src\");\n" +
+                "        });";
+        view.loadUrl("javascript:" + js);
+    }
 
 
     String originalUrl = "";
-    private void go(String url){
+
+    private void go(String url) {
         originalUrl = url;
         info.url = url;
-        WebConfigger.syncCookie(webView,url);
-        if(mAgentWeb == null){
+        WebConfigger.syncCookie(webView, url);
+        if (mAgentWeb == null) {
             LogUtils.w("mAgentWeb == null");
             //mAgentWeb = preAgentWeb.go(url);
-        }else {
+        } else {
             mAgentWeb.getUrlLoader().loadUrl(url);
         }
 
@@ -631,33 +819,29 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
     }
 
 
-
-
-
-
     @Override
     public void onResume(@NonNull LifecycleOwner owner) {
-        if(mAgentWeb != null){
+        if (mAgentWeb != null) {
             mAgentWeb.getWebLifeCycle().onResume();
         }
     }
 
     @Override
     public void onPause(@NonNull LifecycleOwner owner) {
-        if(mAgentWeb != null){
+        if (mAgentWeb != null) {
             mAgentWeb.getWebLifeCycle().onPause();
         }
     }
 
     @Override
     public void onDestroy(@NonNull LifecycleOwner owner) {
-        if(mAgentWeb != null){
+        if (mAgentWeb != null) {
             mAgentWeb.getWebLifeCycle().onDestroy();
         }
     }
 
-    public boolean onBackPressed(){
-        if(mAgentWeb == null){
+    public boolean onBackPressed() {
+        if (mAgentWeb == null) {
             return false;
         }
         return mAgentWeb.back();

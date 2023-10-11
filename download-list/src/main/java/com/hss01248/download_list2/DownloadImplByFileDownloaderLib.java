@@ -1,4 +1,4 @@
-package com.hss01248.download_list;
+package com.hss01248.download_list2;
 
 import android.text.TextUtils;
 import android.webkit.URLUtil;
@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.hss.downloader.download.DownloadInfoUtil;
 import com.hss01248.http.response.DownloadParser;
 import com.liulishuo.filedownloader.BaseDownloadTask;
 import com.liulishuo.filedownloader.FileDownloadSampleListener;
@@ -14,6 +15,7 @@ import com.liulishuo.filedownloader.FileDownloader;
 
 import java.io.File;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @Despciption todo
@@ -31,11 +33,24 @@ public class DownloadImplByFileDownloaderLib implements DownloaderApi{
         if(TextUtils.isEmpty(fileName)){
             fileName = URLUtil.guessFileName(url,"","");
         }
+
+        fileName = DownloadInfoUtil.getLeagalFileName(saveDirPath, fileName);
         File file = new File(saveDirPath,fileName);
-        FileDownloader.getImpl().create(url)
-                .setPath(file.getAbsolutePath())
+        BaseDownloadTask task =  FileDownloader.getImpl().create(url)
+                .setPath(file.getAbsolutePath());
+       if(headers != null){
+           Set<String> strings = headers.keySet();
+           for (String string : strings) {
+               String val = headers.get(string);
+               if(val != null){
+                   task.addHeader(string,val);
+               }
+           }
+       }
+        task.addHeader(
+                "User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36");
                 //1M以上,需要wifi才下载
-                .setWifiRequired(false)
+        task.setWifiRequired(false)
                 .setCallbackProgressTimes(300)
                 .setMinIntervalUpdateSpeed(400)
                 .setForceReDownload(false)
@@ -65,7 +80,7 @@ public class DownloadImplByFileDownloaderLib implements DownloaderApi{
                     @Override
                     protected void error(BaseDownloadTask task, Throwable e) {
                         super.error(task, e);
-                        LogUtils.w(task.getUrl(),e);
+                        LogUtils.w(task.getUrl(),e,file.getAbsolutePath());
                         callback.onError(e.getMessage());
                     }
                 })

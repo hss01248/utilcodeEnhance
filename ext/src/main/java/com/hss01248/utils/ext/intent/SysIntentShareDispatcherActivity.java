@@ -9,7 +9,9 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ReflectUtils;
 import com.hss.utils.enhance.UrlEncodeUtil;
 
 /**
@@ -30,10 +32,46 @@ public class SysIntentShareDispatcherActivity extends AppCompatActivity {
         textView.setBackground(new ColorDrawable(Color.WHITE));
         textView.setPadding(60,60,60,60);
         textView.setText(msg());
+        textView.setTextIsSelectable(true);
         textView.setTextColor(Color.BLACK);
         scrollView.addView(textView);
 
         setContentView(scrollView);
+
+        parseToutiao();
+
+        //parseDouyin();
+    }
+
+    private void parseToutiao() {
+        Bundle extras = getIntent().getExtras();
+        if(extras == null){
+            return;
+        }
+        Object kdescription = extras.get("Kdescription");
+        if(kdescription ==null){
+            return;
+        }
+        String text = kdescription.toString();
+        if(!text.contains("https://m.toutiao.com/") && !text.contains("https://www.iesdouyin.com/")){
+            LogUtils.w("有Kdescription,但不包含https://m.toutiao.com/或者www.iesdouyin.com",text);
+            return;
+        }
+        String url = "";
+        if(text.contains("https://m.toutiao.com/")){
+            url = text.substring(text.indexOf("https://m.toutiao.com/"));
+        }else if(text.contains("https://www.iesdouyin.com/")){
+            url = text.substring(text.indexOf("https://www.iesdouyin.com/"));
+        }
+
+
+        try {
+            ReflectUtils.reflect("com.hss01248.basewebview.BaseWebviewActivity")
+                    .method("start", ActivityUtils.getTopActivity(),url);
+        }catch (Throwable throwable){
+            LogUtils.w(throwable);
+        }
+
     }
 
     private String msg() {
