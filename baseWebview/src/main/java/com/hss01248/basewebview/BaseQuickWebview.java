@@ -659,7 +659,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                 url1 = video.attr("src");
                 if(!url1.startsWith("http")){
                     //url1 = "https://"+Uri.parse(url1).getHost()+url1;
-                    url1 = "https://https://www.iesdouyin.com/"+url1;
+                    url1 = "https://www.iesdouyin.com/"+url1;
                     //需要301重定向
                 }
             }
