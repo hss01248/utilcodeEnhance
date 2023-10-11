@@ -1,6 +1,7 @@
 package com.hss01248.basewebviewdemo;
 
 import android.app.Activity;
+import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.util.Log;
@@ -37,12 +38,21 @@ public class BaseApp extends MultiDexApplication {
                         @Override
                         public void run() {
                             //应用获取焦点后才能读取,否则无法读取
-                            ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                            String clipboardText = clipboardManager.getPrimaryClip().getItemAt(0).getText().toString();
-                            LogUtils.dTag("ClipboardMonitor", "Clipboard text changed: " + clipboardText);
-                            if(clipboardText.contains("https://v.douyin.com/")){
-                                BaseWebviewActivity.start(activity,clipboardText.substring(clipboardText.indexOf("https://v.douyin.com/")));
+                            try{
+                                ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                                ClipData primaryClip = clipboardManager.getPrimaryClip();
+                                if(primaryClip!=null){
+                                    String clipboardText = clipboardManager.getPrimaryClip().getItemAt(0).getText().toString();
+                                    LogUtils.dTag("ClipboardMonitor", "Clipboard text changed: " + clipboardText);
+                                    if(clipboardText.contains("https://v.douyin.com/")){
+                                        BaseWebviewActivity.start(activity,clipboardText.substring(clipboardText.indexOf("https://v.douyin.com/")));
+                                    }
+                                }
+
+                            }catch (Throwable e){
+                                LogUtils.w(e);
                             }
+
                         }
                     },500);
 

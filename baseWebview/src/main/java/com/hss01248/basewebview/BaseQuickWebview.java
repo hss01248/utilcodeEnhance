@@ -697,6 +697,12 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                             LogUtils.d("文件路径: " + file.getAbsolutePath());
                             //ToastUtils.showShort("文件下载成功: \n" + file.getAbsolutePath());
                             //然后保存到mediastore:
+                            if(file.getAbsolutePath().startsWith(
+                                    Environment.getRootDirectory().getAbsolutePath()+"/"
+                                            +Environment.DIRECTORY_DOWNLOADS)){
+                                ToastUtils.showLong("文件下载到download文件夹:"+ file.getAbsolutePath());
+                                return;
+                            }
                             ThreadUtils.executeByIo(new ThreadUtils.SimpleTask<Object>() {
                                 @Override
                                 public Object doInBackground() throws Throwable {
@@ -724,7 +730,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
     private void copyFileToDownloadsDir(File file) {
         Uri uri = MediaStore.Files.getContentUri("external");
         ContentValues contentValues = new ContentValues();
-        contentValues.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/ttv");
+        contentValues.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/"+AppUtils.getAppName());
         // 设置文件名称
         contentValues.put(MediaStore.Downloads.DISPLAY_NAME, file.getName());
         // 设置文件标题, 一般是删除后缀, 可以不设置
@@ -749,8 +755,9 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                     curSize += len;
                 }
                 os.flush();
-                LogUtils.i("拷贝文件到download文件夹: download/ttv/" + file.getName());
-                ToastUtils.showLong("文件下载到download文件夹: download/ttv/"+ file.getName());
+                LogUtils.i("拷贝文件到download文件夹: download/"+AppUtils.getAppName()+"/" + file.getName());
+                ToastUtils.showLong("文件下载到download文件夹: download/"+AppUtils.getAppName()+"/" + file.getName());
+                file.delete();
 
             } catch (IOException e) {
                 LogUtils.w(e);
