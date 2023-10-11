@@ -6,6 +6,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.hss01248.basewebview.BaseWebviewActivity;
+import com.hss01248.basewebview.video.ClipboardMonitorService;
 
 
 import top.zibin.luban.LubanUtil;
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         LubanUtil.setEnableLog(true,true);
+        ClipboardMonitorService.startMonitor();
     }
 
     public void geoLocation(View view) {

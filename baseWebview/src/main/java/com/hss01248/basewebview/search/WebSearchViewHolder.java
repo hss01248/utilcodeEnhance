@@ -155,6 +155,9 @@ public class WebSearchViewHolder extends MyViewHolder<WebSearchHolderBinding, Ba
                     // String url2 = "https://www.baidu.com/s?wd="+url;
                     //https://www.google.com/search?q=
                     //https://www.bing.com/search?q=%E9%87%91%E6%9D%A1
+                    if(!str.startsWith("http") && str.contains("https://")){
+                        str = str.substring(str.indexOf("https://"));
+                    }
                     quickWebview.loadUrl(str);
                     KeyboardUtils.hideSoftInput(binding.etInput);
                     if(dialog != null){
@@ -175,6 +178,9 @@ public class WebSearchViewHolder extends MyViewHolder<WebSearchHolderBinding, Ba
 
         Integer[] res = {R.drawable.icon_baidu,R.drawable.icon_google,R.drawable.icon_bing};
         int index = SPStaticUtils.getInt(KEY_ENGIN);
+        if(index<0){
+            index = 0;
+        }
         binding.ivClose.setImageResource(res[index]);
     }
 
