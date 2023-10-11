@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_CLIPBOARD"/>
+    <uses-permission android:name="android.permission.READ_CLIPBOARD_IN_BACKGROUND" />
     <application>
         <activity android:name=".BaseWebviewActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize"

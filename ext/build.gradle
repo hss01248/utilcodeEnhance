@@ -37,4 +37,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     api project(path: ':lib-base')
     api "com.google.code.gson:gson:2.8.5"
+    implementation "androidx.startup:startup-runtime:1.1.0"
 }

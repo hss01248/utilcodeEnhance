@@ -95,7 +95,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
     }
 
     AgentWeb mAgentWeb;
-    long delayAfterOnFinish;
+    long delayAfterOnFinish = 500;
     AgentWeb.PreAgentWeb preAgentWeb;
 
     public void addRightMenus(IShowRightMenus showRightMenus) {
@@ -640,7 +640,9 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
     }
 
     private void checkIfTouTiao2(String value, String url) {
-        if (!url.startsWith("https://m.toutiao.com/") && !url.startsWith("https://www.iesdouyin.com/") ) {
+        if (!url.startsWith("https://m.toutiao.com/")
+                && !url.startsWith("https://www.iesdouyin.com/")
+                && !url.startsWith("https://v.douyin.com/")) {
             return;
         }
         try {
@@ -651,12 +653,13 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                 url1 = video.childNode(1).attr("src");
             }else if(url.startsWith("https://www.iesdouyin.com/")){
                 Element video = doc.selectFirst("video");
-                if(video == null){
+                /*if(video == null){
                     return;
-                }
+                }*/
                 url1 = video.attr("src");
                 if(!url1.startsWith("http")){
-                    url1 = "https://www.iesdouyin.com"+url1;
+                    //url1 = "https://"+Uri.parse(url1).getHost()+url1;
+                    url1 = "https://https://www.iesdouyin.com/"+url1;
                     //需要301重定向
                 }
             }
