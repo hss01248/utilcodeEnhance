@@ -6,6 +6,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.SizeUtils;
@@ -33,11 +35,11 @@ import java.util.Arrays;
  */
 public class SingleChooseDialogImpl implements ISingleChooseDialog {
     @Override
-    public void showAtBottom(CharSequence title, CharSequence[] datas, SingleChooseDialogListener listener) {
-        showList(title, datas, true, listener);
+    public void showAtBottom(CharSequence title, @Nullable String msg, CharSequence[] datas, SingleChooseDialogListener listener) {
+        showList(title, msg,datas, true, listener);
     }
 
-    private void showList(CharSequence title, CharSequence[] datas, boolean bottom, SingleChooseDialogListener listener) {
+    private void showList(CharSequence title, @Nullable  String msg, CharSequence[] datas, boolean bottom, SingleChooseDialogListener listener) {
         String[] datas2 = new String[datas.length];
         for (int i = 0; i < datas2.length; i++) {
             datas2[i] = datas[i].toString();
@@ -72,6 +74,7 @@ public class SingleChooseDialogImpl implements ISingleChooseDialog {
                         return super.onBackPressed(popupView);
                     }
                 });
+
         if (bottom) {
             builder.asBottomList(title, datas2,
                             new OnSelectListener() {
@@ -99,8 +102,8 @@ public class SingleChooseDialogImpl implements ISingleChooseDialog {
     }
 
     @Override
-    public void showInCenter(CharSequence title, CharSequence[] datas, SingleChooseDialogListener listener) {
-        showList(title, datas, false, listener);
+    public void showInCenter(CharSequence title,  @Nullable  String msg,CharSequence[] datas, SingleChooseDialogListener listener) {
+        showList(title, msg,datas, false, listener);
     }
 
     /**

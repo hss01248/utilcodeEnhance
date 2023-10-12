@@ -46,6 +46,9 @@ import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ThreadUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
+import com.hjq.permissions.OnPermissionCallback;
+import com.hjq.permissions.Permission;
+import com.hjq.permissions.XXPermissions;
 import com.hss.utils.enhance.MyKeyboardUtil;
 import com.hss.utils.enhance.UrlEncodeUtil;
 import com.hss01248.basewebview.adblock.AdBlockClient;
@@ -61,6 +64,8 @@ import com.hss01248.download_list2.DownloadImplByFileDownloaderLib;
 import com.hss01248.iwidget.BaseDialogListener;
 import com.hss01248.iwidget.msg.AlertDialogImplByDialogUtil;
 import com.hss01248.iwidget.singlechoose.ISingleChooseItem;
+import com.hss01248.iwidget.singlechoose.SingleChooseDialogImpl;
+import com.hss01248.iwidget.singlechoose.SingleChooseDialogListener;
 import com.hss01248.viewstate.StatefulLayout;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.AgentWebUIControllerImplBase;
@@ -670,61 +675,107 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
             ToastUtils.showShort("检测到视频url,开始下载: \n" + url1);
 
             String fileName = info.title + ".mp4";
-
-
-            new DownloadImplByFileDownloaderLib()
-                    .download(url1, null, fileName, null, new DownloadCallback() {
+            //XXPermissions.with()
+            String finalUrl = url1;
+            new SingleChooseDialogImpl().showInCenter("检测到视频下载,是下载到普通文件夹还是隐藏文件夹?",
+                    new String[]{"普通文件夹", "隐藏文件夹"},
+                    new SingleChooseDialogListener() {
                         @Override
-                        public void onStart(String url) {
+                        public void onItemClicked(int position, CharSequence text) {
+                            if(position ==0){
+                                startDownload0(null,fileName, finalUrl);
+                            }else if(position ==1){
+                                String permission = Permission.MANAGE_EXTERNAL_STORAGE;
+                                if(Build.VERSION.SDK_INT < Build.VERSION_CODES.R){
+                                    //Android 11（API 级别 30）
+                                    permission = Permission.WRITE_EXTERNAL_STORAGE;
 
-                        }
+                                    //请注意，在搭载 Android 10（API 级别 29）或更高版本的设备上，
+                                    // 您的应用可以提供明确定义的媒体集合，例如 MediaStore.Downloads，而无需请求任何存储相关权限
+                                }
+                                XXPermissions.with(webView.getContext())
+                                        .permission(permission)
+                                        .request(new OnPermissionCallback() {
+                                            @Override
+                                            public void onGranted(List<String> permissions, boolean all) {
+                                                File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath()
+                                                        +"/"+AppUtils.getAppName()+"/.thefolder/");
+                                                if(!dir.exists()){
+                                                    dir.mkdirs();
+                                                }
+                                                File file = new File(dir,".nomedia");
+                                                if(!file.exists()){
+                                                    try {
+                                                        file.createNewFile();
+                                                    } catch (IOException e) {
+                                                        LogUtils.w(e);
+                                                    }
+                                                }
+                                                LogUtils.d("path: "+dir.getAbsolutePath());
+                                                startDownload0(dir.getAbsolutePath(),fileName, finalUrl);
+                                            }
 
-                        @Override
-                        public void onProgress(float progress, long total) {
-
-                        }
-
-                        @Override
-                        public void onError(String msg) {
-                            DownloadCallback.super.onError(msg);
-                            ToastUtils.showShort("文件下载失败: \n" + msg);
-                        }
-
-                        @Override
-                        public void onSuccess(File file) {
-                            ///storage/emulated/0/Android/data/com.hss01248.basewebviewdemo
-                            // /files/Download/胆子真大，竟然选择在山沟里修房子，不怕泥石流吗-今日头条.mp4
-                            LogUtils.d("文件路径: " + file.getAbsolutePath());
-                            //ToastUtils.showShort("文件下载成功: \n" + file.getAbsolutePath());
-                            //然后保存到mediastore:
-                            if(file.getAbsolutePath().startsWith(
-                                    Environment.getRootDirectory().getAbsolutePath()+"/"
-                                            +Environment.DIRECTORY_DOWNLOADS)){
-                                ToastUtils.showLong("文件下载到download文件夹:"+ file.getAbsolutePath());
-                                return;
+                                            @Override
+                                            public void onDenied(List<String> permissions, boolean never) {
+                                                OnPermissionCallback.super.onDenied(permissions, never);
+                                                ToastUtils.showLong("需要写存储权限才能创建隐藏文件夹");
+                                            }
+                                        });
                             }
-                            ThreadUtils.executeByIo(new ThreadUtils.SimpleTask<Object>() {
-                                @Override
-                                public Object doInBackground() throws Throwable {
-                                    copyFileToDownloadsDir(file);
-                                    return null;
-                                }
-
-                                @Override
-                                public void onSuccess(Object result) {
-
-                                }
-                            });
-
                         }
                     });
-
         } catch (Throwable throwable) {
             LogUtils.w(throwable);
             ToastUtils.showLong(throwable.getMessage());
         }
+    }
 
+    private void startDownload0(String dir,String fileName, String url1) {
+        new DownloadImplByFileDownloaderLib()
+                .download(url1, dir, fileName, null, new DownloadCallback() {
+                    @Override
+                    public void onStart(String url) {
 
+                    }
+
+                    @Override
+                    public void onProgress(float progress, long total) {
+
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        DownloadCallback.super.onError(msg);
+                        ToastUtils.showShort("文件下载失败: \n" + msg);
+                    }
+
+                    @Override
+                    public void onSuccess(File file) {
+                        ///storage/emulated/0/Android/data/com.hss01248.basewebviewdemo
+                        // /files/Download/胆子真大，竟然选择在山沟里修房子，不怕泥石流吗-今日头条.mp4
+                        LogUtils.d("文件路径: " + file.getAbsolutePath());
+                        //ToastUtils.showShort("文件下载成功: \n" + file.getAbsolutePath());
+                        //然后保存到mediastore:
+                        if(file.getAbsolutePath().startsWith(
+                                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath())){
+                            ToastUtils.showLong("文件下载到download文件夹:"+ file.getAbsolutePath());
+                            return;
+                        }
+                        ThreadUtils.executeByIo(new ThreadUtils.SimpleTask<Object>() {
+                            @Override
+                            public Object doInBackground() throws Throwable {
+                                copyFileToDownloadsDir(file);
+                                return null;
+                            }
+
+                            @Override
+                            public void onSuccess(Object result) {
+
+                            }
+                        });
+
+                    }
+                });
     }
 
     private void copyFileToDownloadsDir(File file) {

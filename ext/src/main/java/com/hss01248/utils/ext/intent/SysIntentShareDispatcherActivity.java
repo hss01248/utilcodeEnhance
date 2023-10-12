@@ -1,5 +1,6 @@
 package com.hss01248.utils.ext.intent;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -7,11 +8,13 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ReflectUtils;
+import com.blankj.utilcode.util.SPStaticUtils;
 import com.hss.utils.enhance.UrlEncodeUtil;
 
 /**
@@ -63,14 +66,15 @@ public class SysIntentShareDispatcherActivity extends AppCompatActivity {
         }else if(text.contains("https://www.iesdouyin.com/")){
             url = text.substring(text.indexOf("https://www.iesdouyin.com/"));
         }
-
-
         try {
             ReflectUtils.reflect("com.hss01248.basewebview.BaseWebviewActivity")
-                    .method("start", ActivityUtils.getTopActivity(),url);
+                    .method("start", ActivityUtils.getTopActivity(), url);
         }catch (Throwable throwable){
             LogUtils.w(throwable);
         }
+
+
+
 
     }
 

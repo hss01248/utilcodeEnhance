@@ -2,6 +2,8 @@ package com.hss01248.iwidget.singlechoose;
 
 import android.view.View;
 
+import androidx.annotation.Nullable;
+
 /**
  * @Despciption todo
  * @Author hss
@@ -10,9 +12,20 @@ import android.view.View;
  */
 public interface ISingleChooseDialog {
 
-    void showAtBottom(CharSequence title, CharSequence[] datas, SingleChooseDialogListener listener);
+   default void showAtBottom(CharSequence title, CharSequence[] datas, SingleChooseDialogListener listener){
+       showAtBottom(title,null,datas,listener);
+   }
 
-    void showInCenter(CharSequence title, CharSequence[] datas, SingleChooseDialogListener listener);
+   default void showInCenter(CharSequence title, CharSequence[] datas, SingleChooseDialogListener listener){
+       showInCenter(title,null,datas,listener);
+   }
 
     void showInPopMenu(View view,int checkedIndex, CharSequence[] datas, SingleChooseDialogListener listener);
+
+
+    void showAtBottom(CharSequence title, @Nullable  String msg, CharSequence[] datas, SingleChooseDialogListener listener);
+
+    void showInCenter(CharSequence title, @Nullable  String msg,CharSequence[] datas, SingleChooseDialogListener listener);
+
+
 }
