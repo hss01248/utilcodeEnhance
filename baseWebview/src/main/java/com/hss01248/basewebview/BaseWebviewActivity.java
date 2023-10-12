@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.KeyboardUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.hss.utils.enhance.MyKeyboardUtil;
@@ -27,18 +28,28 @@ public class BaseWebviewActivity extends AppCompatActivity implements ISetWebvie
         activity.startActivity(intent);
     }
 
+    public static void start( Activity activity,String url,String title){
+        Intent intent = new Intent(activity, BaseWebviewActivity.class);
+        intent.putExtra("url",url);
+        intent.putExtra("title",title);
+        activity.startActivity(intent);
+    }
+
     protected String url  = "";
+    protected String title  = "";
    protected BaseQuickWebview quickWebview;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         url = getIntent().getStringExtra("url");
+        title = getIntent().getStringExtra("title");
         if(!getIntent().getBooleanExtra(ISetWebviewHolder.setWebviewHolderByOutSide,false)){
             setContentView(R.layout.default_webview_container);
            quickWebview = findViewById(R.id.root_ll);
 
             initWebview2(quickWebview);
+            quickWebview.setTitleFromIntent(title);
            quickWebview.loadUrl(url);
 
         }

@@ -63,15 +63,18 @@ public class BaseApp extends MultiDexApplication {
                                     if(url.equals(SPStaticUtils.getString("video_cli"))){
                                         return;
                                     }
-                                    String finalUrl = url;
-                                    new AlertDialog.Builder(ActivityUtils.getTopActivity())
+                                    String finalUrl = url.substring(url.indexOf("https://v.douyin.com/"));
+                                    String title = url.substring(0,url.indexOf("https://v.douyin.com/"));
+
+
+                                    AlertDialog dialog =   new AlertDialog.Builder(ActivityUtils.getTopActivity())
                                             .setTitle("视频自动下载")
                                             .setMessage("检测到有头条/抖音拷贝的链接,是否自动下载?")
                                             .setPositiveButton("下载", new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which) {
                                                     try {
-                                                        BaseWebviewActivity.start(activity,finalUrl.substring(finalUrl.indexOf("https://v.douyin.com/")));
+                                                        BaseWebviewActivity.start(activity,url,title);
                                                         SPStaticUtils.put("video_cli",finalUrl);
                                                     }catch (Throwable throwable){
                                                         LogUtils.w(throwable);
@@ -82,7 +85,8 @@ public class BaseApp extends MultiDexApplication {
                                                 public void onClick(DialogInterface dialog, int which) {
 
                                                 }
-                                            }).create().show();
+                                            }).create();
+                                    dialog.show();
 
 
 

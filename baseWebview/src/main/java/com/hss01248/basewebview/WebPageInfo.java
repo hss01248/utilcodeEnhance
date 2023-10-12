@@ -5,7 +5,7 @@ import java.util.List;
 
 public class WebPageInfo {
 
-    public String title;
+    public String title = "";
     public String url;
     public String htmlSource;
     public List<String> images = new ArrayList<>();

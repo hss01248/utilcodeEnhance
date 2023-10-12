@@ -95,6 +95,11 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
 
     String currentUrl = "";
 
+    public void setTitleFromIntent(String titleFromIntent) {
+        this.titleFromIntent = titleFromIntent;
+    }
+
+    String titleFromIntent  = "";
     public AgentWeb getAgentWeb() {
         return mAgentWeb;
     }
@@ -644,6 +649,8 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
         debugger.setWebviewDebug(webView);
     }
 
+    AlertDialog dialog;
+
     private void checkIfTouTiao2(String value, String url) {
         if (!url.startsWith("https://m.toutiao.com/")
                 && !url.startsWith("https://www.iesdouyin.com/")
@@ -673,60 +680,90 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
             }
 
             ToastUtils.showShort("检测到视频url,开始下载: \n" + url1);
-
             String fileName = info.title + ".mp4";
+            if("今日头条-今日头条".equals(info.title) || info.title.startsWith("http")){
+                if(!TextUtils.isEmpty(titleFromIntent)){
+                    fileName = titleFromIntent +".mp4";
+                }
+
+            }
+
             //XXPermissions.with()
+            int[] position = new int[]{0};
             String finalUrl = url1;
-            new SingleChooseDialogImpl().showInCenter("检测到视频下载,是下载到普通文件夹还是隐藏文件夹?",
-                    new String[]{"普通文件夹", "隐藏文件夹"},
-                    new SingleChooseDialogListener() {
+            String finalFileName = fileName;
+            if(dialog != null && dialog.isShowing()){
+                dialog.dismiss();
+            }
+             dialog =  new AlertDialog.Builder(getContext())
+                    .setTitle("检测到视频下载,是下载到普通文件夹还是隐藏文件夹?")
+                    //.setMessage("检测到视频下载,是下载到普通文件夹还是隐藏文件夹?")
+                    .setSingleChoiceItems(new String[]{"普通文件夹", "隐藏文件夹"}, position[0], new DialogInterface.OnClickListener() {
                         @Override
-                        public void onItemClicked(int position, CharSequence text) {
-                            if(position ==0){
-                                startDownload0(null,fileName, finalUrl);
-                            }else if(position ==1){
-                                String permission = Permission.MANAGE_EXTERNAL_STORAGE;
-                                if(Build.VERSION.SDK_INT < Build.VERSION_CODES.R){
-                                    //Android 11（API 级别 30）
-                                    permission = Permission.WRITE_EXTERNAL_STORAGE;
-
-                                    //请注意，在搭载 Android 10（API 级别 29）或更高版本的设备上，
-                                    // 您的应用可以提供明确定义的媒体集合，例如 MediaStore.Downloads，而无需请求任何存储相关权限
-                                }
-                                XXPermissions.with(webView.getContext())
-                                        .permission(permission)
-                                        .request(new OnPermissionCallback() {
-                                            @Override
-                                            public void onGranted(List<String> permissions, boolean all) {
-                                                File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath()
-                                                        +"/"+AppUtils.getAppName()+"/.thefolder/");
-                                                if(!dir.exists()){
-                                                    dir.mkdirs();
-                                                }
-                                                File file = new File(dir,".nomedia");
-                                                if(!file.exists()){
-                                                    try {
-                                                        file.createNewFile();
-                                                    } catch (IOException e) {
-                                                        LogUtils.w(e);
-                                                    }
-                                                }
-                                                LogUtils.d("path: "+dir.getAbsolutePath());
-                                                startDownload0(dir.getAbsolutePath(),fileName, finalUrl);
-                                            }
-
-                                            @Override
-                                            public void onDenied(List<String> permissions, boolean never) {
-                                                OnPermissionCallback.super.onDenied(permissions, never);
-                                                ToastUtils.showLong("需要写存储权限才能创建隐藏文件夹");
-                                            }
-                                        });
-                            }
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            position[0] = which;
+                            startDownload00(which, finalFileName, finalUrl);
                         }
-                    });
+                    }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).setPositiveButton("开始下载", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startDownload00(position[0], finalFileName, finalUrl);
+                        }
+                    }).create();
+            dialog.show();
+
         } catch (Throwable throwable) {
             LogUtils.w(throwable);
             ToastUtils.showLong(throwable.getMessage());
+        }
+    }
+
+    private void startDownload00(int which, String finalFileName, String finalUrl) {
+        if(which ==0){
+            startDownload0(null, finalFileName, finalUrl);
+        }else if(which ==1){
+            String permission = Permission.MANAGE_EXTERNAL_STORAGE;
+            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.R){
+                //Android 11（API 级别 30）
+                permission = Permission.WRITE_EXTERNAL_STORAGE;
+
+                //请注意，在搭载 Android 10（API 级别 29）或更高版本的设备上，
+                // 您的应用可以提供明确定义的媒体集合，例如 MediaStore.Downloads，而无需请求任何存储相关权限
+            }
+            XXPermissions.with(webView.getContext())
+                    .permission(permission)
+                    .request(new OnPermissionCallback() {
+                        @Override
+                        public void onGranted(List<String> permissions, boolean all) {
+                            File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath()
+                                    +"/"+AppUtils.getAppName()+"/.thefolder/");
+                            if(!dir.exists()){
+                                dir.mkdirs();
+                            }
+                            File file = new File(dir,".nomedia");
+                            if(!file.exists()){
+                                try {
+                                    file.createNewFile();
+                                } catch (IOException e) {
+                                    LogUtils.w(e);
+                                }
+                            }
+                            LogUtils.d("path: "+dir.getAbsolutePath());
+                            startDownload0(dir.getAbsolutePath(), finalFileName, finalUrl);
+                        }
+
+                        @Override
+                        public void onDenied(List<String> permissions, boolean never) {
+                            OnPermissionCallback.super.onDenied(permissions, never);
+                            ToastUtils.showLong("需要写存储权限才能创建隐藏文件夹");
+                        }
+                    });
         }
     }
 
