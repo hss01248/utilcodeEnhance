@@ -100,6 +100,18 @@
             android:text="web测试页面"
             android:onClick="toTest"
             android:layout_height="wrap_content"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:textAllCaps="false"
+            android:text="sentry_msg"
+            android:onClick="sentry_msg"
+            android:layout_height="wrap_content"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:textAllCaps="false"
+            android:text="sentry_ex"
+            android:onClick="sentry_ex"
+            android:layout_height="wrap_content"/>
 
 
     </com.google.android.flexbox.FlexboxLayout>
