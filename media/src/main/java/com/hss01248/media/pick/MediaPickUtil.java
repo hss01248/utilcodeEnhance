@@ -130,7 +130,7 @@ public class MediaPickUtil {
         intent.addCategory(Intent.CATEGORY_DEFAULT);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-        StartActivityUtil.goOutAppForResult(ActivityUtils.getTopActivity(), intent, new ActivityResultListener() {
+        StartActivityUtil.startActivity(ActivityUtils.getTopActivity(),null, intent,true, new TheActivityListener<Activity>(){
             @Override
             public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
                 if (resultCode == Activity.RESULT_OK) {
