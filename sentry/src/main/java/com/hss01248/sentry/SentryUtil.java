@@ -25,7 +25,6 @@ import io.sentry.SentryOptions;
 import io.sentry.android.core.SentryAndroid;
 import io.sentry.protocol.Device;
 import io.sentry.protocol.Message;
-import io.sentry.protocol.SdkVersion;
 import io.sentry.protocol.User;
 
 /**
@@ -296,7 +295,14 @@ public class SentryUtil {
             }
         }*/
 
-        Sentry.captureEvent(buildEventBuilder());
+        try{
+            Sentry.captureEvent(buildEventBuilder());
+        }catch (Throwable throwable){
+            if(isDebug){
+                throwable.printStackTrace();
+            }
+        }
+
     }
 
 

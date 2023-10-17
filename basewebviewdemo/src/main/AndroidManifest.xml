@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.hss01248.basewebviewdemo">
 
     <uses-feature
@@ -24,8 +25,8 @@
         android:theme="@style/Theme.ImageLoader">
 
         <!-- Required: set your sentry.io project identifier (DSN) -->
-        <meta-data android:name="io.sentry.dsn" android:value="https://fdf2ff75b2b4ea68c09561eb64612b25@o4505345937768448.ingest.sentry.io/4506057477849088" />
-
+        <meta-data tools:replace="android:value" android:name="io.sentry.dsn" android:value="https://fdf2ff75b2b4ea68c09561eb64612b25@o4505345937768448.ingest.sentry.io/4506057477849088" />
+        <meta-data android:name="io.sentry.debug" android:value="true" />
         <!-- enable automatic breadcrumbs for user interactions (clicks, swipes, scrolls) -->
         <meta-data android:name="io.sentry.traces.user-interaction.enable" android:value="true" />
         <!-- enable screenshot for crashes -->

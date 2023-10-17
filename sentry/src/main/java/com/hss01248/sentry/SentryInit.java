@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.startup.Initializer;
 
 import com.blankj.utilcode.util.AppUtils;
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
 
 
@@ -29,7 +30,12 @@ public class SentryInit implements Initializer<String> {
         }else {
             application = Utils.getApp();
         }
-        SentryUtil.init(application, AppUtils.isAppDebug());
+        try{
+            SentryUtil.init(application, AppUtils.isAppDebug());
+        }catch (Throwable throwable){
+            LogUtils.w(throwable);
+        }
+
         return "sentry init";
     }
 
