@@ -67,12 +67,12 @@ public class BaseApp extends MultiDexApplication {
                                         return;
 
                                     }
-                                    if(url.equals(SPStaticUtils.getString("video_cli"))){
-                                        return;
-                                    }
+
                                     String finalUrl = url.substring(url.indexOf("https://v.douyin.com/"));
                                     String title = url.substring(0,url.indexOf("https://v.douyin.com/"));
-
+                                    if(finalUrl.equals(SPStaticUtils.getString("video_cli"))){
+                                        return;
+                                    }
 
                                     AlertDialog dialog =   new AlertDialog.Builder(ActivityUtils.getTopActivity())
                                             .setTitle("视频自动下载")
