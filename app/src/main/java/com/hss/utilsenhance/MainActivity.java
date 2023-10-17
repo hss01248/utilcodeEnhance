@@ -1,7 +1,9 @@
 package com.hss.utilsenhance;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.ClipData;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,6 +26,9 @@ import com.hss.utils.enhance.HomeMaintaner;
 import com.hss.utils.enhance.intent.ShareUtils;
 import com.hss.utils.enhance.UrlEncodeUtil;
 import com.hss.utils.enhance.intent.SysIntentUtil;
+import com.hss01248.activityresult.ActivityResultListener;
+import com.hss01248.activityresult.StartActivityUtil;
+import com.hss01248.activityresult.TheActivityListener;
 import com.hss01248.basewebview.BaseWebviewActivity;
 import com.hss01248.iwidget.BaseDialogListener;
 import com.hss01248.iwidget.msg.AlertDialogImplByDialogUtil;
@@ -278,20 +283,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showMata(Uri path0) {
-        String path = path0.toString();
-        LogUtils.d(path);
-        String desc = path+"\n";
+        final String[] path = {path0.toString()};
+        LogUtils.d(path[0]);
+        String desc = path[0] +"\n";
 
         Map map0 = new LinkedHashMap();
         Map map = ContentUriUtil.getInfos(path0);
         map0.put("uriInfo",map);
 
-        if(!path.startsWith("/")){
-            desc = URLDecoder.decode(path);
+        if(!path[0].startsWith("/")){
+            desc = URLDecoder.decode(path[0]);
         }else {
             try {
                 //todo MetaDataUtil兼容fileprovider的uri,此时至少有读的权限
-                Map map1 = MetaDataUtil.getMetaData(path);
+                Map map1 = MetaDataUtil.getMetaData(path[0]);
                 map0.put("meta",map1);
             }catch (Throwable throwable){
                 throwable.printStackTrace();
@@ -316,7 +321,10 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton("预览", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        SysIntentUtil.openFile(path);
+                        if(map.containsKey("_data")){
+                            path[0] = map.get("_data")+"";
+                        }
+                        SysIntentUtil.openFile(path[0]);
                     }
                 }).setNegativeButton("cancel",null)
                 .create().show();
@@ -766,6 +774,62 @@ public class MainActivity extends AppCompatActivity {
                     public void onCancel(boolean fromBackPressed, boolean fromOutsideClick, boolean fromCancelButton) {
                         SingleChooseDialogListener.super.onCancel(fromBackPressed, fromOutsideClick, fromCancelButton);
                         //callback.onError(StringUtils.getString(com.hss01248.media.R.string.meida_pick_canceled));
+                    }
+                });
+    }
+
+    public void pickImage13(View view) {
+        MyPermissions.requestByMostEffort(false, true, new PermissionUtils.FullCallback() {
+            @Override
+            public void onGranted(@NonNull List<String> granted) {
+                doPick13();
+            }
+
+            @Override
+            public void onDenied(@NonNull List<String> deniedForever, @NonNull List<String> denied) {
+
+            }
+        },Manifest.permission.READ_EXTERNAL_STORAGE);
+
+
+
+    }
+
+    private void doPick13() {
+        final int maxNumPhotosAndVideos = 3;
+
+        Intent intent = new Intent(MediaStore.ACTION_PICK_IMAGES);
+        intent.setType("image/*");
+        intent.putExtra(MediaStore.EXTRA_PICK_IMAGES_MAX, maxNumPhotosAndVideos);
+        StartActivityUtil.startActivity(this,
+                null,
+                intent,
+                true,
+                new TheActivityListener<Activity>(){
+                    @Override
+                    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+                        super.onActivityResult(requestCode, resultCode, data);
+                        //Intent { flg=0x41 ClipData.Item { U:content://media/picker/0/com.android.providers.media.photopicker/media/1000020960} }
+                        //ClipData { image/* video/* 2 items: {U(content)} {U(content)} }
+                        try {
+                            String path = "";
+                            if(data !=null && data.getData() != null){
+                                path = ContentUriUtil.getRealPath(data.getData());
+                            }
+                            LogUtils.w(resultCode,data,path,data.getExtras(),data.getData(),data.getClipData());
+                            ClipData clipData = data.getClipData();
+                            int itemCount = clipData.getItemCount();
+                            for (int i = 0; i < itemCount; i++) {
+                                ClipData.Item itemAt = clipData.getItemAt(i);
+                                Uri uri = itemAt.getUri();
+                                LogUtils.i(uri,ContentUriUtil.getRealPath(uri));
+                                //{_display_name=1000020960.jpg,
+                                // _data=/sdcard/.transforms/synthetic/picker/0/com.android.providers.media.photopicker/media/1000020960.jpg,
+                                // mime_type=image/jpeg, datetaken=996139080, _size=1171426, duration=0}
+                            }
+                        }catch (Throwable throwable){
+                            throwable.printStackTrace();
+                        }
                     }
                 });
     }

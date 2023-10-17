@@ -3,12 +3,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "com.hss01248.basewebviewdemo"
         minSdkVersion 19
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionCode 1002
         versionName "1.0.02"
         multiDexEnabled true

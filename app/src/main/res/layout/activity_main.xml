@@ -91,6 +91,11 @@
                 android:layout_height="wrap_content"/>
             <Button
                 android:layout_width="wrap_content"
+                android:onClick="pickImage13"
+                android:text="选择图片-android13多选"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:layout_width="wrap_content"
                 android:onClick="pickAudio"
                 android:text="选择音频"
                 android:layout_height="wrap_content"/>
