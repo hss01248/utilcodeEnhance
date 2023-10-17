@@ -140,19 +140,14 @@ public class WebConfigger {
             }
         }*/
 
-
-
-
-
-
-
         mWebSettings.setAllowFileAccess(true);
         mWebSettings.setSaveFormData(true);
         mWebSettings.setDomStorageEnabled(true);
         mWebSettings.setDatabaseEnabled(true);
-        mWebSettings.setAppCacheEnabled(true);
+        //setAppCacheEnabled --> android33没有这个api了
+        /*mWebSettings.setAppCacheEnabled(true);
         String appCachePath = webView.getContext().getCacheDir().getAbsolutePath();
-        mWebSettings.setAppCachePath(appCachePath);
+        mWebSettings.setAppCachePath(appCachePath);*/
         //html中的_bank标签就是新建窗口打开，有时会打不开，需要加以下
         //然后 复写 WebChromeClient的onCreateWindow方法
 

@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 33
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 30
+        targetSdkVersion 33
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -44,16 +44,16 @@ dependencies {
 
     //api 'com.github.hss01248:PageStateManager:3.0.5'
     api "androidx.lifecycle:lifecycle-common-java8:2.1.0"
-    implementation "com.github.hss01248.StartActivityResult:activityresult:1.1.6"
+    implementation "com.github.hss01248.StartActivityResult:activityresult:1.1.7"
     api 'com.github.skyNet2017:webviewdebug:1.2.2-from117'
     //api 'com.github.getActivity:TitleBar:9.2'
     api 'com.github.hss01248:UI:0.0.1'
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     api group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
-    implementation "com.github.hss01248.HttpUtil2:openuri:3.1.2"
+    implementation "com.github.hss01248.HttpUtil2:openuri:3.1.4"
     //api 'org.jsoup:jsoup:1.11.2'
     api 'com.blankj:utilcodex:1.30.6'
-    api "com.github.hss01248.MyPermission:location:2.2.9"
+    api "com.github.hss01248.MyPermission:location:2.3.3"
     api project(path: ':media')
     api project(path: ':qr-scan')
     api project(path: ':iwidget')

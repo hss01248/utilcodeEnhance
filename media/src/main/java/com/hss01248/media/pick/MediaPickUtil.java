@@ -29,6 +29,7 @@ import com.blankj.utilcode.util.Utils;
 import com.hss.utils.enhance.api.MyCommonCallback;
 import com.hss01248.activityresult.ActivityResultListener;
 import com.hss01248.activityresult.StartActivityUtil;
+import com.hss01248.activityresult.TheActivityListener;
 import com.hss01248.media.uri.ContentUriUtil;
 import com.hss01248.permission.MyPermissions;
 
@@ -181,6 +182,21 @@ public class MediaPickUtil {
      */
     public static void pickOne( MyCommonCallback<Uri> callback,String... mimeTypes) {
         String mimeType = MimeTypeUtil.buildMimeTypeWithDot(mimeTypes);
+        LogUtils.i("request mimetype: "+mimeType);
+        String mime = mimeTypes[0];
+        String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ){
+            if(TextUtils.isEmpty(mimeType)){
+
+            }else if(mime.startsWith("image")){
+                permission = Manifest.permission.READ_MEDIA_IMAGES;
+            }else if(mime.startsWith("video")){
+                permission = Manifest.permission.READ_MEDIA_VIDEO;
+            }else if(mime.startsWith("audio")){
+                //permission = Manifest.permission.READ_MEDIA_AUDIO;
+                //TMD 设置页面根本没有对应的权限
+            }
+        }
         MyPermissions.requestByMostEffort(false, true,
                 new PermissionUtils.FullCallback() {
                     @Override
@@ -192,7 +208,7 @@ public class MediaPickUtil {
                     public void onDenied(@NonNull List<String> deniedForever, @NonNull List<String> denied) {
                         callback.onError("permission", "[read external storage] permission denied", null);
                     }
-                }, Manifest.permission.READ_EXTERNAL_STORAGE);
+                }, permission);
 
     }
 
@@ -239,7 +255,7 @@ public class MediaPickUtil {
         LogUtils.d(intent);
 
 
-        StartActivityUtil.goOutAppForResult(ActivityUtils.getTopActivity(), intent, new ActivityResultListener() {
+        StartActivityUtil.startActivity(ActivityUtils.getTopActivity(),null, intent,true, new TheActivityListener<Activity>() {
             @Override
             public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
                 LogUtils.i(data);
