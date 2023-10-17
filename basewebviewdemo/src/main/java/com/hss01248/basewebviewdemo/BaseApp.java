@@ -83,6 +83,7 @@ public class BaseApp extends MultiDexApplication {
                                                     try {
                                                         BaseWebviewActivity.start(activity,url,title);
                                                         SPStaticUtils.put("video_cli",finalUrl);
+                                                        activity.finish();
                                                     }catch (Throwable throwable){
                                                         LogUtils.w(throwable);
                                                     }

@@ -67,12 +67,16 @@ public class SysIntentShareDispatcherActivity extends AppCompatActivity {
             title = text.substring(0,text.indexOf("https://m.toutiao.com/"));
         }else if(text.contains("https://www.iesdouyin.com/")){
             url = text.substring(text.indexOf("https://www.iesdouyin.com/"));
-            title = text.substring(0,text.indexOf("https://m.toutiao.com/"));
+            title = text.substring(0,text.indexOf("https://www.iesdouyin.com/"));
+        }else if(text.contains("https://v.douyin.com/")){
+            url = text.substring(text.indexOf("https://v.douyin.com/"));
+            title = text.substring(0,text.indexOf("https://v.douyin.com/"));
         }
 
         try {
             ReflectUtils.reflect("com.hss01248.basewebview.BaseWebviewActivity")
                     .method("start", ActivityUtils.getTopActivity(), url,title);
+            finish();
         }catch (Throwable throwable){
             LogUtils.w(throwable);
         }

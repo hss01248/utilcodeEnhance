@@ -2,6 +2,7 @@ package com.hss01248.basewebview;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -347,8 +348,20 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
         if (url.startsWith("http")) {
             go(url);
         } else {
+            if(url.contains("https://")){
+                url = url.substring(url.indexOf("https://"));
+                go(url);
+                return;
+            }else if(url.contains("http://")){
+                url = url.substring(url.indexOf("http://"));
+                go(url);
+                return;
+            }
             //调用百度/谷歌搜索
-            int anInt = SPStaticUtils.getInt(WebSearchViewHolder.KEY_ENGIN);
+            int anInt = SPStaticUtils.getInt(WebSearchViewHolder.KEY_ENGIN,0);
+            if(anInt <0 || anInt >2){
+                anInt = 0;
+            }
             String[] arr = {
                     "https://www.baidu.com/s?wd=" + url,
                     "https://www.google.com/search?q=" + url,
@@ -679,7 +692,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                 return;
             }
 
-            ToastUtils.showShort("检测到视频url,开始下载: \n" + url1);
+
             String fileName = info.title + ".mp4";
             if("今日头条-今日头条".equals(info.title) || info.title.startsWith("http")){
                 if(!TextUtils.isEmpty(titleFromIntent)){
@@ -768,16 +781,22 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
     }
 
     private void startDownload0(String dir,String fileName, String url1) {
+        ToastUtils.showShort("检测到视频url,开始下载: \n" + fileName);
+        ProgressDialog dialog = new ProgressDialog(getContext());
+        dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        dialog.setTitle("下载文件: "+fileName);
+        dialog.setCanceledOnTouchOutside(false);
         new DownloadImplByFileDownloaderLib()
                 .download(url1, dir, fileName, null, new DownloadCallback() {
                     @Override
                     public void onStart(String url) {
-
+                        dialog.show();
                     }
 
                     @Override
                     public void onProgress(float progress, long total) {
-
+                        dialog.setMax((int) total);
+                        dialog.setProgress((int) (progress*total));
                     }
 
                     @Override
@@ -788,6 +807,12 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
 
                     @Override
                     public void onSuccess(File file) {
+                        try {
+                            dialog.dismiss();
+                        }catch (Throwable throwable){
+                            throwable.printStackTrace();
+                        }
+
                         ///storage/emulated/0/Android/data/com.hss01248.basewebviewdemo
                         // /files/Download/胆子真大，竟然选择在山沟里修房子，不怕泥石流吗-今日头条.mp4
                         LogUtils.d("文件路径: " + file.getAbsolutePath());
@@ -795,7 +820,8 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                         //然后保存到mediastore:
                         if(file.getAbsolutePath().startsWith(
                                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath())){
-                            ToastUtils.showLong("文件下载到download文件夹:"+ file.getAbsolutePath());
+                            ToastUtils.showShort("文件下载到download文件夹:"+ file.getAbsolutePath());
+                            doFinish();
                             return;
                         }
                         ThreadUtils.executeByIo(new ThreadUtils.SimpleTask<Object>() {
@@ -807,12 +833,21 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
 
                             @Override
                             public void onSuccess(Object result) {
-
+                                doFinish();
                             }
                         });
 
                     }
                 });
+    }
+
+    private void doFinish() {
+        ThreadUtils.getMainHandler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ActivityUtils.getTopActivity().finish();
+            }
+        },2000);
     }
 
     private void copyFileToDownloadsDir(File file) {
