@@ -47,6 +47,7 @@ import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ThreadUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
+import com.bumptech.glide.load.data.mediastore.MediaStoreUtil;
 import com.hjq.permissions.OnPermissionCallback;
 import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
@@ -67,6 +68,7 @@ import com.hss01248.iwidget.msg.AlertDialogImplByDialogUtil;
 import com.hss01248.iwidget.singlechoose.ISingleChooseItem;
 import com.hss01248.iwidget.singlechoose.SingleChooseDialogImpl;
 import com.hss01248.iwidget.singlechoose.SingleChooseDialogListener;
+import com.hss01248.media.pick.MediaStoreRefresher;
 import com.hss01248.viewstate.StatefulLayout;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.AgentWebUIControllerImplBase;
@@ -821,6 +823,9 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                         if(file.getAbsolutePath().startsWith(
                                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath())){
                             ToastUtils.showShort("文件下载到download文件夹:"+ file.getAbsolutePath());
+                            if(!file.getAbsolutePath().contains(".thefolder")){
+                                MediaStoreRefresher.refreshMediaCenter(getContext().getApplicationContext(),file.getAbsolutePath());
+                            }
                             doFinish();
                             return;
                         }
@@ -847,7 +852,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
             public void run() {
                 ActivityUtils.getTopActivity().finish();
             }
-        },2000);
+        },1500);
     }
 
     private void copyFileToDownloadsDir(File file) {

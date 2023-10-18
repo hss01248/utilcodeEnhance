@@ -2,6 +2,13 @@ plugins {
     id 'com.android.application'
 }
 
+println("projectDir: "+projectDir) // /Users/hss/github/UtilsEnhance/basewebviewdemo
+
+println("rootDir: "+project.rootDir.toString())   // /Users/hss/github/UtilsEnhance
+Properties props = new Properties()
+props.load(new FileInputStream(file(project.rootDir.toString() +"/local.properties")))
+println(props.toMapString())
+
 android {
     compileSdkVersion 33
 
@@ -9,17 +16,35 @@ android {
         applicationId "com.hss01248.basewebviewdemo"
         minSdkVersion 19
         targetSdkVersion 33
-        versionCode 1002
-        versionName "1.0.02"
+        versionCode 1003
+        versionName "1.0.03"
         multiDexEnabled true
         ndk {
             abiFilters "arm64-v8a" //"armeabi-v7a", "x86"//, "x86", "x86_64"
         }
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs {
+        debug{
+
+        }
+        release {
+            storeFile file(props['keystore.relPath'])
+            storePassword props['keystore.password']
+            keyAlias props['keystore.alias']
+            keyPassword props['keystore.password']
+        }
+    }
 
     buildTypes {
+        debug{
+            signingConfig signingConfigs.release
+        }
         release {
+            ndk {
+                abiFilters  "arm64-v8a"
+            }
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
