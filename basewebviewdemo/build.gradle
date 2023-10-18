@@ -32,7 +32,7 @@ android {
             storeFile file(props['keystore.relPath'])
             storePassword props['keystore.password']
             keyAlias props['keystore.alias']
-            keyPassword props['keystore.password']
+            keyPassword props['keystore.kpassword']
         }
     }
 

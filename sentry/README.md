@@ -120,3 +120,9 @@ https://sentry.io
 ![image-20231017112350460](https://cdn.jsdelivr.net/gh/shuiniuhss/myimages@main/imagemac3/image-20231017112350460.png)
 
 ![image-20231017112413484](https://cdn.jsdelivr.net/gh/shuiniuhss/myimages@main/imagemac3/image-20231017112413484.png)
+
+
+
+# 初始化耗时优化:
+
+com.hss01248.sentry.SentryUtil.init()   cost(ms)====>10450

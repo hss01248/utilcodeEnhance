@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.os.Build;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -11,6 +13,7 @@ import androidx.annotation.Nullable;
 
 import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.NetworkUtils;
+import com.blankj.utilcode.util.ThreadUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -178,8 +181,13 @@ public class SentryUtil {
      * sentry上报初始化
      * @param applicationContext Application上下文
      */
+    @Deprecated
     public static void init(Application applicationContext,boolean debug) {
         isDebug = debug;
+
+        Looper.prepare();
+        Handler handler = new Handler(Looper.myLooper());
+
         SentryAndroid.init(applicationContext, options -> {
             //options.setDsn(dsn);
             options.setAnrEnabled(true);
@@ -218,6 +226,7 @@ public class SentryUtil {
                             event.getBreadcrumbs().clear();
                         }
                     }
+
                     event.setTag("manufacturer",Build.MANUFACTURER);
                     event.setTag("brand",Build.BRAND);
                     event.setTag("model",Build.MODEL);
@@ -264,6 +273,8 @@ public class SentryUtil {
                 }
             });
         });
+
+        Looper.loop();
     }
 
     @SuppressLint("MissingPermission")
@@ -321,8 +332,7 @@ public class SentryUtil {
             eventBuilder.setTag("isBusiness", "true");
             eventBuilder.setLevel(level(level));
         }
-
-
+        buildCommon(eventBuilder);
 
         //额外的tag,不能直接设,会覆盖globaltag
         if (tags != null && !tags.isEmpty()) {
@@ -340,6 +350,36 @@ public class SentryUtil {
         }
         eventBuilder.setEnvironment(isDebug ? ENV_TEST:ENV_RELEASE);
         return eventBuilder;
+    }
+
+    private void buildCommon(SentryEvent eventBuilder) {
+        eventBuilder.setTag("manufacturer",Build.MANUFACTURER);
+        eventBuilder.setTag("brand",Build.BRAND);
+        eventBuilder.setTag("model",Build.MODEL);
+        eventBuilder.setTag("isBackground", !AppUtils.isAppForeground()+"");
+        eventBuilder.setTag("network", network());
+        if(SentryUtil.getIGetInfo() != null){
+            eventBuilder.setTag("topPage", SentryUtil.getIGetInfo().topPageName());
+            boolean unlogin = IGetInfo.UID_NOT_LOGIN.equals(SentryUtil.getIGetInfo().uid())
+                    || "".equals(SentryUtil.getIGetInfo().uid());
+            if(unlogin){
+                eventBuilder.setTag("uid", "unlogin");
+            }else {
+                eventBuilder.setTag("uid", SentryUtil.getIGetInfo().uid());
+            }
+
+            eventBuilder.setModule("pageStack", SentryUtil.getIGetInfo().currentPageStack());
+
+            eventBuilder.setTag("account", SentryUtil.getIGetInfo().account());
+            String uid = SentryUtil.getIGetInfo().uid();
+            if(!IGetInfo.NOT_SET.equals(uid) && !unlogin){
+                User user = new User();
+                user.setId("unlogin");
+                user.setUsername(SentryUtil.getIGetInfo().account());
+                eventBuilder.setUser(user);
+            }
+            eventBuilder.setTag("deviceId", SentryUtil.getIGetInfo().deviceId());
+        }
     }
 
     /**
@@ -375,33 +415,30 @@ public class SentryUtil {
            /* if(ReporterContainer.shouldNotReport(o)){
                 return;
             }*/
-                if (o instanceof SentryEvent) {
-                    Sentry.captureEvent((SentryEvent) o);
-                }  else if(o instanceof String){
-                    Message message = new Message();
-                    message.setMessage((String) o);
-                    SentryEvent event = new SentryEvent();
-                    event.setMessage(message);
-                    event.setEnvironment(isDebug ? ENV_TEST:ENV_RELEASE);
-                    Sentry.captureEvent(event);
-                }else if(o instanceof Throwable){
-                    SentryEvent event = new SentryEvent();
-                    event.setThrowable((Throwable) o);
-                    event.setEnvironment(isDebug ? ENV_TEST:ENV_RELEASE);
-                    Sentry.captureEvent(event);
-                }else {
-                    //打印
-                    if(isDebug){
-                        Log.d("SentryUtil", "sendSentryException: error:"+ o);
-                    }
-
+            if (o instanceof SentryEvent) {
+                Sentry.captureEvent((SentryEvent) o);
+            }  else if(o instanceof String){
+                SentryUtil.create()
+                        .msg((String) o)
+                        .doReport();
+            }else if(o instanceof Throwable){
+                SentryUtil.create()
+                        .exception((Throwable) o)
+                        .doReport();
+            }else {
+                //打印
+                if(isDebug){
+                    Log.d("SentryUtil", "sendSentryException: error:"+ o);
                 }
+
+            }
         }catch (Throwable throwable){
             if(isDebug){
                 throwable.printStackTrace();
             }
 
         }
+
 
     }
 
