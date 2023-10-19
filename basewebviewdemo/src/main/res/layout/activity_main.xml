@@ -15,6 +15,11 @@
         app:justifyContent="space_between"
         app:alignItems="stretch"
         app:alignContent="stretch">
+        <TextView
+            android:text="头条视频自动下载: \n 分享->选择BaseWebviewDemo->自动进入后弹窗选择是普通下载还是下载到隐藏文件夹
+            \n抖音视频下载: \n抖音分享->复制链接->手动打开本app,自动识别到抖音链接,进入web页面后弹窗引导下载\n"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:layout_width="wrap_content"
