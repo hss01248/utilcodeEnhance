@@ -797,6 +797,10 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
 
                     @Override
                     public void onProgress(float progress, long total) {
+                        String msg = String.format("%.2f",progress*total/1024/1024) +"MB/"+String.format("%.2f", total*1.0f/1024/1024)+"MB";
+                        //dialog.setMessage(msg);
+                        dialog.setTitle("下载文件: "+"\n"+msg);
+                        //title最多两行
                         dialog.setMax((int) total);
                         dialog.setProgress((int) (progress*total));
                     }
@@ -852,7 +856,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
             public void run() {
                 ActivityUtils.getTopActivity().finish();
             }
-        },1500);
+        },2000);
     }
 
     private void copyFileToDownloadsDir(File file) {
