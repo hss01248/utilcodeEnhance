@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId "com.hss01248.basewebviewdemo"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 33
         versionCode 1005
         versionName "1.0.05"
@@ -77,4 +77,5 @@ dependencies {
 configurations {
     //com.github.hss01248:DialogUtil
     //all*.exclude group: 'com.github.hss01248', module: 'DialogUtil'
+    all*.exclude group: 'com.github.hss01248.utilcodeEnhance'
 }
