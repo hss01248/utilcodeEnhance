@@ -28,9 +28,9 @@ allprojects {
    // }
 }
 
-task clean(type: Delete) {
+/*task clean(type: Delete) {
     delete rootProject.buildDir
-}
+}*/
 
 def isNoop(){
     for (String s : gradle.startParameter.taskNames) {
