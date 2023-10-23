@@ -75,11 +75,12 @@ public class CommonProgressService extends Service {
 
     public static void updateProgress(int progress,int max,String title,String msg){
         NotificationManager mNotificationManager = (NotificationManager) Utils.getApp().getSystemService(NOTIFICATION_SERVICE);
-        if(progress == max && progress >0){
+        /*if(progress == max && progress >0){
             mNotificationManager.cancel(notify_id);
         }else {
             mNotificationManager.notify(notify_id,getNotification(Utils.getApp(), title, msg,progress,max));
-        }
+        }*/
+        mNotificationManager.notify(notify_id,getNotification(Utils.getApp(), title, msg,progress,max));
 
         //mNotificationManager.getno
     }
