@@ -23,6 +23,7 @@ import com.blankj.utilcode.util.Utils;
 import com.google.gson.GsonBuilder;
 import com.hss.utils.enhance.BarColorUtil;
 import com.hss.utils.enhance.HomeMaintaner;
+import com.hss.utils.enhance.foregroundservice.CommonProgressService;
 import com.hss.utils.enhance.intent.ShareUtils;
 import com.hss.utils.enhance.UrlEncodeUtil;
 import com.hss.utils.enhance.intent.SysIntentUtil;
@@ -832,5 +833,22 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    public void foregroundService(View view) {
+        CommonProgressService.startS("图片上传", "上传进度:", new Runnable() {
+            @Override
+            public void run() {
+                CommonProgressService.doHttpTask();
+            }
+        });
+    }
+
+    public void notify(View view) {
+        CommonProgressService.updateProgress(50,150,"图片上传","上传进度:50/150,剩余100,正在上传:instance of leakcanary.internal.ViewModelClearedWatcher.jpg");
+    }
+
+    public void taskOnly(View view) {
+        CommonProgressService.doHttpTask();
     }
 }

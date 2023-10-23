@@ -3,12 +3,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
     buildToolsVersion "30.0.0"
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
 
@@ -60,6 +60,7 @@ dependencies {
     api "com.github.hss01248.AndoridBus:bus:2.0.5"
 
     api 'androidx.palette:palette:1.0.0'
+    api 'com.github.hss01248.MyPermission:ext:2.3.4'
 
 
 

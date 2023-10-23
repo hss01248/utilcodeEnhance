@@ -245,6 +245,24 @@
                 android:text="扫码获取结果"
                 android:textAllCaps="false"
                 android:layout_height="wrap_content"/>
+            <Button
+                android:text="前台服务开启子线程任务"
+                android:onClick="foregroundService"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:text="无前台服务时开启子线程任务"
+                android:onClick="taskOnly"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:text="测试通知"
+                android:onClick="notify"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
         </com.google.android.flexbox.FlexboxLayout>
         <TextView
             android:layout_margin="10dp"
@@ -284,6 +302,7 @@
                 android:textAllCaps="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+
         </com.google.android.flexbox.FlexboxLayout>
 
 

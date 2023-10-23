@@ -2,7 +2,7 @@ package com.hss.utilsenhance;
 
 import androidx.multidex.MultiDexApplication;
 
-
+import com.blankj.utilcode.util.LogUtils;
 
 
 /**
@@ -17,6 +17,7 @@ public class BaseApp extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
 
+        LogUtils.getConfig().setLogSwitch(true);
         //registerActivityLifecycleCallbacks(new PlayDecorviewActivityLifeycleCallback());
 
     }
