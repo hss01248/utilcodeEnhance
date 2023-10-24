@@ -31,6 +31,7 @@ import com.hss01248.activityresult.ActivityResultListener;
 import com.hss01248.activityresult.StartActivityUtil;
 import com.hss01248.activityresult.TheActivityListener;
 import com.hss01248.basewebview.BaseWebviewActivity;
+import com.hss01248.biometric.BiometricHelper;
 import com.hss01248.iwidget.BaseDialogListener;
 import com.hss01248.iwidget.msg.AlertDialogImplByDialogUtil;
 import com.hss01248.iwidget.msg.AlertDialogImplByMmDialog;
@@ -57,8 +58,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricPrompt;
 
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.View;
 
 import org.devio.takephoto.wrap.TakeOnePhotoListener;
@@ -69,6 +72,8 @@ import java.net.URLDecoder;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.crypto.Cipher;
 
 import io.reactivex.functions.Consumer;
 
@@ -850,5 +855,33 @@ public class MainActivity extends AppCompatActivity {
 
     public void taskOnly(View view) {
         CommonProgressService.doHttpTask();
+    }
+
+    public void biometric(View view) {
+        BiometricHelper.showBiometricDialog(this, new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+                ToastUtils.showLong("onAuthenticationError,"+errorCode+","+errString);
+            }
+
+            @Override
+            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                ToastUtils.showLong("验证成功:"+result.getAuthenticationType());
+                /*Cipher cipher = result.getCryptoObject().getCipher();
+                byte[] encrypted = cipher.doFinal(data.getBytes());
+                byte[] IV = cipher.getIV();
+                String se = Base64.encodeToString(encrypted, Base64.URL_SAFE);
+                String siv = Base64.encodeToString(IV, Base64.URL_SAFE);*/
+
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+                ToastUtils.showLong("onAuthenticationFailed");
+            }
+        });
     }
 }

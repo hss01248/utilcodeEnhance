@@ -47,6 +47,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.2.0'
     implementation 'androidx.navigation:navigation-ui:2.2.0'
     implementation project(path: ':ext')
+    implementation project(path: ':biometric')
     implementation project(path: ':common')
     implementation project(path: ':viewState')
     implementation project(path: ':media')
