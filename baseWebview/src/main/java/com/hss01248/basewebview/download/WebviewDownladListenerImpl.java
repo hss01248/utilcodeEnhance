@@ -115,7 +115,8 @@ public class WebviewDownladListenerImpl implements DownloadListener {
 
 
         if(PermissionUtils.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                || ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) && Environment.isExternalStorageManager())){
+                || ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+                && Environment.isExternalStorageManager())){
             File directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
             File dir = new File(directory, AppUtils.getAppName());
             if(!dir.exists()){

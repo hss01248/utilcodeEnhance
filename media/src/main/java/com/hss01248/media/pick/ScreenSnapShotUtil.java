@@ -156,7 +156,8 @@ public class ScreenSnapShotUtil {
         if(PermissionUtils.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)){
             saveBitmap(bmp, showToast, callback);
         }else {
-            PermissionUtils.permission(PermissionConstants.STORAGE).callback(new PermissionUtils.SimpleCallback() {
+            PermissionUtils.permission(PermissionConstants.STORAGE)
+                    .callback(new PermissionUtils.SimpleCallback() {
                 @Override
                 public void onGranted() {
                     saveBitmap(bmp, showToast, callback);
