@@ -46,7 +46,7 @@ public class CommonProgressService extends Service {
 
 
     static final int notify_id = 199;
-    public  static void startS(String title,String msg,Runnable runnable){
+    public  static void startS(String title,String msg,int notifyId,Runnable runnable){
         MyPermissionsExt.askPermission(ActivityUtils.getTopActivity(),
                 new NotificationPermission(),
                 new IExtPermissionCallback() {
@@ -55,6 +55,7 @@ public class CommonProgressService extends Service {
                         Intent intent = new Intent(ActivityUtils.getTopActivity(), CommonProgressService.class);
                         intent.putExtra("title",title);
                         intent.putExtra("msg",msg);
+                        intent.putExtra("notifyId",notifyId);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             //8.0后才支持
                             ActivityUtils.getTopActivity().startForegroundService(intent);
@@ -73,14 +74,19 @@ public class CommonProgressService extends Service {
 
     }
 
-    public static void updateProgress(int progress,int max,String title,String msg){
+    public static void updateProgress(int progress,int max,String title,String msg,int notifyId){
         NotificationManager mNotificationManager = (NotificationManager) Utils.getApp().getSystemService(NOTIFICATION_SERVICE);
-        /*if(progress == max && progress >0){
-            mNotificationManager.cancel(notify_id);
+        if(notifyId<=0){
+            notifyId = notify_id;
+        }
+        if(progress == max && progress >0){
+        //无法取消
+            //mNotificationManager.cancel(notify_id);
+            mNotificationManager.notify(notifyId,getNotification(Utils.getApp(), title, progress+"/"+max+"(完成)",progress,max));
         }else {
-            mNotificationManager.notify(notify_id,getNotification(Utils.getApp(), title, msg,progress,max));
-        }*/
-        mNotificationManager.notify(notify_id,getNotification(Utils.getApp(), title, msg,progress,max));
+            mNotificationManager.notify(notifyId,getNotification(Utils.getApp(), title, msg,progress,max));
+        }
+
 
         //mNotificationManager.getno
     }
@@ -97,7 +103,11 @@ public class CommonProgressService extends Service {
         //LogUtils.d("onStartCommand: ","------>");
         String title = intent.getStringExtra("title");
         String msg = intent.getStringExtra("msg");
-        startForeground(notify_id, getNotification(ActivityUtils.getTopActivity(), title, msg,-1,100));//创建一个通知，创建通知前记得获取开启通知权限
+        int notifyId = intent.getIntExtra("notifyId",-1);
+        if(notifyId<=0){
+            notifyId = notify_id;
+        }
+        startForeground(notifyId, getNotification(ActivityUtils.getTopActivity(), title, msg,-1,100));//创建一个通知，创建通知前记得获取开启通知权限
 
         //doTask();
 
@@ -207,7 +217,7 @@ public class CommonProgressService extends Service {
             channel.setSound(null, null); // 设置推送通知之时的铃声。null表示静音推送
             channel.enableLights(false); // 通知渠道是否让呼吸灯闪烁
             channel.enableVibration(false); // 通知渠道是否让手机震动
-            channel.setShowBadge(true); // 通知渠道是否在应用图标的右上角展示小红点
+            channel.setShowBadge(false); // 通知渠道是否在应用图标的右上角展示小红点
             // VISIBILITY_PUBLIC显示所有通知内容，Notification.VISIBILITY_PRIVATE只显示标题，Notification.VISIBILITY_SECRET不显示任何内容
            // channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE); // 设置锁屏时候的可见性
             channel.setImportance(NotificationManager.IMPORTANCE_DEFAULT); // 设置通知渠道的重要性级别

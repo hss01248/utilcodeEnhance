@@ -18,6 +18,7 @@ import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ThreadUtils;
+import com.blankj.utilcode.util.ThrowableUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
 import com.google.gson.GsonBuilder;
@@ -841,7 +842,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void foregroundService(View view) {
-        CommonProgressService.startS("图片上传", "上传进度:", new Runnable() {
+        CommonProgressService.startS("图片上传", "上传进度:", 0,new Runnable() {
             @Override
             public void run() {
                 CommonProgressService.doHttpTask();
@@ -850,7 +851,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void notify(View view) {
-        CommonProgressService.updateProgress(50,150,"图片上传","上传进度:50/150,剩余100,正在上传:instance of leakcanary.internal.ViewModelClearedWatcher.jpg");
+        CommonProgressService.updateProgress(50,150,"图片上传",
+                "上传进度:50/150,剩余100,正在上传:instance of leakcanary.internal.ViewModelClearedWatcher.jpg",0);
+
+        ThreadUtils.getMainHandler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                CommonProgressService.updateProgress(150,150,"图片上传",
+                        "上传进度:50/150,剩余100,正在上传:instance of leakcanary.internal.ViewModelClearedWatcher.jpg",0);
+            }
+        },3000);
+
     }
 
     public void taskOnly(View view) {
