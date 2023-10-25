@@ -7,7 +7,8 @@ android {
     compileSdkVersion 33
 
     defaultConfig {
-        minSdkVersion 21
+        minSdkVersion 23
+        ////在 Android 5.0（API 级别 21）和 Android 5.1（API 级别 22）中，您无法使用 Android 密钥库存储密钥集。
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -33,4 +34,19 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     api "com.blankj:utilcodex:1.30.0"
+    // https://mvnrepository.com/artifact/androidx.security/security-crypto
+    implementation group: 'androidx.security', name: 'security-crypto', version: '1.1.0-alpha06'
+
+
+    // For Identity Credential APIs
+    implementation "androidx.security:security-identity-credential:1.0.0-alpha03"
+
+    // For App Authentication APIs
+    implementation "androidx.security:security-app-authenticator:1.0.0-alpha02"
+
+    // For App Authentication API testing
+    androidTestImplementation "androidx.security:security-app-authenticator:1.0.0-alpha01"
+
+    //https://developer.android.com/topic/security/data-android-versions?hl=zh-cn
+    //在 Android 5.0（API 级别 21）和 Android 5.1（API 级别 22）中，您无法使用 Android 密钥库存储密钥集。
 }

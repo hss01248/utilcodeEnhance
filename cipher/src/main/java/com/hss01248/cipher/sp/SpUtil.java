@@ -3,6 +3,8 @@ package com.hss01248.cipher.sp;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.blankj.utilcode.util.Utils;
+
 /**
  * Created by huangshuisheng on 2017/12/13.
  */
@@ -11,13 +13,9 @@ public class SpUtil {
 
 
 
-    private static Context context;
 
-    public static void init(Context app) {
-        context = app;
-    }
 
-    private static final String SP_FILE_NAME = "SpUtilAD";
+    private static final String SP_FILE_NAME = "sp_my";
 
 
     public static void putLong(String key,long val){
@@ -69,6 +67,6 @@ public class SpUtil {
     }
 
     private static SharedPreferences getSP() {
-        return context.getSharedPreferences(SP_FILE_NAME, Context.MODE_PRIVATE);
+        return Utils.getApp().getSharedPreferences(SP_FILE_NAME, Context.MODE_PRIVATE);
     }
 }

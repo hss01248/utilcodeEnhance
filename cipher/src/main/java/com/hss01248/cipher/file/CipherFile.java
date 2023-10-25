@@ -29,7 +29,7 @@ public class CipherFile {
             //SecretKey deskey = new SecretKeySpec(getKey().getBytes(), ENCRYPT_TYPE);
             //Key length not 128/192/256 bits
             Cipher cipher = Cipher.getInstance(ENCRYPT_TYPE);
-            cipher.init(Cipher.ENCRYPT_MODE, getSecretKey());
+            //cipher.init(Cipher.ENCRYPT_MODE, getSecretKey());
             // 创建加密流
             cis = new CipherInputStream(is, cipher);
             byte[] buffer = new byte[1024];
@@ -94,7 +94,7 @@ public class CipherFile {
             is = new FileInputStream(srcFileName);
            // SecretKey deskey = new SecretKeySpec(getKey().getBytes(), ENCRYPT_TYPE);
             Cipher cipher = Cipher.getInstance(ENCRYPT_TYPE);
-            cipher.init(Cipher.DECRYPT_MODE, getSecretKey());
+            //cipher.init(Cipher.DECRYPT_MODE, getSecretKey());
             // 创建解密流
             cos = new CipherOutputStream(out, cipher);
             byte[] buffer = new byte[1024];
@@ -126,9 +126,9 @@ public class CipherFile {
 
     }
 
-    private static Key getSecretKey() {
+ /*   private static Key getSecretKey() {
         return "";
-    }
+    }*/
 
 
 }
