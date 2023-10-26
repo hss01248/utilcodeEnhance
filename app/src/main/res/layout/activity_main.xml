@@ -269,6 +269,18 @@
                 android:textAllCaps="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="sp-加解密"
+                android:onClick="enSp"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="文件-加解密"
+                android:onClick="enFile"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
         </com.google.android.flexbox.FlexboxLayout>
         <TextView
             android:layout_margin="10dp"

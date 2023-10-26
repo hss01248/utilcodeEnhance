@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.hss.utilsenhance">
 
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-sdk tools:overrideLibrary="com.hss01248.cipher,androidx.security.identity.credential"/>
 
     <application
         android:allowBackup="true"

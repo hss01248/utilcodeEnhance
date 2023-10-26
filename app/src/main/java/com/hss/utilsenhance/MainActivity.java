@@ -33,6 +33,10 @@ import com.hss01248.activityresult.StartActivityUtil;
 import com.hss01248.activityresult.TheActivityListener;
 import com.hss01248.basewebview.BaseWebviewActivity;
 import com.hss01248.biometric.BiometricHelper;
+import com.hss01248.cipher.file.EncryptedUtil;
+import com.hss01248.cipher.sp.EnSpUtil;
+import com.hss01248.cipher.sp.SpUtil;
+import com.hss01248.image.dataforphotoselet.ImgDataSeletor;
 import com.hss01248.iwidget.BaseDialogListener;
 import com.hss01248.iwidget.msg.AlertDialogImplByDialogUtil;
 import com.hss01248.iwidget.msg.AlertDialogImplByMmDialog;
@@ -69,6 +73,7 @@ import org.devio.takephoto.wrap.TakeOnePhotoListener;
 import org.devio.takephoto.wrap.TakePhotoUtil;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.net.URLDecoder;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -880,11 +885,22 @@ public class MainActivity extends AppCompatActivity {
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
                 ToastUtils.showLong("验证成功:"+result.getAuthenticationType());
-                /*Cipher cipher = result.getCryptoObject().getCipher();
-                byte[] encrypted = cipher.doFinal(data.getBytes());
-                byte[] IV = cipher.getIV();
-                String se = Base64.encodeToString(encrypted, Base64.URL_SAFE);
-                String siv = Base64.encodeToString(IV, Base64.URL_SAFE);*/
+                //result.getCryptoObject().getSignature();
+                try{
+                    String str = "mockdata189";
+                    Cipher cipher = result.getCryptoObject().getCipher();
+                    //String encrypted =
+                   // if(SpUtil.getString("en_key"),"")
+
+                    byte[] encrypted = cipher.doFinal(str.getBytes());
+                    byte[] IV = cipher.getIV();
+                    String se = Base64.encodeToString(encrypted, Base64.URL_SAFE);
+                    String siv = Base64.encodeToString(IV, Base64.URL_SAFE);
+                    //SpUtil.putString("en_key");
+                }catch (Throwable throwable){
+                    LogUtils.w(throwable);
+                }
+
 
             }
 
@@ -894,5 +910,55 @@ public class MainActivity extends AppCompatActivity {
                 ToastUtils.showLong("onAuthenticationFailed");
             }
         });
+    }
+
+    public void enSp(View view) {
+        EnSpUtil.putString("teststr","The design is simple, the function is rich, the interaction is " +
+                "smooth, and the background is pure. Every page layout design is well thought out so that you ...");
+        String str = EnSpUtil.getString("teststr","defval");
+        LogUtils.i("enstr",str);
+    }
+
+    public void enFile(View view) {
+        MyPermissions.requestByMostEffort(false, true, new PermissionUtils.FullCallback() {
+            @Override
+            public void onGranted(@NonNull List<String> granted) {
+                ImgDataSeletor.startPickOneWitchDialog(MainActivity.this, new TakeOnePhotoListener() {
+                    @Override
+                    public void onSuccess(String path) {
+                        File file = new File(path);
+                        File en = new File(file.getParentFile(),"en-"+file.getName());
+                        try {
+                            EncryptedUtil.writeToEncrypted(new FileInputStream(file),en);
+                        } catch (Throwable e) {
+                            LogUtils.w(e,path);
+                        }
+
+                        File ori = new File(file.getParentFile(),"ori-en-"+file.getName());
+                        try {
+                            EncryptedUtil.decryptFile(en.getAbsolutePath(),ori.getAbsolutePath(),true);
+                        } catch (Throwable e) {
+                            LogUtils.w(e,en,ori);
+                        }
+                    }
+
+                    @Override
+                    public void onFail(String path, String msg) {
+
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onDenied(@NonNull List<String> deniedForever, @NonNull List<String> denied) {
+
+            }
+        },Manifest.permission.READ_EXTERNAL_STORAGE);
+
     }
 }
