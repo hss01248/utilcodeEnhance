@@ -208,7 +208,7 @@ public class MediaPickUtil {
                     public void onDenied(@NonNull List<String> deniedForever, @NonNull List<String> denied) {
                         callback.onError("permission", "[read external storage] permission denied", null);
                     }
-                }, permission);
+                }, permission,Manifest.permission.READ_EXTERNAL_STORAGE);
 
     }
 
