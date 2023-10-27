@@ -36,6 +36,7 @@ import com.hss01248.activityresult.StartActivityUtil;
 import com.hss01248.activityresult.TheActivityListener;
 import com.hss01248.basewebview.BaseWebviewActivity;
 import com.hss01248.biometric.BiometricHelper;
+import com.hss01248.biometric.CryptUtil;
 import com.hss01248.cipher.file.EncryptedUtil;
 import com.hss01248.cipher.sp.EnSpUtil;
 import com.hss01248.cipher.sp.SpUtil;
@@ -67,9 +68,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricPrompt;
+import androidx.security.crypto.MasterKeys;
 
 import android.provider.MediaStore;
+import android.security.keystore.KeyGenParameterSpec;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 
 import org.devio.takephoto.wrap.TakeOnePhotoListener;
@@ -78,11 +82,14 @@ import org.devio.takephoto.wrap.TakePhotoUtil;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.URLDecoder;
+import java.security.KeyStore;
+import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
 
 import io.reactivex.functions.Consumer;
 
@@ -877,20 +884,36 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void biometric(View view) {
-        BiometricHelper.showBiometricDialog(this, new BiometricPrompt.AuthenticationCallback() {
+        BiometricHelper.showBiometricDialog(this, null,new BiometricPrompt.AuthenticationCallback() {
             @Override
             public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
                 ToastUtils.showLong("onAuthenticationError,"+errorCode+","+errString);
             }
 
+
+            /**  https://zhuanlan.zhihu.com/p/489913461
+             * 加密:
+             * 首先通过 KeyStore，主要是得到一个包含密码的 SecretKey ，当然这里有一个关键操作，那就是 setUserAuthenticationRequired(true)，后面我们再解释；
+             * 然后利用 SecretKey 创建 Clipher ， Clipher 就是 Java 里常用于加解密的对象；
+             * 利用 BiometricPrompt.CryptoObject(cipher) 去调用生物认证授权；
+             * 授权成功后会得到一个 AuthenticationResult ，Result 里面包含存在密钥信息的 cryptoObject?.cipher 和 cipher.iv 加密偏移向量；
+             * 利用授权成功后的 cryptoObject?.cipher 对 Token 进行加密，然后和 cipher.iv 一起保存到 SharePerferences ，就完成了基于 BiometricPrompt 的加密保存；
+             *
+             * 解密:
+             * 在 SharePerferences 里获取加密后的 Token 和 iv 信息；
+             * 同样是利用 SecretKey 创建 Clipher ，不过这次要带上保存的 iv 信息；
+             * 利用 BiometricPrompt.CryptoObject(cipher) 去调用生物认证授权；
+             * 通过授权成功后的 cryptoObject?.cipher 对 Token 进行加密，得到原始的 Token 信息；
+             */
             @Override
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
                 ToastUtils.showLong("验证成功:"+result.getAuthenticationType());
                 //result.getCryptoObject().getSignature();
+                //https://zhuanlan.zhihu.com/p/489913461   移动端系统生物认证技术详解
                 try{
-                    String str = "mockdata189";
+                    String str = "login_pw_123456";
                     Cipher cipher = result.getCryptoObject().getCipher();
                     //String encrypted =
                    // if(SpUtil.getString("en_key"),"")
@@ -979,5 +1002,39 @@ public class MainActivity extends AppCompatActivity {
         } catch (Throwable e) {
             LogUtils.w(e,en,ori);
         }
+    }
+
+    public void listKeystore(View view) {
+        try{
+
+            SecretKey testKeyStore1 = CryptUtil.getOrCreateSecretKey("test_key_store3",false);
+            //AndroidKeyStoreSecretKey storeSecretKey = null;
+            //android.security.keystore2.AndroidKeyStoreSecretKey@af6e2d2d
+            LogUtils.d(testKeyStore1.getAlgorithm(),testKeyStore1.getFormat(),testKeyStore1);
+
+            Cipher cipher = CryptUtil.getCipher();
+            cipher.init(Cipher.ENCRYPT_MODE,testKeyStore1);
+            //android.security.KeyStoreException: Key user not authenticated (internal Keystore code: -26 message: In KeystoreOperation::update
+            byte[] testData1s = CryptUtil.encryptData("testData1", cipher);
+
+            Cipher cipher2 = CryptUtil.getCipher();
+            // IV required when decrypting. Use IvParameterSpec or AlgorithmParameters to provide it.
+            cipher2.init(Cipher.DECRYPT_MODE,testKeyStore1);
+            String s1 = CryptUtil.decryptData(testData1s, cipher2);
+            LogUtils.i("decrypted",s1);
+
+
+            KeyStore ks = KeyStore.getInstance("AndroidKeyStore");
+            ks.load(null);
+            Enumeration<String> aliases = ks.aliases();
+
+            while (aliases.hasMoreElements()){
+                String s = aliases.nextElement();
+                System.out.println("key: "+s);
+            }
+        }catch (Throwable throwable){
+            LogUtils.w(throwable);
+        }
+
     }
 }

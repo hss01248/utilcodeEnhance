@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
 }
+//apply plugin: 'kotlin-android'
 
 android {
 
@@ -12,6 +13,9 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
+    /*sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }*/
 
     buildTypes {
         release {
@@ -33,4 +37,10 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     api 'androidx.biometric:biometric:1.1.0'
+   // implementation "io.github.oshai:kotlin-logging-jvm:5.0.1"
+    //api "androidx.core:core-ktx:1.6.1"
+    //api "androidx.fragment:fragment-ktx:1.6.1"
+
+    implementation "org.slf4j:slf4j-api:2.0.7"
+    api "com.blankj:utilcodex:1.30.0"
 }

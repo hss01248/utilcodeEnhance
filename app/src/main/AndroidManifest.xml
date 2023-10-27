@@ -4,7 +4,7 @@
     package="com.hss.utilsenhance">
 
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
-    <uses-sdk tools:overrideLibrary="com.hss01248.cipher,androidx.security.identity.credential"/>
+    <uses-sdk tools:overrideLibrary="com.hss01248.cipher,androidx.security.identity.credential,com.hss01248.biometric"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.CAMERA"/>
 

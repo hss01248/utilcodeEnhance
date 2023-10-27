@@ -30,6 +30,7 @@ public class EncryptedUtil {
         MasterKey mainKey = new MasterKey.Builder(context)
                 .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
                 .build();
+        LogUtils.d("MasterKey",mainKey.toString());
 
 
         EncryptedFile encryptedFile = new EncryptedFile.Builder(context,
@@ -77,7 +78,7 @@ public class EncryptedUtil {
         MasterKey mainKey = new MasterKey.Builder(context)
                 .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
                 .build();
-
+        LogUtils.d("MasterKey",mainKey.toString());
 // Creates a file with this name, or replaces an existing file
 // that has the same name. Note that the file name cannot contain
 // path separators.
@@ -113,7 +114,7 @@ public class EncryptedUtil {
             MasterKey mainKey = new MasterKey.Builder(context)
                     .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
                     .build();
-
+            LogUtils.d("MasterKey",mainKey.toString());
              sharedPreferences = EncryptedSharedPreferences
                     .create(
                             context,

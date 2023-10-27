@@ -4,6 +4,8 @@ import android.app.KeyguardManager;
 import android.content.Context;
 import android.os.Build;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
@@ -107,12 +109,30 @@ public class BiometricHelper {
     }
 
 
-
-    public static  void showBiometricDialog(FragmentActivity activityContext,BiometricPrompt.AuthenticationCallback callback){
+    /**  https://zhuanlan.zhihu.com/p/489913461
+     * 加密:
+     * 首先通过 KeyStore，主要是得到一个包含密码的 SecretKey ，当然这里有一个关键操作，那就是 setUserAuthenticationRequired(true)，后面我们再解释；
+     * 然后利用 SecretKey 创建 Clipher ， Clipher 就是 Java 里常用于加解密的对象；
+     * 利用 BiometricPrompt.CryptoObject(cipher) 去调用生物认证授权；
+     * 授权成功后会得到一个 AuthenticationResult ，Result 里面包含存在密钥信息的 cryptoObject?.cipher 和 cipher.iv 加密偏移向量；
+     * 利用授权成功后的 cryptoObject?.cipher 对 Token 进行加密，然后和 cipher.iv 一起保存到 SharePerferences ，就完成了基于 BiometricPrompt 的加密保存；
+     *
+     * 解密:
+     * 在 SharePerferences 里获取加密后的 Token 和 iv 信息；
+     * 同样是利用 SecretKey 创建 Clipher ，不过这次要带上保存的 iv 信息；
+     * 利用 BiometricPrompt.CryptoObject(cipher) 去调用生物认证授权；
+     * 通过授权成功后的 cryptoObject?.cipher 对 Token 进行加密，得到原始的 Token 信息；
+     * @param activityContext
+     * @param crypto
+     * @param callback
+     */
+    public static  void showBiometricDialog(FragmentActivity activityContext,
+                                            @Nullable BiometricPrompt.CryptoObject crypto,
+                                            BiometricPrompt.AuthenticationCallback callback) {
         BiometricPrompt.PromptInfo promptInfo = null;
         if (isBiometricHardWareAvailable(activityContext)) {
 
-             promptInfo = initBiometricPrompt(
+            promptInfo = initBiometricPrompt(
                     BioConstants.BIOMETRIC_AUTHENTICATION,
                     BioConstants.BIOMETRIC_AUTHENTICATION_SUBTITLE,
                     BioConstants.BIOMETRIC_AUTHENTICATION_DESCRIPTION,
@@ -127,10 +147,16 @@ public class BiometricHelper {
                     true
             );
         }
-        if(promptInfo ==null){
+        if (promptInfo == null) {
             return;
         }
-        BiometricPrompt  biometricPrompt = new BiometricPrompt(activityContext, ContextCompat.getMainExecutor(activityContext),callback);
-        biometricPrompt.authenticate(promptInfo);
+        BiometricPrompt biometricPrompt = new BiometricPrompt(activityContext, ContextCompat.getMainExecutor(activityContext), callback);
+        if (crypto == null) {
+            biometricPrompt.authenticate(promptInfo);
+        } else {
+            biometricPrompt.authenticate(promptInfo, crypto);
+
+        }
     }
+
 }

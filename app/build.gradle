@@ -63,6 +63,18 @@ dependencies {
     debugImplementation 'com.github.hss01248.accountCacher:accountcache:1.1.6'
 
     implementation group: 'cn.qqtheme.framework', name: 'FilePicker', version: '1.5.5'
+
+    implementation group: 'androidx.security', name: 'security-crypto', version: '1.1.0-alpha06'
+
+
+    // For Identity Credential APIs
+    implementation "androidx.security:security-identity-credential:1.0.0-alpha03"
+
+    // For App Authentication APIs
+    implementation "androidx.security:security-app-authenticator:1.0.0-alpha02"
+
+    // For App Authentication API testing
+    androidTestImplementation "androidx.security:security-app-authenticator:1.0.0-alpha01"
     //implementation 'com.github.gzu-liyujiang.AndroidPicker:FilePicker:4.1.2'
     //http://39.101.221.145:8081/repository/jitpack_proxy/
     //https://jitpack.io/com/github/hss01248/MyDataStore/1.0.1/MyDataStore-1.0.1.aar

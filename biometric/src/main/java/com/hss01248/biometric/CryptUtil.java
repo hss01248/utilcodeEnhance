@@ -1,9 +1,12 @@
-package com.hss01248.biometric.store;
+package com.hss01248.biometric;
 
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 
+import com.blankj.utilcode.util.LogUtils;
+
 import java.io.File;
+import java.io.FileInputStream;
 import java.nio.charset.Charset;
 import java.security.KeyStore;
 
@@ -13,31 +16,20 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 
 
-// based on https://github.com/isaidamier/blogs.biometrics.cryptoBlog/blob/cryptoObject/app/src/main/java/com/example/android/biometricauth/CryptographyManager.kt
 
-/*
- * Copyright (C) 2020 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License
- */
+
 /**
  * @Despciption todo
  * @Author hss
- * @Date 27/10/2023 15:46
+ * @Date 27/10/2023 16:43
  * @Version 1.0
  */
-public class CryptographyManagerImpl  implements CryptographyManager {
-    private final KeyGenParameterSpec.Builder configure;
+public class CryptUtil {
+
+
+
+
+
 
     private static final int KEY_SIZE = 256;
     private static final String KEY_PREFIX = "_CM_";
@@ -47,37 +39,41 @@ public class CryptographyManagerImpl  implements CryptographyManager {
     private static final String ENCRYPTION_ALGORITHM = KeyProperties.KEY_ALGORITHM_AES;
     private static final int IV_SIZE_IN_BYTES = 12;
     private static final int TAG_SIZE_IN_BYTES = 16;
-    private final KotlinLogging logger = KotlinLogging.INSTANCE.logger();
 
-    public CryptographyManagerImpl(KeyGenParameterSpec.Builder configure) {
-        this.configure = configure;
-    }
 
-    public CryptographyManager cryptographyManager(KeyGenParameterSpec.Builder configure) {
-        return new CryptographyManagerImpl(configure);
-    }
 
-    @Override
-    public Cipher getInitializedCipherForEncryption(String keyName) {
+
+
+
+    /**
+     * 使用: byte[] ciphertext = cipher.doFinal(plaintext);
+     * byte[] iv = cipher.getIV();
+     * @param keyName
+     * @return
+     * @throws Throwable
+     */
+    //@Override
+    public static Cipher getInitializedCipherForEncryption(String keyName) throws Throwable{
         Cipher cipher = getCipher();
-        SecretKey secretKey = getOrCreateSecretKey(keyName);
+        SecretKey secretKey = getOrCreateSecretKey(keyName,false);
         cipher.init(Cipher.ENCRYPT_MODE, secretKey);
         return cipher;
     }
-    @Override
-    public Cipher getInitializedCipherForDecryption(String keyName, byte[] initializationVector) {
+
+    //@Override
+    public static Cipher getInitializedCipherForDecryption(String keyName, byte[] initializationVector) throws Throwable{
         Cipher cipher = getCipher();
-        SecretKey secretKey = getOrCreateSecretKey(keyName);
+        SecretKey secretKey = getOrCreateSecretKey(keyName,false);
         cipher.init(Cipher.DECRYPT_MODE, secretKey, new GCMParameterSpec(TAG_SIZE_IN_BYTES * 8, initializationVector));
         return cipher;
     }
 
-    @Override
-    public Cipher getInitializedCipherForDecryption(String keyName, File encryptedDataFile) {
+    //@Override
+    public static Cipher getInitializedCipherForDecryption(String keyName, File encryptedDataFile) throws Throwable{
         byte[] iv = new byte[IV_SIZE_IN_BYTES];
         int count;
         try {
-            count = encryptedDataFile.inputStream().read(iv);
+            count = new FileInputStream(encryptedDataFile).read(iv);
             assert count == IV_SIZE_IN_BYTES;
         } catch (Exception e) {
             e.printStackTrace();
@@ -85,8 +81,8 @@ public class CryptographyManagerImpl  implements CryptographyManager {
         return getInitializedCipherForDecryption(keyName, iv);
     }
 
-    @Override
-    public EncryptedData encryptData(String plaintext, Cipher cipher) {
+    //@Override
+    public static byte[] encryptData(String plaintext, Cipher cipher) throws Throwable{
         byte[] input = plaintext.getBytes(Charset.forName("UTF-8"));
         byte[] ciphertext = new byte[IV_SIZE_IN_BYTES + input.length + TAG_SIZE_IN_BYTES];
         int bytesWritten = cipher.doFinal(input, 0, input.length, ciphertext, IV_SIZE_IN_BYTES);
@@ -97,13 +93,14 @@ public class CryptographyManagerImpl  implements CryptographyManager {
         if (cipher.getIV().length != IV_SIZE_IN_BYTES) {
             throw new IllegalStateException("Cipher.getIV() result incorrect length");
         }
-        logger.debug(() -> "encrypted " + input.length + " (" + ciphertext.length + " output)");
-        return new EncryptedData(ciphertext);
+        LogUtils.d( "encrypted " + input.length + " (" + ciphertext.length + " output)");
+        return ciphertext;
     }
 
-    @Override
-    public String decryptData(byte[] ciphertext, Cipher cipher) {
-        logger.debug(() -> "decrypting " + ciphertext.length + " bytes (iv: " + IV_SIZE_IN_BYTES + ", tag: " + TAG_SIZE_IN_BYTES + ")");
+    //@Override
+    public static String decryptData(byte[] ciphertext, Cipher cipher) throws Throwable{
+        LogUtils.d( "decrypting " + ciphertext.length + " bytes (iv: " + IV_SIZE_IN_BYTES + ", tag: " + TAG_SIZE_IN_BYTES + ")");
+     
         byte[] iv = new byte[IV_SIZE_IN_BYTES];
         System.arraycopy(ciphertext, 0, iv, 0, IV_SIZE_IN_BYTES);
         if (!java.util.Arrays.equals(iv, cipher.getIV())) {
@@ -113,7 +110,7 @@ public class CryptographyManagerImpl  implements CryptographyManager {
         return new String(plaintext, Charset.forName("UTF-8"));
     }
 
-    private Cipher getCipher() {
+    public static Cipher getCipher() {
         String transformation = ENCRYPTION_ALGORITHM + "/" + ENCRYPTION_BLOCK_MODE + "/" + ENCRYPTION_PADDING;
         try {
             return Cipher.getInstance(transformation);
@@ -129,11 +126,11 @@ public class CryptographyManagerImpl  implements CryptographyManager {
             keyStore.load(null);
             keyStore.deleteEntry(KEY_PREFIX + keyName);
         } catch (Exception e) {
-            logger.warn(() -> "Unable to delete key from KeyStore " + KEY_PREFIX + keyName);
+            LogUtils.w( "Unable to delete key from KeyStore " + KEY_PREFIX + keyName);
         }
     }
 
-    private SecretKey getOrCreateSecretKey(String keyName) {
+    public static SecretKey getOrCreateSecretKey(String keyName,boolean userAuthenticationRequired) {
         String realKeyName = KEY_PREFIX + keyName;
         try {
             KeyStore keyStore = KeyStore.getInstance(ANDROID_KEYSTORE);
@@ -145,6 +142,8 @@ public class CryptographyManagerImpl  implements CryptographyManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        //对称密钥 KeyGenParameterSpec   非对称加密的密钥对: KeyPairGenerator.getInstance(
+        //            KeyProperties.KEY_ALGORITHM_EC, "AndroidKeyStore")
         KeyGenParameterSpec.Builder paramsBuilder = new KeyGenParameterSpec.Builder(
                 realKeyName,
                 KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT
@@ -152,8 +151,9 @@ public class CryptographyManagerImpl  implements CryptographyManager {
         paramsBuilder.setBlockModes(ENCRYPTION_BLOCK_MODE);
         paramsBuilder.setEncryptionPaddings(ENCRYPTION_PADDING);
         paramsBuilder.setKeySize(KEY_SIZE);
-        paramsBuilder.setUserAuthenticationRequired(true);
-        configure.configure(paramsBuilder);
+        paramsBuilder.setUserAuthenticationRequired(userAuthenticationRequired);
+        //configure = paramsBuilder;
+        //configure.configure(paramsBuilder);
         KeyGenParameterSpec keyGenParams = paramsBuilder.build();
         try {
             KeyGenerator keyGenerator = KeyGenerator.getInstance(
@@ -169,3 +169,20 @@ public class CryptographyManagerImpl  implements CryptographyManager {
     }
 
 }
+
+/*
+class EncryptedData {
+    private final byte[] encryptedPayload;
+
+    public EncryptedData(byte[] encryptedPayload) {
+        this.encryptedPayload = encryptedPayload;
+    }
+
+    public byte[] getEncryptedPayload() {
+        return encryptedPayload;
+    }
+}
+
+    public CryptographyManager cryptographyManager(KeyGenParameterSpec.Builder configure) {
+        return new CryptographyManagerImpl(configure);
+    }*/
