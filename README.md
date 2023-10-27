@@ -23,6 +23,29 @@
 //一行代码进行特殊权限申请
     api 'com.github.hss01248:MyDataStore:1.0.1' 
 //mmkv和shareprefence的api包装,优先mmkv,无缝切换,无崩溃之忧
+
+
+// 最新:
+com.github.hss01248.utilcodeEnhance:lib-base:1.4.1
+com.github.hss01248.utilcodeEnhance:common:1.4.1
+com.github.hss01248.utilcodeEnhance:ext:1.4.1
+com.github.hss01248.utilcodeEnhance:fullScreenDialog:1.4.1
+com.github.hss01248.utilcodeEnhance:viewholder:1.4.1
+com.github.hss01248.utilcodeEnhance:media:1.4.1
+com.github.hss01248.utilcodeEnhance:toast:1.4.1
+com.github.hss01248.utilcodeEnhance:search-history-api:1.4.1
+com.github.hss01248.utilcodeEnhance:qr-scan:1.4.1
+com.github.hss01248.utilcodeEnhance:cipher:1.4.1
+com.github.hss01248.utilcodeEnhance:refresh-loadmore:1.4.1
+com.github.hss01248.utilcodeEnhance:iwidget:1.4.1
+com.github.hss01248.utilcodeEnhance:openuri:1.4.1
+com.github.hss01248.utilcodeEnhance:biometric:1.4.1
+com.github.hss01248.utilcodeEnhance:basewebview-ajax-proxy:1.4.1
+com.github.hss01248.utilcodeEnhance:viewState:1.4.1
+com.github.hss01248.utilcodeEnhance:download-list:1.4.1
+com.github.hss01248.utilcodeEnhance:sentry:1.4.1
+com.github.hss01248.utilcodeEnhance:IReporter:1.4.1
+com.github.hss01248.utilcodeEnhance:baseWebview:1.4.1
 ```
 
 

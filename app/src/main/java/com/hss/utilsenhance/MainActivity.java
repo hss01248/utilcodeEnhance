@@ -21,6 +21,9 @@ import com.blankj.utilcode.util.ThreadUtils;
 import com.blankj.utilcode.util.ThrowableUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
+import com.github.gzuliyujiang.filepicker.ExplorerConfig;
+import com.github.gzuliyujiang.filepicker.FilePicker;
+import com.github.gzuliyujiang.filepicker.contract.OnFilePickedListener;
 import com.google.gson.GsonBuilder;
 import com.hss.utils.enhance.BarColorUtil;
 import com.hss.utils.enhance.HomeMaintaner;
@@ -923,28 +926,28 @@ public class MainActivity extends AppCompatActivity {
         MyPermissions.requestByMostEffort(false, true, new PermissionUtils.FullCallback() {
             @Override
             public void onGranted(@NonNull List<String> granted) {
+                /*ExplorerConfig config = new ExplorerConfig(MainActivity.this);
+                config.setOnFilePickedListener(new OnFilePickedListener() {
+                    @Override
+                    public void onFilePicked(@NonNull File file) {
+                        testEncryptFile(file);
+
+                    }
+                });
+                FilePicker filePicker = new FilePicker(MainActivity.this);
+                filePicker.setExplorerConfig(config);
+                filePicker.show();*/
                 ImgDataSeletor.startPickOneWitchDialog(MainActivity.this, new TakeOnePhotoListener() {
                     @Override
                     public void onSuccess(String path) {
                         File file = new File(path);
-                        File en = new File(file.getParentFile(),"en-"+file.getName());
-                        try {
-                            EncryptedUtil.writeToEncrypted(new FileInputStream(file),en);
-                        } catch (Throwable e) {
-                            LogUtils.w(e,path);
-                        }
-
-                        File ori = new File(file.getParentFile(),"ori-en-"+file.getName());
-                        try {
-                            EncryptedUtil.decryptFile(en.getAbsolutePath(),ori.getAbsolutePath(),true);
-                        } catch (Throwable e) {
-                            LogUtils.w(e,en,ori);
-                        }
+                       testEncryptFile(file);
                     }
 
                     @Override
                     public void onFail(String path, String msg) {
-
+                        LogUtils.w(msg);
+                        ToastUtils.showLong(msg);
                     }
 
                     @Override
@@ -960,5 +963,21 @@ public class MainActivity extends AppCompatActivity {
             }
         },Manifest.permission.READ_EXTERNAL_STORAGE);
 
+    }
+
+    private void testEncryptFile(File file) {
+        File en = new File(getExternalCacheDir(),"en-"+file.getName());
+        try {
+            EncryptedUtil.writeToEncrypted(new FileInputStream(file),en);
+        } catch (Throwable e) {
+            LogUtils.w(e,file.getAbsolutePath());
+        }
+
+        File ori = new File(getExternalCacheDir(),"ori-en-"+file.getName());
+        try {
+            EncryptedUtil.decryptFile(en.getAbsolutePath(),ori.getAbsolutePath(),true);
+        } catch (Throwable e) {
+            LogUtils.w(e,en,ori);
+        }
     }
 }

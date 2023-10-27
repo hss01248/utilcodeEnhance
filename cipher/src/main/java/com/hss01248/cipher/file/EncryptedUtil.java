@@ -61,6 +61,7 @@ public class EncryptedUtil {
         }
         InputStream inputStream = readEncryptedFile(encryptedFilePath);
         ioByBuffer(inputStream,new FileOutputStream(file));
+        LogUtils.d("解密后文件路径和大小: ",targetFilePath,file.length());
         if(file.exists() && file.length() >0 ){
             return true;
         }
@@ -72,6 +73,7 @@ public class EncryptedUtil {
     public static void writeToEncrypted(InputStream inputStream,File targetEncryptedFile) throws Throwable{
         long begin=System.currentTimeMillis();
         Context context = Utils.getApp();
+        int length = inputStream.available();
         MasterKey mainKey = new MasterKey.Builder(context)
                 .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
                 .build();
@@ -91,8 +93,9 @@ public class EncryptedUtil {
             LogUtils.w("目标文件已经存在,执行删除操作",targetEncryptedFile.getAbsolutePath());
             targetEncryptedFile.delete();
         }
-        LogUtils.i("加密文件,路径: ",targetEncryptedFile.getAbsolutePath());
+        LogUtils.d("加密前文件,大小: ",length);
         ioByBuffer(inputStream,encryptedFile.openFileOutput());
+        LogUtils.d("加密后文件,大小: ",targetEncryptedFile.length());
 
     }
 
@@ -145,14 +148,16 @@ public class EncryptedUtil {
             bis = new BufferedInputStream(inputStream);
         }
         int size=0;
+        int length2 = 0;
         byte[] buffer=new byte[1024];
         while((size=bis.read(buffer))!=-1){
             bos.write(buffer, 0, size);
+            length2+=size;
         }
         bos.flush();
         bis.close();
         bos.close();
         long end=System.currentTimeMillis();
-        LogUtils.i("使用缓冲输出流和缓冲输入流实现文件的复制完毕！耗时："+(end-begin)+"毫秒, 大小: "+len/1024.0/1024+"MB");
+        LogUtils.i("使用缓冲输出流和缓冲输入流实现文件的复制完毕！耗时："+(end-begin)+"毫秒,length: "+len,length2);
     }
 }
