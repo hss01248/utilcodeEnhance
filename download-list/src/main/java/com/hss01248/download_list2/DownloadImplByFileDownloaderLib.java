@@ -1,5 +1,6 @@
 package com.hss01248.download_list2;
 
+import android.os.Environment;
 import android.text.TextUtils;
 import android.webkit.URLUtil;
 
@@ -7,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.Utils;
 import com.hss.downloader.download.DownloadInfoUtil;
 import com.hss01248.http.response.DownloadParser;
 import com.liulishuo.filedownloader.BaseDownloadTask;
@@ -28,7 +30,7 @@ public class DownloadImplByFileDownloaderLib implements DownloaderApi{
     public void download(@NonNull String url, @Nullable String saveDirPath,
                          @Nullable String fileName, @Nullable Map<String, String> headers, @NonNull DownloadCallback callback) {
         if(TextUtils.isEmpty(saveDirPath)){
-            saveDirPath = DownloadParser.mkDefaultDownloadDir();
+            saveDirPath = Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
         }
         if(TextUtils.isEmpty(fileName)){
             fileName = URLUtil.guessFileName(url,"","");

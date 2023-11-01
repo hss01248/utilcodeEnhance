@@ -837,6 +837,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                             @Override
                             public Object doInBackground() throws Throwable {
                                 copyFileToDownloadsDir(file);
+                                file.delete();
                                 return null;
                             }
 
