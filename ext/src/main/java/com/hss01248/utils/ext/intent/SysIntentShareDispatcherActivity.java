@@ -17,6 +17,9 @@ import com.blankj.utilcode.util.ReflectUtils;
 import com.blankj.utilcode.util.SPStaticUtils;
 import com.hss.utils.enhance.UrlEncodeUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author: Administrator
  * @date: 2022/3/6
@@ -26,6 +29,10 @@ import com.hss.utils.enhance.UrlEncodeUtil;
  */
 public class SysIntentShareDispatcherActivity extends AppCompatActivity {
 
+    static List<IParseIntent> parseIntents = new ArrayList<>();
+    public static  void addParser(IParseIntent parseIntent){
+        parseIntents.add(parseIntent);
+    }
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,51 +47,17 @@ public class SysIntentShareDispatcherActivity extends AppCompatActivity {
         scrollView.addView(textView);
 
         setContentView(scrollView);
-
-        parseToutiao();
-
-        //parseDouyin();
-    }
-
-    private void parseToutiao() {
-        Bundle extras = getIntent().getExtras();
-        if(extras == null){
-            return;
+        for (IParseIntent parseIntent : parseIntents) {
+            boolean b = parseIntent.parseIntent(getIntent(), this);
+            if(b){
+                break;
+            }
         }
-        Object kdescription = extras.get("Kdescription");
-        if(kdescription ==null){
-            return;
-        }
-        String text = kdescription.toString();
-        if(!text.contains("https://m.toutiao.com/") && !text.contains("https://www.iesdouyin.com/")){
-            LogUtils.w("有Kdescription,但不包含https://m.toutiao.com/或者www.iesdouyin.com",text);
-            return;
-        }
-        String url = "";
-        String title = "";
-        if(text.contains("https://m.toutiao.com/")){
-            url = text.substring(text.indexOf("https://m.toutiao.com/"));
-            title = text.substring(0,text.indexOf("https://m.toutiao.com/"));
-        }else if(text.contains("https://www.iesdouyin.com/")){
-            url = text.substring(text.indexOf("https://www.iesdouyin.com/"));
-            title = text.substring(0,text.indexOf("https://www.iesdouyin.com/"));
-        }else if(text.contains("https://v.douyin.com/")){
-            url = text.substring(text.indexOf("https://v.douyin.com/"));
-            title = text.substring(0,text.indexOf("https://v.douyin.com/"));
-        }
-
-        try {
-            ReflectUtils.reflect("com.hss01248.basewebview.BaseWebviewActivity")
-                    .method("start", ActivityUtils.getTopActivity(), url,title);
-            finish();
-        }catch (Throwable throwable){
-            LogUtils.w(throwable);
-        }
-
-
 
 
     }
+
+
 
     private String msg() {
         String str =  getIntent().toString();

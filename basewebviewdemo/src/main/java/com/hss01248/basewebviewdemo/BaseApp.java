@@ -18,6 +18,7 @@ import com.blankj.utilcode.util.SPStaticUtils;
 import com.blankj.utilcode.util.ThreadUtils;
 import com.hjq.permissions.XXPermissions;
 import com.hss01248.basewebview.BaseWebviewActivity;
+import com.hss01248.basewebview.WebConfigger;
 import com.hss01248.sentry.SentryUtil;
 import com.hss01248.utils.ext.lifecycle.AppFirstActivityOnCreateListener;
 import com.hss01248.utils.ext.lifecycle.FirstActivityCreatedCallback;
@@ -35,6 +36,7 @@ public class BaseApp extends MultiDexApplication {
         super.onCreate();
         regist();
         XXPermissions.setScopedStorage(true);
+        WebConfigger.init(null);
 
         LogUtils.getConfig().setOnConsoleOutputListener(new LogUtils.OnConsoleOutputListener() {
             @Override
