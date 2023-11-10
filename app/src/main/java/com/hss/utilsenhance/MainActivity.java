@@ -1114,25 +1114,33 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    byte[] encryptedData;
-    public void bioEncryptByPublic(View view) {
+
+    public void rsaCipher(View view) {
         try {
-            encryptedData = RsaCipherUtil.encryptByPublicKeyWithUserVerify("mykey", "123456".getBytes());
+            byte[] encryptedData = RsaCipherUtil.encryptByPublicKey("rsaCipher", "abc".getBytes());
+            byte[] data = RsaCipherUtil.decryptByPrivateKey("rsaCipher", encryptedData);
+            LogUtils.i("rsaCipher-解密后数据: "+new String(data));
         } catch (Throwable e) {
             LogUtils.w(e);
         }
     }
 
     public void bioDecryptByPrivate(View view) {
-        if(encryptedData ==null){
-            bioEncryptByPublic(view);
+
+        try {
+            byte[]  encryptedData = RsaCipherUtil.encryptByPublicKeyWithUserVerify("bio-rsaCipher", "123456".getBytes());
+            RsaCipherUtil.decryptByPrivateKeyWithUserVerify("bio-rsaCipher", encryptedData, true,
+                    new MyCommonCallback3<byte[]>() {
+                        @Override
+                        public void onSuccess(byte[] bytes) {
+                            LogUtils.i("bio-rsaCipher-解密后: "+new String(bytes));
+                        }
+                    });
+
+
+        } catch (Throwable e) {
+            LogUtils.w(e);
         }
-        RsaCipherUtil.decryptByPrivateKeyWithUserVerify("mykey", encryptedData, true,
-                new MyCommonCallback3<byte[]>() {
-                    @Override
-                    public void onSuccess(byte[] bytes) {
-                        LogUtils.i("解密后: "+new String(bytes));
-                    }
-                });
+
     }
 }

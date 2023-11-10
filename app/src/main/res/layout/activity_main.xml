@@ -294,13 +294,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <androidx.appcompat.widget.AppCompatButton
-                android:text="bio-公钥加密"
-                android:onClick="bioEncryptByPublic"
+                android:text="rsa加解密"
+                android:onClick="rsaCipher"
                 android:textAllCaps="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <androidx.appcompat.widget.AppCompatButton
-                android:text="bio-私钥解密"
+                android:text="指纹/密码验证的-rsa加解密"
                 android:onClick="bioDecryptByPrivate"
                 android:textAllCaps="false"
                 android:layout_width="wrap_content"

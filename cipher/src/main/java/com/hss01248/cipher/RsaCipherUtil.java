@@ -28,7 +28,7 @@ import javax.crypto.Cipher;
  * @Version 1.0
  */
 public class RsaCipherUtil {
-    final static  String KEY_NAME = "RsaCipherUtil";
+    final static  String KEY_NAME = "RsaCipherUtil-";
 
     /**
      * 公钥不需要验证
