@@ -31,11 +31,11 @@ import com.blankj.utilcode.util.ThreadUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
 import com.google.gson.GsonBuilder;
+import com.hss.utils.base.api.MyCommonCallback3;
 import com.hss.utils.enhance.BarColorUtil;
 import com.hss.utils.enhance.HomeMaintaner;
 import com.hss.utils.enhance.UrlEncodeUtil;
 import com.hss.utils.enhance.api.MyCommonCallback;
-import com.hss.utils.base.api.MyCommonCallback3;
 import com.hss.utils.enhance.foregroundservice.CommonProgressService;
 import com.hss.utils.enhance.intent.ShareUtils;
 import com.hss.utils.enhance.intent.SysIntentUtil;
@@ -45,6 +45,7 @@ import com.hss01248.basewebview.BaseWebviewActivity;
 import com.hss01248.biometric.BiometricHelper;
 import com.hss01248.biometric.CryptUtil;
 import com.hss01248.cipher.RsaCipherUtil;
+import com.hss01248.cipher.SignUtil;
 import com.hss01248.cipher.file.EncryptedUtil;
 import com.hss01248.cipher.sp.EnSpUtil;
 import com.hss01248.image.dataforphotoselet.ImgDataSeletor;
@@ -75,16 +76,17 @@ import org.devio.takephoto.wrap.TakePhotoUtil;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.URLDecoder;
+import java.security.Key;
 import java.security.KeyStore;
 import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 
 import io.reactivex.functions.Consumer;
@@ -1077,10 +1079,26 @@ public class MainActivity extends AppCompatActivity {
             ks.load(null);
             Enumeration<String> aliases = ks.aliases();
 
-            List<String> strings = new ArrayList<>();
+            Map strings = new LinkedHashMap();
             while (aliases.hasMoreElements()){
                 String s = aliases.nextElement();
-                strings.add(s);
+
+                Key secretKey =  ks.getKey(s, null);
+                strings.put(s,secretKey.toString());
+                //android.security.keystore2.AndroidKeyStoreSecretKey
+                //android.security.keystore2.AndroidKeyStoreRSAPrivateKey
+                if(secretKey instanceof  SecretKey){
+                    //SecretKeySpec
+                    //android.security.keystore2.AndroidKeyStoreSecretKey
+                    //strings.put(s,secretKey.toString());
+                }else{
+                    KeyStore.Entry entry = ks.getEntry(s, null);
+                    if (entry instanceof KeyStore.PrivateKeyEntry ) {
+                        KeyStore.PrivateKeyEntry entry1 = (KeyStore.PrivateKeyEntry) entry;
+                        //strings.put(s,entry1.toString());
+                    }
+                }
+
             }
             LogUtils.w(strings);
         }catch (Throwable throwable){
@@ -1142,5 +1160,33 @@ public class MainActivity extends AppCompatActivity {
             LogUtils.w(e);
         }
 
+    }
+
+    public void signAndVerify(View view) {
+
+        try {
+            byte[] sign = SignUtil.sign("signtest", "123456".getBytes());
+            boolean signtest = SignUtil.verify("signtest", sign, "123456".getBytes());
+            LogUtils.i("签名验证结果: "+signtest);
+        } catch (Throwable e) {
+            LogUtils.w(e);
+        }
+    }
+
+    public void signAndVerifyByBio(View view) {
+        SignUtil.signWithUserVerify("signtest-bio", true,
+                new MyCommonCallback3<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+                        try {
+                            boolean signtest = SignUtil.verifyWithUserVerify("signtest-bio", bytes, "123456".getBytes());
+                            LogUtils.i("签名验证结果: "+signtest);
+                        } catch (Throwable e) {
+                            LogUtils.w(e);
+                        }
+                    }
+                },
+                "123456".getBytes()
+        );
     }
 }
