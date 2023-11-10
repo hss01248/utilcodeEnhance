@@ -43,7 +43,7 @@ import com.hss01248.activityresult.StartActivityUtil;
 import com.hss01248.activityresult.TheActivityListener;
 import com.hss01248.basewebview.BaseWebviewActivity;
 import com.hss01248.biometric.BiometricHelper;
-import com.hss01248.biometric.CryptUtil;
+import com.hss01248.cipher.AesCipherUtil;
 import com.hss01248.cipher.RsaCipherUtil;
 import com.hss01248.cipher.SignUtil;
 import com.hss01248.cipher.file.EncryptedUtil;
@@ -882,10 +882,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void biometric(View view) {
-        Cipher cipher = CryptUtil.getCipher();
+        Cipher cipher = null;
         try {
-            cipher.init(Cipher.ENCRYPT_MODE, CryptUtil.getOrCreateSecretKey("pw",true));
-        } catch (Exception e) {
+            cipher = AesCipherUtil.getCipher();
+            cipher.init(Cipher.ENCRYPT_MODE, AesCipherUtil.getOrCreateSecretKey("pw",true));
+        } catch (Throwable e) {
             LogUtils.w(e);
         }
 
@@ -967,14 +968,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void decrypt2(byte[] encrypted, byte[] iv) {
-        Cipher cipher = CryptUtil.getCipher();
+        Cipher cipher = null;
         try {
+            cipher = AesCipherUtil.getCipher();
            int TAG_SIZE_IN_BYTES = 16;
             //IV required when decrypting
             //cipher.init(Cipher.DECRYPT_MODE, CryptUtil.getOrCreateSecretKey("pw",true));
-            cipher.init(Cipher.DECRYPT_MODE, CryptUtil.getOrCreateSecretKey("pw",true),
+            cipher.init(Cipher.DECRYPT_MODE, AesCipherUtil.getOrCreateSecretKey("pw",true),
                     new GCMParameterSpec(TAG_SIZE_IN_BYTES * 8, iv));
-        } catch (Exception e) {
+        } catch (Throwable e) {
             LogUtils.w(e);
         }
         BiometricPrompt.CryptoObject cryptoObject = new BiometricPrompt.CryptoObject(cipher);
@@ -984,7 +986,7 @@ public class MainActivity extends AppCompatActivity {
                 super.onAuthenticationSucceeded(result);
                 Cipher cipher2 = result.getCryptoObject().getCipher();
                 try {
-                    LogUtils.i("解密后:"+ CryptUtil.decryptData(encrypted,cipher2));
+                    LogUtils.i("解密后:"+ AesCipherUtil.decryptData(encrypted,cipher2));
                 } catch (Throwable e) {
                    LogUtils.w(e);
                 }
