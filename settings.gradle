@@ -1,5 +1,6 @@
 include ':ext'
 include ':lib-base'
+include ':lib-base-base'
 include ':app'
 rootProject.name = "UtilsEnhance"
 include ':common'

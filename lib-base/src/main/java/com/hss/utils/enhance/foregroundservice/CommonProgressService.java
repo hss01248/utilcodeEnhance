@@ -10,24 +10,18 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
-import android.util.Log;
-import android.view.View;
-import android.widget.RemoteViews;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.ThreadUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
 import com.hss.utils.enhance.R;
-import com.hss01248.permission.MyPermissions;
 import com.hss01248.permission.ext.IExtPermissionCallback;
 import com.hss01248.permission.ext.MyPermissionsExt;
-import com.hss01248.permission.ext.permissions.NotificationListenerPermissionImpl;
 import com.hss01248.permission.ext.permissions.NotificationPermission;
 
 import java.io.BufferedReader;

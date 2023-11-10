@@ -5,7 +5,6 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import com.blankj.utilcode.util.LogUtils;
-import com.hss.utils.enhance.TimeOutUtil;
 import com.hss.utils.enhance.lifecycle.LifecledCallbackHelper;
 
 import java.lang.reflect.InvocationHandler;

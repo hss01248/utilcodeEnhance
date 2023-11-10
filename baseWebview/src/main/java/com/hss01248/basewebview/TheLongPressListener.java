@@ -5,8 +5,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.webkit.WebView;
 
@@ -15,7 +13,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.blankj.utilcode.util.BarUtils;
 import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.ReflectUtils;
 import com.hss.utils.enhance.TypeToDescUtil;
 import com.hss.utils.enhance.intent.SysIntentUtil;
 import com.hss01248.bigimageviewpager.LargeImageViewer;

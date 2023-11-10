@@ -7,15 +7,11 @@ import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.blankj.utilcode.util.ActivityUtils;
-import com.blankj.utilcode.util.BarUtils;
 import com.hss.utils.enhance.viewholder.MyViewHolder;
 import com.hss.utils.enhance.viewholder.viewpager.BasePagerAdapter;
 import com.hss.utils.enhance.viewholder.viewpager.IViewPagerInstantiateItem;
 import com.hss01248.basewebview.BaseQuickWebview;
-import com.hss01248.basewebview.R;
 import com.hss01248.basewebview.databinding.VpHistoryCollectBinding;
-import com.hss01248.dialog.fullscreen.FullScreenDialog;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;

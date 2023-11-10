@@ -46,7 +46,8 @@ dependencies {
 
     // For App Authentication API testing
     androidTestImplementation "androidx.security:security-app-authenticator:1.0.0-alpha01"
-
+    api project(path: ':biometric')
+    api project(path: ':lib-base-base')
     //https://developer.android.com/topic/security/data-android-versions?hl=zh-cn
     //在 Android 5.0（API 级别 21）和 Android 5.1（API 级别 22）中，您无法使用 Android 密钥库存储密钥集。
 }

@@ -4,7 +4,6 @@ import android.app.KeyguardManager;
 import android.content.Context;
 import android.os.Build;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricManager;
@@ -128,6 +127,7 @@ public class BiometricHelper {
      */
     public static  void showBiometricDialog(FragmentActivity activityContext,
                                             @Nullable BiometricPrompt.CryptoObject crypto,
+                                            boolean canUseOnlyPasswordPin,
                                             BiometricPrompt.AuthenticationCallback callback) {
         BiometricPrompt.PromptInfo promptInfo = null;
         if (isBiometricHardWareAvailable(activityContext)) {
@@ -138,7 +138,7 @@ public class BiometricHelper {
                     BioConstants.BIOMETRIC_AUTHENTICATION_DESCRIPTION,
                     false
             );
-        } else if (deviceHasPasswordPinLock(activityContext)) {
+        } else if (canUseOnlyPasswordPin && deviceHasPasswordPinLock(activityContext)) {
 
             promptInfo = initBiometricPrompt(
                     BioConstants.PASSWORD_PIN_AUTHENTICATION,
@@ -148,6 +148,7 @@ public class BiometricHelper {
             );
         }
         if (promptInfo == null) {
+            callback.onAuthenticationError(BiometricPrompt.ERROR_NO_DEVICE_CREDENTIAL,"not supported");
             return;
         }
         BiometricPrompt biometricPrompt = new BiometricPrompt(activityContext, ContextCompat.getMainExecutor(activityContext), callback);

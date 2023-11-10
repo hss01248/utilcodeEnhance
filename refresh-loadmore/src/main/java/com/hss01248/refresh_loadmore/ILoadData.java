@@ -1,14 +1,6 @@
 package com.hss01248.refresh_loadmore;
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
-import android.view.Gravity;
 import android.view.View;
-import android.widget.PopupWindow;
-import android.widget.TextView;
-
-import androidx.core.widget.PopupWindowCompat;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hss.utils.enhance.api.MyCommonCallback;

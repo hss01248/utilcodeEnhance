@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Environment;
 import android.provider.MediaStore;
 
 import androidx.annotation.NonNull;
@@ -18,10 +17,8 @@ import com.blankj.utilcode.util.Utils;
 import com.hss.utils.enhance.api.MyCommonCallback;
 import com.hss01248.activityresult.ActivityResultListener;
 import com.hss01248.activityresult.StartActivityUtil;
-import com.hss01248.openuri.OpenUri;
 import com.hss01248.permission.MyPermissions;
 
-import java.io.File;
 import java.util.List;
 
 public class CaptureAudioUtil {

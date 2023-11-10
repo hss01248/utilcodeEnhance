@@ -12,34 +12,41 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.security.identity.IdentityCredential;
+import android.util.Base64;
+import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricPrompt;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ThreadUtils;
-import com.blankj.utilcode.util.ThrowableUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
-import com.github.gzuliyujiang.filepicker.ExplorerConfig;
-import com.github.gzuliyujiang.filepicker.FilePicker;
-import com.github.gzuliyujiang.filepicker.contract.OnFilePickedListener;
 import com.google.gson.GsonBuilder;
 import com.hss.utils.enhance.BarColorUtil;
 import com.hss.utils.enhance.HomeMaintaner;
+import com.hss.utils.enhance.UrlEncodeUtil;
+import com.hss.utils.enhance.api.MyCommonCallback;
+import com.hss.utils.base.api.MyCommonCallback3;
 import com.hss.utils.enhance.foregroundservice.CommonProgressService;
 import com.hss.utils.enhance.intent.ShareUtils;
-import com.hss.utils.enhance.UrlEncodeUtil;
 import com.hss.utils.enhance.intent.SysIntentUtil;
-import com.hss01248.activityresult.ActivityResultListener;
 import com.hss01248.activityresult.StartActivityUtil;
 import com.hss01248.activityresult.TheActivityListener;
 import com.hss01248.basewebview.BaseWebviewActivity;
 import com.hss01248.biometric.BiometricHelper;
 import com.hss01248.biometric.CryptUtil;
+import com.hss01248.cipher.RsaCipherUtil;
 import com.hss01248.cipher.file.EncryptedUtil;
 import com.hss01248.cipher.sp.EnSpUtil;
-import com.hss01248.cipher.sp.SpUtil;
 import com.hss01248.image.dataforphotoselet.ImgDataSeletor;
 import com.hss01248.iwidget.BaseDialogListener;
 import com.hss01248.iwidget.msg.AlertDialogImplByDialogUtil;
@@ -49,32 +56,18 @@ import com.hss01248.iwidget.singlechoose.SingleChooseDialogImpl;
 import com.hss01248.iwidget.singlechoose.SingleChooseDialogListener;
 import com.hss01248.media.contact.ContactInfo;
 import com.hss01248.media.contact.ContactPickUtil;
+import com.hss01248.media.metadata.MetaDataUtil;
 import com.hss01248.media.pick.CaptureAudioUtil;
-import com.hss01248.media.pick.MediaPickOrCaptureUtil;
-import com.hss01248.media.pick.MediaPickUtil;
-import com.hss.utils.enhance.api.MyCommonCallback;
-import com.hss01248.media.pick.SafUtil;
 import com.hss01248.media.pick.CaptureImageUtil;
 import com.hss01248.media.pick.CaptureVideoUtil;
-import com.hss01248.media.metadata.MetaDataUtil;
+import com.hss01248.media.pick.MediaPickOrCaptureUtil;
+import com.hss01248.media.pick.MediaPickUtil;
+import com.hss01248.media.pick.SafUtil;
 import com.hss01248.media.uri.ContentUriUtil;
 import com.hss01248.openuri.OpenUri;
 import com.hss01248.permission.MyPermissions;
 import com.hss01248.qrscan.ScanCodeActivity;
 import com.hss01248.toast.MyToast;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.biometric.BiometricPrompt;
-import androidx.security.crypto.MasterKeys;
-
-import android.provider.MediaStore;
-import android.security.keystore.KeyGenParameterSpec;
-import android.util.Base64;
-import android.util.Log;
-import android.view.View;
 
 import org.devio.takephoto.wrap.TakeOnePhotoListener;
 import org.devio.takephoto.wrap.TakePhotoUtil;
@@ -83,13 +76,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.net.URLDecoder;
 import java.security.KeyStore;
+import java.security.NoSuchAlgorithmException;
+import java.security.Signature;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
+import javax.crypto.spec.GCMParameterSpec;
 
 import io.reactivex.functions.Consumer;
 
@@ -884,7 +880,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void biometric(View view) {
-        BiometricHelper.showBiometricDialog(this, null,new BiometricPrompt.AuthenticationCallback() {
+        Cipher cipher = CryptUtil.getCipher();
+        try {
+            cipher.init(Cipher.ENCRYPT_MODE, CryptUtil.getOrCreateSecretKey("pw",true));
+        } catch (Exception e) {
+            LogUtils.w(e);
+        }
+
+        BiometricPrompt.CryptoObject cryptoObject = new BiometricPrompt.CryptoObject(cipher);
+        BiometricHelper.showBiometricDialog(this, cryptoObject,true,new BiometricPrompt.AuthenticationCallback() {
             @Override
             public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
@@ -912,6 +916,22 @@ public class MainActivity extends AppCompatActivity {
                 ToastUtils.showLong("验证成功:"+result.getAuthenticationType());
                 //result.getCryptoObject().getSignature();
                 //https://zhuanlan.zhihu.com/p/489913461   移动端系统生物认证技术详解
+                if(result.getCryptoObject() ==null){
+                    //DEVICE_CREDENTIAL = 1
+                    //TYPE_BIOMETRIC = 2
+                    LogUtils.w("result.getCryptoObject() ==null, type is "+result.getAuthenticationType());
+                    return;
+                }
+                IdentityCredential identityCredential = null;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                     identityCredential = result.getCryptoObject().getIdentityCredential();
+                }
+
+                LogUtils.d(result.getCryptoObject().getCipher(),
+                            result.getCryptoObject().getSignature(),
+                            result.getCryptoObject().getMac(),
+                            identityCredential
+                            );
                 try{
                     String str = "login_pw_123456";
                     Cipher cipher = result.getCryptoObject().getCipher();
@@ -919,10 +939,16 @@ public class MainActivity extends AppCompatActivity {
                    // if(SpUtil.getString("en_key"),"")
 
                     byte[] encrypted = cipher.doFinal(str.getBytes());
-                    byte[] IV = cipher.getIV();
+                    byte[] iv = cipher.getIV();
                     String se = Base64.encodeToString(encrypted, Base64.URL_SAFE);
-                    String siv = Base64.encodeToString(IV, Base64.URL_SAFE);
+                    String siv = Base64.encodeToString(iv, Base64.URL_SAFE);
                     //SpUtil.putString("en_key");
+                    LogUtils.i("加密后:"+se,"iv:"+siv);
+
+                    decrypt2(encrypted,iv);
+
+
+
                 }catch (Throwable throwable){
                     LogUtils.w(throwable);
                 }
@@ -936,6 +962,47 @@ public class MainActivity extends AppCompatActivity {
                 ToastUtils.showLong("onAuthenticationFailed");
             }
         });
+    }
+
+    private void decrypt2(byte[] encrypted, byte[] iv) {
+        Cipher cipher = CryptUtil.getCipher();
+        try {
+           int TAG_SIZE_IN_BYTES = 16;
+            //IV required when decrypting
+            //cipher.init(Cipher.DECRYPT_MODE, CryptUtil.getOrCreateSecretKey("pw",true));
+            cipher.init(Cipher.DECRYPT_MODE, CryptUtil.getOrCreateSecretKey("pw",true),
+                    new GCMParameterSpec(TAG_SIZE_IN_BYTES * 8, iv));
+        } catch (Exception e) {
+            LogUtils.w(e);
+        }
+        BiometricPrompt.CryptoObject cryptoObject = new BiometricPrompt.CryptoObject(cipher);
+        BiometricHelper.showBiometricDialog(this, cryptoObject,true, new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                Cipher cipher2 = result.getCryptoObject().getCipher();
+                try {
+                    LogUtils.i("解密后:"+ CryptUtil.decryptData(encrypted,cipher2));
+                } catch (Throwable e) {
+                   LogUtils.w(e);
+                }
+
+            }
+
+            @Override
+            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+                ToastUtils.showLong("onAuthenticationError,"+errorCode+","+errString);
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+                ToastUtils.showLong("onAuthenticationFailed");
+            }
+        });
+
+
     }
 
     public void enSp(View view) {
@@ -1006,35 +1073,66 @@ public class MainActivity extends AppCompatActivity {
 
     public void listKeystore(View view) {
         try{
-
-            SecretKey testKeyStore1 = CryptUtil.getOrCreateSecretKey("test_key_store3",false);
-            //AndroidKeyStoreSecretKey storeSecretKey = null;
-            //android.security.keystore2.AndroidKeyStoreSecretKey@af6e2d2d
-            LogUtils.d(testKeyStore1.getAlgorithm(),testKeyStore1.getFormat(),testKeyStore1);
-
-            Cipher cipher = CryptUtil.getCipher();
-            cipher.init(Cipher.ENCRYPT_MODE,testKeyStore1);
-            //android.security.KeyStoreException: Key user not authenticated (internal Keystore code: -26 message: In KeystoreOperation::update
-            byte[] testData1s = CryptUtil.encryptData("testData1", cipher);
-
-            Cipher cipher2 = CryptUtil.getCipher();
-            // IV required when decrypting. Use IvParameterSpec or AlgorithmParameters to provide it.
-            cipher2.init(Cipher.DECRYPT_MODE,testKeyStore1);
-            String s1 = CryptUtil.decryptData(testData1s, cipher2);
-            LogUtils.i("decrypted",s1);
-
-
             KeyStore ks = KeyStore.getInstance("AndroidKeyStore");
             ks.load(null);
             Enumeration<String> aliases = ks.aliases();
 
+            List<String> strings = new ArrayList<>();
             while (aliases.hasMoreElements()){
                 String s = aliases.nextElement();
-                System.out.println("key: "+s);
+                strings.add(s);
             }
+            LogUtils.w(strings);
         }catch (Throwable throwable){
             LogUtils.w(throwable);
         }
 
+    }
+
+    public void biometricSignature(View view) {
+        Signature signature = null;
+        try {
+            signature = Signature.getInstance("");
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+        BiometricPrompt.CryptoObject cryptoObject = new BiometricPrompt.CryptoObject(signature);
+        BiometricHelper.showBiometricDialog(this, null,true, new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+            }
+
+            @Override
+            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+            }
+        });
+    }
+    byte[] encryptedData;
+    public void bioEncryptByPublic(View view) {
+        try {
+            encryptedData = RsaCipherUtil.encryptByPublicKeyWithUserVerify("mykey", "123456".getBytes());
+        } catch (Throwable e) {
+            LogUtils.w(e);
+        }
+    }
+
+    public void bioDecryptByPrivate(View view) {
+        if(encryptedData ==null){
+            bioEncryptByPublic(view);
+        }
+        RsaCipherUtil.decryptByPrivateKeyWithUserVerify("mykey", encryptedData, true,
+                new MyCommonCallback3<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+                        LogUtils.i("解密后: "+new String(bytes));
+                    }
+                });
     }
 }

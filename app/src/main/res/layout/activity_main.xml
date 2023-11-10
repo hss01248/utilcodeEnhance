@@ -264,8 +264,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <androidx.appcompat.widget.AppCompatButton
-                android:text="指纹/人脸/密码验证"
+                android:text="指纹/人脸/密码验证-cipher"
                 android:onClick="biometric"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="指纹/人脸/密码验证-signature"
+                android:onClick="biometricSignature"
                 android:textAllCaps="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -284,6 +290,18 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:text="keystore列表"
                 android:onClick="listKeystore"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="bio-公钥加密"
+                android:onClick="bioEncryptByPublic"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="bio-私钥解密"
+                android:onClick="bioDecryptByPrivate"
                 android:textAllCaps="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>

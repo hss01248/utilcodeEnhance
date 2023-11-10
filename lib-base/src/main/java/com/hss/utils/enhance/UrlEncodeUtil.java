@@ -5,12 +5,9 @@ import android.text.TextUtils;
 
 import com.blankj.utilcode.util.LogUtils;
 
-import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
-
-import javax.xml.transform.sax.TemplatesHandler;
 
 /**
  * @Despciption todo 解决崩溃,以及加号问题  https://blog.csdn.net/feinifi/article/details/83622606

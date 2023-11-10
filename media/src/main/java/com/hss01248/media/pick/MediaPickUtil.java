@@ -1,46 +1,32 @@
 package com.hss01248.media.pick;
 
 import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_OK;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.provider.BaseColumns;
-import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
-import android.webkit.MimeTypeMap;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContentResolverCompat;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.Utils;
 import com.hss.utils.enhance.api.MyCommonCallback;
-import com.hss01248.activityresult.ActivityResultListener;
 import com.hss01248.activityresult.StartActivityUtil;
 import com.hss01248.activityresult.TheActivityListener;
 import com.hss01248.media.uri.ContentUriUtil;
 import com.hss01248.permission.MyPermissions;
 
 import java.io.File;
-import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * @author: Administrator

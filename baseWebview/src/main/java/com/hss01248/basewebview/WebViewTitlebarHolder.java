@@ -1,25 +1,13 @@
 package com.hss01248.basewebview;
 
-import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.TextView;
 
 import com.blankj.utilcode.util.ActivityUtils;
-import com.blankj.utilcode.util.KeyboardUtils;
-import com.blankj.utilcode.util.ScreenUtils;
-import com.blankj.utilcode.util.SizeUtils;
-import com.example.zhouwei.library.CustomPopWindow;
 import com.hss.utils.enhance.viewholder.MyViewHolder;
 import com.hss01248.basewebview.databinding.TitlebarForWebviewBinding;
 import com.hss01248.basewebview.search.WebSearchViewHolder;
-import com.hss01248.history.api.OnHistoryItemClickListener;
-import com.hss01248.history.api.SearchHistoryViewHolder;
-import com.hss01248.history.api.db.SearchDbUtil;
-import com.hss01248.toast.MyToast;
 
 /**
  * @Despciption todo
