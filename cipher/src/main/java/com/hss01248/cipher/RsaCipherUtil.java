@@ -113,7 +113,7 @@ public class RsaCipherUtil {
      * @throws Exception
      */
     @RequiresApi(api = Build.VERSION_CODES.M)
-    private static  KeyPair getRsaCipherKeyPair( String keyAlias,boolean userAuthenticationRequired) throws Exception {
+    public static  KeyPair getRsaCipherKeyPair( String keyAlias,boolean userAuthenticationRequired) throws Throwable {
 
         KeyStore keyStore = KeyStore.getInstance("AndroidKeyStore");
         keyStore.load(null);

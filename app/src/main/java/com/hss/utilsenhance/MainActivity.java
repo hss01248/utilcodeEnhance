@@ -46,6 +46,7 @@ import com.hss01248.biometric.BiometricHelper;
 import com.hss01248.cipher.AesCipherUtil;
 import com.hss01248.cipher.RsaCipherUtil;
 import com.hss01248.cipher.SignUtil;
+import com.hss01248.cipher.SslUtil;
 import com.hss01248.cipher.file.EncryptedUtil;
 import com.hss01248.cipher.sp.EnSpUtil;
 import com.hss01248.image.dataforphotoselet.ImgDataSeletor;
@@ -1190,5 +1191,21 @@ public class MainActivity extends AppCompatActivity {
                 },
                 "123456".getBytes()
         );
+    }
+
+    public void aesEncrypt(View view) {
+        String str = "123456789U";
+        try {
+            byte[] aeskeys = AesCipherUtil.encrypt("aeskey", str.getBytes());
+            byte[] aeskeys1 = AesCipherUtil.decrypt("aeskey", aeskeys);
+            LogUtils.d("解密后数据: "+new String(aeskeys1));
+        } catch (Throwable e) {
+            LogUtils.w(e);
+        }
+
+    }
+
+    public void sslMock(View view) {
+        SslUtil.test();
     }
 }

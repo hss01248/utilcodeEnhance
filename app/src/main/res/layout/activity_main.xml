@@ -317,6 +317,18 @@
                 android:textAllCaps="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="aes加密-解密"
+                android:onClick="aesEncrypt"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="https模拟"
+                android:onClick="sslMock"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
         </com.google.android.flexbox.FlexboxLayout>
         <TextView
             android:layout_margin="10dp"
