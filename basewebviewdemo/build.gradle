@@ -16,8 +16,8 @@ android {
         applicationId "com.hss01248.basewebviewdemo"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 1007
-        versionName "1.0.07"
+        versionCode 1008
+        versionName "1.0.08"
         multiDexEnabled true
         ndk {
             abiFilters "arm64-v8a" //"armeabi-v7a", "x86"//, "x86", "x86_64"

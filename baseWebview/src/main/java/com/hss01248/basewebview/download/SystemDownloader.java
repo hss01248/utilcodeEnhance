@@ -14,6 +14,7 @@ import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
 import com.hss01248.basewebview.IDownloader;
+import com.hss01248.openuri2.OpenUri2;
 
 import java.io.File;
 
@@ -33,10 +34,11 @@ public class SystemDownloader implements IDownloader {
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
         request.setTitle(name);
         request.setDescription("正在下载");
+        request.setVisibleInDownloadsUi(true);
         //request.setAllowedOverRoaming(false);//漫游
         //设置文件存放目录
         //request.setDestinationUri(OpenUri.fromFile(Utils.getApp(),new File(dir)));
-        request.setDestinationUri(Uri.fromFile(new File(dir)));
+        request.setDestinationUri(Uri.fromFile(new File(dir,name)));
         DownloadManager downManager = (DownloadManager) Utils.getApp().getSystemService(Context.DOWNLOAD_SERVICE);
         long id = downManager.enqueue(request);
         ToastUtils.showLong("已加入系统下载队列,可在通知栏查看");
@@ -47,6 +49,9 @@ public class SystemDownloader implements IDownloader {
                 LogUtils.i("download success",uri,name,id);
                 //content://downloads/all_downloads/1453
                 ToastUtils.showLong( "任务:" + id + ", 文件: "+name+" 下载完成!");
+                Uri uri2 = OpenUri2.fromFile(Utils.getApp(),new File(dir,name));
+                //Intent intent = new Intent(Intent.ACTION_SEND)
+
             }
         });
 
