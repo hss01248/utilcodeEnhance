@@ -200,7 +200,13 @@ public class CommonProgressService extends Service {
         String category = Notification.CATEGORY_SERVICE;
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         //notificationManager.areNotificationsEnabled()
-        Intent nfIntent = new Intent(context, ActivityUtils.getTopActivity().getClass());
+        //ActivityUtils.getTopActivity()可能为空
+        Intent nfIntent = null;
+        if(ActivityUtils.getTopActivity() != null){
+            nfIntent = new Intent(context, ActivityUtils.getTopActivity().getClass());
+        }else {
+            nfIntent = new Intent(Intent.ACTION_VIEW);
+        }
         int  mFlag = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ? PendingIntent.FLAG_IMMUTABLE : PendingIntent.FLAG_UPDATE_CURRENT;
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, nfIntent, mFlag);
 
