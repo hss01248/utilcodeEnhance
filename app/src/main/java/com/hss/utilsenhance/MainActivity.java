@@ -44,6 +44,7 @@ import com.hss01248.activityresult.TheActivityListener;
 import com.hss01248.basewebview.BaseWebviewActivity;
 import com.hss01248.biometric.BiometricHelper;
 import com.hss01248.cipher.AesCipherUtil;
+import com.hss01248.cipher.PasswordLoginByBiometric;
 import com.hss01248.cipher.RsaCipherUtil;
 import com.hss01248.cipher.SignUtil;
 import com.hss01248.cipher.SslUtil;
@@ -1207,5 +1208,16 @@ public class MainActivity extends AppCompatActivity {
 
     public void sslMock(View view) {
         SslUtil.test();
+    }
+
+    public void bioDecryptByPrivateForPasswordLogin(View view) {
+        PasswordLoginByBiometric.savePw("7788","1234");
+        PasswordLoginByBiometric.getPwByName("7788",
+                true, new MyCommonCallback3<String>() {
+            @Override
+            public void onSuccess(String s) {
+                MyToast.show("密码是: "+s);
+            }
+        });
     }
 }

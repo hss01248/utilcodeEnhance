@@ -124,6 +124,17 @@ public class RsaCipherUtil {
             PublicKey publicKey = ((KeyStore.PrivateKeyEntry)entry).getCertificate().getPublicKey();
             return new KeyPair(publicKey, privateKey);
         } else {
+
+           /* BiometricManager biometricManager = BiometricManager.from(Utils.getApp());
+            boolean supportAuth = biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG)
+                    || biometricManager.canAuthenticate(BiometricManager.Authenticators.DEVICE_CREDENTIAL);*/
+            //Checks if the user can authenticate with an authenticator that meets the given requirements. This requires at
+            // least one of the specified authenticators to be present, enrolled, and available on the device.
+            //Note that not all combinations of authenticator types are supported prior to Android 11 (API 30).
+            // Specifically, DEVICE_CREDENTIAL alone is unsupported prior to API 30, and BIOMETRIC_STRONG | DEVICE_CREDENTIAL
+            // is unsupported on API 28-29. Developers that wish to check for the presence of a PIN, pattern, or password on these
+            // versions should instead use KeyguardManager.isDeviceSecure().
+
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA", "AndroidKeyStore");
             KeyGenParameterSpec.Builder builder = null;
             builder = (new KeyGenParameterSpec.Builder(KEY_NAME + keyAlias, KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT))
@@ -131,6 +142,7 @@ public class RsaCipherUtil {
                     .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
                     .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_PKCS1) // 设置加密填充模式
 //                        .setSignaturePaddings(KeyProperties.SIGNATURE_PADDING_RSA_PKCS1) //设置签名填充模式
+                    //todo 需要先检查硬件是否支持
                     .setUserAuthenticationRequired(userAuthenticationRequired)
 //                        .setUserAuthenticationValidityDurationSeconds(100)
                     .setKeySize(1024);
@@ -139,4 +151,8 @@ public class RsaCipherUtil {
         }
 
     }
+
+
+
+
 }

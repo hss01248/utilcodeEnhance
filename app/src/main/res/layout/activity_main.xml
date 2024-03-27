@@ -305,6 +305,13 @@
                 android:textAllCaps="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="指纹/密码验证的-rsa加解密-passwordLogin方法验证"
+                android:onClick="bioDecryptByPrivateForPasswordLogin"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
             <androidx.appcompat.widget.AppCompatButton
                 android:text="加签和验证"
                 android:onClick="signAndVerify"

@@ -18,6 +18,12 @@ public class BaseApp extends MultiDexApplication {
         super.onCreate();
 
         LogUtils.getConfig().setLogSwitch(true);
+        LogUtils.getConfig().setOnConsoleOutputListener(new LogUtils.OnConsoleOutputListener() {
+            @Override
+            public void onConsoleOutput(int type, String tag, String content) {
+
+            }
+        });
         //registerActivityLifecycleCallbacks(new PlayDecorviewActivityLifeycleCallback());
 
     }
