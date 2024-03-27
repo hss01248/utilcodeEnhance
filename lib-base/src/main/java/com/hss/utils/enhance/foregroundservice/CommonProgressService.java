@@ -95,14 +95,15 @@ public class CommonProgressService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         //调用startForeground() 方法
         //LogUtils.d("onStartCommand: ","------>");
-        String title = intent.getStringExtra("title");
-        String msg = intent.getStringExtra("msg");
-        int notifyId = intent.getIntExtra("notifyId",-1);
-        if(notifyId<=0){
-            notifyId = notify_id;
+        if(intent !=null){
+            String title = intent.getStringExtra("title");
+            String msg = intent.getStringExtra("msg");
+            int notifyId = intent.getIntExtra("notifyId",-1);
+            if(notifyId<=0){
+                notifyId = notify_id;
+            }
+            startForeground(notifyId, getNotification(ActivityUtils.getTopActivity(), title, msg,-1,100));//创建一个通知，创建通知前记得获取开启通知权限
         }
-        startForeground(notifyId, getNotification(ActivityUtils.getTopActivity(), title, msg,-1,100));//创建一个通知，创建通知前记得获取开启通知权限
-
         //doTask();
 
         return super.onStartCommand(intent, flags, startId);
