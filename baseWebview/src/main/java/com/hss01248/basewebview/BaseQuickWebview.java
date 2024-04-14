@@ -255,6 +255,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
         BaseQuickWebview quickWebview = new BaseQuickWebview(context);
         quickWebview.needBlockImageLoad = true;
         quickWebview.delayAfterOnFinish = delayAfterOnFinish;
+
 /*
         Dialog dialog = new Dialog(context);
         dialog.setCanceledOnTouchOutside(false);
@@ -978,6 +979,8 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
         if (mAgentWeb != null) {
             mAgentWeb.getWebLifeCycle().onDestroy();
         }
+        //解决内存泄漏的问题
+        sourceLoadListener = null;
     }
 
     public boolean onBackPressed() {
