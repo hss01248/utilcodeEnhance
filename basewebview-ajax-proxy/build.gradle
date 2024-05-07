@@ -21,10 +21,9 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+
 
     api 'org.jsoup:jsoup:1.13.1'
-    testCompile 'junit:junit:4.12'
     api 'com.github.Justson.AgentWeb:agentweb-core:v5.0.6-androidx' // (必选)
     implementation "com.squareup.okhttp3:okhttp:3.12.12"
     api 'com.blankj:utilcodex:1.30.6'

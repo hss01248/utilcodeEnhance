@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     apply from: 'https://raw.githubusercontent.com/hss01248/flipperUtil/dev/remote3.gradle'
-    apply from: 'https://raw.githubusercontent.com/hss01248/flipperUtil/master/deps/depsLastestChecker.gradle'
+    apply from: 'https://raw.githubusercontent.com/hss01248/flipperUtil/dev/deps/depsLastestChecker.gradle'
     apply from: 'https://raw.githubusercontent.com/hss01248/flipperUtil/dev/z_config/git_branch_info.gradle'
     apply from: "app/configs/componentized.gradle"
     apply from: "app/configs/apk_shrink.gradle"
@@ -9,7 +9,7 @@ buildscript {
     ext.kotlin_version = '1.6.10'
 
     dependencies {
-        classpath "com.android.tools.build:gradle:4.1.0"
+        classpath "com.android.tools.build:gradle:7.1.2"
         classpath 'com.tencent.mm:AndResGuard-gradle-plugin:1.2.21'
         classpath "com.tencent.bugly:symtabfileuploader:2.2.1"
         classpath 'org.greenrobot:greendao-gradle-plugin:3.3.0'
