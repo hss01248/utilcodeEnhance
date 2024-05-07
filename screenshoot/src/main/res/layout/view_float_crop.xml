@@ -3,9 +3,10 @@
     <TextView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:text="⋅"
-        android:textColor="#33999999"
+        android:textColor="#66999999"
         android:gravity="center"
+    android:background="#33ffffff"
         android:textSize="20dp"
-        android:layout_width="40dp"
-        android:layout_height="40dp"/>
+        android:layout_width="60dp"
+        android:layout_height="60dp"/>
 

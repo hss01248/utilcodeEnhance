@@ -3,13 +3,17 @@ package com.hss01248.screenshoot.system;
 import android.app.Dialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.projection.MediaProjectionManager;
+import android.net.Uri;
 import android.os.Build;
-import android.view.Gravity;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -29,6 +33,16 @@ import com.hss01248.screenshoot.R;
 import com.lzf.easyfloat.EasyFloat;
 import com.lzf.easyfloat.enums.ShowPattern;
 import com.lzf.easyfloat.interfaces.OnFloatCallbacks;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * @Despciption 申请权限: 后台弹出界面,显示悬浮窗/system alert window. 长截屏->无障碍服务
@@ -73,6 +87,27 @@ public class SystemScreenShotUtil {
                     textView.setTextColor(Color.parseColor("#33999999"));
                 }
             }, 300);
+
+            ThreadUtils.executeByIo(new ThreadUtils.SimpleTask<Object>() {
+                @Override
+                public Object doInBackground() throws Throwable {
+                    long start = System.currentTimeMillis();
+                    saveBitmap(bitmap);
+                    LogUtils.d("save cost: ",System.currentTimeMillis() -start);
+                    return null;
+                }
+
+                @Override
+                public void onSuccess(Object result) {
+
+                }
+
+                @Override
+                public void onFail(Throwable t) {
+                    super.onFail(t);
+                }
+            });
+
         }
         if (bitmap == null) {
             //ToastUtils.showShort("bitmap is null");
@@ -82,6 +117,7 @@ public class SystemScreenShotUtil {
 
         LogUtils.i("shot", "bitmap", bitmap.getWidth(), bitmap.getHeight());
 
+
         if (ActivityUtils.getTopActivity() != null) {
             ImageView imageView = new ImageView(ActivityUtils.getTopActivity());
             imageView.setImageBitmap(bitmap);
@@ -89,52 +125,111 @@ public class SystemScreenShotUtil {
             dialog.setContentView(imageView);
             dialog.show();
         } else {
-            ImageView imageView = new ImageView(Utils.getApp());
-            imageView.setImageBitmap(bitmap);
-            EasyFloat.with(Utils.getApp())
-                    .setLayout(imageView)
-                    .setTag("image")
-                    .setShowPattern(ShowPattern.ALL_TIME)
-                    .registerCallbacks(new OnFloatCallbacks() {
-                        @Override
-                        public void createdResult(boolean b, String s, View view) {
-
-                        }
-
-                        @Override
-                        public void show(View view) {
-
-                        }
-
-                        @Override
-                        public void hide(View view) {
-
-                        }
-
-                        @Override
-                        public void dismiss() {
-
-                        }
-
-                        @Override
-                        public void touchEvent(View view, MotionEvent motionEvent) {
-                            //EasyFloat.dismiss("image");
-                        }
-
-                        @Override
-                        public void drag(View view, MotionEvent motionEvent) {
-
-                        }
-
-                        @Override
-                        public void dragEnd(View view) {
-
-                        }
-                    })
-                    .show();
+            //ImageView imageView = new ImageView(Utils.getApp());
+            //imageView.setImageBitmap(bitmap);
         }
 
 
+    }
+
+    private static void saveBitmap(Bitmap bitmap) throws Exception {
+        //根据预订尺寸裁切
+        // 假设bitmap是你的原始图像
+       /* Bitmap originalBitmap = bitmap;
+
+// 确定要裁剪的区域
+        int x = 20; // 距离原图左边界20像素
+        int y = 20; // 距离原图上边界20像素
+        int width = originalBitmap.getWidth() - 40; // 裁剪后的宽度比原图宽度小40像素
+        int height = originalBitmap.getHeight() - 40; // 裁剪后的高度比原图高度小40像素
+
+// 创建裁剪后的Bitmap
+        Bitmap croppedBitmap = Bitmap.createBitmap(originalBitmap, x, y, width, height);*/
+
+        //压缩成jpg和png,然后对比大小,保留小的
+
+        //文件名规则:
+        String fileName = fileName();
+
+
+        File dir = new File(Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_PICTURES),"screenshot2");
+        dir.mkdirs();
+
+        File jpgFile = new File(dir,fileName+".jpg");
+        FileOutputStream fileOutputStream = new FileOutputStream(jpgFile);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 85, fileOutputStream);
+
+        File finalFile = jpgFile;
+        boolean compaired = false;
+        if(compaired){
+            File pngFile = new File(dir,fileName+".png");
+            FileOutputStream pngOutputStream = new FileOutputStream(pngFile);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 85, pngOutputStream);
+
+            LogUtils.i("文件大小:",jpgFile.getAbsolutePath(),jpgFile.length(),pngFile.getAbsolutePath(),pngFile.length());
+            if(jpgFile.length()> pngFile.length() && pngFile.length()>0){
+                LogUtils.i("png文件更小,使用png格式");
+                jpgFile.delete();
+                finalFile = pngFile;
+            }else{
+                LogUtils.i("jpg文件更小,使用jpg格式");
+                pngFile.delete();
+            }
+        }
+
+
+        //将文件写到mediastore
+        String path = Environment.DIRECTORY_DCIM+"/my-screenshot" ;
+        writeToMediaStore(finalFile,path);
+        File myFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+path+"/"+finalFile.getName());
+        if(myFile.exists() && myFile.length() >0){
+            LogUtils.i("文件成功另存到mediastore:",myFile.getAbsolutePath());
+            finalFile.delete();
+        }else{
+            LogUtils.i("文件另存到mediastore 失败:",myFile.getAbsolutePath());
+        }
+    }
+
+    private static void writeToMediaStore(File srcFile,String path) throws Exception{
+// 获得ContentResolver对象
+        ContentResolver resolver = Utils.getApp().getContentResolver();
+
+        // 设置文件信息到ContentValues对象
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, srcFile.getName());
+        contentValues.put(MediaStore.MediaColumns.MIME_TYPE,
+                srcFile.getName().endsWith(".jpg")?"image/jpeg":"image/png");
+        // 根据文件类型设置
+        contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, path);
+
+        // 插入文件到系统MediaStore
+        Uri uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+        if (uri != null) {
+            try (OutputStream outputStream = resolver.openOutputStream(uri);
+                 InputStream inputStream = new FileInputStream(srcFile)) {
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = inputStream.read(buffer)) > 0) {
+                    outputStream.write(buffer, 0, length);
+                }
+                outputStream.flush();
+            } catch (IOException e) {
+                LogUtils.w(e,srcFile.getAbsolutePath());
+                throw e;
+            }
+        } else {
+            throw new IOException("Failed to create new MediaStore record: "+srcFile.getAbsolutePath());
+        }
+    }
+
+    private static String fileName() {
+        // 获取当前的日期和时间
+        Date now = new Date();
+        // 创建SimpleDateFormat对象，定义日期时间格式
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.getDefault());
+        // 格式化当前日期和时间
+        String formattedDate = sdf.format(now);
+        return formattedDate;
     }
 
 
@@ -145,7 +240,7 @@ public class SystemScreenShotUtil {
                 .setLayout(R.layout.view_float_crop)
                 .setShowPattern(ShowPattern.ALL_TIME)
                 .setDragEnable(true)
-                .setGravity(Gravity.BOTTOM|Gravity.RIGHT,0,-50)
+                //.setGravity(Gravity.BOTTOM|Gravity.RIGHT,0,-50)
                 // 设置浮窗固定坐标，ps：设置固定坐标，Gravity属性和offset属性将无效
                 //.setLocation(ScreenUtils.getScreenWidth()- SizeUtils.dp2px(50), ScreenUtils.getScreenHeight()- SizeUtils.dp2px(40))
                 // 设置拖拽边界值

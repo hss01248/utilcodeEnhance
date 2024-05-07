@@ -86,6 +86,7 @@ public class CaptureService extends Service {
     }
 
     public Bitmap screenShot(MediaProjection mediaProjection){
+        long startTime0 = System.currentTimeMillis();
         Objects.requireNonNull(mediaProjection);
         @SuppressLint("WrongConstant")
         ImageReader imageReader = ImageReader.newInstance(width, height, PixelFormat.RGBA_8888, 3);
@@ -99,7 +100,12 @@ public class CaptureService extends Service {
 //        Image image = imageReader.acquireNextImage();
         //释放 virtualDisplay,不释放会报错
         virtualDisplay.release();
-        return image2Bitmap(image);
+
+        LogUtils.d("acquireLatestImage cost ms ",System.currentTimeMillis() - startTime0);
+        long startTime = System.currentTimeMillis();
+        Bitmap bitmap =  image2Bitmap(image);
+        LogUtils.d("image2Bitmap cost ms ",System.currentTimeMillis() - startTime);
+        return bitmap;
     }
 
     //第五步:将Image转为Bitmap
