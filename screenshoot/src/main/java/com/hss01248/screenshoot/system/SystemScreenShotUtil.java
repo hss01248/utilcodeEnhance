@@ -57,7 +57,7 @@ public class SystemScreenShotUtil {
     }
 
 
-    // todo 根据屏幕的旋转来旋转bitmap, 然后保存
+    // todo 根据屏幕的旋转来旋转bitmap, 然后保存-->不用处理,系统会自动处理好
     //todo 预先设置好裁剪框,然后裁剪
     public static void showBitmapDialog(Bitmap bitmap) {
         if (textView != null) {
@@ -145,11 +145,11 @@ public class SystemScreenShotUtil {
                 .setLayout(R.layout.view_float_crop)
                 .setShowPattern(ShowPattern.ALL_TIME)
                 .setDragEnable(true)
-                .setGravity(Gravity.BOTTOM|Gravity.RIGHT)
+                .setGravity(Gravity.BOTTOM|Gravity.RIGHT,0,-50)
                 // 设置浮窗固定坐标，ps：设置固定坐标，Gravity属性和offset属性将无效
                 //.setLocation(ScreenUtils.getScreenWidth()- SizeUtils.dp2px(50), ScreenUtils.getScreenHeight()- SizeUtils.dp2px(40))
                 // 设置拖拽边界值
-                .setBorder(0, 0,ScreenUtils.getScreenWidth(),ScreenUtils.getScreenHeight())
+                //.setBorder(0, 0,ScreenUtils.getScreenWidth(),ScreenUtils.getScreenHeight())
                 .registerCallbacks(new OnFloatCallbacks() {
                     @Override
                     public void createdResult(boolean b, String s, View view) {
