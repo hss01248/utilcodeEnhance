@@ -70,6 +70,7 @@ import com.hss01248.media.uri.ContentUriUtil;
 import com.hss01248.openuri.OpenUri;
 import com.hss01248.permission.MyPermissions;
 import com.hss01248.qrscan.ScanCodeActivity;
+import com.hss01248.screenshoot.system.SystemScreenShotUtil;
 import com.hss01248.toast.MyToast;
 
 import org.devio.takephoto.wrap.TakeOnePhotoListener;
@@ -1219,5 +1220,13 @@ public class MainActivity extends AppCompatActivity {
                 MyToast.show("密码是: "+s);
             }
         });
+    }
+
+    public void screenshot(View view) {
+        SystemScreenShotUtil.startCapture();
+    }
+
+    public void screenshotFloat(View view) {
+        SystemScreenShotUtil.createFloatView();
     }
 }

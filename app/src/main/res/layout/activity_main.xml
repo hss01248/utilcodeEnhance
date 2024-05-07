@@ -336,6 +336,18 @@
                 android:textAllCaps="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="调用系统截屏"
+                android:onClick="screenshot"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="截屏浮窗"
+                android:onClick="screenshotFloat"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
         </com.google.android.flexbox.FlexboxLayout>
         <TextView
             android:layout_margin="10dp"
