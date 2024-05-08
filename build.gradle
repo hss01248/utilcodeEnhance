@@ -21,8 +21,12 @@ buildscript {
 allprojects {
     repositories {
         maven { url 'https://github.com/link-u/AndroidGlideAvifDecoder/raw/master/repository' }
+
+        maven { url 'https://nexus.hss01248.tech/repository/maven-releases/' }
+        mavenLocal()
         //maven { url 'https://cdn.jsdelivr.net/gh/link-u/AndroidGlideAvifDecoder@master/repository' }
     }
+
    // maven {
    //     allowInsecureProtocol = true
    //     url 'http://39.101.221.145:8081/repository/jitpack_proxy/'
