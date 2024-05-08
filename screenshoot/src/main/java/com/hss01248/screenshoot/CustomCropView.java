@@ -16,6 +16,15 @@ import android.view.View;
  */
 public class CustomCropView extends View {
     private Paint paint;
+
+    public void setOriginalRect(Rect cropRect) {
+        this.cropRect = cropRect;
+        setMinimumWidth(cropRect.width());
+        setMinimumHeight(cropRect.height());
+        setMeasuredDimension(cropRect.width(),cropRect.height());
+        postInvalidate();
+    }
+
     private Rect cropRect; // 裁剪区域
     private final int TOUCH_SIZE = 50; // 可触摸区域的大小
     private int activePointerId = -1; // 当前活动指针ID
@@ -37,10 +46,10 @@ public class CustomCropView extends View {
 
     private void init() {
         paint = new Paint();
-        paint.setColor(0xFF000000); // 设置颜色为黑色
+        paint.setColor(0xFFFF00FF); // 设置颜色为黑色
         paint.setStyle(Paint.Style.STROKE); // 风格为描边
         paint.setStrokeWidth(5); // 描边宽度
-        cropRect = new Rect(100, 100, 500, 500); // 初始裁剪区域
+        cropRect = new Rect(0, 0, 500, 500); // 初始裁剪区域
     }
 
     @Override

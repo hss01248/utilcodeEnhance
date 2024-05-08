@@ -22,6 +22,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    viewBinding {
+        enabled = true
+    }
 }
 
 dependencies {
@@ -34,4 +37,6 @@ dependencies {
     api project(':lib-base-base')//基底
     //api 'com.github.hss01248.MyPermission:ext:2.3.8'
     api 'com.github.princekin-f:EasyFloat:2.0.4'
+    api 'com.github.skyNet2017.Luban:dataForPhotoSelet:3.3.0'
+    api "com.github.hss01248.ImageLoader:glidev4:3.6.5"
 }
