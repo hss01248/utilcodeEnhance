@@ -90,47 +90,26 @@ public class SystemScreenShotUtil {
                     textView.setTextColor(Color.parseColor("#33999999"));
                 }
             }, 300);
-
-            ThreadUtils.executeByIo(new ThreadUtils.SimpleTask<Object>() {
-                @Override
-                public Object doInBackground() throws Throwable {
-                    long start = System.currentTimeMillis();
-                    saveBitmap(bitmap);
-                    LogUtils.d("save cost: ",System.currentTimeMillis() -start);
-                    return null;
-                }
-
-                @Override
-                public void onSuccess(Object result) {
-
-                }
-
-                @Override
-                public void onFail(Throwable t) {
-                    super.onFail(t);
-                }
-            });
-
         }
-        if (bitmap == null) {
-            //ToastUtils.showShort("bitmap is null");
-            //LogUtils.i("shot", "bitmap",bitmap.getWidth(),bitmap.getHeight());
-            return;
-        }
+        ThreadUtils.executeByIo(new ThreadUtils.SimpleTask<Object>() {
+            @Override
+            public Object doInBackground() throws Throwable {
+                long start = System.currentTimeMillis();
+                saveBitmap(bitmap);
+                LogUtils.d("save cost: ",System.currentTimeMillis() -start);
+                return null;
+            }
 
-        LogUtils.i("shot", "bitmap", bitmap.getWidth(), bitmap.getHeight());
+            @Override
+            public void onSuccess(Object result) {
 
+            }
 
-        if (ActivityUtils.getTopActivity() != null) {
-           /* ImageView imageView = new ImageView(ActivityUtils.getTopActivity());
-            imageView.setImageBitmap(bitmap);
-            Dialog dialog = new Dialog(ActivityUtils.getTopActivity());
-            dialog.setContentView(imageView);
-            dialog.show();*/
-        } else {
-            //ImageView imageView = new ImageView(Utils.getApp());
-            //imageView.setImageBitmap(bitmap);
-        }
+            @Override
+            public void onFail(Throwable t) {
+                super.onFail(t);
+            }
+        });
 
 
     }
@@ -138,9 +117,11 @@ public class SystemScreenShotUtil {
     private static void saveBitmap(Bitmap bitmap) throws Exception {
         //根据预订尺寸裁切
         // 假设bitmap是你的原始图像
+        LogUtils.i("shot", "bitmap", bitmap.getWidth(), bitmap.getHeight(),"屏幕本身宽高",ScreenUtils.getScreenWidth()+"x"+ScreenUtils.getScreenHeight());
         Rect rect = readRect();
         if(rect !=null){
             bitmap = getCroppedBitmap(bitmap,rect);
+            LogUtils.i("裁剪后图片", "bitmap", bitmap.getWidth(), bitmap.getHeight());
         }
 
         Bitmap finalBitmap = bitmap;
@@ -155,6 +136,8 @@ public class SystemScreenShotUtil {
                     Dialog dialog = new Dialog(ActivityUtils.getTopActivity());
                     dialog.setContentView(imageView);
                     dialog.show();
+                }else{
+                    LogUtils.i("shot", "ActivityUtils.getTopActivity() == null");
                 }
             }
         });
@@ -410,7 +393,7 @@ public class SystemScreenShotUtil {
     }
 
     public static Bitmap getCroppedBitmap(Bitmap source, Rect displayRect) {
-        int displayWidth = ScreenUtils.getScreenWidth();
+        int displayWidth = source.getWidth() > source.getHeight() ? ScreenUtils.getScreenHeight() : ScreenUtils.getScreenWidth();
         return cropBitmap(source, displayRect, displayWidth);
     }
 }

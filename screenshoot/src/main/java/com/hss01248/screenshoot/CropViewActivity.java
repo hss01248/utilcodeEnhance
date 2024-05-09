@@ -2,6 +2,7 @@ package com.hss01248.screenshoot;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
@@ -43,6 +44,12 @@ public class CropViewActivity extends AppCompatActivity {
     public  static void start(){
         ActivityUtils.getTopActivity().startActivityForResult(new Intent(ActivityUtils.getTopActivity(),CropViewActivity.class),158);
     }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

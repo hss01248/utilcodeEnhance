@@ -8,6 +8,6 @@
             android:name=".system.CaptureService"
             android:enabled="true"
             android:foregroundServiceType="mediaProjection" />
-        <activity android:name=".CropViewActivity" />
+        <activity android:name=".CropViewActivity" android:configChanges="orientation"/>
     </application>
 </manifest>

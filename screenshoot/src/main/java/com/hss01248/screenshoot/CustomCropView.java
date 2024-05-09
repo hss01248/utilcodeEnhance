@@ -8,6 +8,7 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
 /**
  * @Despciption todo
  * @Author hss
@@ -71,6 +72,19 @@ public class CustomCropView extends View {
         canvas.drawRect(cropRect, paint);
     }
 
+   /* @Override
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+        // 父View要请求拦截事件时，仅在触摸区域在裁剪框内时才拦截
+        if (getParent() instanceof ScrollView) {
+            ScrollView scrollView = (ScrollView) getParent();
+            int scrollY = scrollView.getScrollY();
+            int x = (int) event.getX();
+            int y = (int) event.getY() + scrollY;
+            return cropRect.contains(x, y);
+        }
+        return super.onInterceptTouchEvent(event);
+    }*/
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
@@ -78,6 +92,7 @@ public class CustomCropView extends View {
                 activeEdge = determineTouchedEdge((int) event.getX(), (int) event.getY());
                 if (activeEdge != ActiveEdge.NONE) {
                     activePointerId = event.getPointerId(0);
+                    getParent().requestDisallowInterceptTouchEvent(true); // 禁止父View拦截事件
                     return true;
                 }
                 break;
