@@ -9,11 +9,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -24,6 +26,7 @@ import androidx.annotation.RequiresApi;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.SPStaticUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.ThreadUtils;
 import com.blankj.utilcode.util.Utils;
@@ -119,11 +122,11 @@ public class SystemScreenShotUtil {
 
 
         if (ActivityUtils.getTopActivity() != null) {
-            ImageView imageView = new ImageView(ActivityUtils.getTopActivity());
+           /* ImageView imageView = new ImageView(ActivityUtils.getTopActivity());
             imageView.setImageBitmap(bitmap);
             Dialog dialog = new Dialog(ActivityUtils.getTopActivity());
             dialog.setContentView(imageView);
-            dialog.show();
+            dialog.show();*/
         } else {
             //ImageView imageView = new ImageView(Utils.getApp());
             //imageView.setImageBitmap(bitmap);
@@ -135,16 +138,27 @@ public class SystemScreenShotUtil {
     private static void saveBitmap(Bitmap bitmap) throws Exception {
         //根据预订尺寸裁切
         // 假设bitmap是你的原始图像
-       /* Bitmap originalBitmap = bitmap;
+        Rect rect = readRect();
+        if(rect !=null){
+            bitmap = getCroppedBitmap(bitmap,rect);
+        }
 
-// 确定要裁剪的区域
-        int x = 20; // 距离原图左边界20像素
-        int y = 20; // 距离原图上边界20像素
-        int width = originalBitmap.getWidth() - 40; // 裁剪后的宽度比原图宽度小40像素
-        int height = originalBitmap.getHeight() - 40; // 裁剪后的高度比原图高度小40像素
+        Bitmap finalBitmap = bitmap;
+        ThreadUtils.getMainHandler().post(new Runnable(
 
-// 创建裁剪后的Bitmap
-        Bitmap croppedBitmap = Bitmap.createBitmap(originalBitmap, x, y, width, height);*/
+        ) {
+            @Override
+            public void run() {
+                if (ActivityUtils.getTopActivity() != null) {
+                    ImageView imageView = new ImageView(ActivityUtils.getTopActivity());
+                    imageView.setImageBitmap(finalBitmap);
+                    Dialog dialog = new Dialog(ActivityUtils.getTopActivity());
+                    dialog.setContentView(imageView);
+                    dialog.show();
+                }
+            }
+        });
+
 
         //压缩成jpg和png,然后对比大小,保留小的
 
@@ -345,5 +359,58 @@ public class SystemScreenShotUtil {
         //ActivityUtils.getTopActivity().startActivityForResult(captureIntent, SCREEN_SHOT_CODE);
     }
 
+    public static  void saveRect(Rect rect){
+        //[281,599][683,930]
+        LogUtils.d(rect.toString(),rect.toShortString());
+        String str = "";
+        str += rect.left;
+        str += ",";
+        str += rect.top;
+        str += ",";
+        str += rect.right;
+        str += ",";
+        str += rect.bottom;
+        LogUtils.i("savedRect",str );
+        SPStaticUtils.put("savedRect",str);
+    }
 
+    public static  Rect readRect(){
+        String string = SPStaticUtils.getString("savedRect");
+        if(TextUtils.isEmpty(string)){
+            return  null;
+        }
+        String[] parts = string.split(",");
+        Rect rect =   new Rect(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]),Integer.parseInt(parts[2]), Integer.parseInt(parts[3]));
+        LogUtils.i("read rect",rect.toString());
+        return rect;
+    }
+
+
+    public static Bitmap cropBitmap(Bitmap source, Rect scaledRect, int displayWidth) {
+        int originalWidth = source.getWidth();
+        int originalHeight = source.getHeight();
+        int displayHeight = calculateDisplayHeight(originalWidth, originalHeight, displayWidth);
+
+        float widthRatio = (float) originalWidth / displayWidth;
+        float heightRatio = (float) originalHeight / displayHeight;
+
+        int left = Math.round(scaledRect.left * widthRatio);
+        int top = Math.round(scaledRect.top * heightRatio);
+        int right = Math.round(scaledRect.right * widthRatio);
+        int bottom = Math.round(scaledRect.bottom * heightRatio);
+
+        int width = right - left;
+        int height = bottom - top;
+
+        return Bitmap.createBitmap(source, left, top, width, height);
+    }
+
+    public static int calculateDisplayHeight(int originalWidth, int originalHeight, int displayWidth) {
+        return (int) ((float) originalHeight / originalWidth * displayWidth);
+    }
+
+    public static Bitmap getCroppedBitmap(Bitmap source, Rect displayRect) {
+        int displayWidth = ScreenUtils.getScreenWidth();
+        return cropBitmap(source, displayRect, displayWidth);
+    }
 }

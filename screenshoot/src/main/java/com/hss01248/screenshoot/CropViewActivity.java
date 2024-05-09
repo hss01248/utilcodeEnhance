@@ -9,7 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,7 +21,9 @@ import com.hss01248.image.ImageLoader;
 import com.hss01248.image.MyUtil;
 import com.hss01248.image.dataforphotoselet.ImgDataSeletor;
 import com.hss01248.image.interfaces.ImageListener;
+import com.hss01248.screenshoot.databinding.DialogDisplayBitmapBinding;
 import com.hss01248.screenshoot.databinding.LayoutCropViewBinding;
+import com.hss01248.screenshoot.system.SystemScreenShotUtil;
 
 import org.devio.takephoto.wrap.TakeOnePhotoListener;
 
@@ -115,44 +116,34 @@ public class CropViewActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Bitmap bmp = BitmapFactory.decodeFile(path);
-                int[] originalWidthHeight = MyUtil.getImageWidthHeight(path);
-                Bitmap bitmap = cropBitmap(bmp, cropRect, originalWidthHeight[0], originalWidthHeight[1], widthView, heightView);
+                Bitmap bitmap = SystemScreenShotUtil.cropBitmap(bmp, cropRect,  widthView);
                 Dialog dialog = new Dialog(CropViewActivity.this);
-                ImageView imageView =  new ImageView(CropViewActivity.this);
-                imageView.setImageBitmap(bitmap);
-                dialog.setContentView(imageView);
 
+
+                DialogDisplayBitmapBinding bitmapBinding = DialogDisplayBitmapBinding.inflate(CropViewActivity.this.getLayoutInflater());
+                bitmapBinding.dialogIv.setImageBitmap(bitmap);
+                dialog.setContentView(bitmapBinding.getRoot());
                 dialog.show();
+
+                bitmapBinding.btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+
+                bitmapBinding.btnConfirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //保存rect信息:
+                        SystemScreenShotUtil.saveRect(cropRect);
+                        dialog.dismiss();
+
+                    }
+                });
             }
         });
     }
 
 
-    /**
-     * 裁剪Bitmap
-     *
-     * @param source 原始的Bitmap
-     * @param scaledRect 裁剪框在缩放后的图片上的位置
-     * @param originalWidth 原始Bitmap的宽度
-     * @param originalHeight 原始Bitmap的高度
-     * @param displayWidth 显示的宽度
-     * @param displayHeight 显示的高度
-     * @return 裁剪后的Bitmap
-     */
-    public static Bitmap cropBitmap(Bitmap source, Rect scaledRect,
-                                    int originalWidth, int originalHeight,
-                                    int displayWidth, int displayHeight) {
-        float widthRatio = (float) originalWidth / displayWidth;
-        float heightRatio = (float) originalHeight / displayHeight;
-
-        int left = Math.round(scaledRect.left * widthRatio);
-        int top = Math.round(scaledRect.top * heightRatio);
-        int right = Math.round(scaledRect.right * widthRatio);
-        int bottom = Math.round(scaledRect.bottom * heightRatio);
-
-        int width = right - left;
-        int height = bottom - top;
-
-        return Bitmap.createBitmap(source, left, top, width, height);
-    }
 }

@@ -66,7 +66,7 @@ public class CustomCropView extends View {
         canvas.drawRect(0, cropRect.bottom, getWidth(), getHeight(), paint);
 
         // 绘制裁剪区域
-        paint.setColor(0xFFFFFFFF);
+        paint.setColor(0xFFFF00FF);
         paint.setStyle(Paint.Style.STROKE);
         canvas.drawRect(cropRect, paint);
     }

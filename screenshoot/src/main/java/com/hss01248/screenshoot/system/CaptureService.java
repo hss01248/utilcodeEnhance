@@ -53,6 +53,7 @@ public class CaptureService extends Service {
         width = intent.getIntExtra("width",1080);
         height = intent.getIntExtra("height",1920);
 
+
         //第三步：获取mediaProjection
         if(mediaProjection ==null){
             MediaProjectionManager mMediaProjectionManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
