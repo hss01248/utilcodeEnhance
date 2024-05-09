@@ -55,6 +55,19 @@ public class CustomCropView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        //canvas.drawRect(cropRect, paint);
+        // 绘制半透明遮罩
+        paint.setColor(0x66000000); // 半透明黑色
+        paint.setStyle(Paint.Style.FILL);
+
+        canvas.drawRect(0, 0, getWidth(), cropRect.top, paint);
+        canvas.drawRect(0, cropRect.top, cropRect.left, cropRect.bottom, paint);
+        canvas.drawRect(cropRect.right, cropRect.top, getWidth(), cropRect.bottom, paint);
+        canvas.drawRect(0, cropRect.bottom, getWidth(), getHeight(), paint);
+
+        // 绘制裁剪区域
+        paint.setColor(0xFFFFFFFF);
+        paint.setStyle(Paint.Style.STROKE);
         canvas.drawRect(cropRect, paint);
     }
 
@@ -96,6 +109,19 @@ public class CustomCropView extends View {
     }
 
     private void updateCropRect(int x, int y) {
+        //边界限制:
+        if(x< 0){
+            return;
+        }
+        if(y<0){
+            return;
+        }
+        if(x > getMeasuredWidth()){
+            return;
+        }
+        if(y > getMeasuredHeight()){
+            return;
+        }
         // 这个方法根据触摸移动更新裁剪区域
         switch (activeEdge) {
             case LEFT:
