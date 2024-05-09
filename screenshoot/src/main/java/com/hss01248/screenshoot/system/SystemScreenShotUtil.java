@@ -357,6 +357,9 @@ public class SystemScreenShotUtil {
         SPStaticUtils.put("savedRect",str);
     }
 
+    public static  void clearRect(){
+        SPStaticUtils.put("savedRect","");
+    }
     public static  Rect readRect(){
         String string = SPStaticUtils.getString("savedRect");
         if(TextUtils.isEmpty(string)){
@@ -384,6 +387,8 @@ public class SystemScreenShotUtil {
 
         int width = right - left;
         int height = bottom - top;
+
+        //y + height must be <= bitmap.height()
 
         return Bitmap.createBitmap(source, left, top, width, height);
     }

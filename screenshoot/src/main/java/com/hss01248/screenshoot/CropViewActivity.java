@@ -56,6 +56,12 @@ public class CropViewActivity extends AppCompatActivity {
         binding = LayoutCropViewBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        binding.btnClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SystemScreenShotUtil.clearRect();
+            }
+        });
         binding.btnPick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
