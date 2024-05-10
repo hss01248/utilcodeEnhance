@@ -44,6 +44,19 @@ public class ScreenShootHomeActivity extends AppCompatActivity {
             }
         });
         updateConfigText();
+
+        configBinding.btnLandscape.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CropConfigActivity.start(true);
+            }
+        });
+        configBinding.btnPortrait.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CropConfigActivity.start(false);
+            }
+        });
     }
 
     private void updateConfigText() {
@@ -66,10 +79,10 @@ public class ScreenShootHomeActivity extends AppCompatActivity {
                 .append("\n\n");
 
         builder.append("截图后裁剪配置(横屏): ")
-                .append(SystemScreenShotUtil.readRect())
+                .append(SystemScreenShotUtil.readRect(true))
                 .append("\n\n");
         builder.append("截图后裁剪配置(竖屏): ")
-                .append(SystemScreenShotUtil.readRect());
+                .append(SystemScreenShotUtil.readRect(false));
 
         configBinding.tvConfig.setText(builder.toString());
 

@@ -10,6 +10,7 @@
             android:foregroundServiceType="mediaProjection" />
         <activity android:name=".CropViewActivity" android:configChanges="orientation"/>
         <activity android:name=".ScreenShootHomeActivity" />
+        <activity android:name=".CropConfigActivity" />
 
         <service
             android:name=".MyAccessibilityService"

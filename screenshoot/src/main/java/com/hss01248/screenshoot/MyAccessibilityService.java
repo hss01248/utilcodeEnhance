@@ -21,11 +21,17 @@ import com.blankj.utilcode.util.Utils;
  * @Version 1.0
  */
 public class MyAccessibilityService extends AccessibilityService {
+
+   public static  String topAppName = "";
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
 
         if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
             Log.d("Current Top App", event.toString());
+            if(event.getText() !=null && !event.getText().isEmpty()){
+                topAppName = event.getText().get(0).toString();
+                Log.d("Current Top App", "top appName: "+topAppName);
+            }
             if (event.getPackageName() != null) {
                 String currentTopApp = event.getPackageName().toString();
                 Log.d("Current Top App", currentTopApp);

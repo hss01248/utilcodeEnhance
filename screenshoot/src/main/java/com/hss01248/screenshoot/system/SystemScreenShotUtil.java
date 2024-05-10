@@ -32,6 +32,7 @@ import com.blankj.utilcode.util.ThreadUtils;
 import com.blankj.utilcode.util.Utils;
 import com.hss01248.activityresult.ActivityResultListener;
 import com.hss01248.activityresult.StartActivityUtil;
+import com.hss01248.screenshoot.MyAccessibilityService;
 import com.hss01248.screenshoot.R;
 import com.lzf.easyfloat.EasyFloat;
 import com.lzf.easyfloat.enums.ShowPattern;
@@ -118,7 +119,7 @@ public class SystemScreenShotUtil {
         //根据预订尺寸裁切
         // 假设bitmap是你的原始图像
         LogUtils.i("shot", "bitmap", bitmap.getWidth(), bitmap.getHeight(),"屏幕本身宽高",ScreenUtils.getScreenWidth()+"x"+ScreenUtils.getScreenHeight());
-        Rect rect = readRect();
+        Rect rect = readRect(bitmap.getWidth() > bitmap.getHeight());
         if(rect !=null){
             bitmap = getCroppedBitmap(bitmap,rect);
             LogUtils.i("裁剪后图片", "bitmap", bitmap.getWidth(), bitmap.getHeight());
@@ -231,7 +232,10 @@ public class SystemScreenShotUtil {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.getDefault());
         // 格式化当前日期和时间
         String formattedDate = sdf.format(now);
-        return formattedDate;
+        if(TextUtils.isEmpty(MyAccessibilityService.topAppName)){
+            return formattedDate;
+        }
+        return MyAccessibilityService.topAppName + "-"+formattedDate;
     }
 
 
@@ -355,7 +359,7 @@ public class SystemScreenShotUtil {
         //ActivityUtils.getTopActivity().startActivityForResult(captureIntent, SCREEN_SHOT_CODE);
     }
 
-    public static  void saveRect(Rect rect){
+    public static  void saveRect(Rect rect, boolean landscape){
         //[281,599][683,930]
         LogUtils.d(rect.toString(),rect.toShortString());
         String str = "";
@@ -367,14 +371,14 @@ public class SystemScreenShotUtil {
         str += ",";
         str += rect.bottom;
         LogUtils.i("savedRect",str );
-        SPStaticUtils.put("savedRect",str);
+        SPStaticUtils.put("savedRect-landscape-"+landscape,str);
     }
 
-    public static  void clearRect(){
-        SPStaticUtils.put("savedRect","");
+    public static  void clearRect(boolean landscape){
+        SPStaticUtils.put("savedRect-landscape-"+landscape,"");
     }
-    public static  Rect readRect(){
-        String string = SPStaticUtils.getString("savedRect");
+    public static  Rect readRect(boolean landscape){
+        String string = SPStaticUtils.getString("savedRect-landscape-"+landscape);
         if(TextUtils.isEmpty(string)){
             return  null;
         }

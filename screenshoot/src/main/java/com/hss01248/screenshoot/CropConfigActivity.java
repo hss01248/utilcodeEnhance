@@ -24,7 +24,7 @@ import com.hss01248.image.MyUtil;
 import com.hss01248.image.dataforphotoselet.ImgDataSeletor;
 import com.hss01248.image.interfaces.ImageListener;
 import com.hss01248.screenshoot.databinding.DialogDisplayBitmapBinding;
-import com.hss01248.screenshoot.databinding.LayoutCropViewBinding;
+import com.hss01248.screenshoot.databinding.LayoutCropConfigBinding;
 import com.hss01248.screenshoot.system.SystemScreenShotUtil;
 
 import org.devio.takephoto.wrap.TakeOnePhotoListener;
@@ -35,16 +35,20 @@ import org.devio.takephoto.wrap.TakeOnePhotoListener;
  * @Date 5/7/24 6:20 PM
  * @Version 1.0
  */
-public class CropViewActivity extends AppCompatActivity {
+public class CropConfigActivity extends AppCompatActivity {
 
 
-    LayoutCropViewBinding binding;
+    LayoutCropConfigBinding binding;
     String path;
     int widthView, heightView;
     Rect cropRect;
-    public  static void start(){
-        ActivityUtils.getTopActivity().startActivityForResult(new Intent(ActivityUtils.getTopActivity(),CropViewActivity.class),158);
+    public  static void start(boolean landscape){
+        Intent intent = new Intent(ActivityUtils.getTopActivity(), CropConfigActivity.class);
+        intent.putExtra("landscape",landscape);
+        ActivityUtils.getTopActivity().startActivity(intent);
     }
+
+    boolean landscape;
 
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
@@ -54,18 +58,44 @@ public class CropViewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = LayoutCropViewBinding.inflate(getLayoutInflater());
+        landscape = getIntent().getBooleanExtra("landscape",false);
+        binding = LayoutCropConfigBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        String text  = landscape? "横屏图": "竖屏图";
+        binding.btnPick.setText("选择图片: "+text);
 
+
+        binding.btnClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SystemScreenShotUtil.clearRect(landscape);
+                ToastUtils.showShort("裁剪区域配置已经清空");
+            }
+        });
 
         binding.btnPick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImgDataSeletor.startPickOneWitchDialog(CropViewActivity.this, new TakeOnePhotoListener() {
+                ImgDataSeletor.startPickOneWitchDialog(CropConfigActivity.this, new TakeOnePhotoListener() {
                     @Override
                     public void onSuccess(String path) {
-                        CropViewActivity.this.path = path;
-                        ImageLoader.with(CropViewActivity.this)
+                        CropConfigActivity.this.path = path;
+                        int[] imageWidthHeight = MyUtil.getImageWidthHeight(path);
+                        LogUtils.d("原始图片大小: ",imageWidthHeight[0],imageWidthHeight[1]);
+                        if(imageWidthHeight[0] > imageWidthHeight[1]){
+                            if(!landscape){
+                                ToastUtils.showShort("请选择竖屏图片(高>宽)");
+                                return;
+                            }
+                        }
+
+                        if(imageWidthHeight[0] < imageWidthHeight[1]){
+                            if(landscape){
+                                ToastUtils.showShort("请选择横屏图片(宽>高)");
+                                return;
+                            }
+                        }
+                        ImageLoader.with(CropConfigActivity.this)
                                 .load(path)
                                 .setImageListener(new ImageListener() {
                                     @Override
@@ -83,11 +113,6 @@ public class CropViewActivity extends AppCompatActivity {
                                             heightView = binding.iv.getMeasuredHeight();
                                             }
                                         },1000);
-
-                                        //图片原始大小:
-                                        int[] imageWidthHeight = MyUtil.getImageWidthHeight(path);
-                                        LogUtils.d("原始图片大小: ",imageWidthHeight[0],imageWidthHeight[1]);
-
                                     }
 
                                     @Override
@@ -126,10 +151,10 @@ public class CropViewActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Bitmap bmp = BitmapFactory.decodeFile(path);
                 Bitmap bitmap = SystemScreenShotUtil.cropBitmap(bmp, cropRect,  widthView);
-                Dialog dialog = new Dialog(CropViewActivity.this);
+                Dialog dialog = new Dialog(CropConfigActivity.this);
 
 
-                DialogDisplayBitmapBinding bitmapBinding = DialogDisplayBitmapBinding.inflate(CropViewActivity.this.getLayoutInflater());
+                DialogDisplayBitmapBinding bitmapBinding = DialogDisplayBitmapBinding.inflate(CropConfigActivity.this.getLayoutInflater());
                 bitmapBinding.dialogIv.setImageBitmap(bitmap);
                 dialog.setContentView(bitmapBinding.getRoot());
                 dialog.show();
@@ -144,8 +169,11 @@ public class CropViewActivity extends AppCompatActivity {
                 bitmapBinding.btnConfirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        //保存rect信息:
+                        SystemScreenShotUtil.saveRect(cropRect,landscape);
                         dialog.dismiss();
                         ToastUtils.showShort("裁剪区域配置已经保存");
+                        CropConfigActivity.this.finish();
 
                     }
                 });
