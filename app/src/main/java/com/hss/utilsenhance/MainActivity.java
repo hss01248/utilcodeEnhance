@@ -70,7 +70,7 @@ import com.hss01248.media.uri.ContentUriUtil;
 import com.hss01248.openuri.OpenUri;
 import com.hss01248.permission.MyPermissions;
 import com.hss01248.qrscan.ScanCodeActivity;
-import com.hss01248.screenshoot.CropViewActivity;
+import com.hss01248.screenshoot.ScreenShootHomeActivity;
 import com.hss01248.screenshoot.system.SystemScreenShotUtil;
 import com.hss01248.toast.MyToast;
 
@@ -1224,7 +1224,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void screenshot(View view) {
-        SystemScreenShotUtil.startCapture();
+        SystemScreenShotUtil.startCapture(false);
     }
 
     public void screenshotFloat(View view) {
@@ -1232,6 +1232,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void cropView(View view) {
-        CropViewActivity.start();
+        ScreenShootHomeActivity.start();
     }
 }

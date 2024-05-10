@@ -37,12 +37,14 @@ public class CaptureService extends Service {
         startForeground(1, new NotificationCompat.Builder(this, SystemScreenShotUtil.SCREEN_CAPTURE_CHANNEL_ID).build());
     }
 
+
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
-    static MediaProjection mediaProjection;
+    public static MediaProjection mediaProjection;
     int width = 0;
     int height = 0;
     int retryCount = 0;
@@ -52,6 +54,8 @@ public class CaptureService extends Service {
         Intent data = intent.getParcelableExtra("data");
         width = intent.getIntExtra("width",1080);
         height = intent.getIntExtra("height",1920);
+        boolean onlyPermission = intent.getBooleanExtra("onlyPermission",false);
+        //service.putExtra("onlyPermission", onlyPermission);
 
 
         //第三步：获取mediaProjection
@@ -62,6 +66,10 @@ public class CaptureService extends Service {
 
         if (mediaProjection == null) {
             LogUtils.e("shot", "media projection is null");
+            return super.onStartCommand(intent, flags, startId);
+        }
+        if(onlyPermission){
+            LogUtils.e("shot", "only permission");
             return super.onStartCommand(intent, flags, startId);
         }
         Bitmap bitmap = screenShot(mediaProjection);

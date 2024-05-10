@@ -113,7 +113,7 @@ public class SystemScreenShotUtil {
 
 
     }
-
+    static Dialog dialog;
     private static void saveBitmap(Bitmap bitmap) throws Exception {
         //根据预订尺寸裁切
         // 假设bitmap是你的原始图像
@@ -133,7 +133,12 @@ public class SystemScreenShotUtil {
                 if (ActivityUtils.getTopActivity() != null) {
                     ImageView imageView = new ImageView(ActivityUtils.getTopActivity());
                     imageView.setImageBitmap(finalBitmap);
-                    Dialog dialog = new Dialog(ActivityUtils.getTopActivity());
+                    if(dialog != null && dialog.isShowing()){
+                        dialog.dismiss();
+                    }
+                    if(dialog ==null){
+                        dialog = new Dialog(ActivityUtils.getTopActivity());
+                    }
                     dialog.setContentView(imageView);
                     dialog.show();
                 }else{
@@ -230,9 +235,14 @@ public class SystemScreenShotUtil {
     }
 
 
-    static TextView textView;
+    public static TextView textView;
+
 
     public static void createFloatView() {
+        if(textView !=null){
+            LogUtils.w("已经显示了悬浮窗");
+            return;
+        }
         EasyFloat.with(ActivityUtils.getTopActivity())
                 .setLayout(R.layout.view_float_crop)
                 .setShowPattern(ShowPattern.ALL_TIME)
@@ -275,7 +285,7 @@ public class SystemScreenShotUtil {
 
                         if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                             if (System.currentTimeMillis() - downTime < 1500) {
-                                startCapture();
+                                startCapture(false);
                             } else {
                                 LogUtils.i("大于1.5s,不是点击");
                             }
@@ -299,8 +309,11 @@ public class SystemScreenShotUtil {
     }
 
 
-    public static void startCapture() {
+    public static void startCapture(boolean onlyPermission) {
         if (CaptureService.mediaProjection != null) {
+            if(onlyPermission){
+                return;
+            }
             Intent service = new Intent(ActivityUtils.getTopActivity(), CaptureService.class);
             //service.putExtra("code", resultCode);
             // service.putExtra("data", data);
@@ -324,13 +337,13 @@ public class SystemScreenShotUtil {
                         Intent service = new Intent(ActivityUtils.getTopActivity(), CaptureService.class);
                         service.putExtra("code", resultCode);
                         service.putExtra("data", data);
+                        service.putExtra("onlyPermission", onlyPermission);
                         service.putExtra("width", ScreenUtils.getScreenWidth());
                         service.putExtra("height", ScreenUtils.getScreenHeight());
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             SystemScreenShotUtil.createScreenCaptureNotificationChannel();
                             ActivityUtils.getTopActivity().startForegroundService(service);
                         }
-
                     }
 
                     @Override

@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ThreadUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.hss01248.image.ImageLoader;
 import com.hss01248.image.MyUtil;
 import com.hss01248.image.dataforphotoselet.ImgDataSeletor;
@@ -60,6 +61,7 @@ public class CropViewActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 SystemScreenShotUtil.clearRect();
+                ToastUtils.showShort("裁剪区域配置已经清空");
             }
         });
         binding.btnPick.setOnClickListener(new View.OnClickListener() {
@@ -151,6 +153,7 @@ public class CropViewActivity extends AppCompatActivity {
                         //保存rect信息:
                         SystemScreenShotUtil.saveRect(cropRect);
                         dialog.dismiss();
+                        ToastUtils.showShort("裁剪区域配置已经保存");
 
                     }
                 });

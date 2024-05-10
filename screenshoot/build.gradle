@@ -35,7 +35,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     api project(':lib-base-base')//基底
-    //api 'com.github.hss01248.MyPermission:ext:2.3.8'
+    api 'com.github.hss01248.MyPermission:ext:2.3.8'
     api 'com.github.princekin-f:EasyFloat:2.0.4'
     api 'com.github.skyNet2017.Luban:dataForPhotoSelet:3.3.0'
     api "com.github.hss01248.ImageLoader:glidev4:3.6.5"

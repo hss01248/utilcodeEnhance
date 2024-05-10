@@ -9,5 +9,6 @@
             android:enabled="true"
             android:foregroundServiceType="mediaProjection" />
         <activity android:name=".CropViewActivity" android:configChanges="orientation"/>
+        <activity android:name=".ScreenShootHomeActivity" />
     </application>
 </manifest>
