@@ -1234,4 +1234,8 @@ public class MainActivity extends AppCompatActivity {
     public void cropView(View view) {
         ScreenShootHomeActivity.start();
     }
+
+    public void crashTest(View view) {
+        int i = 1/0;
+    }
 }

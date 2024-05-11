@@ -1,18 +1,15 @@
 plugins {
-    id 'com.android.application'
+    id 'com.android.library'
 }
 
 android {
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.hss01248.screenshotapp"
         minSdk 23
-        targetSdk 34
-        versionCode 1
-        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
     }
 
     buildTypes {
@@ -28,15 +25,11 @@ android {
 }
 
 dependencies {
-    api project(':crash')
+
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.0'
     testImplementation 'junit:junit:4.14-SNAPSHOT'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    implementation project(path: ':screenshoot')
-}
-
-configurations {
-    all*.exclude group: 'com.github.simplepeng.SpiderMan', module: 'spiderman'
+    api project(':lib-base-base')//基底
 }

@@ -74,9 +74,9 @@ public class ScreenShootHomeActivity extends AppCompatActivity {
                 .append(CaptureService.mediaProjection == null ? "未被允许" : "已允许")
                 .append("\n\n");
 
-        builder.append("辅助功能是否打开: ")
+        /*builder.append("辅助功能是否打开: ")
                 .append(MyAccessibilityService.isAccessibilityServiceEnabled() ? "已打开" : "未打开")
-                .append("\n\n");
+                .append("\n\n");*/
 
         builder.append("截图后裁剪配置(横屏): ")
                 .append(SystemScreenShotUtil.readRect(true))
@@ -135,9 +135,9 @@ public class ScreenShootHomeActivity extends AppCompatActivity {
     private void showCropConfig() {
         //CropViewActivity.start();
         if(MyAccessibilityService.isAccessibilityServiceEnabled()){
-            CropViewActivity.start();
+           // CropViewActivity.start();
         }else {
-            MyAccessibilityService.promptForAccessibilityServiceEnable();
+           // MyAccessibilityService.promptForAccessibilityServiceEnable();
         }
 
     }
