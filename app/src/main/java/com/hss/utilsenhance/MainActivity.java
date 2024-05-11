@@ -70,8 +70,6 @@ import com.hss01248.media.uri.ContentUriUtil;
 import com.hss01248.openuri.OpenUri;
 import com.hss01248.permission.MyPermissions;
 import com.hss01248.qrscan.ScanCodeActivity;
-import com.hss01248.screenshoot.ScreenShootHomeActivity;
-import com.hss01248.screenshoot.system.SystemScreenShotUtil;
 import com.hss01248.toast.MyToast;
 
 import org.devio.takephoto.wrap.TakeOnePhotoListener;
@@ -1223,17 +1221,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void screenshot(View view) {
-        SystemScreenShotUtil.startCapture(false);
-    }
 
-    public void screenshotFloat(View view) {
-        SystemScreenShotUtil.createFloatView();
-    }
-
-    public void cropView(View view) {
-        ScreenShootHomeActivity.start();
-    }
 
     public void crashTest(View view) {
         int i = 1/0;
