@@ -123,6 +123,7 @@ public class ScreenShootHomeActivity extends AppCompatActivity {
 
             @Override
             public void run() {
+                updateConfigText();
                 if (CaptureService.mediaProjection != null) {
                     showCropConfig();
                 }else {

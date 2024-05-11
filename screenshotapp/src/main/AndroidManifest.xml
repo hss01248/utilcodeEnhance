@@ -12,7 +12,7 @@
         android:theme="@style/Theme.UtilsEnhance" >
         <activity
             android:name="com.hss01248.screenshoot.ScreenShootHomeActivity"
-            android:label="截图配置首页"
+            android:label="一键截图"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
