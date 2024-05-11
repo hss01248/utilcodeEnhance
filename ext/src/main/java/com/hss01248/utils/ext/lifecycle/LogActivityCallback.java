@@ -45,8 +45,6 @@ public class LogActivityCallback implements Application.ActivityLifecycleCallbac
                         // //https://www.jianshu.com/p/648d67eee455  -->只有反射能使用
                         //                        //android-app://com.huawei.android.launcher launcher点击图标启动
                         //                        //android-app://com.android.shell  - android studio adb启动
-                        //                        //android-app://com.aku.fbdemo  点击打开普通页面
-                        //                        //android-app://com.aku.fbdemo  通知栏点击打开
                         //                        //android-app://com.android.packageinstaller
                     }else {
                         if(savedInstanceState != null){
