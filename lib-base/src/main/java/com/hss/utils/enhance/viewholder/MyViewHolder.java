@@ -32,6 +32,7 @@ import java.util.List;
  * @Date 22/06/2022 16:27
  * @Version 1.0
  */
+@Deprecated
 public abstract  class MyViewHolder<VB extends ViewBinding,T> implements DefaultLifecycleObserver {
 
     public VB binding;

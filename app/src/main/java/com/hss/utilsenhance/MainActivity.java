@@ -1226,4 +1226,8 @@ public class MainActivity extends AppCompatActivity {
     public void crashTest(View view) {
         int i = 1/0;
     }
+
+    public void viewHolderDemo(View view) {
+        startActivity(new Intent(this, ViewHolderDemoActivity.class));
+    }
 }

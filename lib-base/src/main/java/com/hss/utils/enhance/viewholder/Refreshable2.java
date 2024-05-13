@@ -1,7 +1,7 @@
 package com.hss.utils.enhance.viewholder;
 
 import java.util.List;
-
+@Deprecated
 public interface Refreshable2 {
     void refresh();
     public void refresh(List newData);

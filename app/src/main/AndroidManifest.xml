@@ -31,6 +31,7 @@
         <activity android:name=".StateActivityXml" />
         <activity android:name=".StateActivityHasParent" />
         <activity android:name=".StateActivitySmallView" />
+        <activity android:name=".ViewHolderDemoActivity" />
     </application>
 
 </manifest>
