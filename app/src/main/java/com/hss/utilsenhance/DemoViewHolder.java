@@ -40,7 +40,7 @@ public class DemoViewHolder extends BaseViewHolder<ActivityViewHolderDemoHttpSta
             public void run() {
                 if(new Random().nextBoolean()){
                     stateManager.showContent();
-                    viewBinding.tvContent.setText(bean);
+                    binding.tvContent.setText(bean);
                 }else {
                     stateManager.showError("请求错误");
                 }

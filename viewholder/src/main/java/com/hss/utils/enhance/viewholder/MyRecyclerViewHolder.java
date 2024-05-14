@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewbinding.ViewBinding;
 
 import com.hss.utils.enhance.lifecycle.LifecycleObjectUtil;
 
@@ -18,11 +19,23 @@ import java.util.List;
  * @Date 5/13/24 3:12 PM
  * @Version 1.0
  */
-public abstract class MyRecyclerViewHolder<T> extends RecyclerView.ViewHolder implements DefaultLifecycleObserver {
+public abstract class MyRecyclerViewHolder<VB extends ViewBinding,T> extends RecyclerView.ViewHolder implements DefaultLifecycleObserver {
+
+    protected  VB binding;
+
+    public MyRecyclerViewHolder<VB,T> setBinding(VB binding) {
+        this.binding = binding;
+        return this;
+    }
+
     public MyRecyclerViewHolder(@NonNull View itemView) {
+        //利用aop将这个NonNull干掉,变成可以为null. 或者aop直接切入这个方法的before,给itemview赋值
         super(itemView);
         doInit(itemView.getContext(), this);
     }
+
+
+
 
     private static  void doInit(Context context, LifecycleObserver object) {
         LifecycleObjectUtil.getLifecycleOwnerFromObj(context).getLifecycle().addObserver(object);

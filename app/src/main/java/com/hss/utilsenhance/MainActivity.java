@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.security.identity.IdentityCredential;
 import android.util.Base64;
@@ -71,6 +72,7 @@ import com.hss01248.openuri.OpenUri;
 import com.hss01248.permission.MyPermissions;
 import com.hss01248.qrscan.ScanCodeActivity;
 import com.hss01248.toast.MyToast;
+import com.hss01248.viewholder_media.FileTreeViewHolder;
 
 import org.devio.takephoto.wrap.TakeOnePhotoListener;
 import org.devio.takephoto.wrap.TakePhotoUtil;
@@ -1229,5 +1231,15 @@ public class MainActivity extends AppCompatActivity {
 
     public void viewHolderDemo(View view) {
         startActivity(new Intent(this, ViewHolderDemoActivity.class));
+    }
+
+    public void dirTree(View view) {
+        File externalStorageDirectory = Environment.getExternalStorageDirectory();
+        FileTreeViewHolder viewHolder = new FileTreeViewHolder(this);
+        viewHolder.init(externalStorageDirectory.getAbsolutePath());
+
+        Dialog dialog1 = new Dialog(this);
+        dialog1.setContentView(viewHolder.getRootView());
+        dialog1.show();
     }
 }

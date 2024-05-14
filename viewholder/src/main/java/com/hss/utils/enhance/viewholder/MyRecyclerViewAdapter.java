@@ -4,6 +4,7 @@ import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,8 +15,10 @@ import java.util.List;
  */
 public abstract class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewHolder> {
 
-    private List datas;
+    private List datas = new ArrayList();
     boolean isListViewFling;
+
+
 
     public boolean isListViewFling() {
         return isListViewFling;
@@ -26,10 +29,10 @@ public abstract class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyc
     }
     @Override
     public MyRecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return generateCoustomViewHolder(viewType);
+        return generateNewViewHolder(viewType);
     }
 
-    protected abstract MyRecyclerViewHolder generateCoustomViewHolder(int viewType);
+    protected abstract MyRecyclerViewHolder generateNewViewHolder(int viewType);
 
 
     @Override

@@ -28,6 +28,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <Button
+                android:text="外部存储文件夹浏览"
+                android:textAllCaps="false"
+                android:onClick="dirTree"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <Button
                 android:text="urlEncode"
                 android:textAllCaps="false"
                 android:onClick="urlEncode"

@@ -50,7 +50,7 @@ public abstract class BaseViewHolder<VB extends ViewBinding, InitInfo>
 
     protected Context context;
 
-    protected VB viewBinding;
+    protected VB binding;
 
     public BaseViewHolder(Context context) {
         Activity activity = LifecycleObjectUtil.getActivityFromContext(context);
@@ -89,8 +89,8 @@ public abstract class BaseViewHolder<VB extends ViewBinding, InitInfo>
         if(inflater == null){
             inflater = LayoutInflater.from(context);
         }
-        this.viewBinding = initViewBinding(inflater,parent);
-        rootView = viewBinding.getRoot();
+        this.binding = initViewBinding(inflater,parent);
+        rootView = binding.getRoot();
     }
 
     protected  VB initViewBinding(LayoutInflater inflater, ViewGroup parent){
