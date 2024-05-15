@@ -10,7 +10,6 @@ import androidx.annotation.Nullable;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
 import com.hss.downloader.download.DownloadInfoUtil;
-import com.hss01248.http.response.DownloadParser;
 import com.liulishuo.filedownloader.BaseDownloadTask;
 import com.liulishuo.filedownloader.FileDownloadSampleListener;
 import com.liulishuo.filedownloader.FileDownloader;
