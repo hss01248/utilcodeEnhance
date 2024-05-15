@@ -41,7 +41,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     api 'com.github.hss01248.MyPermission:permission:2.2.9'
-    api 'com.github.hss01248.HttpUtil2:openuri:3.1.4'//Android7.0 file转uri,expose
     api 'com.github.hss01248.StartActivityResult:activityresult:1.1.7'//回调形式的startActivityForResult,完美兼容应用内,应用外跳转, 兼容Android4.4-Android12
     api 'com.blankj:utilcodex:1.30.0'//基底
     api "io.reactivex.rxjava2:rxjava:2.2.6"
@@ -60,7 +59,7 @@ dependencies {
     api "com.github.hss01248.AndoridBus:bus:2.0.5"
 
     api 'androidx.palette:palette:1.0.0'
-    api 'com.github.hss01248.MyPermission:ext:2.3.4'
+    api 'com.github.hss01248.MyPermission:ext:2.3.9'
 
 
 

@@ -25,7 +25,7 @@ import com.blankj.utilcode.util.Utils;
 import com.hss.utils.enhance.api.MyCommonCallback;
 import com.hss.utils.enhance.R;
 
-import com.hss01248.openuri.OpenUri;
+
 import com.hss01248.openuri2.OpenUri2;
 import com.hss01248.toast.MyToast;
 
@@ -130,7 +130,7 @@ public class SysIntentUtil {
         try {
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_VIEW);
-            OpenUri.addPermissionRW(intent);
+            OpenUri2.addPermissionRW(intent);
             String extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString());
             String type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
             intent.setDataAndType(uri,type);
