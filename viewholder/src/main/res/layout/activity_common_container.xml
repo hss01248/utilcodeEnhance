@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:id="@+id/ll_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.hjq.bar.TitleBar
+        android:id="@+id/qr_titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:barStyle="light"
+        android:background="#ffffff"
+        app:leftIcon="@drawable/bar_arrows_left_black"
+        app:title="我是标题" />
+
+</LinearLayout>

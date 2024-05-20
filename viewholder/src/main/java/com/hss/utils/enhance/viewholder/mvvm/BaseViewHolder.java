@@ -79,6 +79,7 @@ public abstract class BaseViewHolder<VB extends ViewBinding, InitInfo>
 
     }
 
+
     private void doInit(LayoutInflater inflater, LifecycleOwner lifecycleOwner, ViewGroup parent) {
         this.lifecycleOwner = lifecycleOwner;
         lifecycleOwner.getLifecycle().addObserver(this);
@@ -115,6 +116,10 @@ public abstract class BaseViewHolder<VB extends ViewBinding, InitInfo>
         }
         parent.addView(rootView, index);
         return this;
+    }
+
+    public void doUpdate(){
+        init(initInfo);
     }
 
     /**

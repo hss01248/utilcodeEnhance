@@ -36,5 +36,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     api project(':viewholder')
     api project(':viewState')
+    api project(':iwidget')
     api "com.github.hss01248.ImageLoader:glidev4:3.7.1"
+    api 'com.github.fondesa:recycler-view-divider:3.5.0'
 }

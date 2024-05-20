@@ -1,6 +1,7 @@
 package com.hss01248.viewholder_media;
 
 import android.content.Context;
+import android.view.View;
 
 import androidx.core.util.Pair;
 import androidx.lifecycle.LifecycleOwner;
@@ -8,11 +9,13 @@ import androidx.lifecycle.LifecycleOwner;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ThreadUtils;
 import com.hss.utils.enhance.viewholder.mvvm.BaseViewHolder;
+import com.hss01248.iwidget.singlechoose.ISingleChooseItem;
 import com.hss01248.toast.MyToast;
 import com.hss01248.viewholder_media.databinding.LayoutFileTreeBinding;
 import com.hss01248.viewstate.StatefulLayout;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +33,7 @@ public class FileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBinding,Str
     StatefulLayout stateManager;
     String currentPath;
     MediaListViewHolder listViewHolder;
+    DisplayAndFilterInfo filterInfo = new DisplayAndFilterInfo();
     Map<String,List<String>> cache = new TreeMap<>();
     public FileTreeViewHolder(Context context) {
         super(context);
@@ -54,7 +58,127 @@ public class FileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBinding,Str
                 }
             }
         });
+
+        binding.ivMenus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                initMenus(view);
+
+            }
+        });
     }
+
+    private void initMenus(View view) {
+        List<ISingleChooseItem<String>> menus = new ArrayList<>();
+        menus.add(new ISingleChooseItem<String>() {
+            @Override
+            public String text() {
+                return "显示模式-表格";
+            }
+
+            @Override
+            public void onItemClicked(int position, String bean) {
+
+                filterInfo.displayType = 0;
+                listViewHolder.setFilterInfo(filterInfo);
+            }
+        });
+        menus.add(new ISingleChooseItem<String>() {
+            @Override
+            public String text() {
+                return "显示模式-列表";
+            }
+
+            @Override
+            public void onItemClicked(int position, String bean) {
+                filterInfo.displayType = 1;
+                listViewHolder.setFilterInfo(filterInfo);
+            }
+        });
+        menus.add(new ISingleChooseItem<String>() {
+            @Override
+            public String text() {
+                return "排序-文件名-顺序";
+            }
+
+            @Override
+            public void onItemClicked(int position, String bean) {
+
+            }
+        });
+        menus.add(new ISingleChooseItem<String>() {
+            @Override
+            public String text() {
+                return "排序-文件名-倒序";
+            }
+
+            @Override
+            public void onItemClicked(int position, String bean) {
+
+            }
+        });
+        menus.add(new ISingleChooseItem<String>() {
+            @Override
+            public String text() {
+                return "排序-文件大小-大到小";
+            }
+
+            @Override
+            public void onItemClicked(int position, String bean) {
+
+            }
+        });
+        menus.add(new ISingleChooseItem<String>() {
+            @Override
+            public String text() {
+                return "排序-文件大小-小到大";
+            }
+
+            @Override
+            public void onItemClicked(int position, String bean) {
+
+            }
+        });
+        menus.add(new ISingleChooseItem<String>() {
+            @Override
+            public String text() {
+                return "排序-时间-旧到新";
+            }
+
+            @Override
+            public void onItemClicked(int position, String bean) {
+
+            }
+        });
+        menus.add(new ISingleChooseItem<String>() {
+            @Override
+            public String text() {
+                return "排序-时间-新到旧";
+            }
+
+            @Override
+            public void onItemClicked(int position, String bean) {
+
+            }
+        });
+
+        ISingleChooseItem.showAsMenu2(view,menus,currentPath);
+    }
+
+
+    public  boolean onBackPressed(){
+        if("/storage/emulated/0".equals(currentPath)){
+            return false;
+        }
+        File dir = new File(currentPath).getParentFile();
+        if(dir !=null && dir.exists()){
+            loadDir(dir.getAbsolutePath());
+            return true;
+        }else {
+            return false;
+        }
+    }
+
 
     private void loadDir(String path) {
         currentPath = path;
@@ -81,15 +205,31 @@ public class FileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBinding,Str
         ThreadUtils.executeByIo(new ThreadUtils.SimpleTask<Pair<String,List<String>>>() {
             @Override
             public Pair<String,List<String>> doInBackground() throws Throwable {
-                String[] files = file.list();
+                File[] files1 = file.listFiles(new FileFilter() {
+                    @Override
+                    public boolean accept(File file) {
+                        return file.isDirectory();
+                    }
+                });
+
+                File[] files2 = file.listFiles(new FileFilter() {
+                    @Override
+                    public boolean accept(File file) {
+                        return !file.isDirectory();
+                    }
+                });
                 //只列出文件名,不列出上级路径,蛋疼的api
-                LogUtils.w(files);
-                if(files ==null || files.length ==0){
-                    return new Pair<>(path,new ArrayList<>());
+                LogUtils.w(files1,files2);
+                List<String> list = new ArrayList<>();
+                if(files1 !=null && files1.length > 0){
+                    for (File s : files1) {
+                        list.add(s.getAbsolutePath());
+                    }
                 }
-                List<String> list = new ArrayList<>(files.length);
-                for (String s : files) {
-                    list.add(path+"/"+s);
+                if(files2 !=null && files2.length > 0){
+                    for (File s : files2) {
+                        list.add(s.getAbsolutePath());
+                    }
                 }
                 return new Pair<>(path,list);
             }

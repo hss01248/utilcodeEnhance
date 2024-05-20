@@ -23,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricPrompt;
+import androidx.core.util.Pair;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.LogUtils;
@@ -40,6 +41,7 @@ import com.hss.utils.enhance.api.MyCommonCallback;
 import com.hss.utils.enhance.foregroundservice.CommonProgressService;
 import com.hss.utils.enhance.intent.ShareUtils;
 import com.hss.utils.enhance.intent.SysIntentUtil;
+import com.hss.utils.enhance.viewholder.ContainerActivity;
 import com.hss01248.activityresult.StartActivityUtil;
 import com.hss01248.activityresult.TheActivityListener;
 import com.hss01248.basewebview.BaseWebviewActivity;
@@ -72,6 +74,7 @@ import com.hss01248.openuri.OpenUri;
 import com.hss01248.permission.MyPermissions;
 import com.hss01248.qrscan.ScanCodeActivity;
 import com.hss01248.toast.MyToast;
+import com.hss01248.viewholder.databinding.ActivityCommonContainerBinding;
 import com.hss01248.viewholder_media.FileTreeViewHolder;
 
 import org.devio.takephoto.wrap.TakeOnePhotoListener;
@@ -88,6 +91,7 @@ import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -1234,12 +1238,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void dirTree(View view) {
-        File externalStorageDirectory = Environment.getExternalStorageDirectory();
-        FileTreeViewHolder viewHolder = new FileTreeViewHolder(this);
-        viewHolder.init(externalStorageDirectory.getAbsolutePath());
 
-        Dialog dialog1 = new Dialog(this);
+        ContainerActivity.start("外部存储", new Consumer<Pair<ContainerActivity, ActivityCommonContainerBinding>>() {
+            @Override
+            public void accept(Pair<ContainerActivity, ActivityCommonContainerBinding> pair) throws Exception {
+                File externalStorageDirectory = Environment.getExternalStorageDirectory();
+                FileTreeViewHolder viewHolder = new FileTreeViewHolder(pair.first);
+                viewHolder.init(externalStorageDirectory.getAbsolutePath());
+                pair.second.llRoot.addView(viewHolder.getRootView());
+
+                pair.first.setOnBackPressed(new Callable<Boolean>() {
+                    @Override
+                    public Boolean call() throws Exception {
+                        //ToastUtils.showShort("拦截后退键");
+                        return viewHolder.onBackPressed();
+                    }
+                });
+            }
+        });
+
+       /* Dialog dialog1 = new Dialog(this);
         dialog1.setContentView(viewHolder.getRootView());
-        dialog1.show();
+        dialog1.show();*/
     }
 }

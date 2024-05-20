@@ -67,4 +67,5 @@ dependencies {
     api "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     api 'com.blankj:utilcodex:1.30.0'//基底
     api project(':lib-base')
+    api 'com.github.getActivity:TitleBar:9.6'
 }
