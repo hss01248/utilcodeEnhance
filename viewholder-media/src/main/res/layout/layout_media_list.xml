@@ -9,6 +9,11 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:fastScrollEnabled="true"
+        app:fastScrollHorizontalThumbDrawable="@drawable/fast_thumb_drawable"
+        app:fastScrollHorizontalTrackDrawable="@drawable/fast_line_drawable"
+        app:fastScrollVerticalThumbDrawable="@drawable/fast_thumb_drawable"
+        app:fastScrollVerticalTrackDrawable="@drawable/fast_line_drawable"
         android:fadeScrollbars="false"
         android:scrollbarThumbVertical="@drawable/my_scrollbar_shape"
         android:scrollbars="vertical" />
