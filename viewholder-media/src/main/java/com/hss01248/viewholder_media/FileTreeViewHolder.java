@@ -45,7 +45,7 @@ public class FileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBinding,Str
         });
         rootView = stateManager;
         listViewHolder = new MediaListViewHolder(context);
-        binding.llTree.addView(listViewHolder.getRootView());
+        binding.llContainer.addView(listViewHolder.getRootView());
 
         listViewHolder.setOnItemClicked(new Consumer<String>() {
             @Override

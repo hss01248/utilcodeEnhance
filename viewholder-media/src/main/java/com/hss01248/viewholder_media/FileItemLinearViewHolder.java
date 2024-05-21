@@ -38,6 +38,12 @@ public class FileItemLinearViewHolder extends MyRecyclerViewHolder<LayoutFileIte
         File file = new File(data);
         String time = DateFormatUtils.format(file.lastModified(),"yyyy-MM-dd HH:mm:ss");
         String size = ConvertUtils.byte2FitMemorySize(file.length());
+        if(file.isDirectory()){
+            String[] list = file.list();
+            size = (list==null ? 0 : list.length)+"个文件";
+        }else {
+            size = ConvertUtils.byte2FitMemorySize(file.length(),1);
+        }
         binding.info.setText(time+"    "+ size);
     }
 }

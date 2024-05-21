@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         app:barStyle="light"
         android:background="#ffffff"
-        app:leftIcon="@drawable/bar_arrows_left_black"
+        app:leftIcon="@drawable/arrow_back_black"
         app:title="我是标题" />
 
 </LinearLayout>

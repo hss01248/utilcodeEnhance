@@ -1239,7 +1239,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void dirTree(View view) {
 
-        ContainerActivity.start("外部存储", new Consumer<Pair<ContainerActivity, ActivityCommonContainerBinding>>() {
+        ContainerActivity.start("", new Consumer<Pair<ContainerActivity, ActivityCommonContainerBinding>>() {
             @Override
             public void accept(Pair<ContainerActivity, ActivityCommonContainerBinding> pair) throws Exception {
                 File externalStorageDirectory = Environment.getExternalStorageDirectory();
