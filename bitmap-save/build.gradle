@@ -3,16 +3,13 @@ plugins {
 }
 
 android {
-    compileSdk 34
+    compileSdk 33
 
     defaultConfig {
         minSdk 23
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
-    }
-    viewBinding {
-        enabled = true
     }
 
     buildTypes {
@@ -25,18 +22,19 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    viewBinding {
+        enabled = true
+    }
 }
 
 dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.0'
-
+    testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    api project(':viewholder')
-    api project(':viewState')
-    api project(':iwidget')
-    api "com.github.hss01248.ImageLoader:glidev4:3.7.1"
-    api 'com.github.fondesa:recycler-view-divider:3.5.0'
+    //api 'com.github.hss01248.utilcodeEnhance:lib-base-base:1.4.7'
+    api 'com.github.hss01248.MyPermission:ext:2.3.8'
+    api project(path: ':lib-base-base')
 }

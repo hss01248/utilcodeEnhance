@@ -57,6 +57,7 @@ dependencies {
     implementation project(path: ':viewholder')
     implementation project(path: ':viewholder-media')
     implementation project(':baseWebview')
+    implementation project(':bitmap-save')
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
