@@ -17,6 +17,8 @@ import com.hss01248.viewstate.StatefulLayout;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -221,13 +223,38 @@ public class FileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBinding,Str
                 //只列出文件名,不列出上级路径,蛋疼的api
                 LogUtils.w(files1,files2);
                 List<String> list = new ArrayList<>();
+
+                //排序
+
                 if(files1 !=null && files1.length > 0){
+                    List<File> list1 = new ArrayList<>();
                     for (File s : files1) {
+                        list1.add(s);
+                    }
+                    Collections.sort(list1, new Comparator<File>() {
+                        @Override
+                        public int compare(File file, File t1) {
+                            return file.getName().toLowerCase().compareTo(t1.getName().toLowerCase());
+                        }
+                    });
+
+                    for (File s : list1) {
                         list.add(s.getAbsolutePath());
                     }
                 }
                 if(files2 !=null && files2.length > 0){
+                    List<File> list1 = new ArrayList<>();
                     for (File s : files2) {
+                        list1.add(s);
+                    }
+                    Collections.sort(list1, new Comparator<File>() {
+                        @Override
+                        public int compare(File file, File t1) {
+                            return file.getName().toLowerCase().compareTo(t1.getName().toLowerCase());
+                        }
+                    });
+
+                    for (File s : list1) {
                         list.add(s.getAbsolutePath());
                     }
                 }

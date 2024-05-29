@@ -46,6 +46,7 @@ import com.hss01248.activityresult.StartActivityUtil;
 import com.hss01248.activityresult.TheActivityListener;
 import com.hss01248.basewebview.BaseWebviewActivity;
 import com.hss01248.biometric.BiometricHelper;
+import com.hss01248.bitmap_saver.BitmapSaveUtil;
 import com.hss01248.cipher.AesCipherUtil;
 import com.hss01248.cipher.PasswordLoginByBiometric;
 import com.hss01248.cipher.RsaCipherUtil;
@@ -1260,5 +1261,18 @@ public class MainActivity extends AppCompatActivity {
        /* Dialog dialog1 = new Dialog(this);
         dialog1.setContentView(viewHolder.getRootView());
         dialog1.show();*/
+    }
+
+    public void bitmapSaveConfig(View view) {
+        BitmapSaveUtil.openConfigPage();
+    }
+
+    public void bitmapSaveAction(View view) {
+        try {
+            view.setDrawingCacheEnabled(true);
+            BitmapSaveUtil.saveBitmap(view.getDrawingCache());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

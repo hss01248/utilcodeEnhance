@@ -61,6 +61,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <Button
+                android:text="bitmap-save-config"
+                android:textAllCaps="false"
+                android:onClick="bitmapSaveConfig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:text="bitmap-save-action"
+                android:textAllCaps="false"
+                android:onClick="bitmapSaveAction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <Button
                 android:text="透明状态栏"
                 android:textAllCaps="false"
                 android:onClick="statusbarTrans"
