@@ -16,6 +16,7 @@ import com.blankj.utilcode.util.FileUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.Utils;
+import com.hss01248.glide.aop.file.AddByteUtil;
 import com.hss01248.permission.MyPermissions;
 import com.hss01248.permission.ext.IExtPermissionCallback;
 import com.hss01248.permission.ext.MyPermissionsExt;
@@ -107,6 +108,7 @@ public class BitmapSaveUtil {
             if(DirConfigInfo.loadConfigInfo().hiddenType ==2){
                 //todo 加密
                 //EncryptUtils.encryptAES()
+                AddByteUtil.addByte(finalFile.getAbsolutePath());
             }
             boolean copy = FileUtils.copy(finalFile, myFile);
             if(copy){

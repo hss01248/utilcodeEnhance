@@ -42,4 +42,5 @@ dependencies {
     api "com.blankj:utilcodex:1.30.0"
     api 'com.github.hss01248.MyPermission:ext:2.3.8'
     api project(path: ':lib-base-base')
+    api "com.github.hss01248.ImageLoader:glide-aop:3.7.1"
 }

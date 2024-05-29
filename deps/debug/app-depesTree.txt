@@ -1,4 +1,4 @@
-Starting a Gradle Daemon, 1 busy and 1 incompatible and 4 stopped Daemons could not be reused, use --status for details
+Starting a Gradle Daemon, 2 busy and 3 stopped Daemons could not be reused, use --status for details
 
 > Configure project :
 ---->afterEvaluate:root project 'UtilsEnhance'
@@ -38,6 +38,9 @@ use a newer Android Gradle Plugin that has been tested with compileSdk = 33
 
 > Configure project :biometric
 ---->afterEvaluate:project ':biometric'
+
+> Configure project :bitmap-saver
+---->afterEvaluate:project ':bitmap-saver'
 
 > Configure project :cipher
 ---->afterEvaluate:project ':cipher'
@@ -253,7 +256,7 @@ debugRuntimeClasspath - Resolved configuration for runtime for variant: debug
 |    |    \--- com.android.support:support-annotations:28.0.0 -> androidx.annotation:annotation:1.2.0
 |    +--- androidx.appcompat:appcompat:1.1.0 -> 1.2.0 (*)
 |    +--- com.google.android.material:material:1.2.0 (*)
-|    +--- com.github.getActivity:XXPermissions:11.2
+|    +--- com.github.getActivity:XXPermissions:11.2 -> 11.6
 |    |    \--- com.android.support:support-fragment:24.2.0 -> androidx.fragment:fragment:1.3.5 (*)
 |    \--- org.greenrobot:greendao:3.3.0
 |         \--- org.greenrobot:greendao-api:3.3.0
@@ -371,9 +374,9 @@ debugRuntimeClasspath - Resolved configuration for runtime for variant: debug
 |    +--- com.google.android.material:material:1.2.0 (*)
 |    \--- org.slf4j:slf4j-api:2.0.7
 +--- project :common
-|    +--- com.github.hss01248.ImageLoader:glidev4:3.4.8
+|    +--- com.github.hss01248.ImageLoader:glidev4:3.4.8 -> 3.7.1
 |    |    +--- androidx.appcompat:appcompat:1.0.0 -> 1.2.0 (*)
-|    |    +--- com.github.hss01248.ImageLoader:imageDebugger:3.4.8
+|    |    +--- com.github.hss01248.ImageLoader:imageDebugger:3.7.1
 |    |    |    +--- androidx.appcompat:appcompat:1.3.1 -> 1.2.0 (*)
 |    |    |    +--- com.google.android.material:material:1.4.0 -> 1.2.0 (*)
 |    |    |    +--- com.github.bumptech.glide:glide:4.11.0 -> 4.12.0
@@ -383,16 +386,17 @@ debugRuntimeClasspath - Resolved configuration for runtime for variant: debug
 |    |    |    |    +--- com.github.bumptech.glide:annotations:4.12.0
 |    |    |    |    +--- androidx.fragment:fragment:1.0.0 -> 1.3.5 (*)
 |    |    |    |    +--- androidx.vectordrawable:vectordrawable-animated:1.0.0 -> 1.1.0 (*)
-|    |    |    |    \--- androidx.exifinterface:exifinterface:1.2.0 -> 1.3.5
+|    |    |    |    \--- androidx.exifinterface:exifinterface:1.2.0 -> 1.3.7
 |    |    |    |         \--- androidx.annotation:annotation:1.2.0
 |    |    |    +--- com.blankj:utilcodex:1.30.0 -> 1.30.6 (*)
-|    |    |    \--- com.github.hss01248.metadata:metadata:1.1.6 -> 1.2.3
+|    |    |    \--- com.github.hss01248.metadata:metadata:1.1.6 -> 1.2.7
 |    |    |         +--- androidx.appcompat:appcompat:1.2.0 (*)
-|    |    |         +--- androidx.exifinterface:exifinterface:1.3.5 (*)
+|    |    |         +--- androidx.exifinterface:exifinterface:1.3.5 -> 1.3.7 (*)
 |    |    |         +--- com.google.code.gson:gson:2.8.5 -> 2.8.9
 |    |    |         +--- androidx.documentfile:documentfile:1.0.1 (*)
 |    |    |         +--- com.blankj:utilcodex:1.30.0 -> 1.30.6 (*)
-|    |    |         \--- com.squareup.okhttp3:okhttp:3.12.12 (*)
+|    |    |         +--- com.squareup.okhttp3:okhttp:3.12.12 (*)
+|    |    |         \--- commons-lang:commons-lang:2.6
 |    |    +--- jp.wasabeef:glide-transformations:4.1.0
 |    |    |    \--- com.github.bumptech.glide:glide:4.9.0 -> 4.12.0 (*)
 |    |    +--- jp.co.cyberagent.android.gpuimage:gpuimage-library:1.4.1
@@ -401,14 +405,17 @@ debugRuntimeClasspath - Resolved configuration for runtime for variant: debug
 |    |    |    +--- com.github.bumptech.glide:glide:4.11.0 -> 4.12.0 (*)
 |    |    |    +--- com.squareup.okhttp3:okhttp:3.9.1 -> 3.12.12 (*)
 |    |    |    \--- androidx.annotation:annotation:1.0.0 -> 1.2.0
-|    |    +--- com.github.hss01248.ImageLoader:imageloader:3.4.8
+|    |    +--- com.github.hss01248.ImageLoader:imageloader:3.7.1
 |    |    |    +--- androidx.appcompat:appcompat:1.0.0 -> 1.2.0 (*)
 |    |    |    +--- androidx.recyclerview:recyclerview:1.0.0 -> 1.2.1 (*)
-|    |    |    +--- androidx.exifinterface:exifinterface:1.0.0 -> 1.3.5 (*)
+|    |    |    +--- org.greenrobot:eventbus:3.0.0 -> 3.2.0
+|    |    |    +--- androidx.exifinterface:exifinterface:1.0.0 -> 1.3.7 (*)
 |    |    |    +--- com.squareup.okhttp3:okhttp:3.12.13 -> 3.12.12 (*)
+|    |    |    +--- am.util:viewpager:25.3.0
+|    |    |    |    \--- com.android.support:support-fragment:25.3.0 -> androidx.fragment:fragment:1.3.5 (*)
 |    |    |    +--- com.blankj:utilcodex:1.30.6 (*)
-|    |    |    +--- it.sephiroth.android.exif:library:+ -> 1.0.1
-|    |    |    |    +--- org.apache.commons:commons-lang3:3.3.2
+|    |    |    +--- it.sephiroth.android.exif:library:1.0.1
+|    |    |    |    +--- org.apache.commons:commons-lang3:3.3.2 -> 3.12.0
 |    |    |    |    \--- org.apache.commons:commons-io:1.3.2
 |    |    |    |         \--- commons-io:commons-io:1.3.2
 |    |    |    +--- org.apache.commons:commons-io:1.3.2 (*)
@@ -417,106 +424,121 @@ debugRuntimeClasspath - Resolved configuration for runtime for variant: debug
 |    |    |    +--- com.shizhefei:LargeImageView:1.1.0
 |    |    |    +--- com.github.hss01248:PageStateManager:3.0.5
 |    |    |    |    \--- androidx.appcompat:appcompat:1.1.0 -> 1.2.0 (*)
-|    |    |    +--- com.github.hss01248.ImageLoader:bigimageviewpager:3.4.8
-|    |    |    |    +--- androidx.appcompat:appcompat:1.3.1 -> 1.2.0 (*)
-|    |    |    |    +--- com.google.android.material:material:1.4.0 -> 1.2.0 (*)
-|    |    |    |    +--- pl.droidsonroids.gif:android-gif-drawable:1.2.19 (*)
-|    |    |    |    +--- com.shizhefei:LargeImageView:1.1.0
-|    |    |    |    +--- io.reactivex.rxjava2:rxandroid:2.1.0 -> 2.1.1 (*)
-|    |    |    |    +--- com.github.bumptech.glide:glide:4.11.0 -> 4.12.0 (*)
-|    |    |    |    +--- com.github.bumptech.glide:annotations:4.11.0 -> 4.12.0
-|    |    |    |    +--- com.github.hss01248:PageStateManager:3.0.5 (*)
-|    |    |    |    +--- me.jessyan:progressmanager:1.5.0
-|    |    |    |    +--- com.github.bumptech.glide:okhttp3-integration:4.11.0 (*)
-|    |    |    |    +--- androidx.viewpager:viewpager:1.0.0 (*)
-|    |    |    |    +--- com.github.hss01248.metadata:metadata:1.1.2 -> 1.2.3 (*)
-|    |    |    |    +--- jp.co.link_u.library.glideavif:glideavif:0.8.1
-|    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-android-extensions-runtime:1.3.72 -> 1.6.10 (*)
-|    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.72 -> 1.5.0
-|    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.0 -> 1.6.10 (*)
-|    |    |    |    |    +--- androidx.appcompat:appcompat:1.1.0 -> 1.2.0 (*)
-|    |    |    |    |    +--- androidx.core:core-ktx:1.3.0
-|    |    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.3.71 -> 1.6.10 (*)
-|    |    |    |    |    |    +--- androidx.annotation:annotation:1.1.0 -> 1.2.0
-|    |    |    |    |    |    \--- androidx.core:core:1.3.0 -> 1.5.0 (*)
-|    |    |    |    |    +--- com.github.bumptech.glide:glide:4.11.0 -> 4.12.0 (*)
-|    |    |    |    |    \--- com.android.support:support-fragment -> androidx.fragment:fragment:1.3.5 (*)
-|    |    |    |    \--- androidx.databinding:viewbinding:4.1.0 -> 7.1.2 (*)
-|    |    |    +--- com.davemorrissey.labs:subsampling-scale-image-view:3.10.0
-|    |    |    |    +--- com.android.support:support-annotations:27.1.0 -> androidx.annotation:annotation:1.2.0
-|    |    |    |    \--- com.android.support:exifinterface:27.1.0 -> androidx.exifinterface:exifinterface:1.3.5 (*)
-|    |    |    +--- com.github.filippudak.progresspieview:library:1.0.4
-|    |    |    |    \--- com.android.support:support-v4:21.0.2 -> androidx.legacy:legacy-support-v4:1.0.0
-|    |    |    |         +--- androidx.core:core:1.0.0 -> 1.5.0 (*)
-|    |    |    |         +--- androidx.media:media:1.0.0
-|    |    |    |         |    +--- androidx.annotation:annotation:1.0.0 -> 1.2.0
-|    |    |    |         |    +--- androidx.core:core:1.0.0 -> 1.5.0 (*)
-|    |    |    |         |    \--- androidx.versionedparcelable:versionedparcelable:1.0.0 -> 1.1.1 (*)
-|    |    |    |         +--- androidx.legacy:legacy-support-core-utils:1.0.0 (*)
-|    |    |    |         +--- androidx.legacy:legacy-support-core-ui:1.0.0
-|    |    |    |         |    +--- androidx.annotation:annotation:1.0.0 -> 1.2.0
-|    |    |    |         |    +--- androidx.core:core:1.0.0 -> 1.5.0 (*)
-|    |    |    |         |    +--- androidx.legacy:legacy-support-core-utils:1.0.0 (*)
-|    |    |    |         |    +--- androidx.customview:customview:1.0.0 -> 1.1.0 (*)
-|    |    |    |         |    +--- androidx.viewpager:viewpager:1.0.0 (*)
-|    |    |    |         |    +--- androidx.coordinatorlayout:coordinatorlayout:1.0.0 -> 1.1.0 (*)
-|    |    |    |         |    +--- androidx.drawerlayout:drawerlayout:1.0.0 -> 1.1.1 (*)
-|    |    |    |         |    +--- androidx.slidingpanelayout:slidingpanelayout:1.0.0
-|    |    |    |         |    |    +--- androidx.annotation:annotation:1.0.0 -> 1.2.0
-|    |    |    |         |    |    +--- androidx.core:core:1.0.0 -> 1.5.0 (*)
-|    |    |    |         |    |    \--- androidx.customview:customview:1.0.0 -> 1.1.0 (*)
-|    |    |    |         |    +--- androidx.interpolator:interpolator:1.0.0 (*)
-|    |    |    |         |    +--- androidx.swiperefreshlayout:swiperefreshlayout:1.0.0
-|    |    |    |         |    |    +--- androidx.annotation:annotation:1.0.0 -> 1.2.0
-|    |    |    |         |    |    +--- androidx.core:core:1.0.0 -> 1.5.0 (*)
-|    |    |    |         |    |    \--- androidx.interpolator:interpolator:1.0.0 (*)
-|    |    |    |         |    +--- androidx.asynclayoutinflater:asynclayoutinflater:1.0.0
-|    |    |    |         |    |    +--- androidx.annotation:annotation:1.0.0 -> 1.2.0
-|    |    |    |         |    |    \--- androidx.core:core:1.0.0 -> 1.5.0 (*)
-|    |    |    |         |    \--- androidx.cursoradapter:cursoradapter:1.0.0 (*)
-|    |    |    |         \--- androidx.fragment:fragment:1.0.0 -> 1.3.5 (*)
-|    |    |    +--- org.greenrobot:eventbus:3.0.0
-|    |    |    \--- am.util:viewpager:25.3.0
-|    |    |         \--- com.android.support:support-fragment:25.3.0 -> androidx.fragment:fragment:1.3.5 (*)
-|    |    +--- com.github.hss01248.ImageLoader:glidebase:3.4.8
+|    |    |    \--- com.github.hss01248.ImageLoader:bigimageviewpager:3.7.1
+|    |    |         +--- androidx.appcompat:appcompat:1.3.1 -> 1.2.0 (*)
+|    |    |         +--- com.google.android.material:material:1.4.0 -> 1.2.0 (*)
+|    |    |         +--- pl.droidsonroids.gif:android-gif-drawable:1.2.19 (*)
+|    |    |         +--- com.shizhefei:LargeImageView:1.1.0
+|    |    |         +--- io.reactivex.rxjava2:rxandroid:2.1.0 -> 2.1.1 (*)
+|    |    |         +--- com.github.bumptech.glide:glide:4.11.0 -> 4.12.0 (*)
+|    |    |         +--- com.github.bumptech.glide:annotations:4.11.0 -> 4.12.0
+|    |    |         +--- me.jessyan:progressmanager:1.5.0
+|    |    |         +--- com.github.bumptech.glide:okhttp3-integration:4.11.0 (*)
+|    |    |         +--- androidx.viewpager:viewpager:1.0.0 (*)
+|    |    |         +--- com.github.hss01248.metadata:metadata:1.2.7 (*)
+|    |    |         +--- jp.co.link_u.library.glideavif:glideavif:0.8.1
+|    |    |         |    +--- org.jetbrains.kotlin:kotlin-android-extensions-runtime:1.3.72 -> 1.6.10 (*)
+|    |    |         |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.72 -> 1.5.0
+|    |    |         |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.0 -> 1.6.10 (*)
+|    |    |         |    +--- androidx.appcompat:appcompat:1.1.0 -> 1.2.0 (*)
+|    |    |         |    +--- androidx.core:core-ktx:1.3.0
+|    |    |         |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.3.71 -> 1.6.10 (*)
+|    |    |         |    |    +--- androidx.annotation:annotation:1.1.0 -> 1.2.0
+|    |    |         |    |    \--- androidx.core:core:1.3.0 -> 1.5.0 (*)
+|    |    |         |    +--- com.github.bumptech.glide:glide:4.11.0 -> 4.12.0 (*)
+|    |    |         |    \--- com.android.support:support-fragment -> androidx.fragment:fragment:1.3.5 (*)
+|    |    |         +--- com.google.vr:sdk-panowidget:1.180.0
+|    |    |         |    \--- com.google.vr:sdk-commonwidget:1.180.0
+|    |    |         |         \--- com.google.vr:sdk-common:1.180.0
+|    |    |         |              \--- com.google.protobuf.nano:protobuf-javanano:3.1.0
+|    |    |         +--- androidx.lifecycle:lifecycle-common-java8:2.2.0 -> 2.3.1 (*)
+|    |    |         +--- com.github.Jarvis-Lau:GestureViewBinder:1.0.3
+|    |    |         |    \--- com.android.support:appcompat-v7:27.1.1 -> androidx.appcompat:appcompat:1.2.0 (*)
+|    |    |         +--- com.davemorrissey.labs:subsampling-scale-image-view:3.10.0
+|    |    |         |    +--- com.android.support:support-annotations:27.1.0 -> androidx.annotation:annotation:1.2.0
+|    |    |         |    \--- com.android.support:exifinterface:27.1.0 -> androidx.exifinterface:exifinterface:1.3.7 (*)
+|    |    |         +--- com.qcloud.cos:avif:1.1.1
+|    |    |         |    \--- com.qcloud.cos:qcloud-decoder-base:1.1.0
+|    |    |         +--- com.github.hss01248.ImageLoader:glide-aop:3.7.1
+|    |    |         |    +--- androidx.appcompat:appcompat:1.2.0 (*)
+|    |    |         |    +--- com.google.android.material:material:1.2.0 (*)
+|    |    |         |    +--- org.aspectj:aspectjrt:1.9.5
+|    |    |         |    +--- com.github.hss01248.aop-android:logforaop:1.0.2
+|    |    |         |    |    +--- org.aspectj:aspectjrt:1.9.5
+|    |    |         |    |    \--- com.google.code.gson:gson:2.8.5 -> 2.8.9
+|    |    |         |    +--- com.github.bumptech.glide:glide:4.11.0 -> 4.12.0 (*)
+|    |    |         |    +--- com.github.bumptech.glide:okhttp3-integration:4.11.0 (*)
+|    |    |         |    +--- com.blankj:utilcodex:1.30.6 (*)
+|    |    |         |    \--- pl.droidsonroids.gif:android-gif-drawable:1.2.19 (*)
+|    |    |         \--- androidx.databinding:viewbinding:7.1.2 (*)
+|    |    +--- com.github.hss01248.ImageLoader:glide-aop:3.7.1 (*)
+|    |    +--- com.github.hss01248.ImageLoader:glidebase:3.7.1
 |    |    |    \--- androidx.appcompat:appcompat:1.0.0 -> 1.2.0 (*)
 |    |    +--- me.jessyan:progressmanager:1.5.0
 |    |    +--- com.squareup.okhttp3:logging-interceptor:3.12.0 -> 3.12.12
 |    |    |    \--- com.squareup.okhttp3:okhttp:3.12.12 (*)
-|    |    \--- jp.co.link_u.library.glideavif:glideavif:0.8.1 (*)
-|    +--- com.github.hss01248.ImageLoader:compressor:3.4.8
+|    |    +--- jp.co.link_u.library.glideavif:glideavif:0.8.1 (*)
+|    |    +--- androidx.exifinterface:exifinterface:1.3.7 (*)
+|    |    +--- com.github.hss01248.metadata:metadata:1.2.7 (*)
+|    |    +--- com.github.skyNet2017.Luban:luban:3.2.7
+|    |    |    +--- com.github.skyNet2017.Luban:showResult:3.2.7
+|    |    |    |    +--- androidx.appcompat:appcompat:1.1.0 -> 1.2.0 (*)
+|    |    |    |    +--- com.davemorrissey.labs:subsampling-scale-image-view:3.10.0 (*)
+|    |    |    |    \--- com.github.hss01248.metadata:metadata:1.2.3 -> 1.2.7 (*)
+|    |    |    +--- androidx.exifinterface:exifinterface:1.3.5 -> 1.3.7 (*)
+|    |    |    +--- com.github.hss01248.metadata:metadata:1.2.3 -> 1.2.7 (*)
+|    |    |    \--- com.blankj:utilcodex:1.30.0 -> 1.30.6 (*)
+|    |    \--- androidx.startup:startup-runtime:1.1.0 (*)
+|    +--- com.github.hss01248.ImageLoader:compressor:3.4.8 -> 3.6.2
 |    |    +--- androidx.appcompat:appcompat:1.2.0 (*)
 |    |    +--- com.google.android.material:material:1.3.0 -> 1.2.0 (*)
-|    |    +--- com.github.hss01248.ImageLoader:avif:3.4.8
-|    |    |    +--- androidx.appcompat:appcompat:1.2.0 (*)
-|    |    |    +--- com.google.android.material:material:1.3.0 -> 1.2.0 (*)
-|    |    |    +--- com.github.bumptech.glide:glide:4.11.0 -> 4.12.0 (*)
-|    |    |    +--- jp.co.link_u.library.glideavif:glideavif:0.8.1 (*)
-|    |    |    \--- androidx.exifinterface:exifinterface:1.3.2 -> 1.3.5 (*)
-|    |    +--- com.github.hss01248.ImageLoader:fileOperation:3.4.8
+|    |    +--- com.github.hss01248.ImageLoader:fileOperation:3.6.2
 |    |    |    +--- androidx.appcompat:appcompat:1.2.0 (*)
 |    |    |    +--- com.google.android.material:material:1.2.0 (*)
 |    |    |    +--- com.github.hss01248.StartActivityResult:activityresult:1.1.4 -> 1.1.9 (*)
 |    |    |    +--- com.blankj:utilcodex:1.30.0 -> 1.30.6 (*)
-|    |    |    +--- com.github.hss01248.metadata:metadata:1.1.6 -> 1.2.3 (*)
+|    |    |    +--- com.github.hss01248.metadata:metadata:1.1.6 -> 1.2.7 (*)
 |    |    |    +--- io.reactivex.rxjava2:rxjava:2.2.0 -> 2.2.9 (*)
 |    |    |    \--- com.github.hss01248.HttpUtil2:openuri:3.0.5
 |    |    |         \--- androidx.appcompat:appcompat:1.0.0 -> 1.2.0 (*)
 |    |    +--- com.blankj:utilcodex:1.30.6 (*)
-|    |    \--- com.github.hss01248.metadata:metadata:1.1.6 -> 1.2.3 (*)
-|    +--- com.github.hss01248.ImageLoader:imageDebugger:3.4.8 (*)
-|    +--- com.github.hss01248.ImageLoader:bigimageviewpager:3.4.8 (*)
-|    +--- com.github.hss01248.metadata:metadata:1.1.9 -> 1.2.3 (*)
-|    +--- com.github.skyNet2017.Luban:luban:3.2.2 -> 3.2.6
-|    |    +--- androidx.exifinterface:exifinterface:1.3.5 (*)
-|    |    \--- com.github.hss01248.metadata:metadata:1.2.3 (*)
-|    +--- com.github.skyNet2017.Luban:showResult:3.2.2
-|    |    +--- com.github.hss01248.metadata:metadata:1.1.1 -> 1.2.3 (*)
-|    |    +--- androidx.appcompat:appcompat:1.1.0 -> 1.2.0 (*)
-|    |    \--- com.davemorrissey.labs:subsampling-scale-image-view:3.10.0 (*)
+|    |    \--- com.github.hss01248.metadata:metadata:1.2.5 -> 1.2.7 (*)
+|    +--- com.github.hss01248.ImageLoader:imageDebugger:3.4.8 -> 3.7.1 (*)
+|    +--- com.github.hss01248.ImageLoader:bigimageviewpager:3.4.8 -> 3.7.1 (*)
+|    +--- com.github.hss01248.metadata:metadata:1.1.9 -> 1.2.7 (*)
+|    +--- com.github.skyNet2017.Luban:luban:3.2.2 -> 3.2.7 (*)
+|    +--- com.github.skyNet2017.Luban:showResult:3.2.2 -> 3.2.7 (*)
 |    +--- com.github.skyNet2017:TakePhoto:4.2.1
 |    |    +--- com.soundcloud.android.crop:lib_crop:1.0.0
-|    |    |    +--- com.android.support:support-v4:23.0.1 -> androidx.legacy:legacy-support-v4:1.0.0 (*)
+|    |    |    +--- com.android.support:support-v4:23.0.1 -> androidx.legacy:legacy-support-v4:1.0.0
+|    |    |    |    +--- androidx.core:core:1.0.0 -> 1.5.0 (*)
+|    |    |    |    +--- androidx.media:media:1.0.0
+|    |    |    |    |    +--- androidx.annotation:annotation:1.0.0 -> 1.2.0
+|    |    |    |    |    +--- androidx.core:core:1.0.0 -> 1.5.0 (*)
+|    |    |    |    |    \--- androidx.versionedparcelable:versionedparcelable:1.0.0 -> 1.1.1 (*)
+|    |    |    |    +--- androidx.legacy:legacy-support-core-utils:1.0.0 (*)
+|    |    |    |    +--- androidx.legacy:legacy-support-core-ui:1.0.0
+|    |    |    |    |    +--- androidx.annotation:annotation:1.0.0 -> 1.2.0
+|    |    |    |    |    +--- androidx.core:core:1.0.0 -> 1.5.0 (*)
+|    |    |    |    |    +--- androidx.legacy:legacy-support-core-utils:1.0.0 (*)
+|    |    |    |    |    +--- androidx.customview:customview:1.0.0 -> 1.1.0 (*)
+|    |    |    |    |    +--- androidx.viewpager:viewpager:1.0.0 (*)
+|    |    |    |    |    +--- androidx.coordinatorlayout:coordinatorlayout:1.0.0 -> 1.1.0 (*)
+|    |    |    |    |    +--- androidx.drawerlayout:drawerlayout:1.0.0 -> 1.1.1 (*)
+|    |    |    |    |    +--- androidx.slidingpanelayout:slidingpanelayout:1.0.0
+|    |    |    |    |    |    +--- androidx.annotation:annotation:1.0.0 -> 1.2.0
+|    |    |    |    |    |    +--- androidx.core:core:1.0.0 -> 1.5.0 (*)
+|    |    |    |    |    |    \--- androidx.customview:customview:1.0.0 -> 1.1.0 (*)
+|    |    |    |    |    +--- androidx.interpolator:interpolator:1.0.0 (*)
+|    |    |    |    |    +--- androidx.swiperefreshlayout:swiperefreshlayout:1.0.0
+|    |    |    |    |    |    +--- androidx.annotation:annotation:1.0.0 -> 1.2.0
+|    |    |    |    |    |    +--- androidx.core:core:1.0.0 -> 1.5.0 (*)
+|    |    |    |    |    |    \--- androidx.interpolator:interpolator:1.0.0 (*)
+|    |    |    |    |    +--- androidx.asynclayoutinflater:asynclayoutinflater:1.0.0
+|    |    |    |    |    |    +--- androidx.annotation:annotation:1.0.0 -> 1.2.0
+|    |    |    |    |    |    \--- androidx.core:core:1.0.0 -> 1.5.0 (*)
+|    |    |    |    |    \--- androidx.cursoradapter:cursoradapter:1.0.0 (*)
+|    |    |    |    \--- androidx.fragment:fragment:1.0.0 -> 1.3.5 (*)
 |    |    |    \--- com.android.support:support-annotations:23.0.1 -> androidx.annotation:annotation:1.2.0
 |    |    +--- com.darsh.multipleimageselect:multipleimageselect:1.0.5
 |    |    |    +--- com.android.support:appcompat-v7:27.0.1 -> androidx.appcompat:appcompat:1.2.0 (*)
@@ -574,7 +596,7 @@ debugRuntimeClasspath - Resolved configuration for runtime for variant: debug
 |    +--- project :openuri (*)
 |    +--- com.github.hss01248.MyPermission:permission:2.1.8 -> 2.3.9 (*)
 |    +--- com.github.hss01248.MyPermission:ext:2.3.9 (*)
-|    +--- com.github.hss01248.MyPermission:location:2.2.5
+|    +--- com.github.hss01248.MyPermission:location:2.2.5 -> 2.3.3
 |    |    +--- androidx.appcompat:appcompat:1.2.0 (*)
 |    |    +--- com.google.android.material:material:1.2.0 (*)
 |    |    +--- com.google.android.gms:play-services-location:16.0.0
@@ -588,7 +610,7 @@ debugRuntimeClasspath - Resolved configuration for runtime for variant: debug
 |    |    |    |    \--- com.google.android.gms:play-services-basement:16.0.1 (*)
 |    |    |    \--- com.google.android.gms:play-services-tasks:16.0.1 (*)
 |    |    +--- com.blankj:utilcodex:1.30.0 -> 1.30.6 (*)
-|    |    +--- com.github.hss01248.MyPermission:permission:2.2.5 -> 2.3.9 (*)
+|    |    +--- com.github.hss01248.MyPermission:permission:2.3.3 -> 2.3.9 (*)
 |    |    +--- io.reactivex.rxjava2:rxandroid:2.1.1 (*)
 |    |    +--- io.reactivex.rxjava2:rxjava:2.2.9 (*)
 |    |    \--- com.google.code.gson:gson:2.8.5 -> 2.8.9
@@ -645,7 +667,7 @@ debugRuntimeClasspath - Resolved configuration for runtime for variant: debug
 |    |    \--- com.google.android.material:material:1.2.0 (*)
 |    +--- androidx.documentfile:documentfile:1.0.1 (*)
 |    +--- com.github.li-xiaojun:XPopup:2.9.15 (*)
-|    +--- com.github.skyNet2017.Luban:luban:3.2.6 (*)
+|    +--- com.github.skyNet2017.Luban:luban:3.2.6 -> 3.2.7 (*)
 |    +--- androidx.databinding:viewbinding:7.1.2 (*)
 |    +--- androidx.appcompat:appcompat:1.2.0 (*)
 |    +--- com.google.android.material:material:1.2.0 (*)
@@ -658,7 +680,7 @@ debugRuntimeClasspath - Resolved configuration for runtime for variant: debug
 |    +--- project :lib-base (*)
 |    +--- project :media (*)
 |    +--- com.github.getActivity:TitleBar:9.6
-|    +--- com.github.skyNet2017.Luban:luban:3.2.2 -> 3.2.6 (*)
+|    +--- com.github.skyNet2017.Luban:luban:3.2.2 -> 3.2.7 (*)
 |    +--- androidx.databinding:viewbinding:7.1.2 (*)
 |    +--- androidx.appcompat:appcompat:1.2.0 (*)
 |    \--- com.google.android.material:material:1.2.0 (*)
@@ -730,6 +752,7 @@ debugRuntimeClasspath - Resolved configuration for runtime for variant: debug
 |    |    \--- androidx.lifecycle:lifecycle-viewmodel:2.2.0 -> 2.3.1 (*)
 |    +--- com.blankj:utilcodex:1.30.0 -> 1.30.6 (*)
 |    +--- project :lib-base (*)
+|    +--- com.github.getActivity:TitleBar:9.6
 |    +--- androidx.databinding:viewbinding:7.1.2 (*)
 |    +--- androidx.appcompat:appcompat:1.2.0 (*)
 |    +--- com.google.android.material:material:1.2.0 (*)
@@ -737,7 +760,106 @@ debugRuntimeClasspath - Resolved configuration for runtime for variant: debug
 +--- project :viewholder-media
 |    +--- project :viewholder (*)
 |    +--- project :viewState (*)
-|    +--- com.github.hss01248.ImageLoader:glidev4:3.4.8 (*)
+|    +--- project :iwidget (*)
+|    +--- com.github.hss01248.ImageLoader:glidev4:3.7.1 (*)
+|    +--- com.github.fondesa:recycler-view-divider:3.5.0 (*)
+|    +--- androidx.databinding:viewbinding:7.1.2 (*)
+|    +--- androidx.appcompat:appcompat:1.2.0 (*)
+|    \--- com.google.android.material:material:1.2.0 (*)
++--- project :baseWebview
+|    +--- com.github.Justson.AgentWeb:agentweb-core:v5.0.6-androidx
+|    +--- com.github.Justson:Downloader:v5.0.4-androidx
+|    |    \--- com.github.Justson:dispatch-queue:v1.0.5
+|    +--- androidx.lifecycle:lifecycle-common-java8:2.1.0 -> 2.3.1 (*)
+|    +--- com.github.skyNet2017:webviewdebug:1.2.2-from117
+|    |    \--- com.squareup.okhttp3:okhttp:3.12.1 -> 3.12.12 (*)
+|    +--- com.github.hss01248:UI:0.0.1
+|    |    +--- androidx.appcompat:appcompat:1.3.0 -> 1.2.0 (*)
+|    |    \--- com.google.android.material:material:1.3.0 -> 1.2.0 (*)
+|    +--- org.apache.commons:commons-lang3:3.12.0
+|    +--- project :openuri (*)
+|    +--- com.blankj:utilcodex:1.30.6 (*)
+|    +--- com.github.hss01248.MyPermission:location:2.3.3 (*)
+|    +--- project :media (*)
+|    +--- project :qr-scan (*)
+|    +--- project :iwidget (*)
+|    +--- project :viewState (*)
+|    +--- project :refresh-loadmore
+|    |    +--- io.github.scwang90:refresh-layout-kernel:2.0.5
+|    |    +--- io.github.scwang90:refresh-header-material:2.0.5
+|    |    +--- io.github.scwang90:refresh-footer-ball:2.0.5
+|    |    +--- io.github.scwang90:refresh-footer-classics:2.0.5 (*)
+|    |    +--- project :lib-base (*)
+|    |    +--- project :iwidget (*)
+|    |    +--- project :search-history-api
+|    |    |    +--- project :lib-base (*)
+|    |    |    +--- project :iwidget (*)
+|    |    |    +--- com.google.android.flexbox:flexbox:3.0.0 (*)
+|    |    |    +--- com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.46 -> 2.9.47
+|    |    |    +--- com.google.code.gson:gson:2.8.5 -> 2.8.9
+|    |    |    +--- androidx.sqlite:sqlite:2.0.1 -> 2.1.0 (*)
+|    |    |    +--- io.github.yuweiguocn:GreenDaoUpgradeHelper:v2.2.1 (*)
+|    |    |    +--- androidx.databinding:viewbinding:7.1.2 (*)
+|    |    |    +--- androidx.appcompat:appcompat:1.2.0 (*)
+|    |    |    +--- com.google.android.material:material:1.2.0 (*)
+|    |    |    +--- androidx.constraintlayout:constraintlayout:2.1.3 (*)
+|    |    |    \--- org.greenrobot:greendao:3.3.0 (*)
+|    |    +--- com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.46 -> 2.9.47
+|    |    +--- com.github.fondesa:recycler-view-divider:3.5.0 (*)
+|    |    +--- com.yqritc:recyclerview-flexibledivider:1.4.0
+|    |    +--- androidx.databinding:viewbinding:7.1.2 (*)
+|    |    +--- androidx.appcompat:appcompat:1.2.0 (*)
+|    |    \--- com.google.android.material:material:1.2.0 (*)
+|    +--- project :search-history-api (*)
+|    +--- project :download-list
+|    |    +--- project :lib-base (*)
+|    |    +--- project :refresh-loadmore (*)
+|    |    +--- com.liulishuo.filedownloader:library:1.7.7
+|    |    +--- androidx.startup:startup-runtime:1.1.0 (*)
+|    |    +--- com.github.hss01248.ImageLoader:downloader:3.6.2
+|    |    |    +--- androidx.appcompat:appcompat:1.3.1 -> 1.2.0 (*)
+|    |    |    +--- com.google.android.material:material:1.4.0 -> 1.2.0 (*)
+|    |    |    +--- com.liulishuo.okdownload:okdownload:1.0.7
+|    |    |    +--- com.liulishuo.okdownload:sqlite:1.0.7
+|    |    |    +--- com.liulishuo.okdownload:okhttp:1.0.7
+|    |    |    +--- com.squareup.okhttp3:okhttp:3.12.12 (*)
+|    |    |    +--- com.daimajia.numberprogressbar:library:1.4
+|    |    |    +--- com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.47
+|    |    |    +--- com.noober.floatmenu:common:1.0.4
+|    |    |    +--- com.github.hss01248.metadata:metadata:1.1.2 -> 1.2.7 (*)
+|    |    |    +--- com.github.getActivity:XXPermissions:11.6 (*)
+|    |    |    +--- com.blankj:utilcodex:1.30.6 (*)
+|    |    |    +--- com.github.bumptech.glide:glide:4.11.0 -> 4.12.0 (*)
+|    |    |    +--- com.github.hss01248.ImageLoader:compressor:3.6.2 (*)
+|    |    |    +--- com.liulishuo.filedownloader:library:1.7.7
+|    |    |    +--- org.greenrobot:greendao:3.3.0 (*)
+|    |    |    +--- io.github.yuweiguocn:GreenDaoUpgradeHelper:v2.2.1 (*)
+|    |    |    +--- org.greenrobot:eventbus:3.2.0
+|    |    |    \--- androidx.databinding:viewbinding:4.1.0 -> 7.1.2 (*)
+|    |    +--- androidx.databinding:viewbinding:7.1.2 (*)
+|    |    +--- androidx.appcompat:appcompat:1.2.0 (*)
+|    |    \--- com.google.android.material:material:1.2.0 (*)
+|    +--- project :ext (*)
+|    +--- com.github.hss01248.ImageLoader:downloader:3.6.2 (*)
+|    +--- com.github.skyNet2017.Luban:luban:3.2.7 (*)
+|    +--- com.github.hackware1993:MagicIndicator:1.7.0
+|    |    \--- androidx.viewpager:viewpager:1.0.0 (*)
+|    +--- com.google.code.gson:gson:2.8.5 -> 2.8.9
+|    +--- androidx.sqlite:sqlite:2.0.1 -> 2.1.0 (*)
+|    +--- io.github.yuweiguocn:GreenDaoUpgradeHelper:v2.2.1 (*)
+|    +--- com.github.hss01248.ImageLoader:bigimageviewpager:3.5.3 -> 3.7.1 (*)
+|    +--- org.jsoup:jsoup:1.13.1
+|    +--- com.github.pinguo-zhouwei:CustomPopwindow:2.1.1
+|    |    \--- com.android.support:appcompat-v7:24.2.1 -> androidx.appcompat:appcompat:1.2.0 (*)
+|    +--- androidx.databinding:viewbinding:7.1.2 (*)
+|    +--- androidx.appcompat:appcompat:1.2.0 (*)
+|    +--- com.google.android.material:material:1.2.0 (*)
+|    +--- com.github.hss01248.StartActivityResult:activityresult:1.1.7 -> 1.1.9 (*)
+|    \--- org.greenrobot:greendao:3.3.0 (*)
++--- project :bitmap-saver
+|    +--- com.blankj:utilcodex:1.30.0 -> 1.30.6 (*)
+|    +--- com.github.hss01248.MyPermission:ext:2.3.8 -> 2.3.9 (*)
+|    +--- project :lib-base-base (*)
 |    +--- androidx.databinding:viewbinding:7.1.2 (*)
 |    +--- androidx.appcompat:appcompat:1.2.0 (*)
 |    \--- com.google.android.material:material:1.2.0 (*)
@@ -792,7 +914,7 @@ debugRuntimeClasspath - Resolved configuration for runtime for variant: debug
 |    |         +--- com.google.android.material:material:1.2.0 (*)
 |    |         +--- com.google.code.gson:gson:2.8.5 -> 2.8.9
 |    |         +--- com.github.tiann:FreeReflection:3.1.0
-|    |         +--- com.github.hss01248.metadata:metadata:1.1.6 -> 1.2.3 (*)
+|    |         +--- com.github.hss01248.metadata:metadata:1.1.6 -> 1.2.7 (*)
 |    |         +--- com.blankj:utilcodex:1.30.0 -> 1.30.6 (*)
 |    |         \--- com.squareup.okhttp3:okhttp:3.12.12 (*)
 |    +--- com.github.hss01248.flipperUtil:network-hooks-chucker:1.7.15-dev
@@ -991,16 +1113,16 @@ debugRuntimeClasspath - Resolved configuration for runtime for variant: debug
 (*) - dependencies omitted (listed previously)
 
 A web-based, searchable dependency report is available by adding the --scan option.
-:app:dependencies took 89ms
-:app:dependencies spend 95ms
+:app:dependencies took 116ms
+:app:dependencies spend 122ms
 
 ======================================================
 Task timings(sorted): 
-:app:dependencies                                   89ms           
+:app:dependencies                                   116ms          
 
 
-Total Tasks took 0min 0s 89ms
-      00:00.09   :app:dependencies
+Total Tasks took 0min 0s 116ms
+      00:00.12   :app:dependencies
 
 Deprecated Gradle features were used in this build, making it incompatible with Gradle 8.0.
 
