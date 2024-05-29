@@ -26,3 +26,5 @@ include ':biometric'
 include ':cipher'
 include ':crash'
 include ':viewholder-media'
+include ':bitmap-saver'
+//bitmap-saver
