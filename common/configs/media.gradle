@@ -1,10 +1,10 @@
 
 dependencies {
     //图片库 3.4.8
-    api "com.github.hss01248.ImageLoader:glidev4:3.4.8"
-    api "com.github.hss01248.ImageLoader:compressor:3.4.8"
-    api "com.github.hss01248.ImageLoader:imageDebugger:3.4.8"
-    api "com.github.hss01248.ImageLoader:bigimageviewpager:3.4.8"
+    api "com.github.hss01248.ImageLoader:glidev4:3.7.7"
+    api "com.github.hss01248.ImageLoader:compressor:3.7.7"
+    api "com.github.hss01248.ImageLoader:imageDebugger:3.7.7"
+    api "com.github.hss01248.ImageLoader:bigimageviewpager:3.7.7"
     /*com.github.hss01248.ImageLoader:MediaStoreApi:3.4.7
 com.github.hss01248.ImageLoader:imageloader:3.4.7
 com.github.hss01248.ImageLoader:avif:3.4.7
