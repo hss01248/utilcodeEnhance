@@ -97,6 +97,22 @@
             android:text="保存配置"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+
+        <View
+            android:layout_margin="10dp"
+            android:background="#f0f2f5"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+        <Button
+            android:id="@+id/btn_view_images"
+            android:text="查看已保存的截图(公开)"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/btn_view_images_hidden"
+            android:text="查看已保存的截图(隐藏文件夹)"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 
 </ScrollView>

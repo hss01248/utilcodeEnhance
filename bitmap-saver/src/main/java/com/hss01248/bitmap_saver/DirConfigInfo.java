@@ -77,7 +77,7 @@ public class DirConfigInfo {
 
     }
 
-    private static File parentDir(int hiddenType) {
+    public static File parentDir(int hiddenType) {
         if(hiddenType ==0){
           return new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"quick_screen_shot");
         }else if(hiddenType ==1){

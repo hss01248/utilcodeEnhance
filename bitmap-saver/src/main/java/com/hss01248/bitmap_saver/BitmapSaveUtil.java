@@ -21,6 +21,7 @@ import com.hss01248.permission.MyPermissions;
 import com.hss01248.permission.ext.IExtPermissionCallback;
 import com.hss01248.permission.ext.MyPermissionsExt;
 import com.hss01248.permission.ext.permissions.StorageManagerPermissionImpl;
+import com.hss01248.viewholder_media.FileTreeViewHolder;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,6 +38,11 @@ public class BitmapSaveUtil {
 
     public static void openConfigPage(){
         DirConfigActivity.start();
+    }
+
+    public static void viewImages(boolean hidden){
+        File dir = DirConfigInfo.parentDir(hidden ? 1: 0);
+        FileTreeViewHolder.viewDirInActivity(dir.getAbsolutePath());
     }
 
     public static void setPrefix(String name){

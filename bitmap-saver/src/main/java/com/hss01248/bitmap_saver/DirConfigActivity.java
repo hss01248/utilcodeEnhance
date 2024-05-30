@@ -92,6 +92,19 @@ public class DirConfigActivity extends AppCompatActivity {
 
     private void initEvent() {
 
+        binding.btnViewImages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BitmapSaveUtil.viewImages(false);
+            }
+        });
+        binding.btnViewImagesHidden.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BitmapSaveUtil.viewImages(true);
+            }
+        });
+
         binding.sAsPrefix.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {

@@ -8,9 +8,11 @@ import androidx.lifecycle.LifecycleOwner;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ThreadUtils;
+import com.hss.utils.enhance.viewholder.ContainerActivity;
 import com.hss.utils.enhance.viewholder.mvvm.BaseViewHolder;
 import com.hss01248.iwidget.singlechoose.ISingleChooseItem;
 import com.hss01248.toast.MyToast;
+import com.hss01248.viewholder.databinding.ActivityCommonContainerBinding;
 import com.hss01248.viewholder_media.databinding.LayoutFileTreeBinding;
 import com.hss01248.viewstate.StatefulLayout;
 
@@ -22,6 +24,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.Callable;
 
 import io.reactivex.functions.Consumer;
 
@@ -37,6 +40,33 @@ public class FileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBinding,Str
     MediaListViewHolder listViewHolder;
     DisplayAndFilterInfo filterInfo = new DisplayAndFilterInfo();
     Map<String,List<String>> cache = new TreeMap<>();
+
+
+    public static void viewDirInActivity(String dir){
+        ContainerActivity.start("", new Consumer<Pair<ContainerActivity, ActivityCommonContainerBinding>>() {
+            @Override
+            public void accept(Pair<ContainerActivity, ActivityCommonContainerBinding> pair) throws Exception {
+                File externalStorageDirectory = new File(dir);
+                FileTreeViewHolder viewHolder = new FileTreeViewHolder(pair.first);
+                viewHolder.init(externalStorageDirectory.getAbsolutePath());
+                pair.second.llRoot.addView(viewHolder.getRootView());
+
+
+
+                pair.first.setOnBackPressed(new Callable<Boolean>() {
+                    @Override
+                    public Boolean call() throws Exception {
+                        //ToastUtils.showShort("拦截后退键");
+                        return viewHolder.onBackPressed();
+                    }
+                });
+            }
+        });
+    }
+
+
+
+
     public FileTreeViewHolder(Context context) {
         super(context);
         stateManager = StatefulLayout.wrapWithStateOfPage(rootView, new Runnable() {

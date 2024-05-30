@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -47,6 +48,10 @@ public class ContainerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityCommonContainerBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        ViewGroup.LayoutParams layoutParams = binding.getRoot().getLayoutParams();
+        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        binding.getRoot().setLayoutParams(layoutParams);
         String title = getIntent().getStringExtra("title");
         if(TextUtils.isEmpty(title)){
             binding.qrTitlebar.setTitle("");
