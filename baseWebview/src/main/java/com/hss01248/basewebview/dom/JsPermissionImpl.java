@@ -99,17 +99,20 @@ public class JsPermissionImpl extends MiddlewareWebChromeBase {
                 false, true, new MyLocationCallback() {
                     @Override
                     public boolean configJustAskPermissionAndSwitch() {
+                        //只申请权限和打开开关,不发起定位过程
                         return true;
                     }
 
                     @Override
                     public boolean configAcceptOnlyCoarseLocationPermission() {
+                        //可以允许模糊权限. 这个看项目实际要求
                         return true;
                     }
 
                     @Override
                     public void onSuccess(Location location, String msg) {
                         //注意个函数，第二个参数就是是否同意定位权限，第三个是是否希望内核记住
+                        //不要记住,因为权限和开关随时能手动关闭,需要每次调这里来获取, 如果传true,下次就不会调用到这里的回调了
                         callback.invoke(origin,true,false);
                     }
 
