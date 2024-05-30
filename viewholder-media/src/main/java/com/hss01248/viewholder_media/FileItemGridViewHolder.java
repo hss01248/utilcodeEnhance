@@ -84,6 +84,7 @@ public class FileItemGridViewHolder extends MyRecyclerViewHolder<LayoutFileItemG
             file.getName().endsWith(".mp4")){
                 ImageLoader.with(context)
                         .file(data)
+                        .defaultErrorRes(true)
                         .scale(ScaleMode.CENTER_CROP)
                         .into(iv);
             }else {
