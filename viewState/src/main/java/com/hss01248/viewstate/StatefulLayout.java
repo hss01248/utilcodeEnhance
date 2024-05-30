@@ -80,6 +80,10 @@ public class StatefulLayout extends FrameLayout implements IViewState{
                 }).build());
 
         layout.setContentView(view);
+        //主要是宽高
+        if(view.getLayoutParams() !=null){
+            layout.setLayoutParams(view.getLayoutParams());
+        }
         return layout;
     }
 

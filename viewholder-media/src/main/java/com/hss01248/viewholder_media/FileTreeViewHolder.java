@@ -50,6 +50,8 @@ public class FileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBinding,Str
                 FileTreeViewHolder viewHolder = new FileTreeViewHolder(pair.first);
                 viewHolder.init(externalStorageDirectory.getAbsolutePath());
                 pair.second.llRoot.addView(viewHolder.getRootView());
+                //处理宽高:
+
 
 
 
