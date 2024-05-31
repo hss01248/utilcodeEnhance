@@ -8,9 +8,7 @@ import java.io.File;
  * @Date 5/31/24 11:02 AM
  * @Version 1.0
  */
-public class BitmapSaveListener {
+public interface BitmapSaveListener {
 
-    void onSaved(File file, int width,int height){
-
-    }
+    void onSaved(File file, int width,int height);
 }

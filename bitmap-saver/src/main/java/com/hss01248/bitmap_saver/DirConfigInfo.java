@@ -65,6 +65,11 @@ public class DirConfigInfo {
     }
 
     public static void setPrefix(String name){
+        if(!TextUtils.isEmpty(name)){
+            if(name.length() > 20){
+                name = name.substring(0,20);
+            }
+        }
         if(TextUtils.isEmpty(name)){
             if(!TextUtils.isEmpty(loadConfigInfo().prefix)){
                 loadConfigInfo().prefix = "";

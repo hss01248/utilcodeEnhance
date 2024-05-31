@@ -61,6 +61,10 @@ public class BitmapSaveUtil {
         listeners.add(listener);
     }
 
+    public static  void remove(BitmapSaveListener listener){
+        listeners.remove(listener);
+    }
+
     public static void saveBitmap(Bitmap bitmap) throws Exception {
 
 
