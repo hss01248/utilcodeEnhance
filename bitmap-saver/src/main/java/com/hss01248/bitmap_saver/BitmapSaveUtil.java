@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 
 import androidx.annotation.NonNull;
+import androidx.exifinterface.media.ExifInterface;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.FileUtils;
@@ -29,7 +30,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import io.reactivex.Observer;
 
@@ -47,6 +52,13 @@ public class BitmapSaveUtil {
 
     public static void setPrefix(String name){
         DirConfigInfo.setPrefix(name);
+    }
+
+
+    static  List<BitmapSaveListener> listeners =  new ArrayList<>();
+
+    public static  void addBitmapSaveListener(BitmapSaveListener listener){
+        listeners.add(listener);
     }
 
     public static void saveBitmap(Bitmap bitmap) throws Exception {
@@ -86,6 +98,9 @@ public class BitmapSaveUtil {
                 pngFile.delete();
             }
         }
+        //写exif
+        writeDateTimeToFile(finalFile);
+
         if(DirConfigInfo.loadConfigInfo().hiddenType ==0){
             //将文件写到mediastore
             String path = Environment.DIRECTORY_PICTURES+"/quick_screen_shot" ;
@@ -93,6 +108,7 @@ public class BitmapSaveUtil {
             File myFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+path+"/"+finalFile.getName());
             if(myFile.exists() && myFile.length() >0){
                 LogUtils.i("文件成功另存到mediastore:",myFile.getAbsolutePath());
+                notifyListeners(myFile,bitmap.getWidth(),bitmap.getHeight());
                 finalFile.delete();
             }else{
                 LogUtils.w("文件另存到mediastore 失败:",myFile.getAbsolutePath());
@@ -118,11 +134,37 @@ public class BitmapSaveUtil {
             }
             boolean copy = FileUtils.copy(finalFile, myFile);
             if(copy){
+
+                notifyListeners(myFile,bitmap.getWidth(),bitmap.getHeight());
                 LogUtils.i("文件另存隐藏文件夹成功:",myFile.getAbsolutePath());
                 finalFile.delete();
             }else {
                 LogUtils.w("文件另存隐藏文件夹失败:",myFile.getAbsolutePath());
             }
+        }
+    }
+
+    private static void notifyListeners(File myFile, int width, int height) {
+        for (BitmapSaveListener listener : listeners) {
+            try{
+                listener.onSaved(myFile,width,height);
+            }catch (Throwable throwable){
+                LogUtils.w(throwable);
+            }
+
+        }
+    }
+
+    private static void writeDateTimeToFile(File file) {
+        try {
+            ExifInterface exifInterface = new ExifInterface(file);
+            //exifInterface.setDateTime(System.currentTimeMillis());
+            long timeStamp = System.currentTimeMillis();
+            SimpleDateFormat sFormatterPrimary = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss", Locale.US);
+            exifInterface.setAttribute(ExifInterface.TAG_DATETIME, sFormatterPrimary.format(new Date(timeStamp)));
+            exifInterface.saveAttributes();
+        } catch (Exception e) {
+           LogUtils.w(e);
         }
     }
 
