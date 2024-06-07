@@ -10,7 +10,7 @@ props.load(new FileInputStream(file(project.rootDir.toString() +"/local.properti
 println(props.toMapString())
 
 android {
-    compileSdkVersion 33
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.hss01248.basewebviewdemo"

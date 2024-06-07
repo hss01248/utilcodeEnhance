@@ -1,15 +1,15 @@
 plugins {
     id 'com.android.application'
 }
-apply from: "configs/andresguard.gradle"
+//apply from: "configs/andresguard.gradle"
 android {
-    compileSdkVersion 33
-    buildToolsVersion "30.0.0"
+    compileSdk 34
+    //buildToolsVersion "30.0.0"
 
     defaultConfig {
         applicationId "com.hss.utilsenhance"
-        minSdkVersion 23
-        targetSdkVersion 33
+        minSdk 23
+        targetSdk 34
         versionCode 1
         versionName "1.0"
         multiDexEnabled true

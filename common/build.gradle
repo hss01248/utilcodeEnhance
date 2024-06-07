@@ -6,7 +6,7 @@ apply from:'configs/ui_kit.gradle'
 apply from:'configs/compact.gradle'
 
 android {
-    compileSdkVersion 33
+    compileSdk 33
 
     defaultConfig {
         minSdkVersion 19

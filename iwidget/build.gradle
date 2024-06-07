@@ -4,7 +4,7 @@ plugins {
 
 android {
     //namespace 'com.hss01248.iwidget'
-    compileSdkVersion 33
+    compileSdk 33
 
     defaultConfig {
         minSdkVersion 19
