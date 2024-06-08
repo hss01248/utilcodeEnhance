@@ -54,6 +54,7 @@ import com.hss.utils.enhance.MyKeyboardUtil;
 import com.hss.utils.enhance.UrlEncodeUtil;
 import com.hss01248.basewebview.adblock.AdBlockClient;
 import com.hss01248.basewebview.databinding.TitlebarForWebviewBinding;
+import com.hss01248.basewebview.dom.AuthImpl;
 import com.hss01248.basewebview.dom.FileChooseImpl;
 import com.hss01248.basewebview.dom.JsCreateNewWinImpl;
 import com.hss01248.basewebview.dom.JsPermissionImpl;
@@ -628,6 +629,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                         jsCreateNewWin.onCloseWindow(window);
                     }
                 })
+                .useMiddlewareWebClient(new AuthImpl())
                 .useMiddlewareWebChrome(new JsPermissionImpl())
                 .useMiddlewareWebClient(new AdBlockClient(getContext()))
                 .useMiddlewareWebChrome(new FileChooseImpl());

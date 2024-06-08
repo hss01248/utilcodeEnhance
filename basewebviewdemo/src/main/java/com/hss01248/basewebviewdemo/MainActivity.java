@@ -28,6 +28,10 @@ public class MainActivity extends AppCompatActivity {
         BaseWebviewActivity.start(this,"https://www.runoob.com/try/try.php?filename=tryhtml5_geolocation");
     }
 
+    public void test401Login(View view) {
+        BaseWebviewActivity.start(this,"http://192.168.1.12:9625");
+    }
+
     public void showOpenFilePicker(View view) {
         BaseWebviewActivity.start(this,"https://www.zhangxinxu.com/study/202108/button-picker-file-upload.php");
     }
