@@ -7,8 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.startup.Initializer;
 
 import com.blankj.utilcode.util.Utils;
-import com.hss01248.utils.ext.lifecycle.FirstActivityCreatedCallback;
-import com.hss01248.utils.ext.lifecycle.LogActivityCallback;
+import com.hss01248.utils.ext.lifecycle.BackgroundAndFirstActivityCreatedCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +28,7 @@ public class ExtInit implements Initializer<String> {
         }else {
             application = Utils.getApp();
         }
-        application.registerActivityLifecycleCallbacks(new FirstActivityCreatedCallback());
+        application.registerActivityLifecycleCallbacks(new BackgroundAndFirstActivityCreatedCallback());
         return "ext init";
     }
 

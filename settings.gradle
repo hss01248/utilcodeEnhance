@@ -27,4 +27,5 @@ include ':cipher'
 include ':crash'
 include ':viewholder-media'
 include ':bitmap-saver'
+include ':lock-app'
 //bitmap-saver

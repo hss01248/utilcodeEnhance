@@ -6,22 +6,19 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.TextUtils;
-import android.util.Log;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.multidex.MultiDexApplication;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.ReflectUtils;
 import com.blankj.utilcode.util.SPStaticUtils;
 import com.blankj.utilcode.util.ThreadUtils;
 import com.hjq.permissions.XXPermissions;
 import com.hss01248.basewebview.BaseWebviewActivity;
 import com.hss01248.basewebview.WebConfigger;
-import com.hss01248.sentry.SentryUtil;
 import com.hss01248.utils.ext.lifecycle.AppFirstActivityOnCreateListener;
-import com.hss01248.utils.ext.lifecycle.FirstActivityCreatedCallback;
+import com.hss01248.utils.ext.lifecycle.BackgroundAndFirstActivityCreatedCallback;
 
 /**
  * @Despciption todo
@@ -47,7 +44,7 @@ public class BaseApp extends MultiDexApplication {
     }
 
     private void regist() {
-        FirstActivityCreatedCallback.addAppFirstActivityOnCreateListener(new AppFirstActivityOnCreateListener() {
+        BackgroundAndFirstActivityCreatedCallback.addAppFirstActivityOnCreateListener(new AppFirstActivityOnCreateListener() {
             @Override
             public void onForegroundBackgroundChanged(Activity activity, boolean changeToBackground) {
                 AppFirstActivityOnCreateListener.super.onForegroundBackgroundChanged(activity, changeToBackground);

@@ -22,7 +22,7 @@ import java.util.List;
  * @Date 20/06/2022 10:29
  * @Version 1.0
  */
-public class FirstActivityCreatedCallback implements Application.ActivityLifecycleCallbacks {
+public class BackgroundAndFirstActivityCreatedCallback implements Application.ActivityLifecycleCallbacks {
 
     /**
      * 冷启动时,或者崩溃重启时,不一定走splash.
@@ -104,6 +104,7 @@ public class FirstActivityCreatedCallback implements Application.ActivityLifecyc
     }
 
     private void onForeBackChanged(Activity activity,boolean changeToBackground) {
+        LogUtils.d(activity,"ToBackground:"+changeToBackground);
         if (appFirstActivityOnCreateListeners != null && !appFirstActivityOnCreateListeners.isEmpty()) {
             for (AppFirstActivityOnCreateListener appFirstActivityOnCreateListener : appFirstActivityOnCreateListeners) {
                 try {
