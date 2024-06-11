@@ -131,15 +131,22 @@ public class MyKeyboardUtil implements DefaultLifecycleObserver {
                     @Override
                     public void onSoftKeyBoardShow(int keyboardHeight) {
                         ViewGroup.LayoutParams layoutParams = innerScrollableView.getLayoutParams();
-                        layoutParams.height = totalHeight[0] - keyboardHeight;
-                        innerScrollableView.setLayoutParams(layoutParams);
+                        if(layoutParams ==null){
+
+                        }else {
+                            layoutParams.height = totalHeight[0] - keyboardHeight;
+                            innerScrollableView.setLayoutParams(layoutParams);
+                        }
                     }
 
                     @Override
                     public void onSoftKeyBoardHide() {
                         ViewGroup.LayoutParams layoutParams = innerScrollableView.getLayoutParams();
-                        layoutParams.height = totalHeight[0] ;
-                        innerScrollableView.setLayoutParams(layoutParams);
+                        if(layoutParams !=null){
+                            layoutParams.height = totalHeight[0] ;
+                            innerScrollableView.setLayoutParams(layoutParams);
+                        }
+
                     }
                 });
     }
