@@ -79,6 +79,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <Button
+                android:text="全屏dialog-alert"
+                android:textAllCaps="false"
+                android:onClick="fullScreenDialog2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <Button
                 android:text="透明导航栏"
                 android:textAllCaps="false"
                 android:onClick="navibarTrans"

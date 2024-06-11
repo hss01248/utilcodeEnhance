@@ -40,6 +40,7 @@ import com.hss.utils.enhance.api.MyCommonCallback;
 import com.hss.utils.enhance.foregroundservice.CommonProgressService;
 import com.hss.utils.enhance.intent.ShareUtils;
 import com.hss.utils.enhance.intent.SysIntentUtil;
+import com.hss.utilsenhance.databinding.TestFullBinding;
 import com.hss01248.activityresult.StartActivityUtil;
 import com.hss01248.activityresult.TheActivityListener;
 import com.hss01248.basewebview.BaseWebviewActivity;
@@ -52,6 +53,7 @@ import com.hss01248.cipher.SignUtil;
 import com.hss01248.cipher.SslUtil;
 import com.hss01248.cipher.file.EncryptedUtil;
 import com.hss01248.cipher.sp.EnSpUtil;
+import com.hss01248.fullscreendialog.FullScreenDialogUtil;
 import com.hss01248.image.dataforphotoselet.ImgDataSeletor;
 import com.hss01248.iwidget.BaseDialogListener;
 import com.hss01248.iwidget.msg.AlertDialogImplByDialogUtil;
@@ -1255,5 +1257,10 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void fullScreenDialog2(View view) {
+        TestFullBinding binding = TestFullBinding.inflate(getLayoutInflater());
+        FullScreenDialogUtil.showFullScreen(binding.getRoot());
     }
 }
