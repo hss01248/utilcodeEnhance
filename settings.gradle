@@ -28,4 +28,5 @@ include ':crash'
 include ':viewholder-media'
 include ':bitmap-saver'
 include ':lock-app'
+include ':crash-remote'
 //bitmap-saver

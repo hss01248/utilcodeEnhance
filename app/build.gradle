@@ -54,6 +54,7 @@ dependencies {
     implementation project(path: ':qr-scan')
     implementation project(path: ':cipher')
     implementation project(path: ':crash')
+    implementation project(path: ':crash-remote')
     implementation project(path: ':viewholder')
     implementation project(path: ':viewholder-media')
     implementation project(':baseWebview')
