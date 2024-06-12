@@ -58,12 +58,14 @@ dependencies {
     api project(path: ':qr-scan')
     api project(path: ':iwidget')
     api project(path: ':viewState')
+    api project(path: ':viewholder')
     //api project(path: ':basewebview-ajax-proxy')
     api project(path: ':refresh-loadmore')
     api project(path: ':search-history-api')
     api project(path: ':download-list')
     api project(path: ':ext')
-    api "com.github.hss01248.ImageLoader:downloader:3.6.2"
+    api "com.github.hss01248.ImageLoader:downloader:3.7.9"
+    api 'com.daimajia.numberprogressbar:library:1.4@aar'
 
     api 'com.github.skyNet2017.Luban:luban:3.2.7'
     //api 'com.github.skyNet2017.Luban:showResult:3.2.7'

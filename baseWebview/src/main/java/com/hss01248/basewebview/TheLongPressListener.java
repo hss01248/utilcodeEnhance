@@ -9,7 +9,6 @@ import android.view.View;
 import android.webkit.WebView;
 
 import androidx.annotation.NonNull;
-import androidx.viewpager.widget.ViewPager;
 
 import com.blankj.utilcode.util.BarUtils;
 import com.blankj.utilcode.util.LogUtils;
@@ -98,7 +97,7 @@ public class TheLongPressListener implements View.OnLongClickListener {
                 myViewPager.setBackgroundColor(Color.BLACK);
                 List<String> ulrs = new ArrayList<>();
                 ulrs.add(pic);
-                ViewPager viewPager = LargeImageViewer.showBig(v.getContext(), myViewPager, ulrs, 0);
+                View viewPager = LargeImageViewer.showBig(v.getContext(), myViewPager, ulrs, 0);
 
                 FullScreenDialog dialog = new FullScreenDialog(v.getContext());
                 dialog.setContentView(myViewPager);

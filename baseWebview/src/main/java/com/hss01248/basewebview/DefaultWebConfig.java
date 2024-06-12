@@ -1,6 +1,6 @@
 package com.hss01248.basewebview;
 
-import com.hss01248.basewebview.download.SystemDownloader;
+import com.hss01248.basewebview.download.ApiDownloader;
 
 /**
  * @Despciption todo
@@ -16,7 +16,7 @@ public class DefaultWebConfig implements WebviewInit {
 
     @Override
     public IDownloader getIDownloader() {
-        return new SystemDownloader();
+        return new ApiDownloader();
     }
 
 
