@@ -50,6 +50,10 @@ public abstract class BaseViewHolder<VB extends ViewBinding, InitInfo>
 
     protected Context context;
 
+    public VB getBinding() {
+        return binding;
+    }
+
     protected VB binding;
 
     public BaseViewHolder(Context context) {

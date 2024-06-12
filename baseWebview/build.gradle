@@ -65,7 +65,7 @@ dependencies {
     api project(path: ':download-list')
     api project(path: ':ext')
     api "com.github.hss01248.ImageLoader:downloader:3.8.0"
-    api 'com.daimajia.numberprogressbar:library:1.4@aar'
+    api 'com.daimajia.numberprogressbar:library:1.4'
 
     api 'com.github.skyNet2017.Luban:luban:3.2.7'
     //api 'com.github.skyNet2017.Luban:showResult:3.2.7'
