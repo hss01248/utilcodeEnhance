@@ -19,6 +19,7 @@ import com.hss01248.basewebview.BaseWebviewActivity;
 import com.hss01248.basewebview.WebConfigger;
 import com.hss01248.utils.ext.lifecycle.AppFirstActivityOnCreateListener;
 import com.hss01248.utils.ext.lifecycle.BackgroundAndFirstActivityCreatedCallback;
+import com.liulishuo.filedownloader.FileDownloader;
 
 /**
  * @Despciption todo
@@ -34,6 +35,7 @@ public class BaseApp extends MultiDexApplication {
         regist();
         XXPermissions.setScopedStorage(true);
         WebConfigger.init(null);
+        FileDownloader.setup(this);
 
         LogUtils.getConfig().setOnConsoleOutputListener(new LogUtils.OnConsoleOutputListener() {
             @Override
