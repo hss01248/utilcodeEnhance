@@ -7,7 +7,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        minSdkVersion 23
+        minSdkVersion 21
         ////在 Android 5.0（API 级别 21）和 Android 5.1（API 级别 22）中，您无法使用 Android 密钥库存储密钥集。
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId "com.hss01248.basewebviewdemo"
-        minSdkVersion 23
+        minSdkVersion 21
         targetSdkVersion 33
         versionCode 1008
         versionName "1.0.08"
@@ -69,7 +69,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
     implementation project(path: ':baseWebview')
     api project(path: ':ext')
-    api project(path: ':sentry')
+    //api project(path: ':sentry')
+     api 'com.github.hss01248.flipperUtil:network-hooks-auth:1.7.20-dev'
 
 
 }

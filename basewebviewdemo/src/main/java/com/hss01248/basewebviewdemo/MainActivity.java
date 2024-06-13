@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.hss01248.basewebview.BaseWebviewActivity;
 import com.hss01248.basewebview.video.ClipboardMonitorService;
-import com.hss01248.sentry.SentryUtil;
+
 
 
 import top.zibin.luban.LubanUtil;
@@ -85,10 +85,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sentry_msg(View view) {
-        SentryUtil.testMsg("msg test");
+        //SentryUtil.testMsg("msg test");
     }
 
     public void sentry_ex(View view) {
-        SentryUtil.testException();
+        //SentryUtil.testException();
     }
 }
