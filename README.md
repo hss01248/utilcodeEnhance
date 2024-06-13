@@ -26,26 +26,32 @@
 
 
 // 最新:
-com.github.hss01248.utilcodeEnhance:lib-base:1.4.1
-com.github.hss01248.utilcodeEnhance:common:1.4.1
-com.github.hss01248.utilcodeEnhance:ext:1.4.1
-com.github.hss01248.utilcodeEnhance:fullScreenDialog:1.4.1
-com.github.hss01248.utilcodeEnhance:viewholder:1.4.1
-com.github.hss01248.utilcodeEnhance:media:1.4.1
-com.github.hss01248.utilcodeEnhance:toast:1.4.1
-com.github.hss01248.utilcodeEnhance:search-history-api:1.4.1
-com.github.hss01248.utilcodeEnhance:qr-scan:1.4.1
-com.github.hss01248.utilcodeEnhance:cipher:1.4.1
-com.github.hss01248.utilcodeEnhance:refresh-loadmore:1.4.1
-com.github.hss01248.utilcodeEnhance:iwidget:1.4.1
-com.github.hss01248.utilcodeEnhance:openuri:1.4.1
-com.github.hss01248.utilcodeEnhance:biometric:1.4.1
-com.github.hss01248.utilcodeEnhance:basewebview-ajax-proxy:1.4.1
-com.github.hss01248.utilcodeEnhance:viewState:1.4.1
-com.github.hss01248.utilcodeEnhance:download-list:1.4.1
-com.github.hss01248.utilcodeEnhance:sentry:1.4.1
-com.github.hss01248.utilcodeEnhance:IReporter:1.4.1
-com.github.hss01248.utilcodeEnhance:baseWebview:1.4.1
+com.github.hss01248.utilcodeEnhance:cipher:1.5.8
+com.github.hss01248.utilcodeEnhance:bitmap-saver:1.5.8
+com.github.hss01248.utilcodeEnhance:fullScreenDialog:1.5.8
+com.github.hss01248.utilcodeEnhance:viewholder:1.5.8
+com.github.hss01248.utilcodeEnhance:ext:1.5.8
+com.github.hss01248.utilcodeEnhance:qr-scan:1.5.8
+com.github.hss01248.utilcodeEnhance:crash:1.5.8
+com.github.hss01248.utilcodeEnhance:media:1.5.8
+com.github.hss01248.utilcodeEnhance:common:1.5.8
+com.github.hss01248.utilcodeEnhance:viewholder-media:1.5.8
+com.github.hss01248.utilcodeEnhance:baseWebview:1.5.8
+com.github.hss01248.utilcodeEnhance:search-history-api:1.5.8
+com.github.hss01248.utilcodeEnhance:viewState:1.5.8
+com.github.hss01248.utilcodeEnhance:iwidget:1.5.8
+com.github.hss01248.utilcodeEnhance:lib-base-base:1.5.8
+com.github.hss01248.utilcodeEnhance:sentry:1.5.8
+com.github.hss01248.utilcodeEnhance:refresh-loadmore:1.5.8
+com.github.hss01248.utilcodeEnhance:biometric:1.5.8
+com.github.hss01248.utilcodeEnhance:toast:1.5.8
+com.github.hss01248.utilcodeEnhance:lock-app:1.5.8
+com.github.hss01248.utilcodeEnhance:IReporter:1.5.8
+com.github.hss01248.utilcodeEnhance:openuri:1.5.8
+com.github.hss01248.utilcodeEnhance:basewebview-ajax-proxy:1.5.8
+com.github.hss01248.utilcodeEnhance:crash-remote:1.5.8
+com.github.hss01248.utilcodeEnhance:lib-base:1.5.8
+com.github.hss01248.utilcodeEnhance:download-list:1.5.8
 ```
 
 
