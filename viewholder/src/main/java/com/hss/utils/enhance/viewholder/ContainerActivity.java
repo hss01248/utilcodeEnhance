@@ -58,20 +58,26 @@ public class ContainerActivity extends AppCompatActivity {
         binding.getRoot().setLayoutParams(layoutParams);
         String title = getIntent().getStringExtra("title");
         if(TextUtils.isEmpty(title)){
-            binding.qrTitlebar.getLeftTextView().setText("");
+            binding.qrTitlebar.setTitle("");
             binding.qrTitlebar.setVisibility(View.GONE);
+            UltimateBarX.statusBarOnly(this)
+                    .fitWindow(false)
+                    .color(Color.TRANSPARENT)
+                    //.colorRes(R.color.deepSkyBlue)
+                    .light(false)
+                    //.lvlColorRes(R.color.cyan)
+                    .apply();
         }else{
-            binding.qrTitlebar.getLeftTextView().setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-            binding.qrTitlebar.getLeftTextView().setCompoundDrawablePadding(SizeUtils.dp2px(10));
-            binding.qrTitlebar.getLeftTextView().setText(title);
+            binding.qrTitlebar.setTitle(title);
+            UltimateBarX.statusBarOnly(this)
+                    .fitWindow(true)
+                    .color(Color.WHITE)
+                    //.colorRes(R.color.deepSkyBlue)
+                    .light(true)
+                    //.lvlColorRes(R.color.cyan)
+                    .apply();
         }
-        UltimateBarX.statusBarOnly(this)
-                .fitWindow(false)
-                .color(Color.TRANSPARENT)
-                //.colorRes(R.color.deepSkyBlue)
-                .light(true)
-                //.lvlColorRes(R.color.cyan)
-                .apply();
+
 
         //默认白色主题
         /*ImmersionBar.with(this)
@@ -81,7 +87,7 @@ public class ContainerActivity extends AppCompatActivity {
                 .autoDarkModeEnable(true) //自动状态栏字体和导航栏图标变色，必须指定状态栏颜色和导航栏颜色才可以自动变色哦
                 .init();*/
 
-        binding.qrTitlebar.getLeftTextView().setOnClickListener(new View.OnClickListener() {
+        binding.qrTitlebar.getLeftView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();

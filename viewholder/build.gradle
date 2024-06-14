@@ -69,5 +69,5 @@ dependencies {
     api 'com.blankj:utilcodex:1.30.0'//基底
     api project(':lib-base')
     api 'com.github.getActivity:TitleBar:9.6'
-    api 'com.wuhenzhizao:titlebar:1.2.0'
+    //api 'com.wuhenzhizao:titlebar:1.2.0'
 }

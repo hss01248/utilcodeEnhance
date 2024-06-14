@@ -18,7 +18,7 @@ import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.SizeUtils;
 import com.google.gson.GsonBuilder;
-import com.gyf.immersionbar.ImmersionBar;
+
 
 import java.util.Map;
 
@@ -73,7 +73,7 @@ public class FullScreenDialogUtil {
         dialog.show();
     }
 
-    public static  void showFullScreen(View view){
+    public static  AlertDialog showFullScreen(View view){
         AlertDialog dialog = new AlertDialog.Builder(ActivityUtils.getTopActivity())
                 .setView(view)
                 .create();
@@ -114,7 +114,8 @@ public class FullScreenDialogUtil {
             }
         });
         dialog.show();
-        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+        return dialog;
+       /* dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog0) {
                 ImmersionBar.destroy(ActivityUtils.getTopActivity(), dialog);
@@ -126,7 +127,7 @@ public class FullScreenDialogUtil {
             public void onDismiss(DialogInterface dialog0) {
                 ImmersionBar.destroy(ActivityUtils.getTopActivity(), dialog);
             }
-        });
+        });*/
     }
 
     private static void expandHeight( AlertDialog dialog, int id) {
