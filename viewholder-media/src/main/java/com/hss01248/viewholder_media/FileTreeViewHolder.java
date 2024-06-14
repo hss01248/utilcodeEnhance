@@ -1,6 +1,7 @@
 package com.hss01248.viewholder_media;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.View;
 
 import androidx.core.util.Pair;
@@ -15,6 +16,7 @@ import com.hss01248.toast.MyToast;
 import com.hss01248.viewholder.databinding.ActivityCommonContainerBinding;
 import com.hss01248.viewholder_media.databinding.LayoutFileTreeBinding;
 import com.hss01248.viewstate.StatefulLayout;
+import com.zackratos.ultimatebarx.ultimatebarx.java.UltimateBarX;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -43,7 +45,7 @@ public class FileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBinding,Str
 
 
     public static void viewDirInActivity(String dir){
-        ContainerActivity.start("ContainerActivity", new Consumer<Pair<ContainerActivity, ActivityCommonContainerBinding>>() {
+        ContainerActivity.start("", new Consumer<Pair<ContainerActivity, ActivityCommonContainerBinding>>() {
             @Override
             public void accept(Pair<ContainerActivity, ActivityCommonContainerBinding> pair) throws Exception {
                 File externalStorageDirectory = new File(dir);
@@ -60,13 +62,13 @@ public class FileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBinding,Str
                     }
                 });
 
-               /* UltimateBarX.statusBarOnly(pair.first)
+                UltimateBarX.statusBarOnly(pair.first)
                         .fitWindow(true)
                         .color(Color.WHITE)
                         //.colorRes(R.color.deepSkyBlue)
                         .light(true)
                         //.lvlColorRes(R.color.cyan)
-                        .apply();*/
+                        .apply();
             }
         });
     }
