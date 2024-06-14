@@ -34,7 +34,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-
+    api 'com.geyifeng.immersionbar:immersionbar:3.2.2'
 
     def lifecycle_version = "2.2.0"
 

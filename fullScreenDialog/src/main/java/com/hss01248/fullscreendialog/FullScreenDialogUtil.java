@@ -18,6 +18,7 @@ import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.SizeUtils;
 import com.google.gson.GsonBuilder;
+import com.gyf.immersionbar.ImmersionBar;
 
 import java.util.Map;
 
@@ -94,18 +95,38 @@ public class FullScreenDialogUtil {
                 layoutParams.height = height;
                 view.setLayoutParams(layoutParams);
 
+
+                BarUtils.transparentStatusBar(dialog.getWindow());
                 //BarUtils.setStatusBarColor(dialog.getWindow(),Color.WHITE);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     //BarUtils.setNavBarColor(dialog.getWindow(),Color.WHITE);
                     dialog.getWindow().setNavigationBarColor(Color.WHITE);
+                    dialog.getWindow().setStatusBarColor(Color.TRANSPARENT);
+                    BarUtils.setNavBarColor(dialog.getWindow(),Color.WHITE);
                 }
-                BarUtils.setStatusBarLightMode(dialog.getWindow(),false);
-                BarUtils.setNavBarLightMode(dialog.getWindow(),true);
+               /* ImmersionBar.with(ActivityUtils.getTopActivity(), dialog)
+                        .navigationBarColorInt(Color.WHITE)
+                        .navigationBarDarkIcon(true)
+                        .init();*/
 
 
+               // BarUtils.setNavBarLightMode(dialog.getWindow(),true);
             }
         });
         dialog.show();
+        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog0) {
+                ImmersionBar.destroy(ActivityUtils.getTopActivity(), dialog);
+            }
+        });
+
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog0) {
+                ImmersionBar.destroy(ActivityUtils.getTopActivity(), dialog);
+            }
+        });
     }
 
     private static void expandHeight( AlertDialog dialog, int id) {

@@ -71,7 +71,7 @@ import com.hss01248.media.pick.MediaPickOrCaptureUtil;
 import com.hss01248.media.pick.MediaPickUtil;
 import com.hss01248.media.pick.SafUtil;
 import com.hss01248.media.uri.ContentUriUtil;
-import com.hss01248.openuri.OpenUri;
+import com.hss01248.openuri2.OpenUri2;
 import com.hss01248.permission.MyPermissions;
 import com.hss01248.qrscan.ScanCodeActivity;
 import com.hss01248.toast.MyToast;
@@ -298,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
         CaptureVideoUtil.startVideoCapture(true,30, 1024 * 1024 * 1024, new MyCommonCallback<String>() {
             @Override
             public void onSuccess(String path) {
-                showMata(OpenUri.fromFile(Utils.getApp(),new File(path)));
+                showMata(OpenUri2.fromFile(Utils.getApp(),new File(path)));
                 LogUtils.d(path);
             }
 
@@ -361,7 +361,7 @@ public class MainActivity extends AppCompatActivity {
         CaptureImageUtil.takePicture(true,new MyCommonCallback<String>() {
             @Override
             public void onSuccess(String s) {
-                showMata(OpenUri.fromFile(Utils.getApp(),new File(s)));
+                showMata(OpenUri2.fromFile(Utils.getApp(),new File(s)));
                 LogUtils.d(s);
             }
 
