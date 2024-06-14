@@ -6,13 +6,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.hjq.bar.TitleBar
+    <com.wuhenzhizao.titlebar.widget.CommonTitleBar
         android:id="@+id/qr_titlebar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:barStyle="light"
+        app:fillStatusBar="true"
+        app:leftType="textView"
+        app:leftTextColor="#333333"
+        app:leftTextSize="17sp"
         android:background="#ffffff"
-        app:leftIcon="@drawable/arrow_back_black"
-        app:title="我是标题" />
+        app:leftDrawable="@drawable/arrow_back_black"
+        app:leftText="我是标题" />
 
 </LinearLayout>

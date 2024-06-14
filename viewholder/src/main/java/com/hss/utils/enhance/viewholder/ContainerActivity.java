@@ -1,6 +1,8 @@
 package com.hss.utils.enhance.viewholder;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -12,9 +14,9 @@ import androidx.core.util.Pair;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.LogUtils;
-import com.gyf.immersionbar.ImmersionBar;
-import com.hss01248.viewholder.R;
+import com.blankj.utilcode.util.SizeUtils;
 import com.hss01248.viewholder.databinding.ActivityCommonContainerBinding;
+import com.zackratos.ultimatebarx.ultimatebarx.java.UltimateBarX;
 
 import java.util.concurrent.Callable;
 
@@ -56,23 +58,30 @@ public class ContainerActivity extends AppCompatActivity {
         binding.getRoot().setLayoutParams(layoutParams);
         String title = getIntent().getStringExtra("title");
         if(TextUtils.isEmpty(title)){
-            binding.qrTitlebar.setTitle("");
+            binding.qrTitlebar.getLeftTextView().setText("");
             binding.qrTitlebar.setVisibility(View.GONE);
         }else{
-            binding.qrTitlebar.setTitle(title);
+            binding.qrTitlebar.getLeftTextView().setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+            binding.qrTitlebar.getLeftTextView().setCompoundDrawablePadding(SizeUtils.dp2px(10));
+            binding.qrTitlebar.getLeftTextView().setText(title);
         }
+        UltimateBarX.statusBarOnly(this)
+                .fitWindow(false)
+                .color(Color.TRANSPARENT)
+                //.colorRes(R.color.deepSkyBlue)
+                .light(true)
+                //.lvlColorRes(R.color.cyan)
+                .apply();
+
         //默认白色主题
-        ImmersionBar.with(this)
+        /*ImmersionBar.with(this)
                 .statusBarColor(R.color.color_bg_white)     //状态栏颜色，不写默认透明色
                 .navigationBarColor(R.color.color_bg_white) //导航栏颜色，不写默认黑色
                 .fitsSystemWindows(true)
-                //.statusBarDarkFont(true)   //状态栏字体是深色，不写默认为亮色
-                //.navigationBarDarkIcon(true) //导航栏图标是深色，不写默认为亮色
                 .autoDarkModeEnable(true) //自动状态栏字体和导航栏图标变色，必须指定状态栏颜色和导航栏颜色才可以自动变色哦
-                //.autoStatusBarDarkModeEnable(true,0.2f) //自动状态栏字体变色，必须指定状态栏颜色才可以自动变色哦
-                .init();
+                .init();*/
 
-        binding.qrTitlebar.getLeftView().setOnClickListener(new View.OnClickListener() {
+        binding.qrTitlebar.getLeftTextView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();

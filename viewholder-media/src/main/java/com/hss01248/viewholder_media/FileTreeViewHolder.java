@@ -43,7 +43,7 @@ public class FileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBinding,Str
 
 
     public static void viewDirInActivity(String dir){
-        ContainerActivity.start("", new Consumer<Pair<ContainerActivity, ActivityCommonContainerBinding>>() {
+        ContainerActivity.start("ContainerActivity", new Consumer<Pair<ContainerActivity, ActivityCommonContainerBinding>>() {
             @Override
             public void accept(Pair<ContainerActivity, ActivityCommonContainerBinding> pair) throws Exception {
                 File externalStorageDirectory = new File(dir);
@@ -52,9 +52,6 @@ public class FileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBinding,Str
                 pair.second.llRoot.addView(viewHolder.getRootView());
                 //处理宽高:
 
-
-
-
                 pair.first.setOnBackPressed(new Callable<Boolean>() {
                     @Override
                     public Boolean call() throws Exception {
@@ -62,6 +59,14 @@ public class FileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBinding,Str
                         return viewHolder.onBackPressed();
                     }
                 });
+
+               /* UltimateBarX.statusBarOnly(pair.first)
+                        .fitWindow(true)
+                        .color(Color.WHITE)
+                        //.colorRes(R.color.deepSkyBlue)
+                        .light(true)
+                        //.lvlColorRes(R.color.cyan)
+                        .apply();*/
             }
         });
     }
