@@ -64,7 +64,7 @@ dependencies {
     releaseApi 'com.github.hss01248.accountCacher:no-op:1.1.1'
 
     //app更新  https://github.com/skyNet2017/AppUpdate
-    api "com.github.skyNet2017.AppUpdate:update-app:4.0.1"
+    api "com.github.skyNet2017.AppUpdate:update-app:4.1.5"
    // api  "com.github.skyNet2017.AppUpdate:http:4.0.1"
 
     api "io.reactivex.rxjava2:rxjava:2.2.6"

@@ -172,7 +172,7 @@ dependencies {
      implementation "com.github.li-xiaojun:XPopup:2.9.15"
      implementation "com.github.lihangleo2:ShadowLayout:3.3.1"
      implementation "com.github.pinguo-zhouwei:CustomPopwindow:2.1.1"
-     implementation "com.github.skyNet2017.AppUpdate:update-app:4.0.1"
+     implementation "com.github.skyNet2017.AppUpdate:update-app:4.1.5"
      implementation "com.github.skyNet2017.Luban:dataForPhotoSelet:3.3.0"
      implementation "com.github.skyNet2017.Luban:luban:3.2.7"
      implementation "com.github.skyNet2017.Luban:showResult:3.2.7"
