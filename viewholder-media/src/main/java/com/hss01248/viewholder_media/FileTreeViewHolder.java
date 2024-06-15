@@ -10,7 +10,9 @@ import androidx.lifecycle.LifecycleOwner;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ThreadUtils;
 import com.hss.utils.enhance.viewholder.ContainerActivity;
+import com.hss.utils.enhance.viewholder.ContainerActivity2;
 import com.hss.utils.enhance.viewholder.mvvm.BaseViewHolder;
+import com.hss.utils.enhance.viewholder.mvvm.ContainerViewHolderWithTitleBar;
 import com.hss01248.iwidget.singlechoose.ISingleChooseItem;
 import com.hss01248.toast.MyToast;
 import com.hss01248.viewholder.databinding.ActivityCommonContainerBinding;
@@ -45,13 +47,15 @@ public class FileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBinding,Str
 
 
     public static void viewDirInActivity(String dir){
-        ContainerActivity.start("", new Consumer<Pair<ContainerActivity, ActivityCommonContainerBinding>>() {
+        ContainerActivity2.start( new Consumer<Pair<ContainerActivity2, ContainerViewHolderWithTitleBar>>() {
             @Override
-            public void accept(Pair<ContainerActivity, ActivityCommonContainerBinding> pair) throws Exception {
+            public void accept(Pair<ContainerActivity2, ContainerViewHolderWithTitleBar> pair) throws Exception {
                 File externalStorageDirectory = new File(dir);
                 FileTreeViewHolder viewHolder = new FileTreeViewHolder(pair.first);
                 viewHolder.init(externalStorageDirectory.getAbsolutePath());
-                pair.second.llRoot.addView(viewHolder.getRootView());
+                pair.second.getBinding().rlContainer.addView(viewHolder.getRootView());
+                pair.second.setTitleBarHidden(true);
+                pair.second.setStatusBarFontBlack(true);
                 //处理宽高:
 
                 pair.first.setOnBackPressed(new Callable<Boolean>() {
@@ -61,14 +65,6 @@ public class FileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBinding,Str
                         return viewHolder.onBackPressed();
                     }
                 });
-
-                UltimateBarX.statusBarOnly(pair.first)
-                        .fitWindow(true)
-                        .color(Color.WHITE)
-                        //.colorRes(R.color.deepSkyBlue)
-                        .light(true)
-                        //.lvlColorRes(R.color.cyan)
-                        .apply();
             }
         });
     }

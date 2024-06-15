@@ -34,6 +34,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <Button
+                android:text="containeractivity-带标题"
+                android:textAllCaps="false"
+                android:onClick="containeractivityWithTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:text="containeractivity-无标题-有状态栏占位符"
+                android:textAllCaps="false"
+                android:onClick="containeractivityWithNoTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:text="containeractivity-无标题-无状态栏占位符"
+                android:textAllCaps="false"
+                android:onClick="containeractivityWithNoTitleAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:text="containeractivity-相对布局,标题透明"
+                android:textAllCaps="false"
+                android:onClick="containeractivityWithTransTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <Button
                 android:text="urlEncode"
                 android:textAllCaps="false"
                 android:onClick="urlEncode"

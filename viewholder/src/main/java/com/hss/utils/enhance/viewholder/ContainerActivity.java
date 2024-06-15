@@ -28,6 +28,7 @@ import io.reactivex.functions.Consumer;
  * @Date 5/20/24 2:44 PM
  * @Version 1.0
  */
+@Deprecated
 public class ContainerActivity extends AppCompatActivity {
 
     ActivityCommonContainerBinding binding;
@@ -38,6 +39,7 @@ public class ContainerActivity extends AppCompatActivity {
     }
 
     Callable<Boolean> onBackPressed;
+    Object contentViewOrHolder;
 
     public static void start(String title,
                              Consumer<Pair<ContainerActivity,ActivityCommonContainerBinding>> onActivityCreate){
@@ -58,8 +60,8 @@ public class ContainerActivity extends AppCompatActivity {
         binding.getRoot().setLayoutParams(layoutParams);
         String title = getIntent().getStringExtra("title");
         if(TextUtils.isEmpty(title)){
-            binding.qrTitlebar.setTitle("");
-            binding.qrTitlebar.setVisibility(View.GONE);
+            //binding.qrTitlebar.setTitle("");
+            binding.realTitleBar.setVisibility(View.GONE);
             UltimateBarX.statusBarOnly(this)
                     .fitWindow(false)
                     .color(Color.TRANSPARENT)
@@ -68,7 +70,8 @@ public class ContainerActivity extends AppCompatActivity {
                     //.lvlColorRes(R.color.cyan)
                     .apply();
         }else{
-            binding.qrTitlebar.setTitle(title);
+           // binding.qrTitlebar.setTitle(title);
+            binding.realTitleBar.setLeftTitle(title);
             UltimateBarX.statusBarOnly(this)
                     .fitWindow(true)
                     .color(Color.WHITE)
@@ -87,7 +90,7 @@ public class ContainerActivity extends AppCompatActivity {
                 .autoDarkModeEnable(true) //自动状态栏字体和导航栏图标变色，必须指定状态栏颜色和导航栏颜色才可以自动变色哦
                 .init();*/
 
-        binding.qrTitlebar.getLeftView().setOnClickListener(new View.OnClickListener() {
+        binding.realTitleBar.getLeftView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();

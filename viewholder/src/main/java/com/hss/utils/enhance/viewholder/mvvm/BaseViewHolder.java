@@ -56,6 +56,12 @@ public abstract class BaseViewHolder<VB extends ViewBinding, InitInfo>
 
     protected VB binding;
 
+    public void setContainerViewHolderWithTitleBar(ContainerViewHolderWithTitleBar viewHolderWithTitleBar) {
+        this.containerViewHolderWithTitleBar = viewHolderWithTitleBar;
+    }
+
+    protected ContainerViewHolderWithTitleBar containerViewHolderWithTitleBar;
+
     public BaseViewHolder(Context context) {
         Activity activity = LifecycleObjectUtil.getActivityFromContext(context);
         if(activity ==null){

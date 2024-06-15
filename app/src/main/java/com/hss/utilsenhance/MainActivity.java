@@ -16,13 +16,18 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.security.identity.IdentityCredential;
 import android.util.Base64;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricPrompt;
+import androidx.core.util.Pair;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.LogUtils;
@@ -40,6 +45,9 @@ import com.hss.utils.enhance.api.MyCommonCallback;
 import com.hss.utils.enhance.foregroundservice.CommonProgressService;
 import com.hss.utils.enhance.intent.ShareUtils;
 import com.hss.utils.enhance.intent.SysIntentUtil;
+import com.hss.utils.enhance.viewholder.ContainerActivity;
+import com.hss.utils.enhance.viewholder.ContainerActivity2;
+import com.hss.utils.enhance.viewholder.mvvm.ContainerViewHolderWithTitleBar;
 import com.hss.utilsenhance.databinding.TestFullBinding;
 import com.hss01248.activityresult.StartActivityUtil;
 import com.hss01248.activityresult.TheActivityListener;
@@ -75,6 +83,7 @@ import com.hss01248.openuri2.OpenUri2;
 import com.hss01248.permission.MyPermissions;
 import com.hss01248.qrscan.ScanCodeActivity;
 import com.hss01248.toast.MyToast;
+import com.hss01248.viewholder.databinding.ActivityCommonContainerBinding;
 import com.hss01248.viewholder_media.FileTreeViewHolder;
 
 import org.devio.takephoto.wrap.TakeOnePhotoListener;
@@ -1262,5 +1271,78 @@ public class MainActivity extends AppCompatActivity {
     public void fullScreenDialog2(View view) {
         TestFullBinding binding = TestFullBinding.inflate(getLayoutInflater());
         FullScreenDialogUtil.showFullScreen(binding.getRoot());
+    }
+
+    public void containeractivityWithTitle(View view) {
+        ContainerActivity2.start( new Consumer<Pair<ContainerActivity2, ContainerViewHolderWithTitleBar>>() {
+            @Override
+            public void accept(Pair<ContainerActivity2, ContainerViewHolderWithTitleBar> pair) throws Exception {
+                TextView textView = new TextView(pair.first);
+                textView.setBackgroundColor(Color.GREEN);
+                textView.setText("center.........");
+                textView.setGravity(Gravity.CENTER);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
+                textView.setLayoutParams(params);
+                pair.second.getBinding().rlContainer.addView(textView);
+                pair.second.getBinding().realTitleBar.setTitle("我是标题啦啦啦啦啦我是");
+
+            }
+        });
+    }
+
+    public void containeractivityWithNoTitle(View view) {
+        ContainerActivity2.start( new Consumer<Pair<ContainerActivity2, ContainerViewHolderWithTitleBar>>() {
+            @Override
+            public void accept(Pair<ContainerActivity2, ContainerViewHolderWithTitleBar> pair) throws Exception {
+                TextView textView = new TextView(pair.first);
+                textView.setBackgroundColor(Color.GREEN);
+                textView.setText("center.........");
+                textView.setGravity(Gravity.CENTER);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
+                textView.setLayoutParams(params);
+                pair.second.getBinding().rlContainer.addView(textView);
+                pair.second.getBinding().realTitleBar.setTitle("我是标题啦啦啦啦啦我是");
+
+                pair.second.setTitleBarHidden(true);
+
+            }
+        });
+    }
+
+    public void containeractivityWithTransTitle(View view) {
+        ContainerActivity2.start( new Consumer<Pair<ContainerActivity2, ContainerViewHolderWithTitleBar>>() {
+            @Override
+            public void accept(Pair<ContainerActivity2, ContainerViewHolderWithTitleBar> pair) throws Exception {
+                TextView textView = new TextView(pair.first);
+                textView.setBackgroundColor(Color.GREEN);
+                textView.setText("center.........");
+                textView.setGravity(Gravity.CENTER);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
+                textView.setLayoutParams(params);
+                pair.second.getBinding().rlContainer.addView(textView);
+                pair.second.getBinding().realTitleBar.setTitle("我是标题啦啦啦啦啦我是");
+                pair.second.setTitleBarTransplantAndRelative(true);
+
+            }
+        });
+    }
+
+    public void containeractivityWithNoTitleAll(View view) {
+        ContainerActivity2.start( new Consumer<Pair<ContainerActivity2, ContainerViewHolderWithTitleBar>>() {
+            @Override
+            public void accept(Pair<ContainerActivity2, ContainerViewHolderWithTitleBar> pair) throws Exception {
+                TextView textView = new TextView(pair.first);
+                textView.setBackgroundColor(Color.GREEN);
+                textView.setText("center.........");
+                textView.setGravity(Gravity.CENTER);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
+                textView.setLayoutParams(params);
+                pair.second.getBinding().rlContainer.addView(textView);
+                pair.second.getBinding().realTitleBar.setTitle("我是标题啦啦啦啦啦我是");
+
+                pair.second.setTitleBarHidden(false);
+
+            }
+        });
     }
 }
