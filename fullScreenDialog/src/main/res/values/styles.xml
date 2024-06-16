@@ -17,6 +17,8 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@color/color_bg_white</item>
         <item name="android:windowIsFloating">false</item>
+        <!-- 根据需求设置软键盘模式-->
+        <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
 
 </resources>

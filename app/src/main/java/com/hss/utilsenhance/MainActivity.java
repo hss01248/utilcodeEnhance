@@ -1286,6 +1286,14 @@ public class MainActivity extends AppCompatActivity {
                 pair.second.getBinding().rlContainer.addView(textView);
                 pair.second.getBinding().realTitleBar.setTitle("我是标题啦啦啦啦啦我是");
 
+                pair.second.showRightMoreIcon(false);
+                pair.second.getBinding().realTitleBar.getRightView().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        MyToast.show("more icon clicked");
+                    }
+                });
+
             }
         });
     }
@@ -1341,6 +1349,7 @@ public class MainActivity extends AppCompatActivity {
                 pair.second.getBinding().realTitleBar.setTitle("我是标题啦啦啦啦啦我是");
 
                 pair.second.setTitleBarHidden(false);
+
 
             }
         });

@@ -105,6 +105,9 @@ public class BackgroundAndFirstActivityCreatedCallback implements Application.Ac
 
     private void onForeBackChanged(Activity activity,boolean changeToBackground) {
         LogUtils.d(activity,"ToBackground:"+changeToBackground);
+       /* if(activity.isFinishing()){
+
+        }*/
         if (appFirstActivityOnCreateListeners != null && !appFirstActivityOnCreateListeners.isEmpty()) {
             for (AppFirstActivityOnCreateListener appFirstActivityOnCreateListener : appFirstActivityOnCreateListeners) {
                 try {

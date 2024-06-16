@@ -11,8 +11,8 @@ buildscript {
     ext.kotlin_version = '1.6.10'
     ext {
 // 快照版需要在版本号后面加-SNAPSHOT
-       // groupId='com.github.hss01248.utilcodeEnhance'
-        versionCode = '1.6.1.04'
+        groupId='com.github.hss01248.utilcodeEnhance'
+        versionCode = '1.6.1.06'
         isPublisToLocal=false
 
         releaseUrl='https://nexus.hss01248.tech/repository/maven-releases/'

@@ -25,6 +25,18 @@ public class ContainerViewHolderWithTitleBar extends BaseViewHolder<ActivityComm
         binding.realTitleBar.getLeftView().setText("");
     }
 
+    public void useInDialog(boolean statusBarTransplant) {
+        this.useInDialog = true;
+        this.statusBarTransplant = statusBarTransplant;
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) binding.vStatus.getLayoutParams();
+        layoutParams.height = statusBarTransplant ? BarUtils.getStatusBarHeight() :0;
+        binding.vStatus.setLayoutParams(layoutParams);
+
+    }
+
+    public boolean useInDialog;
+    public boolean statusBarTransplant;
+
     public  void setTitleBarWhite(){
         binding.llTitlebar.setVisibility(View.VISIBLE);
         binding.llTitlebar.setBackgroundColor(Color.WHITE);
@@ -39,6 +51,16 @@ public class ContainerViewHolderWithTitleBar extends BaseViewHolder<ActivityComm
                 .light(black)
                 //.lvlColorRes(R.color.cyan)
                 .apply();
+    }
+
+    /**
+     * 右边显示三个...,自行设置onclicklistener
+     * @param whiteIcon
+     */
+    public void showRightMoreIcon(boolean whiteIcon){
+        binding.realTitleBar.setRightTitle("● ● ●");
+        binding.realTitleBar.setRightTitleColor(whiteIcon?Color.WHITE:Color.parseColor("#333333"));
+        binding.realTitleBar.getRightView().setTextSize(10);
     }
 
 
