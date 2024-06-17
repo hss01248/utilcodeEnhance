@@ -5,26 +5,10 @@
     android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <RelativeLayout
-        android:id="@+id/rl_top"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_width="match_parent"
-        android:layout_height="50dp">
-        <ImageView
-            android:layout_alignParentRight="true"
-            android:id="@+id/iv_menus"
-            android:layout_centerVertical="true"
-            android:src="@drawable/icon_more_menu"
-            android:layout_marginRight="8dp"
-            android:scaleType="fitCenter"
-            android:layout_width="45dp"
-            android:layout_height="45dp"/>
-    </RelativeLayout>
     <TextView
-        android:layout_below="@id/rl_top"
         android:layout_gravity="center_vertical"
         android:id="@+id/tv_path"
+        android:padding="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

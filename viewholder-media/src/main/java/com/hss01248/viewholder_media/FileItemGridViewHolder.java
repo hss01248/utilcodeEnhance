@@ -34,7 +34,7 @@ public class FileItemGridViewHolder extends MyRecyclerViewHolder<LayoutFileItemG
     public static final  float dividerWidth = 1.0f;
 
     public static int getSpanCount(){
-        return DeviceUtils.isTablet() ? 5 : 4;
+        return DeviceUtils.isTablet() ? 6 : 5;
     }
 
 

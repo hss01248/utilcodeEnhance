@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             app:titleColor="#333333"
-            app:title="title"
+            app:title=""
             app:titleSize="18sp"
             app:titleStyle="bold"
             app:leftIcon="@drawable/arrow_back_black"

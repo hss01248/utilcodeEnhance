@@ -51,8 +51,16 @@ public class FileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBinding,Str
                 FileTreeViewHolder viewHolder = new FileTreeViewHolder(pair.first);
                 viewHolder.init(externalStorageDirectory.getAbsolutePath());
                 pair.second.getBinding().rlContainer.addView(viewHolder.getRootView());
-                pair.second.setTitleBarHidden(true);
+                //pair.second.setTitleBarHidden(true);
                 pair.second.setStatusBarFontBlack(true);
+
+                pair.second.showRightMoreIcon(false);
+                pair.second.getBinding().realTitleBar.getRightView().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        viewHolder.initMenus(v);
+                    }
+                });
                 //处理宽高:
 
                 pair.first.setOnBackPressed(new Callable<Boolean>() {
@@ -88,16 +96,18 @@ public class FileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBinding,Str
                 if(file.isDirectory()){
                     loadDir(s);
                 }else {
-                    MyToast.show("打开文件: \n"+s);
+                    //todo
+                    List<String> strings = cache.get(file.getParentFile().getAbsolutePath());
+
+                    if(s.contains("jpg")|| s.contains("png")){
+
+                    }else if(s.contains(".mp4")||s.contains(".mkv")){
+
+                    }else{
+                        MyToast.show("打开文件: \n"+s);
+                    }
+
                 }
-            }
-        });
-
-        binding.ivMenus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                initMenus(view);
-
             }
         });
     }
