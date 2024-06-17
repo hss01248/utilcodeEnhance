@@ -12,6 +12,7 @@ import com.blankj.utilcode.util.ThreadUtils;
 import com.hss.utils.enhance.viewholder.ContainerActivity2;
 import com.hss.utils.enhance.viewholder.mvvm.BaseViewHolder;
 import com.hss.utils.enhance.viewholder.mvvm.ContainerViewHolderWithTitleBar;
+import com.hss01248.fileoperation.FileOpenUtil;
 import com.hss01248.iwidget.singlechoose.ISingleChooseItem;
 import com.hss01248.toast.MyToast;
 import com.hss01248.viewholder_media.databinding.LayoutFileTreeBinding;
@@ -98,15 +99,7 @@ public class FileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBinding,Str
                 }else {
                     //todo
                     List<String> strings = cache.get(file.getParentFile().getAbsolutePath());
-
-                    if(s.contains("jpg")|| s.contains("png")){
-
-                    }else if(s.contains(".mp4")||s.contains(".mkv")){
-
-                    }else{
-                        MyToast.show("打开文件: \n"+s);
-                    }
-
+                    FileOpenUtil.openBeforeFilter(s,strings);
                 }
             }
         });
