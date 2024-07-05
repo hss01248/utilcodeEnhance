@@ -1,7 +1,6 @@
 package com.hss01248.viewholder_media;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.View;
 
 import androidx.core.util.Pair;
@@ -12,9 +11,7 @@ import com.blankj.utilcode.util.ThreadUtils;
 import com.hss.utils.enhance.viewholder.ContainerActivity2;
 import com.hss.utils.enhance.viewholder.mvvm.BaseViewHolder;
 import com.hss.utils.enhance.viewholder.mvvm.ContainerViewHolderWithTitleBar;
-import com.hss01248.fileoperation.FileOpenUtil;
 import com.hss01248.iwidget.singlechoose.ISingleChooseItem;
-import com.hss01248.toast.MyToast;
 import com.hss01248.viewholder_media.databinding.LayoutFileTreeBinding;
 import com.hss01248.viewstate.StatefulLayout;
 
@@ -99,7 +96,7 @@ public class FileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBinding,Str
                 }else {
                     //todo
                     List<String> strings = cache.get(file.getParentFile().getAbsolutePath());
-                    FileOpenUtil.openBeforeFilter(s,strings);
+                    //FileOpenUtil.openBeforeFilter(s,strings);
                 }
             }
         });
