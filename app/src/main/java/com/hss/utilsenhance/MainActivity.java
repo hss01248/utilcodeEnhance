@@ -19,6 +19,7 @@ import android.util.Base64;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -36,6 +37,7 @@ import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ThreadUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
+import com.bumptech.glide.Glide;
 import com.google.gson.GsonBuilder;
 import com.hss.utils.base.api.MyCommonCallback3;
 import com.hss.utils.enhance.BarColorUtil;
@@ -47,6 +49,7 @@ import com.hss.utils.enhance.intent.ShareUtils;
 import com.hss.utils.enhance.intent.SysIntentUtil;
 import com.hss.utils.enhance.viewholder.ContainerActivity2;
 import com.hss.utils.enhance.viewholder.mvvm.ContainerViewHolderWithTitleBar;
+import com.hss.utilsenhance.databinding.DisplayMetaViewBinding;
 import com.hss.utilsenhance.databinding.TestFullBinding;
 import com.hss01248.activityresult.StartActivityUtil;
 import com.hss01248.activityresult.TheActivityListener;
@@ -82,7 +85,6 @@ import com.hss01248.openuri2.OpenUri2;
 import com.hss01248.permission.MyPermissions;
 import com.hss01248.qrscan.ScanCodeActivity;
 import com.hss01248.toast.MyToast;
-import com.hss01248.viewholder.databinding.ActivityCommonContainerBinding;
 import com.hss01248.viewholder_media.FileTreeViewHolder;
 
 import org.devio.takephoto.wrap.TakeOnePhotoListener;
@@ -350,10 +352,35 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         desc  = path0.toString()+"\n"+  new GsonBuilder().setPrettyPrinting().create().toJson(map);
-        new AlertDialog.Builder(this)
-                .setTitle("mata data")
-                .setMessage(desc)
-                .setPositiveButton("预览", new DialogInterface.OnClickListener() {
+        String type = map.get("mime_type")+"";
+
+        View contentView = null;
+        if(type.contains("image") || type.contains("video")
+                || path0.toString().endsWith(".mp4")
+                || path0.toString().endsWith(".jpg")){
+            DisplayMetaViewBinding binding = DisplayMetaViewBinding.inflate(MainActivity.this.getLayoutInflater(),findViewById(android.R.id.content),false);
+            //ViewGroup group = (ViewGroup) View.inflate(this,R.layout.display_meta_view,findViewById(android.R.id.content));
+            contentView = binding.getRoot();
+
+           ImageView imageView =  binding.ivImage;
+            Glide.with(this)
+                    .load(path0)
+                    //.override(SizeUtils.dp2px(100),SizeUtils.dp2px(100))
+                    .into(imageView);
+
+            TextView textView =  binding.tvDesc;
+            textView.setText(desc);
+
+        }
+
+        AlertDialog.Builder builder =   new AlertDialog.Builder(this)
+                .setTitle("mata data");
+        if(contentView !=null){
+            builder.setView(contentView);
+        }else {
+              builder.setMessage(desc);
+        }
+        builder.setPositiveButton("预览", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if(map.containsKey("_data")){

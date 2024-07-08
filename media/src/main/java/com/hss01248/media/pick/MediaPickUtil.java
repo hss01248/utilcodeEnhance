@@ -203,12 +203,13 @@ public class MediaPickUtil {
             }else if(mime.startsWith("video")){
                 permission = Manifest.permission.READ_MEDIA_VIDEO;
             }else if(mime.startsWith("audio")){
-                //permission = Manifest.permission.READ_MEDIA_AUDIO;
+                permission = Manifest.permission.READ_MEDIA_AUDIO;
                 //TMD 设置页面根本没有对应的权限
             }
         }
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ){
-            MyPermissions.requestByMostEffort(false, true,
+            startIntent(mimeType, callback);
+            /*MyPermissions.requestByMostEffort(false, true,
                     new PermissionUtils.FullCallback() {
                         @Override
                         public void onGranted(@NonNull List<String> granted) {
@@ -219,9 +220,10 @@ public class MediaPickUtil {
                         public void onDenied(@NonNull List<String> deniedForever, @NonNull List<String> denied) {
                             callback.onError("permission", "[read external storage] permission denied", null);
                         }
-                    }, permission);
+                    }, permission);*/
         }else {
-            MyPermissions.requestByMostEffort(false, true,
+            startIntent(mimeType, callback);
+            /*MyPermissions.requestByMostEffort(false, true,
                     new PermissionUtils.FullCallback() {
                         @Override
                         public void onGranted(@NonNull List<String> granted) {
@@ -232,7 +234,7 @@ public class MediaPickUtil {
                         public void onDenied(@NonNull List<String> deniedForever, @NonNull List<String> denied) {
                             callback.onError("permission", "[read external storage] permission denied", null);
                         }
-                    }, permission,Manifest.permission.READ_EXTERNAL_STORAGE);
+                    }, permission,Manifest.permission.READ_EXTERNAL_STORAGE);*/
         }
 
 
