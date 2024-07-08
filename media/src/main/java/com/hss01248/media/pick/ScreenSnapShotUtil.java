@@ -254,8 +254,15 @@ public class ScreenSnapShotUtil {
         String mImageFileName = String.format(SCREENSHOT_FILE_NAME_TEMPLATE, imageDate);
 
         final ContentValues values = new ContentValues();
-        values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES
-                + File.separator + AppUtils.getAppName()); //Environment.DIRECTORY_SCREENSHOTS:截图,图库中显示的文件夹名。"dh"
+        //values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + File.separator + AppUtils.getAppName()); //Environment.DIRECTORY_SCREENSHOTS:截图,图库中显示的文件夹名。"dh"
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + File.separator + AppUtils.getAppName());
+        } else {
+            values.put(
+                    MediaStore.MediaColumns.DATA,
+                    Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+Environment.DIRECTORY_PICTURES + File.separator + AppUtils.getAppName()
+            );
+        }
         //DIRECTORY_SCREENSHOTS--> 不允许操作
         values.put(MediaStore.MediaColumns.DISPLAY_NAME, mImageFileName);
         values.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");

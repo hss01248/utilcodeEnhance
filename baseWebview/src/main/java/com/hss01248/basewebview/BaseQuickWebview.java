@@ -863,7 +863,14 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
     private void copyFileToDownloadsDir(File file) {
         Uri uri = MediaStore.Files.getContentUri("external");
         ContentValues contentValues = new ContentValues();
-        contentValues.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/"+AppUtils.getAppName());
+        //contentValues.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/"+AppUtils.getAppName());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + File.separator + AppUtils.getAppName());
+        } else {
+            contentValues.put(
+                    MediaStore.MediaColumns.DATA,
+                    Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+Environment.DIRECTORY_DOWNLOADS + File.separator + AppUtils.getAppName()
+            );
         // 设置文件名称
         contentValues.put(MediaStore.Downloads.DISPLAY_NAME, file.getName());
         // 设置文件标题, 一般是删除后缀, 可以不设置

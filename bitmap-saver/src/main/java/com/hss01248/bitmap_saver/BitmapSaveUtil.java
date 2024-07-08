@@ -182,7 +182,15 @@ public class BitmapSaveUtil {
         contentValues.put(MediaStore.MediaColumns.MIME_TYPE,
                 srcFile.getName().endsWith(".jpg")?"image/jpeg":"image/png");
         // 根据文件类型设置
-        contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, path);
+        //contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, path);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, path);
+        } else {
+            contentValues.put(
+                    MediaStore.MediaColumns.DATA,
+                    Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+path
+            );
+        }
 
         // 插入文件到系统MediaStore
         Uri uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
