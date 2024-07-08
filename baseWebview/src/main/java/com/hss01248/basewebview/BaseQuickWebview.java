@@ -869,55 +869,56 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
         } else {
             contentValues.put(
                     MediaStore.MediaColumns.DATA,
-                    Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+Environment.DIRECTORY_DOWNLOADS + File.separator + AppUtils.getAppName()
+                    Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + Environment.DIRECTORY_DOWNLOADS + File.separator + AppUtils.getAppName()
             );
-        // 设置文件名称
-        contentValues.put(MediaStore.Downloads.DISPLAY_NAME, file.getName());
-        // 设置文件标题, 一般是删除后缀, 可以不设置
-        //contentValues.put(MediaStore.Downloads.TITLE, "hello");
-        // uri 表示操作哪个数据库 , contentValues 表示要插入的数据内容
-        Uri insert = Utils.getApp().getContentResolver().insert(uri, contentValues);
-        // 向 Download/hello/hello.txt 文件中插入数据
+            // 设置文件名称
+            contentValues.put(MediaStore.Downloads.DISPLAY_NAME, file.getName());
+            // 设置文件标题, 一般是删除后缀, 可以不设置
+            //contentValues.put(MediaStore.Downloads.TITLE, "hello");
+            // uri 表示操作哪个数据库 , contentValues 表示要插入的数据内容
+            Uri insert = Utils.getApp().getContentResolver().insert(uri, contentValues);
+            // 向 Download/hello/hello.txt 文件中插入数据
 
-        try {
-            int sBufferSize = 524288;
-            InputStream is = new FileInputStream(file);
-            OutputStream os = Utils.getApp().getContentResolver().openOutputStream(insert);
             try {
-                os = new BufferedOutputStream(os, sBufferSize);
-
-                double totalSize = is.available();
-                int curSize = 0;
-
-                byte[] data = new byte[sBufferSize];
-                for (int len; (len = is.read(data)) != -1; ) {
-                    os.write(data, 0, len);
-                    curSize += len;
-                }
-                os.flush();
-                LogUtils.i("拷贝文件到download文件夹: download/"+AppUtils.getAppName()+"/" + file.getName());
-                ToastUtils.showLong("文件下载到download文件夹: download/"+AppUtils.getAppName()+"/" + file.getName());
-                file.delete();
-
-            } catch (IOException e) {
-                LogUtils.w(e);
-
-            } finally {
+                int sBufferSize = 524288;
+                InputStream is = new FileInputStream(file);
+                OutputStream os = Utils.getApp().getContentResolver().openOutputStream(insert);
                 try {
-                    is.close();
-                } catch (IOException e) {
-                    LogUtils.w(e);
-                }
-                try {
-                    if (os != null) {
-                        os.close();
+                    os = new BufferedOutputStream(os, sBufferSize);
+
+                    double totalSize = is.available();
+                    int curSize = 0;
+
+                    byte[] data = new byte[sBufferSize];
+                    for (int len; (len = is.read(data)) != -1; ) {
+                        os.write(data, 0, len);
+                        curSize += len;
                     }
+                    os.flush();
+                    LogUtils.i("拷贝文件到download文件夹: download/" + AppUtils.getAppName() + "/" + file.getName());
+                    ToastUtils.showLong("文件下载到download文件夹: download/" + AppUtils.getAppName() + "/" + file.getName());
+                    file.delete();
+
                 } catch (IOException e) {
                     LogUtils.w(e);
+
+                } finally {
+                    try {
+                        is.close();
+                    } catch (IOException e) {
+                        LogUtils.w(e);
+                    }
+                    try {
+                        if (os != null) {
+                            os.close();
+                        }
+                    } catch (IOException e) {
+                        LogUtils.w(e);
+                    }
                 }
+            } catch (Exception e) {
+                LogUtils.w(e);
             }
-        } catch (Exception e) {
-            LogUtils.w(e);
         }
     }
 

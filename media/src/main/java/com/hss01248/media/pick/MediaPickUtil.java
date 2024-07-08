@@ -67,7 +67,25 @@ public class MediaPickUtil {
 
     @Deprecated
     public static void pickPdf(MyCommonCallback<Uri> callback) {
-        pickOne( callback,"application/pdf");
+        pickMulti( new MyCommonCallback<List<Uri>>(){
+
+            @Override
+            public void onSuccess(List<Uri> uris) {
+                callback.onSuccess(uris.get(0));
+            }
+
+            @Override
+            public void onError(String msg) {
+                //MyCommonCallback.super.onError(msg);
+                callback.onError(msg);
+            }
+
+            @Override
+            public void onError(String code, String msg, @Nullable Throwable throwable) {
+                //MyCommonCallback.super.onError(code, msg, throwable);
+                callback.onError(code, msg, throwable);
+            }
+        },false,"application/pdf");
     }
     public static void pickOneFile(MyCommonCallback<Uri> callback) {
         pickOne( callback,"*/*");
@@ -79,25 +97,30 @@ public class MediaPickUtil {
      * @param callback
      */
     public static void pickMultiFiles(MyCommonCallback<List<Uri>> callback) {
-        pickMulti( callback,"*/*");
+        pickMulti( callback,true,"*/*");
     }
 
 
-    public static void pickMulti( MyCommonCallback<List<Uri>> callback,String... mimeTypes) {
+    public static void pickMulti( MyCommonCallback<List<Uri>> callback,
+                                  boolean multi,
+                                  String... mimeTypes) {
         String mimeType = MimeTypeUtil.buildMimeTypeWithDot(mimeTypes);
-        MyPermissions.requestByMostEffort(false, true,
-                new PermissionUtils.FullCallback() {
-                    @Override
-                    public void onGranted(@NonNull List<String> granted) {
-                        startIntent2(mimeType, callback);
-                    }
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ){
+            startIntent2(mimeType,multi, callback);
+        }else {
+            MyPermissions.requestByMostEffort(false, true,
+                    new PermissionUtils.FullCallback() {
+                        @Override
+                        public void onGranted(@NonNull List<String> granted) {
+                            startIntent2(mimeType,multi, callback);
+                        }
 
-                    @Override
-                    public void onDenied(@NonNull List<String> deniedForever, @NonNull List<String> denied) {
-                        callback.onError("permission", "[read external storage] permission denied", null);
-                    }
-                }, Manifest.permission.READ_EXTERNAL_STORAGE);
-
+                        @Override
+                        public void onDenied(@NonNull List<String> deniedForever, @NonNull List<String> denied) {
+                            callback.onError("permission", "[read external storage] permission denied", null);
+                        }
+                    }, Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
     }
 
     /**
@@ -109,10 +132,11 @@ public class MediaPickUtil {
      * @param mimeType
      * @param callback
      */
-    private static void startIntent2(String mimeType, MyCommonCallback<List<Uri>> callback) {
+    private static void startIntent2(String mimeType,boolean multi ,MyCommonCallback<List<Uri>> callback) {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("*/*");
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);//打开多个文件
+        intent.setType(mimeType);
+        //intent.setType("*/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,multi);//打开多个文件
         intent.addCategory(Intent.CATEGORY_DEFAULT);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
@@ -183,18 +207,34 @@ public class MediaPickUtil {
                 //TMD 设置页面根本没有对应的权限
             }
         }
-        MyPermissions.requestByMostEffort(false, true,
-                new PermissionUtils.FullCallback() {
-                    @Override
-                    public void onGranted(@NonNull List<String> granted) {
-                        startIntent(mimeType, callback);
-                    }
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ){
+            MyPermissions.requestByMostEffort(false, true,
+                    new PermissionUtils.FullCallback() {
+                        @Override
+                        public void onGranted(@NonNull List<String> granted) {
+                            startIntent(mimeType, callback);
+                        }
 
-                    @Override
-                    public void onDenied(@NonNull List<String> deniedForever, @NonNull List<String> denied) {
-                        callback.onError("permission", "[read external storage] permission denied", null);
-                    }
-                }, permission,Manifest.permission.READ_EXTERNAL_STORAGE);
+                        @Override
+                        public void onDenied(@NonNull List<String> deniedForever, @NonNull List<String> denied) {
+                            callback.onError("permission", "[read external storage] permission denied", null);
+                        }
+                    }, permission);
+        }else {
+            MyPermissions.requestByMostEffort(false, true,
+                    new PermissionUtils.FullCallback() {
+                        @Override
+                        public void onGranted(@NonNull List<String> granted) {
+                            startIntent(mimeType, callback);
+                        }
+
+                        @Override
+                        public void onDenied(@NonNull List<String> deniedForever, @NonNull List<String> denied) {
+                            callback.onError("permission", "[read external storage] permission denied", null);
+                        }
+                    }, permission,Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
+
 
     }
 

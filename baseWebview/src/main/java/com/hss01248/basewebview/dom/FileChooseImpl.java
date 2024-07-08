@@ -66,7 +66,7 @@ public class FileChooseImpl extends MiddlewareWebChromeBase {
         String[] washMimeTypes = MimeTypeUtil.washMimeType(fileChooserParams.getAcceptTypes());
        // LogUtils.d(washMimeTypes);
         if(fileChooserParams.getMode() == FileChooserParams.MODE_OPEN_MULTIPLE){
-            MediaPickUtil.pickMultiFiles(new MyCommonCallback<List<Uri>>() {
+            MediaPickUtil.pickMulti(new MyCommonCallback<List<Uri>>() {
                 @Override
                 public void onSuccess(List<Uri> uris) {
                     Uri[] uris1 = new Uri[uris.size()];
@@ -80,7 +80,7 @@ public class FileChooseImpl extends MiddlewareWebChromeBase {
                     MyCommonCallback.super.onError(code, msg, throwable);
                     filePathCallback.onReceiveValue(null);
                 }
-            });
+            },true,washMimeTypes);
             return true;
         }
 
