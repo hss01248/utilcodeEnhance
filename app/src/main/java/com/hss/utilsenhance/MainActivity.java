@@ -52,6 +52,7 @@ import com.hss.utils.enhance.viewholder.ContainerActivity2;
 import com.hss.utils.enhance.viewholder.mvvm.ContainerViewHolderWithTitleBar;
 import com.hss.utilsenhance.databinding.DisplayMetaViewBinding;
 import com.hss.utilsenhance.databinding.TestFullBinding;
+import com.hss01248.activityresult.ActivityResultListener;
 import com.hss01248.activityresult.StartActivityUtil;
 import com.hss01248.activityresult.TheActivityListener;
 import com.hss01248.basewebview.BaseWebviewActivity;
@@ -1407,5 +1408,34 @@ public class MainActivity extends AppCompatActivity {
             ToastUtils.showShort(throwable.getMessage());
         }
 
+    }
+
+    public void createDoc(View view) {
+        // 创建一个新的 Intent 对象来创建文档
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+// 设置这个文件可以被打开
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+// 设置文件的 MIME 类型为 PDF
+        intent.setType("text/plain");
+// 设置创建的文件名
+        intent.putExtra(Intent.EXTRA_TITLE, "invoice.txt");
+
+// 可选：为系统文件选择器指定打开的初始目录的 URI
+        //intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
+
+// 开始 Activity 并请求返回结果
+        StartActivityUtil.goOutAppForResult(this, intent, new ActivityResultListener() {
+            @Override
+            public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+                LogUtils.d(data,data.getData());
+                //data.getData()
+                //然后就可以往这个uri写文件流了
+            }
+
+            @Override
+            public void onActivityNotFound(Throwable e) {
+
+            }
+        });
     }
 }

@@ -180,6 +180,11 @@
                 android:layout_height="wrap_content"/>
             <Button
                 android:layout_width="wrap_content"
+                android:onClick="createDoc"
+                android:text="另存为-ACTION_CREATE_DOCUMENT"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:layout_width="wrap_content"
                 android:onClick="takePicture"
                 android:text="调用系统拍照intent-前摄像头"
                 android:layout_height="wrap_content"/>
