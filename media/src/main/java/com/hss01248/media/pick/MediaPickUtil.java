@@ -11,18 +11,15 @@ import android.os.Build;
 import android.os.Environment;
 import android.text.TextUtils;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.Utils;
 import com.hss.utils.enhance.api.MyCommonCallback;
 import com.hss01248.activityresult.StartActivityUtil;
 import com.hss01248.activityresult.TheActivityListener;
 import com.hss01248.media.uri.ContentUriUtil;
-import com.hss01248.permission.MyPermissions;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -105,7 +102,8 @@ public class MediaPickUtil {
                                   boolean multi,
                                   String... mimeTypes) {
         String mimeType = MimeTypeUtil.buildMimeTypeWithDot(mimeTypes);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ){
+        startIntent2(mimeType,multi, callback);
+        /*if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ){
             startIntent2(mimeType,multi, callback);
         }else {
             MyPermissions.requestByMostEffort(false, true,
@@ -120,7 +118,7 @@ public class MediaPickUtil {
                             callback.onError("permission", "[read external storage] permission denied", null);
                         }
                     }, Manifest.permission.READ_EXTERNAL_STORAGE);
-        }
+        }*/
     }
 
     /**

@@ -175,6 +175,11 @@
                 android:layout_height="wrap_content"/>
             <Button
                 android:layout_width="wrap_content"
+                android:onClick="saveBitmapToAlbumWithoutPermission"
+                android:text="保存截图到相册-无权限版"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:layout_width="wrap_content"
                 android:onClick="takePicture"
                 android:text="调用系统拍照intent-前摄像头"
                 android:layout_height="wrap_content"/>

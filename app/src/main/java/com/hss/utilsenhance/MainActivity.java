@@ -8,6 +8,7 @@ import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -1379,5 +1380,32 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void saveBitmapToAlbumWithoutPermission(View view) {
+        try {
+            View view1 = findViewById(android.R.id.content);
+            view1.setDrawingCacheEnabled(true);
+            Bitmap drawingCache = view1.getDrawingCache();
+
+            /*File externalFilesDir = getExternalFilesDir(Environment.DIRECTORY_DCIM);
+            externalFilesDir.mkdirs();
+            File file = new File(externalFilesDir,System.currentTimeMillis()+".jpg");
+            drawingCache.compress(Bitmap.CompressFormat.JPEG,85,new FileOutputStream(file));
+            MediaStoreRefresher.refreshMediaCenter(getApplicationContext(),file.getAbsolutePath());*/
+
+            BitmapSaveUtil.saveBitmap(drawingCache);
+            ToastUtils.showShort("保存成功,跳去选择界面查看");
+            MediaPickUtil.pickImage(new MyCommonCallback<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+
+                }
+            });
+        }catch (Throwable throwable){
+            LogUtils.w(throwable);
+            ToastUtils.showShort(throwable.getMessage());
+        }
+
     }
 }
