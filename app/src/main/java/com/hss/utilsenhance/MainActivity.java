@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.security.identity.IdentityCredential;
 import android.util.Base64;
@@ -1421,7 +1422,7 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(Intent.EXTRA_TITLE, "invoice.txt");
 
 // 可选：为系统文件选择器指定打开的初始目录的 URI
-        //intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
+        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, "file://"+Environment.getRootDirectory().getAbsolutePath()+"/"+Environment.DIRECTORY_DCIM);
 
 // 开始 Activity 并请求返回结果
         StartActivityUtil.goOutAppForResult(this, intent, new ActivityResultListener() {
