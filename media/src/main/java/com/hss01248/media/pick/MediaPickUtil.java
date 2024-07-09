@@ -62,13 +62,20 @@ public class MediaPickUtil {
     }
 
 
-    @Deprecated
+
     public static void pickPdf(MyCommonCallback<Uri> callback) {
         pickMulti( new MyCommonCallback<List<Uri>>(){
 
             @Override
             public void onSuccess(List<Uri> uris) {
-                callback.onSuccess(uris.get(0));
+                //这里判断类型,而不是传入到选择器,否则选择器界面极度难用
+                Uri uri = uris.get(0);
+                if(uri.toString().endsWith(".pdf")){
+                    callback.onSuccess(uri);
+                }else {
+                    callback.onError("not a pdf file: \n"+uri.toString());
+                }
+
             }
 
             @Override
@@ -82,7 +89,7 @@ public class MediaPickUtil {
                 //MyCommonCallback.super.onError(code, msg, throwable);
                 callback.onError(code, msg, throwable);
             }
-        },false,"application/pdf");
+        },false,"*/*");
     }
     public static void pickOneFile(MyCommonCallback<Uri> callback) {
         pickOne( callback,"*/*");
@@ -102,6 +109,8 @@ public class MediaPickUtil {
                                   boolean multi,
                                   String... mimeTypes) {
         String mimeType = MimeTypeUtil.buildMimeTypeWithDot(mimeTypes);
+
+        //不建议传入选择器,而是应该选择后自行检查. 传入选择器会导致选择器界面无法筛选类型,交互极度难用
         startIntent2(mimeType,multi, callback);
         /*if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ){
             startIntent2(mimeType,multi, callback);
@@ -132,8 +141,8 @@ public class MediaPickUtil {
      */
     private static void startIntent2(String mimeType,boolean multi ,MyCommonCallback<List<Uri>> callback) {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType(mimeType);
-        //intent.setType("*/*");
+        //intent.setType(mimeType);
+        intent.setType("*/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,multi);//打开多个文件
         intent.addCategory(Intent.CATEGORY_DEFAULT);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -185,6 +194,8 @@ public class MediaPickUtil {
     /**
      * 虽然高版本Android不再需要READ_EXTERNAL_STORAGE就可以查看选择的图片,但用户不知道啊,能多拿权限就多拿
      *  Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q ? Manifest.permission.INTERNET : Manifest.permission.READ_EXTERNAL_STORAGE
+     *
+     *  经由系统或第三方选择器的,通通不需要权限,因为他们会自动赋予uri以read权限!!!
      * @param callback
      * @param mimeTypes
      */

@@ -473,6 +473,12 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(Uri uri) {
                 showMata(uri);
             }
+
+            @Override
+            public void onError(String msg) {
+                MyCommonCallback.super.onError(msg);
+                MyToast.error(msg);
+            }
         });
     }
 
@@ -844,20 +850,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void pickImage13(View view) {
-        MyPermissions.requestByMostEffort(false, true, new PermissionUtils.FullCallback() {
-            @Override
-            public void onGranted(@NonNull List<String> granted) {
-                doPick13();
-            }
-
-            @Override
-            public void onDenied(@NonNull List<String> deniedForever, @NonNull List<String> denied) {
-
-            }
-        },Manifest.permission.READ_EXTERNAL_STORAGE);
-
-
-
+        doPick13();
     }
 
     private void doPick13() {
