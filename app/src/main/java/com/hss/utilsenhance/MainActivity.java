@@ -1415,13 +1415,43 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(Intent.EXTRA_TITLE, "invoice.txt");
 
 // 可选：为系统文件选择器指定打开的初始目录的 URI
-        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, "file://"+Environment.getRootDirectory().getAbsolutePath()+"/"+Environment.DIRECTORY_DCIM);
+        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, "file://"+Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+Environment.DIRECTORY_DOWNLOADS);
 
 // 开始 Activity 并请求返回结果
         StartActivityUtil.goOutAppForResult(this, intent, new ActivityResultListener() {
             @Override
             public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+                LogUtils.d(data,data==null ? "null":data.getData());
+                if(data !=null){
+                    MyToast.show("可以往这个uri写文件了: \n"+data.getDataString());
+                }
+
+                //data.getData()
+                //然后就可以往这个uri写文件流了
+            }
+
+            @Override
+            public void onActivityNotFound(Throwable e) {
+
+            }
+        });
+    }
+
+    public void safDir(View view) {
+        // 使用系统文件选择器选择一个目录
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+        // 可选，指定一个 URI，作为系统文件选择器加载时应该打开的目录
+        String pkgName = "com.hss01248.finalcompress";
+        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Android/data/"+pkgName);
+        Uri uri = Uri.fromFile(file);
+        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, uri);
+        //intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
+
+        StartActivityUtil.goOutAppForResult(this, intent, new ActivityResultListener() {
+            @Override
+            public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
                 LogUtils.d(data,data.getData());
+                MyToast.show("可以遍历这个目录了: \n"+data.getDataString());
                 //data.getData()
                 //然后就可以往这个uri写文件流了
             }
