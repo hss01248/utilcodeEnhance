@@ -109,6 +109,8 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
 public class MainActivity extends AppCompatActivity {
@@ -1270,7 +1272,28 @@ public class MainActivity extends AppCompatActivity {
     public void dirTree(View view) {
 
 
-        FileTreeViewHolder.viewDirInActivity(Environment.getExternalStorageDirectory().getAbsolutePath());
+        BitmapSaveUtil.askWritePermission(new Observer<Boolean>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(Boolean aBoolean) {
+                FileTreeViewHolder.viewDirInActivity(Environment.getExternalStorageDirectory().getAbsolutePath());
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+
 
        /* Dialog dialog1 = new Dialog(this);
         dialog1.setContentView(viewHolder.getRootView());
