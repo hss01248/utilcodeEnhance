@@ -14,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.exifinterface.media.ExifInterface;
 
 import com.blankj.utilcode.util.ActivityUtils;
-import com.blankj.utilcode.util.FileIOUtils;
 import com.blankj.utilcode.util.FileUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.PermissionUtils;
@@ -27,7 +26,6 @@ import com.hss01248.permission.ext.permissions.StorageManagerPermissionImpl;
 import com.hss01248.toast.MyToast;
 import com.hss01248.viewholder_media.FileTreeViewHolder;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -272,50 +270,7 @@ public class BitmapSaveUtil {
         // 插入文件到系统MediaStore
 
     }
-    private static int sBufferSize = 524288;
-    public static boolean writeFileFromIS(final File file,
-                                          final InputStream is,
-                                          final boolean append,
-                                          final FileIOUtils.OnProgressUpdateListener listener) {
 
-        OutputStream os = null;
-        try {
-            os = new BufferedOutputStream(new FileOutputStream(file, append), sBufferSize);
-            if (listener == null) {
-                byte[] data = new byte[sBufferSize];
-                for (int len; (len = is.read(data)) != -1; ) {
-                    os.write(data, 0, len);
-                }
-            } else {
-                double totalSize = is.available();
-                int curSize = 0;
-                listener.onProgressUpdate(0);
-                byte[] data = new byte[sBufferSize];
-                for (int len; (len = is.read(data)) != -1; ) {
-                    os.write(data, 0, len);
-                    curSize += len;
-                    listener.onProgressUpdate(curSize / totalSize);
-                }
-            }
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            try {
-                is.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                if (os != null) {
-                    os.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
 
     public static void askWritePermission( Observer<Boolean> callBack) {
