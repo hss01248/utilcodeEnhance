@@ -154,6 +154,7 @@ public class FileChooseImpl extends MiddlewareWebChromeBase {
             }
             return true;
         }
+        //目标类型是图片或者视频
         if(isOnlyVideoOrImage(washMimeTypes)){
             if(fileChooserParams.isCaptureEnabled()){
                 new SingleChooseDialogImpl().showAtBottom(
@@ -254,6 +255,7 @@ public class FileChooseImpl extends MiddlewareWebChromeBase {
             }
             return true;
         }
+        //任意类型的文件
         MediaPickUtil.pickOne(new MyCommonCallback<Uri>() {
             @Override
             public void onSuccess(Uri uri) {

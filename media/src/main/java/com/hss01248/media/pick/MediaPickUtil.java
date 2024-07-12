@@ -352,7 +352,7 @@ public class MediaPickUtil {
             dir.mkdirs();
             Map<String, Object> infos = ContentUriUtil.getInfos(uri);
             String name = System.currentTimeMillis()+".jpg";
-            if(infos.containsKey("_display_name")){
+            if(infos !=null && infos.containsKey("_display_name")){
                 name = infos.get("_display_name")+"";
             }
             File file = new File(dir,name);
