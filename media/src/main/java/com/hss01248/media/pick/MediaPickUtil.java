@@ -9,11 +9,14 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.webkit.MimeTypeMap;
 
 import androidx.annotation.Nullable;
 
 import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.FileIOUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
 import com.hss.utils.enhance.api.MyCommonCallback;
@@ -22,8 +25,13 @@ import com.hss01248.activityresult.TheActivityListener;
 import com.hss01248.media.uri.ContentUriUtil;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import top.zibin.luban.LubanUtil;
 
 /**
  * @author: Administrator
@@ -50,15 +58,15 @@ import java.util.List;
 public class MediaPickUtil {
 
     public static void pickImage(MyCommonCallback<Uri> callback) {
-        pickOne(callback,"image/*");
+        pickOneMedia(callback,"image/*");
     }
 
     public static void pickVideo(MyCommonCallback<Uri> callback) {
-        pickOne( callback,"video/*");
+        pickOneMedia( callback,"video/*");
     }
 
     public static void pickAudio(MyCommonCallback<Uri> callback) {
-        pickOne( callback,"audio/*");
+        pickOneMedia( callback,"audio/*");
     }
 
 
@@ -92,7 +100,7 @@ public class MediaPickUtil {
         },false,"*/*");
     }
     public static void pickOneFile(MyCommonCallback<Uri> callback) {
-        pickOne( callback,"*/*");
+        pickOneMedia( callback,"*/*");
     }
     /**
      * 多文件选择特点: 大多数响应的intent只返回单个文件,不支持多文件选择
@@ -102,6 +110,20 @@ public class MediaPickUtil {
      */
     public static void pickMultiFiles(MyCommonCallback<List<Uri>> callback) {
         pickMulti( callback,true,"*/*");
+    }
+    public static void pickOne(MyCommonCallback<Uri> callback) {
+        pickMulti(new MyCommonCallback<List<Uri>>() {
+            @Override
+            public void onSuccess(List<Uri> uris) {
+                callback.onSuccess(uris.get(0));
+            }
+
+            @Override
+            public void onError(String code, String msg, @Nullable Throwable throwable) {
+                MyCommonCallback.super.onError(code, msg, throwable);
+                callback.onError(code, msg, throwable);
+            }
+        }, false, "*/*");
     }
 
 
@@ -199,7 +221,7 @@ public class MediaPickUtil {
      * @param callback
      * @param mimeTypes
      */
-    public static void pickOne( MyCommonCallback<Uri> callback,String... mimeTypes) {
+    public static void pickOneMedia(MyCommonCallback<Uri> callback, String... mimeTypes) {
         String mimeType = MimeTypeUtil.buildMimeTypeWithDot(mimeTypes);
         LogUtils.i("request mimetype: "+mimeType);
         String mime = mimeTypes[0];
@@ -309,7 +331,7 @@ public class MediaPickUtil {
                 callback.onSuccess(uri);
                 //后续操作:
                 //ContentUriUtil.getRealPath(uri);
-                ContentUriUtil.getInfos(uri);
+                //ContentUriUtil.getInfos(uri);
                 //ContentUriUtil.queryMediaStore(uri);
                 //content://com.android.providers.media.documents/document/video%3A114026
             }
@@ -322,5 +344,95 @@ public class MediaPickUtil {
         });
     }
 
+
+    public static @Nullable File transUriToInnerFilePath(String pathOrUriString) {
+        if(pathOrUriString.startsWith("content://")){
+            Uri uri = Uri.parse(pathOrUriString);
+            File dir  = Utils.getApp().getExternalFilesDir("pickCache");
+            dir.mkdirs();
+            Map<String, Object> infos = ContentUriUtil.getInfos(uri);
+            String name = System.currentTimeMillis()+".jpg";
+            if(infos.containsKey("_display_name")){
+                name = infos.get("_display_name")+"";
+            }
+            File file = new File(dir,name);
+
+            try {
+                boolean success = FileIOUtils.writeFileFromIS(file, Utils.getApp().getContentResolver().openInputStream(uri));
+                if(success && file.exists() && file.length() >0){
+                    return file;
+                }else {
+                    return null;
+                }
+            } catch (Throwable e) {
+                LogUtils.w(e);
+                return null;
+            }
+        }else {
+            if(pathOrUriString.startsWith("file://")){
+                Uri uri = Uri.parse(pathOrUriString);
+                pathOrUriString = uri.getPath();
+            }
+            File file = new File(pathOrUriString);
+            if(file.exists() && file.length() >0 && file.canRead()){
+                return file;
+            }
+            return null;
+        }
+    }
+
+    public static @Nullable InputStream transUriToInputStream(String pathOrUriString) throws Exception{
+        if(pathOrUriString.startsWith("content://")){
+            Uri uri = Uri.parse(pathOrUriString);
+            return Utils.getApp().getContentResolver().openInputStream(uri);
+        }else {
+            if(pathOrUriString.startsWith("file://")){
+                Uri uri = Uri.parse(pathOrUriString);
+                pathOrUriString = uri.getPath();
+            }
+            File file = new File(pathOrUriString);
+            if(file.exists() && file.length() >0 && file.canRead()){
+                return new FileInputStream(file);
+            }
+            return null;
+        }
+    }
+
+    public static Uri doCompress(Uri uri) {
+        if("content".equals(uri.getScheme())){
+            Map<String, Object> infos = ContentUriUtil.getInfos(uri);
+            if(infos !=null  ){
+                String type =  infos.get(MediaStore.MediaColumns.MIME_TYPE)+"";
+                if(type.startsWith("image")){
+                    File file = MediaPickUtil.transUriToInnerFilePath(uri.toString());
+                    if(file !=null){
+                        file = LubanUtil.compressWithNoResize(file.getAbsolutePath());
+                        if(file.exists() && file.length() >0){
+                            uri = Uri.fromFile(file);
+                        }
+                    }
+                }else if(type.startsWith("video")){
+                    //todo 压缩视频
+                }
+            }
+        }else if("file".equals(uri.getScheme())){
+            String path = uri.getPath();
+            File file = new File(path);
+            String name = file.getName();
+            if(name.contains(".")){
+                String suffix = name.substring(name.lastIndexOf(".")+1);
+                String minetype =      MimeTypeMap.getSingleton().getMimeTypeFromExtension(suffix);
+                if(minetype !=null && minetype.startsWith("image")){
+                    file = LubanUtil.compressWithNoResize(file.getAbsolutePath());
+                    if(file.exists() && file.length() >0){
+                        uri = Uri.fromFile(file);
+                    }
+                }else  if(minetype !=null && minetype.startsWith("video")){
+                    //todo 压缩视频
+                }
+            }
+        }
+        return uri;
+    }
 
 }
