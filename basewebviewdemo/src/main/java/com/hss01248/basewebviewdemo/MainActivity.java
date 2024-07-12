@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void getUserMedia(View view) {
         //https://developer.mozilla.org/zh-CN/docs/Web/API/MediaDevices/getUserMedia
-        BaseWebviewActivity.start(this,"https://webrtc.github.io/samples/src/content/getusermedia/gum/");
+        BaseWebviewActivity.start(this,"https://static.hss01248.tech/webrtc.html");
     }
 
     public void windowHistory(View view) {
