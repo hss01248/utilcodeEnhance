@@ -4,9 +4,11 @@ import android.content.Context;
 
 import androidx.lifecycle.LifecycleOwner;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ThreadUtils;
 import com.hss.utils.enhance.viewholder.mvvm.BaseViewHolder;
 import com.hss.utilsenhance.databinding.ActivityViewHolderDemoHttpStatusBinding;
+import com.hss01248.toast.MyToast;
 import com.hss01248.viewstate.StatefulLayout;
 
 import java.util.Random;
@@ -29,7 +31,14 @@ public class DemoViewHolder extends BaseViewHolder<ActivityViewHolderDemoHttpSta
             }
         });
         rootView = stateManager;
+    }
 
+    @Override
+    public boolean onBackPressed() {
+        //无法拦截到StatefulLayout层级,只能拦截到内部的ActivityViewHolderDemoHttpStatusBinding
+        MyToast.show("点击了后退键");
+        LogUtils.e("拦截后退键---->");
+        return true;
     }
 
     @Override

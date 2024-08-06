@@ -3,6 +3,7 @@ package com.hss.utils.enhance.viewholder.mvvm;
 
 import android.app.Activity;
 import android.content.Context;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,7 +102,32 @@ public abstract class BaseViewHolder<VB extends ViewBinding, InitInfo>
             inflater = LayoutInflater.from(context);
         }
         this.binding = initViewBinding(inflater,parent);
+
         rootView = binding.getRoot();
+        rootViewBackPressedHanlde();
+
+    }
+
+    protected void rootViewBackPressedHanlde() {
+        rootView.setFocusableInTouchMode(true);
+        rootView.requestFocus();
+        rootView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                //LogUtils.w(v,keyCode,event);
+                if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP){
+                    boolean intercept = onBackPressed();
+                    if(intercept){
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+    }
+
+    public boolean onBackPressed(){
+        return false;
     }
 
     protected  VB initViewBinding(LayoutInflater inflater, ViewGroup parent){
@@ -138,6 +164,7 @@ public abstract class BaseViewHolder<VB extends ViewBinding, InitInfo>
     public final void init( @Nullable InitInfo bean) {
         initInfo = bean;
         initDataAndEventInternal(lifecycleOwner, bean);
+        //rootViewBackPressedHanlde();
     }
 
 
