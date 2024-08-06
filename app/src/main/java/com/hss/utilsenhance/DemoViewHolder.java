@@ -2,6 +2,7 @@ package com.hss.utilsenhance;
 
 import android.content.Context;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.lifecycle.LifecycleOwner;
 
 import com.blankj.utilcode.util.LogUtils;
@@ -33,13 +34,7 @@ public class DemoViewHolder extends BaseViewHolder<ActivityViewHolderDemoHttpSta
         rootView = stateManager;
     }
 
-    @Override
-    public boolean onBackPressed() {
-        //无法拦截到StatefulLayout层级,只能拦截到内部的ActivityViewHolderDemoHttpStatusBinding
-        MyToast.show("点击了后退键");
-        LogUtils.e("拦截后退键---->");
-        return true;
-    }
+
 
     @Override
     protected void initDataAndEventInternal(LifecycleOwner lifecycleOwner, String bean) {
@@ -56,8 +51,16 @@ public class DemoViewHolder extends BaseViewHolder<ActivityViewHolderDemoHttpSta
 
             }
         }, 2000);
+        onBackPressedCallback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                MyToast.show("点击了后退键");
+                LogUtils.e("拦截后退键---->");
+            }
+        };
+        getBackPressedDispatcher().addCallback(onBackPressedCallback);
 
     }
-
+    OnBackPressedCallback onBackPressedCallback;
 
 }
