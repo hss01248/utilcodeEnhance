@@ -2,10 +2,8 @@ package com.hss.utilsenhance;
 
 import android.content.Context;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.lifecycle.LifecycleOwner;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ThreadUtils;
 import com.hss.utils.enhance.viewholder.mvvm.BaseViewHolder;
 import com.hss.utilsenhance.databinding.ActivityViewHolderDemoHttpStatusBinding;
@@ -51,16 +49,17 @@ public class DemoViewHolder extends BaseViewHolder<ActivityViewHolderDemoHttpSta
 
             }
         }, 2000);
-        onBackPressedCallback = new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                MyToast.show("点击了后退键");
-                LogUtils.e("拦截后退键---->");
-            }
-        };
-        getBackPressedDispatcher().addCallback(onBackPressedCallback);
 
     }
-    OnBackPressedCallback onBackPressedCallback;
 
+    @Override
+    protected boolean shouldInterceptBackPressed() {
+        return true;
+    }
+
+    @Override
+    protected void onBackPressed2() {
+        super.onBackPressed2();
+        MyToast.show("点击了后退键2222");
+    }
 }

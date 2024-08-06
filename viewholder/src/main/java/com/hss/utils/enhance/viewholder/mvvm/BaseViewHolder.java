@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.activity.ComponentActivity;
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -107,9 +108,41 @@ public abstract class BaseViewHolder<VB extends ViewBinding, InitInfo>
 
         rootView = binding.getRoot();
 
+        visiableListenerFrameLayout = new VisiableListenerFrameLayout(context);
+        visiableListenerFrameLayout.addView(binding.getRoot());
+        rootView = visiableListenerFrameLayout;
+
+        visiableListenerFrameLayout.registerListener(new VisiableListenerFrameLayout.MyListener() {
+            @Override
+            public void onVisibilityChanged(int visibility) {
+                onBackPressedCallback.setEnabled(visibility == View.VISIBLE
+                        && shouldInterceptBackPressed());
+            }
+        });
+
+        onBackPressedCallback = new OnBackPressedCallback(rootView.getVisibility() == View.VISIBLE
+                && shouldInterceptBackPressed()) {
+            @Override
+            public void handleOnBackPressed() {
+                onBackPressed2();
+            }
+        };
+
+
+    }
+
+    protected boolean shouldInterceptBackPressed() {
+        return false;
+    }
+
+    protected void onBackPressed2(){
+
     }
 
 
+
+    OnBackPressedCallback onBackPressedCallback;
+    VisiableListenerFrameLayout visiableListenerFrameLayout;
     protected OnBackPressedDispatcher getBackPressedDispatcher(){
         Activity topActivity1 = ActivityUtils.getTopActivity();
         if(!(topActivity1 instanceof ComponentActivity)){
