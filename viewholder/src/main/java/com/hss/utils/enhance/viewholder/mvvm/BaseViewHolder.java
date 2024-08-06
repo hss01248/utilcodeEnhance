@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.ComponentActivity;
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -104,10 +106,25 @@ public abstract class BaseViewHolder<VB extends ViewBinding, InitInfo>
         this.binding = initViewBinding(inflater,parent);
 
         rootView = binding.getRoot();
-        rootViewBackPressedHanlde();
 
     }
 
+
+    protected OnBackPressedDispatcher getBackPressedDispatcher(){
+        Activity topActivity1 = ActivityUtils.getTopActivity();
+        if(!(topActivity1 instanceof ComponentActivity)){
+            return new OnBackPressedDispatcher();
+        }
+        ComponentActivity topActivity = (ComponentActivity) ActivityUtils.getTopActivity();
+       return topActivity.getOnBackPressedDispatcher();
+    }
+
+
+
+    /**
+     * 依赖聚焦状态,偶尔有效,经常会无效
+     */
+    @Deprecated
     protected void rootViewBackPressedHanlde() {
         rootView.setFocusableInTouchMode(true);
         rootView.requestFocus();
@@ -116,19 +133,17 @@ public abstract class BaseViewHolder<VB extends ViewBinding, InitInfo>
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 //LogUtils.w(v,keyCode,event);
                 if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP){
-                    boolean intercept = onBackPressed();
+                  /*  boolean intercept = onBackPressed();
                     if(intercept){
                         return true;
-                    }
+                    }*/
                 }
                 return false;
             }
         });
     }
 
-    public boolean onBackPressed(){
-        return false;
-    }
+
 
     protected  VB initViewBinding(LayoutInflater inflater, ViewGroup parent){
         try {

@@ -1,12 +1,9 @@
 package com.hss.utilsenhance;
 
 import android.os.Bundle;
-import android.view.KeyEvent;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.blankj.utilcode.util.LogUtils;
 
 /**
  * @Despciption todo
@@ -27,9 +24,7 @@ public class ViewHolderDemoActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        LogUtils.d(keyCode,event);
-        return super.onKeyDown(keyCode, event);
-    }
+
+
+
 }
