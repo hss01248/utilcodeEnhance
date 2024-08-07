@@ -43,8 +43,10 @@ public class DemoViewHolder extends BaseViewHolder<ActivityViewHolderDemoHttpSta
                 if(new Random().nextBoolean()){
                     stateManager.showContent();
                     binding.tvContent.setText(bean);
+                    setShouldInterceptBackPressed(true);
                 }else {
                     stateManager.showError("请求错误");
+                    setShouldInterceptBackPressed(false);
                 }
 
             }
@@ -52,10 +54,6 @@ public class DemoViewHolder extends BaseViewHolder<ActivityViewHolderDemoHttpSta
 
     }
 
-    @Override
-    protected boolean shouldInterceptBackPressed() {
-        return true;
-    }
 
     @Override
     protected void onBackPressed2() {

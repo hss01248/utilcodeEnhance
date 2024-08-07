@@ -7,6 +7,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import androidx.activity.ComponentActivity;
 import androidx.activity.OnBackPressedCallback;
@@ -115,24 +116,72 @@ public abstract class BaseViewHolder<VB extends ViewBinding, InitInfo>
         visiableListenerFrameLayout.registerListener(new VisiableListenerFrameLayout.MyListener() {
             @Override
             public void onVisibilityChanged(int visibility) {
-                onBackPressedCallback.setEnabled(visibility == View.VISIBLE
-                        && shouldInterceptBackPressed());
+                onBackPressedCallback.setEnabled(shouldInterceptBackPressed2());
             }
         });
 
-        onBackPressedCallback = new OnBackPressedCallback(rootView.getVisibility() == View.VISIBLE
-                && shouldInterceptBackPressed()) {
+        visiableListenerFrameLayout.getViewTreeObserver().addOnWindowAttachListener(new ViewTreeObserver.OnWindowAttachListener() {
+            @Override
+            public void onWindowAttached() {
+                LogUtils.w("onWindowAttached");
+                onBackPressedCallback.setEnabled(shouldInterceptBackPressed2());
+            }
+
+            @Override
+            public void onWindowDetached() {
+                LogUtils.w("onWindowDetached");
+                onBackPressedCallback.setEnabled(false);
+            }
+        });
+
+        onBackPressedCallback = new OnBackPressedCallback(shouldInterceptBackPressed2()) {
             @Override
             public void handleOnBackPressed() {
                 onBackPressed2();
             }
         };
-
+        getBackPressedDispatcher().addCallback(onBackPressedCallback);
 
     }
 
-    protected boolean shouldInterceptBackPressed() {
-        return false;
+    private boolean shouldInterceptBackPressed2() {
+        LogUtils.d("shouldInterceptBackPressed:"+shouldInterceptBackPressed,
+                "visiableListenerFrameLayout.getVisibility() == View.VISIBLE:"+(visiableListenerFrameLayout.getVisibility() == View.VISIBLE),
+                "isForeground:"+ isForeground
+                );
+        return shouldInterceptBackPressed
+                && visiableListenerFrameLayout.getVisibility() == View.VISIBLE && isForeground
+                ;
+    }
+
+
+    private boolean  isForeground =  true;
+    @Override
+    public void onPause(@NonNull LifecycleOwner owner) {
+        DefaultLifecycleObserver.super.onPause(owner);
+        isForeground= false;
+        onBackPressedCallback.setEnabled(shouldInterceptBackPressed2());
+    }
+
+    @Override
+    public void onResume(@NonNull LifecycleOwner owner) {
+        DefaultLifecycleObserver.super.onResume(owner);
+        isForeground  = true;
+        onBackPressedCallback.setEnabled(shouldInterceptBackPressed2());
+    }
+
+    @Override
+    public void onCreate(@NonNull LifecycleOwner owner) {
+        DefaultLifecycleObserver.super.onCreate(owner);
+        isForeground = true;
+        onBackPressedCallback.setEnabled(shouldInterceptBackPressed2());
+    }
+
+    private boolean  shouldInterceptBackPressed = false;
+
+    public void setShouldInterceptBackPressed(boolean shouldInterceptBackPressed) {
+        this.shouldInterceptBackPressed = shouldInterceptBackPressed;
+        onBackPressedCallback.setEnabled(shouldInterceptBackPressed2());
     }
 
     protected void onBackPressed2(){
@@ -141,9 +190,9 @@ public abstract class BaseViewHolder<VB extends ViewBinding, InitInfo>
 
 
 
-    OnBackPressedCallback onBackPressedCallback;
-    VisiableListenerFrameLayout visiableListenerFrameLayout;
-    protected OnBackPressedDispatcher getBackPressedDispatcher(){
+   private OnBackPressedCallback onBackPressedCallback;
+    protected  VisiableListenerFrameLayout visiableListenerFrameLayout;
+    private OnBackPressedDispatcher getBackPressedDispatcher(){
         Activity topActivity1 = ActivityUtils.getTopActivity();
         if(!(topActivity1 instanceof ComponentActivity)){
             return new OnBackPressedDispatcher();
@@ -253,10 +302,6 @@ public abstract class BaseViewHolder<VB extends ViewBinding, InitInfo>
         Log.w("test","LifecycleChecker onAppForeground ON_START: "+this);
     }*/
 
-    @Override
-    public void onResume(@NonNull LifecycleOwner owner) {
-        DefaultLifecycleObserver.super.onResume(owner);
-        //Log.w("test","onResume: "+this);
-    }
+
 
 }
