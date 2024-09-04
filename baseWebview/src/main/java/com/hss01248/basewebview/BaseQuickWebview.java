@@ -50,6 +50,8 @@ import com.blankj.utilcode.util.Utils;
 import com.hjq.permissions.OnPermissionCallback;
 import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
+import com.hss.downloader.IDownloadCallback;
+import com.hss.downloader.api.DownloadApi;
 import com.hss.utils.enhance.MyKeyboardUtil;
 import com.hss.utils.enhance.UrlEncodeUtil;
 import com.hss01248.basewebview.adblock.AdBlockClient;
@@ -61,8 +63,6 @@ import com.hss01248.basewebview.dom.JsPermissionImpl;
 import com.hss01248.basewebview.history.db.MyDbUtil;
 import com.hss01248.basewebview.menus.DefaultMenus;
 import com.hss01248.basewebview.search.WebSearchViewHolder;
-import com.hss01248.download_list2.DownloadCallback;
-import com.hss01248.download_list2.DownloadImplByFileDownloaderLib;
 import com.hss01248.iwidget.BaseDialogListener;
 import com.hss01248.iwidget.msg.AlertDialogImplByDialogUtil;
 import com.hss01248.iwidget.singlechoose.ISingleChooseItem;
@@ -710,7 +710,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
             if(dialog != null && dialog.isShowing()){
                 dialog.dismiss();
             }
-             dialog =  new AlertDialog.Builder(getContext())
+            dialog =  new AlertDialog.Builder(getContext())
                     .setTitle("检测到视频下载,是下载到普通文件夹还是隐藏文件夹?")
                     //.setMessage("检测到视频下载,是下载到普通文件夹还是隐藏文件夹?")
                     .setSingleChoiceItems(new String[]{"普通文件夹", "隐藏文件夹"}, position[0], new DialogInterface.OnClickListener() {
@@ -788,31 +788,29 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
         dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         dialog.setTitle("下载文件: "+fileName);
         dialog.setCanceledOnTouchOutside(false);
-        new DownloadImplByFileDownloaderLib()
-                .download(url1, dir, fileName, null, new DownloadCallback() {
+        DownloadApi.create(url1)
+                .setName(fileName)
+                .setDir(dir)
+                .callback(new IDownloadCallback() {
                     @Override
-                    public void onStart(String url) {
+                    public void onStart(String url, String realPath) {
+                        IDownloadCallback.super.onStart(url, realPath);
                         dialog.show();
                     }
 
                     @Override
-                    public void onProgress(float progress, long total) {
-                        String msg = String.format("%.2f",progress*total/1024/1024) +"MB/"+String.format("%.2f", total*1.0f/1024/1024)+"MB";
+                    public void onProgress(String url, String realPath, long currentOffset, long total, long speed) {
+                        String msg = String.format("%.2f",currentOffset/1024/1024) +"MB/"+String.format("%.2f", total*1.0f/1024/1024)+"MB";
                         //dialog.setMessage(msg);
                         dialog.setTitle("下载文件: "+"\n"+msg);
                         //title最多两行
                         dialog.setMax((int) total);
-                        dialog.setProgress((int) (progress*total));
+                        dialog.setProgress((int) (currentOffset));
                     }
 
                     @Override
-                    public void onError(String msg) {
-                        DownloadCallback.super.onError(msg);
-                        ToastUtils.showShort("文件下载失败: \n" + msg);
-                    }
-
-                    @Override
-                    public void onSuccess(File file) {
+                    public void onSuccess(String url, String realPath) {
+                        File file = new File(realPath);
                         try {
                             dialog.dismiss();
                         }catch (Throwable throwable){
@@ -846,7 +844,11 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                                 doFinish();
                             }
                         });
+                    }
 
+                    @Override
+                    public void onFail(String url, String realPath, String msg, Throwable throwable) {
+                        ToastUtils.showShort("文件下载失败: \n" + msg);
                     }
                 });
     }
