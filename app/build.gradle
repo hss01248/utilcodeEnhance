@@ -4,7 +4,7 @@ plugins {
 //apply from: "configs/andresguard.gradle"
 android {
     compileSdk 34
-    //buildToolsVersion "30.0.0"
+    //
 
     defaultConfig {
         applicationId "com.hss.utilsenhance"

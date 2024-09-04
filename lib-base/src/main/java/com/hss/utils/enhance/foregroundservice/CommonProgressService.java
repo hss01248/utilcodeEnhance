@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ServiceInfo;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
@@ -77,6 +78,7 @@ public class CommonProgressService extends Service {
         //无法取消
             //mNotificationManager.cancel(notify_id);
             mNotificationManager.notify(notifyId,getNotification(Utils.getApp(), title, progress+"/"+max+"(完成)",progress,max));
+            //mNotificationManager.cancel(notifyId);
         }else {
             mNotificationManager.notify(notifyId,getNotification(Utils.getApp(), title, msg,progress,max));
         }
@@ -102,7 +104,15 @@ public class CommonProgressService extends Service {
             if(notifyId<=0){
                 notifyId = notify_id;
             }
-            startForeground(notifyId, getNotification(ActivityUtils.getTopActivity(), title, msg,-1,100));//创建一个通知，创建通知前记得获取开启通知权限
+            //前台服务类型（foregroundServiceType）是在 Android 10 引入的, 14开始强制要求
+            if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.R){
+                startForeground(notifyId, getNotification(ActivityUtils.getTopActivity(), title, msg,-1,100));//创建一个通知，创建通知前记得获取开启通知权限
+            }else {
+                startForeground(notifyId,
+                        getNotification(ActivityUtils.getTopActivity(), title, msg,-1,100),
+                        ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC);//创建一个通知，创建通知前记得获取开启通知权限
+            }
+
         }
         //doTask();
 

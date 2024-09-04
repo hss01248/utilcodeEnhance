@@ -10,12 +10,12 @@ props.load(new FileInputStream(file(project.rootDir.toString() +"/local.properti
 println(props.toMapString())
 
 android {
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.hss01248.basewebviewdemo"
         minSdkVersion 23
-        targetSdkVersion 33
+        targetSdkVersion 34
         versionCode 1008
         versionName "1.0.08"
         multiDexEnabled true
