@@ -61,11 +61,12 @@ dependencies {
     api project(path: ':viewholder')
     //api project(path: ':basewebview-ajax-proxy')
     api project(path: ':refresh-loadmore')
+    api project(path: ':viewholder-media')
     api project(path: ':search-history-api')
-    api project(path: ':download-list')
+    //api project(path: ':download-list')
     api project(path: ':ext')
     api project(path: ':cipher')
-    api "com.github.hss01248.ImageLoader:downloader:3.8.2"
+    api "com.github.hss01248.ImageLoader:downloader:${imageLoaderVersion}"
 
     api 'com.github.skyNet2017.Luban:luban:3.2.7'
     //api 'com.github.skyNet2017.Luban:showResult:3.2.7'
@@ -79,7 +80,7 @@ dependencies {
     api "androidx.sqlite:sqlite:2.0.1"
     api 'io.github.yuweiguocn:GreenDaoUpgradeHelper:v2.2.1'
 
-    api 'com.github.hss01248.ImageLoader:bigimageviewpager:3.8.3'
+    api "com.github.hss01248.ImageLoader:bigimageviewpager:${imageLoaderVersion}"
     api "org.jsoup:jsoup:1.13.1"
 
     api 'com.github.pinguo-zhouwei:CustomPopwindow:2.1.1'

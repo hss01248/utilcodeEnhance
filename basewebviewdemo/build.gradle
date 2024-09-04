@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId "com.hss01248.basewebviewdemo"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 33
         versionCode 1008
         versionName "1.0.08"

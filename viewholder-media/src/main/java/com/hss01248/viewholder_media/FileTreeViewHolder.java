@@ -11,6 +11,7 @@ import com.blankj.utilcode.util.ThreadUtils;
 import com.hss.utils.enhance.viewholder.ContainerActivity2;
 import com.hss.utils.enhance.viewholder.mvvm.BaseViewHolder;
 import com.hss.utils.enhance.viewholder.mvvm.ContainerViewHolderWithTitleBar;
+import com.hss01248.fileoperation.FileOpenUtil;
 import com.hss01248.iwidget.singlechoose.ISingleChooseItem;
 import com.hss01248.viewholder_media.databinding.LayoutFileTreeBinding;
 import com.hss01248.viewstate.StatefulLayout;
@@ -77,15 +78,16 @@ public class FileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBinding,Str
 
     public FileTreeViewHolder(Context context) {
         super(context);
-        stateManager = StatefulLayout.wrapWithStateOfPage(rootView, new Runnable() {
+
+       // rootView = stateManager;
+        listViewHolder = new MediaListViewHolder(context);
+        stateManager = StatefulLayout.wrapWithStateOfPage(listViewHolder.getRootView(), new Runnable() {
             @Override
             public void run() {
                 loadDir(currentPath);
             }
         });
-        rootView = stateManager;
-        listViewHolder = new MediaListViewHolder(context);
-        binding.llContainer.addView(listViewHolder.getRootView());
+        binding.llContainer.addView(stateManager);
 
         listViewHolder.setOnItemClicked(new Consumer<String>() {
             @Override
@@ -96,7 +98,7 @@ public class FileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBinding,Str
                 }else {
                     //todo
                     List<String> strings = cache.get(file.getParentFile().getAbsolutePath());
-                    //FileOpenUtil.openBeforeFilter(s,strings);
+                    FileOpenUtil.open(s,strings);
                 }
             }
         });
