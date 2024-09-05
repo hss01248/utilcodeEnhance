@@ -28,7 +28,7 @@ public class DefaultUIDownloadCallback implements IDownloadCallback {
 
     @Override
     public void onStart(String url, String realPath) {
-         dialog =  new ProgressDialog(ActivityUtils.getTopActivity());
+         dialog =  new ProgressDialog(ActivityUtils.getTopActivity(),ProgressDialog.STYLE_HORIZONTAL);
          String msg = "文件下载中:"+url+"\n-->\n"+realPath+"\n";
         dialog.setMessage(msg);
         dialog.setCanceledOnTouchOutside(false);
@@ -41,8 +41,12 @@ public class DefaultUIDownloadCallback implements IDownloadCallback {
     public void onProgress(String url, String realPath, long currentOffset, long totalLength,long speed) {
         String msg = "文件下载中:"+url+"\n-->\n"+realPath+"\n";
         msg += ConvertUtils.byte2FitMemorySize(currentOffset,1)+"/"+ConvertUtils.byte2FitMemorySize(totalLength,1);
-        msg += speed/1024+"KB/s";
-        if (dialog != null)dialog.setMessage(msg);
+        msg += ", "+ speed/1024+"KB/s";
+        if (dialog != null){
+            dialog.setMessage(msg);
+            dialog.setMax((int) totalLength);
+            dialog.setProgress((int) currentOffset);
+        }
         callback.onProgress(url, realPath, currentOffset, totalLength,speed);
     }
 

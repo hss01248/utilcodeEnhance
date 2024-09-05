@@ -50,6 +50,12 @@ public class FileItemGridViewHolder extends MyRecyclerViewHolder<LayoutFileItemG
         return this;
     }
 
+    public FileItemGridViewHolder setFilterInfo(DisplayAndFilterInfo filterInfo) {
+        this.filterInfo = filterInfo;
+        return this;
+    }
+
+    DisplayAndFilterInfo filterInfo;
     Consumer<String> onItemClicked;
 
     @Override
@@ -62,19 +68,20 @@ public class FileItemGridViewHolder extends MyRecyclerViewHolder<LayoutFileItemG
 
         showInfo(data, itemView.getContext(), itemView,
                 binding.tv,
-                binding.iv, onItemClicked);
+                binding.iv, onItemClicked,filterInfo.showFileName);
     }
 
     public static void showInfo(String data, Context context,
                                 View rootView,
                                 TextView textView,
-                                ImageView iv, Consumer<String> onItemClicked) {
+                                ImageView iv, Consumer<String> onItemClicked,boolean showFileName) {
         File file = new File(data);
         if (file.isDirectory()) {
             ImageLoader.with(context)
                     .res(R.drawable.icon_folder)
                     .scale(ScaleMode.CENTER_INSIDE)
                     .into(iv);
+            textView.setVisibility(View.VISIBLE);
         } else {
             if (file.getName().endsWith(".jpg") ||
                     file.getName().endsWith(".jpeg") ||
@@ -92,15 +99,22 @@ public class FileItemGridViewHolder extends MyRecyclerViewHolder<LayoutFileItemG
                         .defaultErrorRes(true)
                         .scale(ScaleMode.CENTER_CROP)
                         .into(iv);
+                if(!showFileName){
+                    textView.setVisibility(View.GONE);
+                }else {
+                    textView.setVisibility(View.VISIBLE);
+                }
             } else {
                 ImageLoader.with(context)
                         .res(R.drawable.icon_file)
                         .scale(ScaleMode.CENTER_INSIDE)
                         .into(iv);
+                textView.setVisibility(View.VISIBLE);
             }
         }
         String name = data.substring(data.lastIndexOf("/") + 1);
         textView.setText(name);
+
 
         rootView.setOnClickListener(new View.OnClickListener() {
             @Override

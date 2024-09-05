@@ -34,7 +34,7 @@ public class FileItemLinearViewHolder extends MyRecyclerViewHolder<LayoutFileIte
 
     @Override
     public void assignDatasAndEvents(String data) {
-        FileItemGridViewHolder.showInfo(data, itemView.getContext(), itemView,binding.tv,binding.iv,onItemClicked);
+        FileItemGridViewHolder.showInfo(data, itemView.getContext(), itemView,binding.tv,binding.iv,onItemClicked,true);
         File file = new File(data);
         String time = DateFormatUtils.format(file.lastModified(),"yyyy-MM-dd HH:mm:ss");
         String size = ConvertUtils.byte2FitMemorySize(file.length());

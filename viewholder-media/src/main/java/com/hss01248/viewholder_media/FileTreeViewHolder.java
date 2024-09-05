@@ -106,31 +106,51 @@ public class FileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBinding,Str
 
     private void initMenus(View view) {
         List<ISingleChooseItem<String>> menus = new ArrayList<>();
-        menus.add(new ISingleChooseItem<String>() {
-            @Override
-            public String text() {
-                return "显示模式-表格";
-            }
+        if(filterInfo.displayType == 0){
+            //表格
+            menus.add(new ISingleChooseItem<String>() {
+                @Override
+                public String text() {
+                    return "文件名"+(filterInfo.showFileName?"隐藏":"显示");
+                }
 
-            @Override
-            public void onItemClicked(int position, String bean) {
+                @Override
+                public void onItemClicked(int position, String bean) {
 
-                filterInfo.displayType = 0;
-                listViewHolder.setFilterInfo(filterInfo);
-            }
-        });
-        menus.add(new ISingleChooseItem<String>() {
-            @Override
-            public String text() {
-                return "显示模式-列表";
-            }
+                    filterInfo.showFileName = !filterInfo.showFileName;
+                    listViewHolder.setFilterInfo(filterInfo);
+                }
+            });
+            menus.add(new ISingleChooseItem<String>() {
+                @Override
+                public String text() {
+                    return "显示模式-列表";
+                }
 
-            @Override
-            public void onItemClicked(int position, String bean) {
-                filterInfo.displayType = 1;
-                listViewHolder.setFilterInfo(filterInfo);
-            }
-        });
+                @Override
+                public void onItemClicked(int position, String bean) {
+                    filterInfo.displayType = 1;
+                    listViewHolder.setFilterInfo(filterInfo);
+                }
+            });
+        }else {
+            menus.add(new ISingleChooseItem<String>() {
+                @Override
+                public String text() {
+                    return "显示模式-表格";
+                }
+
+                @Override
+                public void onItemClicked(int position, String bean) {
+
+                    filterInfo.displayType = 0;
+                    listViewHolder.setFilterInfo(filterInfo);
+                }
+            });
+        }
+
+
+
         menus.add(new ISingleChooseItem<String>() {
             @Override
             public String text() {
@@ -241,7 +261,7 @@ public class FileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBinding,Str
         ThreadUtils.executeByIo(new ThreadUtils.SimpleTask<Pair<String,List<String>>>() {
             @Override
             public Pair<String,List<String>> doInBackground() throws Throwable {
-                File[] files1 = file.listFiles(new FileFilter() {
+                File[] dirs = file.listFiles(new FileFilter() {
                     @Override
                     public boolean accept(File file) {
                         return file.isDirectory();
@@ -255,14 +275,14 @@ public class FileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBinding,Str
                     }
                 });
                 //只列出文件名,不列出上级路径,蛋疼的api
-                LogUtils.w(files1,files2);
+                LogUtils.w(dirs,files2);
                 List<String> list = new ArrayList<>();
 
                 //排序
 
-                if(files1 !=null && files1.length > 0){
+                if(dirs !=null && dirs.length > 0){
                     List<File> list1 = new ArrayList<>();
-                    for (File s : files1) {
+                    for (File s : dirs) {
                         list1.add(s);
                     }
                     Collections.sort(list1, new Comparator<File>() {
