@@ -73,6 +73,7 @@ import com.hss01248.iwidget.BaseDialogListener;
 import com.hss01248.iwidget.msg.AlertDialogImplByDialogUtil;
 import com.hss01248.iwidget.msg.AlertDialogImplByMmDialog;
 import com.hss01248.iwidget.msg.AlertDialogImplByXStyleDialog;
+import com.hss01248.iwidget.pop.PopList;
 import com.hss01248.iwidget.singlechoose.SingleChooseDialogImpl;
 import com.hss01248.iwidget.singlechoose.SingleChooseDialogListener;
 import com.hss01248.media.contact.ContactInfo;
@@ -89,7 +90,6 @@ import com.hss01248.openuri2.OpenUri2;
 import com.hss01248.permission.MyPermissions;
 import com.hss01248.qrscan.ScanCodeActivity;
 import com.hss01248.toast.MyToast;
-import com.hss01248.ui.pop.list.PopList;
 import com.hss01248.viewholder_media.FileTreeViewHolder;
 import com.hss01248.webviewspider.SpiderWebviewActivity;
 
