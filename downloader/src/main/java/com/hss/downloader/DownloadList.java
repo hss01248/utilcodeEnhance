@@ -192,7 +192,7 @@ public class DownloadList {
         DownloadList.largeImagesViewer = largeImagesViewer;
     }
 
-    static ILargeImagesViewer largeImagesViewer;
+    static ILargeImagesViewer largeImagesViewer = new DefaultLargeImageViewer();
     List<DownloadInfo> datas;
     private void initClick(DownloadItemAdapter adapter, List<DownloadInfo> result) {
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {

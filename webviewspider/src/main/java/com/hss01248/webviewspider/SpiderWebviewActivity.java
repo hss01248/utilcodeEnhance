@@ -50,7 +50,7 @@ public class SpiderWebviewActivity extends AppCompatActivity implements ISetWebv
         SpiderWebviewActivity.iShowUrls = iShowUrls;
     }
 
-    static IShowUrls iShowUrls;
+    static IShowUrls iShowUrls = new DefaultShowUrls();
 
     public static void start(Activity activity,String url){
         Intent intent = new Intent(activity,SpiderWebviewActivity.class);

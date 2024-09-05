@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import com.hss01248.imagelist.album.IViewInit;
 import com.hss01248.imagelist.album.ImageListView;
 import com.hss01248.imagelist.album.ImageMediaCenterUtil;
+import com.hss01248.viewholder_media.FileTreeViewHolder;
 
 import java.util.List;
 import java.util.Map;
@@ -57,5 +58,6 @@ public class DefaultShowUrls implements IShowUrls{
                 return listView;
             }
         });
+        FileTreeViewHolder.viewDirInActivity(absolutePath);
     }
 }
