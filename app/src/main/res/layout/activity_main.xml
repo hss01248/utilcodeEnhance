@@ -77,7 +77,13 @@
                 android:onClick="encodeFilePathToUrlUsage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
-
+            <Button
+                android:onClick="goWebSpider"
+                android:layout_margin="10dp"
+                android:text="webview爬取urls并加载"
+                android:textAllCaps="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
             <Button
                 android:text="share"
                 android:textAllCaps="false"

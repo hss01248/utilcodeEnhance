@@ -41,6 +41,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
 import com.bumptech.glide.Glide;
 import com.google.gson.GsonBuilder;
+import com.hss.downloader.MyDownloader;
 import com.hss.utils.base.api.MyCommonCallback3;
 import com.hss.utils.enhance.BarColorUtil;
 import com.hss.utils.enhance.HomeMaintaner;
@@ -88,7 +89,9 @@ import com.hss01248.openuri2.OpenUri2;
 import com.hss01248.permission.MyPermissions;
 import com.hss01248.qrscan.ScanCodeActivity;
 import com.hss01248.toast.MyToast;
+import com.hss01248.ui.pop.list.PopList;
 import com.hss01248.viewholder_media.FileTreeViewHolder;
+import com.hss01248.webviewspider.SpiderWebviewActivity;
 
 import org.devio.takephoto.wrap.TakeOnePhotoListener;
 import org.devio.takephoto.wrap.TakePhotoUtil;
@@ -1298,6 +1301,35 @@ public class MainActivity extends AppCompatActivity {
        /* Dialog dialog1 = new Dialog(this);
         dialog1.setContentView(viewHolder.getRootView());
         dialog1.show();*/
+    }
+
+    public void goWebSpider(View view) {
+        List<String> menus = SpiderWebviewActivity.getSpiders();
+        menus.add("浏览全部下载列表");
+        menus.add("浏览下载列表");
+        menus.add("修复升级前的数据");
+        menus.add("继续下载未完成的图片");
+
+        PopList.showPop(this, -1, view, menus, new PopList.OnItemClickListener() {
+            @Override
+            public void onClick(int position, String str) {
+                if(position == menus.size()-1){
+                    MyDownloader.continueDownload();
+                    //ImgDownloader.downladUrlsInDB(MainActivity.this,new File(SpiderWebviewActivity.getSaveDir("继续下载","")));
+                }else if(position ==  menus.size()-4) {
+                    MyDownloader.showWholeDownloadPage();
+                }else if(position ==  menus.size()-3) {
+                    MyDownloader.showDownloadPage();
+                }else if(position == menus.size()-2) {
+                    MyDownloader.fixDbWhenUpdate();
+                }else {
+                    SpiderWebviewActivity.start(MainActivity.this,str);
+                }
+
+            }
+        });
+
+
     }
 
     public void bitmapSaveConfig(View view) {

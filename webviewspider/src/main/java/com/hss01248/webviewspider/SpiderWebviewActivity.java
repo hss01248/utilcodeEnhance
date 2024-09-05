@@ -1,0 +1,352 @@
+package com.hss01248.webviewspider;
+
+import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.os.Environment;
+import android.text.TextUtils;
+import android.util.Log;
+import android.webkit.ValueCallback;
+import android.widget.Button;
+import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.blankj.utilcode.util.ToastUtils;
+import com.hss01248.basewebview.BaseQuickWebview;
+import com.hss01248.basewebview.ISetWebviewHolder;
+import com.hss01248.basewebview.IShowRightMenus;
+import com.hss01248.iwidget.singlechoose.ISingleChooseItem;
+import com.hss01248.toast.MyToast;
+import com.hss01248.webviewspider.spider.BaiduImageParser;
+import com.hss01248.webviewspider.spider.GoogleImageParser;
+import com.hss01248.webviewspider.spider.IHtmlParser;
+import com.hss01248.webviewspider.spider.ListParser;
+import com.hss01248.webviewspider.spider.ListToDetailImgsInfo;
+import com.hss01248.webviewspider.spider.PexelImageParser;
+import com.hss01248.webviewspider.spider.ToutiaoImageParser;
+import com.lzf.easyfloat.EasyFloat;
+import com.lzf.easyfloat.enums.ShowPattern;
+
+import java.io.File;
+import java.io.FileFilter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+public class SpiderWebviewActivity extends AppCompatActivity implements ISetWebviewHolder {
+
+    public static void setShowUrls(IShowUrls iShowUrls) {
+        SpiderWebviewActivity.iShowUrls = iShowUrls;
+    }
+
+    static IShowUrls iShowUrls;
+
+    public static void start(Activity activity,String url){
+        Intent intent = new Intent(activity,SpiderWebviewActivity.class);
+        intent.putExtra("url",url);
+        activity.startActivity(intent);
+    }
+
+    String url  = "";
+   BaseQuickWebview quickWebview;
+    Button button;
+
+
+    public static List<String> getSpiders(){
+        List<String> strings = new ArrayList<>();
+        Iterator<Map.Entry<String, IHtmlParser>> iterator = parsers.entrySet().iterator();
+        while (iterator.hasNext()){
+            strings.add(iterator.next().getValue().entranceUrl());
+        }
+        return strings;
+    }
+
+    static Map<String,IHtmlParser> parsers = new HashMap<>();
+    static {
+        parsers.put(new PexelImageParser().entranceUrl(),new PexelImageParser());
+        parsers.put(new GoogleImageParser().entranceUrl(),new GoogleImageParser());
+        parsers.put(new BaiduImageParser().entranceUrl(),new BaiduImageParser());
+        parsers.put(new ToutiaoImageParser().entranceUrl(),new ToutiaoImageParser());
+    }
+    IHtmlParser parser;
+
+    public static void addParser(IHtmlParser parser){
+        parsers.put(parser.entranceUrl(),parser);
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        url = getIntent().getStringExtra("url");
+        if(!getIntent().getBooleanExtra(ISetWebviewHolder.setWebviewHolderByOutSide,false)){
+            parser = parsers.get(url);
+            setContentView(R.layout.activity_web_spider);
+            button = findViewById(R.id.btn_float);
+            initWebView();
+        }
+
+    }
+
+    private void initWebView() {
+        quickWebview = findViewById(R.id.root_ll);
+        quickWebview.setNeedBlockImageLoad( parser.interceptImage(url));
+        //quickWebview.addLifecycle(this);
+        if(parser.usePcAgent()){
+            quickWebview.getWebView().getSettings().setUserAgentString("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36");
+        }
+        quickWebview.loadUrl(url);
+        addMenu();
+    }
+
+    private void addMenu() {
+
+        quickWebview.addRightMenus(new IShowRightMenus() {
+            @Override
+            public List<ISingleChooseItem<BaseQuickWebview>> addMenus(BaseQuickWebview quickWebview) {
+                List<ISingleChooseItem<BaseQuickWebview>> menus = new ArrayList<>();
+                menus.add(new ISingleChooseItem<BaseQuickWebview>() {
+                    @Override
+                    public String text() {
+                        return "显示html源码";
+                    }
+
+                    @Override
+                    public void onItemClicked(int position, BaseQuickWebview bean) {
+                        showSource();
+                    }
+                });
+                menus.add(new ISingleChooseItem<BaseQuickWebview>() {
+                    @Override
+                    public String text() {
+                        return "显示html源码";
+                    }
+
+                    @Override
+                    public void onItemClicked(int position, BaseQuickWebview bean) {
+                        showSource();
+                    }
+                });
+                menus.add(new ISingleChooseItem<BaseQuickWebview>() {
+                    @Override
+                    public String text() {
+                        return "展示当前页面所有图片";
+                    }
+
+                    @Override
+                    public void onItemClicked(int position, BaseQuickWebview bean) {
+                        parseUrlsAndShow();
+                    }
+                });
+                menus.add(new ISingleChooseItem<BaseQuickWebview>() {
+                    @Override
+                    public String text() {
+                        return "当前为分页list,爬取list内所有页面的图片并直接下载";
+                    }
+
+                    @Override
+                    public void onItemClicked(int position, BaseQuickWebview bean) {
+                        parseListUrlsAndShow();
+                    }
+                });
+                menus.add(new ISingleChooseItem<BaseQuickWebview>() {
+                    @Override
+                    public String text() {
+                        return "显示图片文件夹";
+                    }
+
+                    @Override
+                    public void onItemClicked(int position, BaseQuickWebview bean) {
+                        if(iShowUrls != null){
+                            iShowUrls.showFolder(SpiderWebviewActivity.this, new File(Environment.getExternalStorageDirectory(),"0spider").getAbsolutePath());
+                        }
+                    }
+                });
+
+                return menus;
+            }
+        });
+    }
+
+    boolean isParsingList;
+
+    private void parseListUrlsAndShow() {
+        if(quickWebview == null){
+            return;
+        }
+        String url = quickWebview.getCurrentUrl();
+        TextView textView = new TextView(this);
+        textView.setTextColor(Color.WHITE);
+        textView.setPadding(20,20,20,20);
+        textView.setBackground(new ColorDrawable(Color.parseColor("#66333333")));
+        textView.setText("爬取urllist start");
+        EasyFloat.with(this)
+                .setTag(url)
+                .setLayout(textView)
+                // .setGravity(Gravity.BOTTOM)
+                .setDragEnable(true)
+                .setShowPattern(ShowPattern.FOREGROUND)
+                .show();
+
+        quickWebview.loadSource(new ValueCallback<String>() {
+            @Override
+            public void onReceiveValue(String value) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        isParsingList = true;
+                        ListParser.parseListAndDetail(SpiderWebviewActivity.this,quickWebview.getInfo(), parser,new ValueCallback<ListToDetailImgsInfo>() {
+                            @Override
+                            public void onReceiveValue(ListToDetailImgsInfo info) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        isParsingList = false;
+                                        EasyFloat.dismiss(info.listUrl);
+                                        if (info.imagUrls.isEmpty()) {
+                                            quickWebview.loadSource(new ValueCallback<String>() {
+                                                @Override
+                                                public void onReceiveValue(String value) {
+
+                                                }
+                                            });
+                                        } else {
+                                            if (iShowUrls != null) {
+                                                info.saveDirPath = getSaveDir(parser.folderName(),parser.subfolderName(quickWebview.getCurrentTitle(),quickWebview.getCurrentUrl()));
+                                                Log.v("caol","parseListUrlsAndShow path:"+info.saveDirPath);
+                                                info.hiddenFolder = parser.hiddenFolder();
+                                                iShowUrls.showUrls(SpiderWebviewActivity.this,info.listTitle,info.titlesToImags,info.imagUrls,info.saveDirPath,info.hiddenFolder,true);
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                        }, new ValueCallback<String>() {
+                            @Override
+                            public void onReceiveValue(String value) {
+                                textView.setText("爬取urllist: "+value);
+                            }
+                        });
+                    }
+                });
+
+            }
+        });
+    }
+
+
+    public static String getSaveDir(String folderName, String subFolderName) {
+
+         //new File(System.getenv("EXTERNAL_STORAGE"));
+        File dir0 = new File(Environment.getExternalStorageDirectory(),"0spider");
+        dir0.mkdirs();
+        File dir = new File(dir0,folderName);
+        dir.mkdirs();
+        if(!TextUtils.isEmpty(subFolderName)){
+            dir = new File(dir,subFolderName);
+            dir.mkdirs();
+        }
+        //dir = findNextSub(dir,0);
+        //dir.listFiles();
+        return dir.getAbsolutePath();
+    }
+
+    private File findNextSub(File dir,int idx) {
+        File[] files = dir.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                return pathname.isDirectory();
+            }
+        });
+        if(files == null || files.length ==0){
+            File dir2 = new File(dir,dir.getName()+idx);
+            dir2.mkdirs();
+            Log.v("dirs","0 new dir :"+dir2);
+            return dir2;
+        }else {
+            List<File> dirs = new ArrayList<>(Arrays.asList(files));
+            Collections.sort(dirs, new Comparator<File>() {
+                @Override
+                public int compare(File o1, File o2) {
+                    return o2.getName().compareTo(o1.getName());
+                }
+            });
+            Log.v("dirs",Arrays.toString(dirs.toArray()));
+            String[] list = dirs.get(0).list();
+            if(list == null ||list.length < 3000){
+                return dirs.get(0);
+            }
+            File dir2 = new File(dir,dir.getName()+dirs.size());
+            dir2.mkdirs();
+            Log.v("dirs","1 new dir :"+dir2);
+            return dir2;
+        }
+    }
+
+    private void parseUrlsAndShow() {
+        quickWebview.loadSource(new ValueCallback<String>() {
+            @Override
+            public void onReceiveValue(String value) {
+                List<String> list = parser.parseDetailPage(value);
+                if(list != null && !list.isEmpty()){
+                    if(iShowUrls != null){
+                        String path =  getSaveDir(parser.folderName(), parser.subfolderName(quickWebview.getCurrentTitle(),quickWebview.getCurrentUrl()));
+                        Log.v("caol","parseUrlsAndShow path:"+path);
+                        iShowUrls.showUrls(SpiderWebviewActivity.this,
+                                parser.resetDetailTitle(quickWebview.getCurrentTitle()),list,path
+                               ,parser.hiddenFolder(),false);
+                    }else {
+                        MyToast.error("iShowUrls == null");
+                    }
+
+                }else{
+                    MyToast.error("image list is empty");
+                }
+            }
+        });
+    }
+
+    private void showSource() {
+        quickWebview.loadSource(new ValueCallback<String>() {
+            @Override
+            public void onReceiveValue(String value) {
+                new AlertDialog.Builder(SpiderWebviewActivity.this)
+                        .setTitle("source")
+                        .setMessage(value)
+                        .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        }).create().show();
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(isParsingList){
+            ToastUtils.showShort("正在爬取list,不可退出当前页面");
+            return;
+        }
+        if(quickWebview == null || !quickWebview.onBackPressed()){
+            super.onBackPressed();
+        }
+
+    }
+
+    @Override
+    public void setWebviewHolder(BaseQuickWebview webview) {
+        quickWebview = webview;
+    }
+}

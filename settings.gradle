@@ -29,4 +29,7 @@ include ':viewholder-media'
 include ':bitmap-saver'
 include ':lock-app'
 include ':crash-remote'
+
+include ':webviewspider'
+include ':downloader'
 //bitmap-saver
