@@ -91,6 +91,8 @@ public abstract class BaseViewHolder<VB extends ViewBinding, InitInfo>
                           @NonNull LifecycleOwner lifecycleOwner,
                           @Nullable ViewGroup parent) {
         doInit(inflater, lifecycleOwner,parent);
+        isForeground = true;
+        onBackPressedCallback.setEnabled(shouldInterceptBackPressed2());
 
     }
 
@@ -173,8 +175,7 @@ public abstract class BaseViewHolder<VB extends ViewBinding, InitInfo>
     @Override
     public void onCreate(@NonNull LifecycleOwner owner) {
         DefaultLifecycleObserver.super.onCreate(owner);
-        isForeground = true;
-        onBackPressedCallback.setEnabled(shouldInterceptBackPressed2());
+
     }
 
     private boolean  shouldInterceptBackPressed = false;
