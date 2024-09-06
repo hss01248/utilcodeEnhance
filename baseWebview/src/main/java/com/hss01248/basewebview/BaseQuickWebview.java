@@ -703,7 +703,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
 
             }
 
-            //XXPermissions.with()
+
             int[] position = new int[]{0};
             String finalUrl = url1;
             String finalFileName = fileName;

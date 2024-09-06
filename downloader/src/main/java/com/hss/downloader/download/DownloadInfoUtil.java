@@ -1,13 +1,13 @@
 package com.hss.downloader.download;
 
+import android.Manifest;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.Utils;
-import com.hjq.permissions.Permission;
-import com.hjq.permissions.XXPermissions;
 import com.hss.downloader.download.db.DaoMaster;
 import com.hss.downloader.download.db.DaoSession;
 import com.hss.downloader.download.db.DownloadInfoDao;
@@ -43,7 +43,9 @@ public class DownloadInfoUtil {
 
     static void init(Context context) {
         Context context2 = context;
-        if(  XXPermissions.isGranted(context,Permission.MANAGE_EXTERNAL_STORAGE)){
+
+        if(  PermissionUtils.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE) ||
+                PermissionUtils.isGranted(Manifest.permission.MANAGE_EXTERNAL_STORAGE)){
             context2 = new MyDBContext(context);
         }
         DaoMaster.OpenHelper helper = new MySQLiteOpenHelper(context2, "imgdownload.db");

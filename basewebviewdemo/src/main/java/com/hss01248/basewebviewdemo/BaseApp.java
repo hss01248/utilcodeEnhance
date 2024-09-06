@@ -14,7 +14,6 @@ import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.SPStaticUtils;
 import com.blankj.utilcode.util.ThreadUtils;
-import com.hjq.permissions.XXPermissions;
 import com.hss01248.basewebview.BaseWebviewActivity;
 import com.hss01248.basewebview.WebConfigger;
 import com.hss01248.utils.ext.lifecycle.AppFirstActivityOnCreateListener;
@@ -33,7 +32,7 @@ public class BaseApp extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         regist();
-        XXPermissions.setScopedStorage(true);
+        //XXPermissions.setScopedStorage(true);
         WebConfigger.init(null);
         FileDownloader.setup(this);
 
