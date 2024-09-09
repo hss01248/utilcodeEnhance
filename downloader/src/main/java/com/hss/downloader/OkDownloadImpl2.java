@@ -67,6 +67,12 @@ public class OkDownloadImpl2 implements IDownload, IDownload2 {
 
     @Override
     public void download(DownloadApi api) {
+        if(!api.getHeaders().containsKey("User-Agent")){
+            if(userAgent ==null){
+                userAgent = System.getProperty("http.agent");
+            }
+            api.getHeaders().put("User-Agent", userAgent);
+        }
         AndroidDownloader.prepareDownload(api.getUrl())
                 .filePath(api.getRealPath())
                 .headers(api.getHeaders())
@@ -75,6 +81,7 @@ public class OkDownloadImpl2 implements IDownload, IDownload2 {
                     public void onCodeStart(String url, String path) {
                         com.hss01248.download_okhttp.IDownloadCallback.super.onCodeStart(url, path);
                         api.getCallback().onStart(url, path);
+
                     }
 
                     @Override
@@ -90,10 +97,11 @@ public class OkDownloadImpl2 implements IDownload, IDownload2 {
                     @Override
                     public void onFailed(String url, String path, String code, String msg, Throwable e) {
                         api.getCallback().onFail(url,path,code+" "+msg,e);
+
                     }
                     @Override
                     public void onProgress(String url, String path, long total, long alreadyReceived,long speed) {
-                        api.getCallback().onProgress(url, path, total, alreadyReceived, speed);
+                        api.getCallback().onProgress(url, path,  alreadyReceived,total, speed);
                     }
 
                     @Override

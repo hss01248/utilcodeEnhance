@@ -12,6 +12,7 @@ import com.hss.downloader.IDownloadCallback;
 import com.hss.downloader.OkDownloadImpl2;
 import com.hss.downloader.callback.DefaultUIDownloadCallback;
 import com.hss.downloader.callback.DownloadCallbackDbDecorator;
+import com.hss.downloader.callback.DownloadCallbackWithServiceNotification;
 import com.hss.downloader.callback.ExeOnMainDownloadCallback;
 import com.hss.downloader.download.DownloadInfoUtil;
 
@@ -50,8 +51,9 @@ public class DownloadApi {
         return forceReDownload;
     }
 
-    public void setForceReDownload(boolean forceReDownload) {
+    public DownloadApi setForceReDownload(boolean forceReDownload) {
         this.forceReDownload = forceReDownload;
+        return this;
     }
 
     private boolean forceReDownload;
@@ -73,6 +75,35 @@ public class DownloadApi {
         return (dir+"/"+name).replace("//","/");
     }
 
+    public String getMediaStoreRelativePath() {
+        return mediaStoreRelativePath;
+    }
+
+    public DownloadApi setMediaStoreRelativePath(String mediaStoreRelativePath) {
+        this.mediaStoreRelativePath = mediaStoreRelativePath;
+        return this;
+    }
+
+    private String mediaStoreRelativePath;
+
+    public boolean isCutToMediaStore() {
+        return cutToMediaStore;
+    }
+
+    public DownloadApi setCutToMediaStore(boolean cutToMediaStore) {
+        this.cutToMediaStore = cutToMediaStore;
+        if(cutToMediaStore){
+            if(mediaStoreRelativePath ==null){
+                mediaStoreRelativePath = Environment.DIRECTORY_DOWNLOADS + File.separator + AppUtils.getAppName().toLowerCase();
+            }
+        }
+        return this;
+    }
+
+    private  boolean cutToMediaStore;
+
+
+
     public Map<String, String> getHeaders() {
         return headers;
     }
@@ -82,10 +113,21 @@ public class DownloadApi {
     }
 
     private IDownloadCallback callback;
+
+    public boolean isUseServiceToDownload() {
+        return useServiceToDownload;
+    }
+
+    private boolean useServiceToDownload;
    public static IDownload2 downlodImpl = new OkDownloadImpl2();
 
     public DownloadApi setDir(String dir) {
         this.dir = dir;
+        return this;
+    }
+
+    public DownloadApi useServiceToDownload(boolean useServiceToDownload) {
+        this.useServiceToDownload = useServiceToDownload;
         return this;
     }
     public DownloadApi setDirForce(String dir) {
@@ -105,11 +147,20 @@ public class DownloadApi {
     }
 
     public void callback(IDownloadCallback callback) {
+        IDownloadCallback callback1 = callback;
         if(showDefaultLoadingAndToast){
+            callback1 = new ExeOnMainDownloadCallback(new DefaultUIDownloadCallback(callback));
+        }
+        if(useServiceToDownload){
+            callback1 = new DownloadCallbackWithServiceNotification(callback1);
+        }
+        callback1 = new DownloadCallbackDbDecorator(callback1).setApi(this);
+        this.callback = callback1;
+        /*if(showDefaultLoadingAndToast){
             this.callback = new DownloadCallbackDbDecorator(new ExeOnMainDownloadCallback(new DefaultUIDownloadCallback(callback)));
         }else {
             this.callback = new DownloadCallbackDbDecorator(callback);
-        }
+        }*/
 
 
 
@@ -124,8 +175,11 @@ public class DownloadApi {
                     //批量下载的,在list api里批量判断
                     return null;
                 }
+
+
+
                 // 优化判断逻辑: 判断一个文件是否下载过,是否强制下载
-                return DownloadCallbackDbDecorator.shouldStartRealDownload(url,path,forceReDownload);
+                return DownloadCallbackDbDecorator.shouldStartRealDownload(url,path,forceReDownload,DownloadApi.this);
             }
 
             @Override

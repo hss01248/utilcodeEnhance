@@ -19,7 +19,7 @@ buildscript {
         snapshotUrl='https://nexus.hss01248.tech/repository/maven-snapshots/'
         publicUrl='https://nexus.hss01248.tech/#browse/browse:maven-public:'
 
-        imageLoaderVersion = "3.8.7"
+        imageLoaderVersion = "3.8.8"
 
 
 

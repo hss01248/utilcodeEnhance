@@ -65,8 +65,6 @@ public class CommonProgressService extends Service {
                         ToastUtils.showLong("必须有通知权限才能开始后台下载,避免进程被杀");
                     }
                 });
-
-
     }
 
     public static void updateProgress(int progress,int max,String title,String msg,int notifyId){
@@ -82,15 +80,26 @@ public class CommonProgressService extends Service {
         }else {
             mNotificationManager.notify(notifyId,getNotification(Utils.getApp(), title, msg,progress,max));
         }
-
-
         //mNotificationManager.getno
+    }
+
+    public static void stopService(int notifyId){
+        Intent stopIntent = new Intent(Utils.getApp(), CommonProgressService.class);
+        Utils.getApp().stopService(stopIntent);
+        NotificationManager mNotificationManager = (NotificationManager) Utils.getApp().getSystemService(NOTIFICATION_SERVICE);
+        mNotificationManager.cancel(notifyId);
     }
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
        // LogUtils.d("on onBind: ","------>");
         return new Binder();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
     }
 
     @Override

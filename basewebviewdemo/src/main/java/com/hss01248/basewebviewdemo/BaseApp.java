@@ -63,17 +63,26 @@ public class BaseApp extends MultiDexApplication {
                                     if(TextUtils.isEmpty(url)){
                                         return;
                                     }
-                                    if(!url.contains("https://v.douyin.com/")){
+
+                                    //https://m.toutiao.com/is/ihcXy96w/
+                                    if (!url.startsWith("https://m.toutiao.com/")
+                                            && !url.startsWith("https://www.iesdouyin.com/")
+                                            && !url.startsWith("https://v.douyin.com/")) {
                                         return;
+                                    }
+                                    String title = "";
+                                    String finalUrl = url;
+                                    if(url.contains("https://v.douyin.com/")){
+                                         finalUrl = url.substring(url.indexOf("https://v.douyin.com/"));
+                                         title = url.substring(0,url.indexOf("https://v.douyin.com/"));
 
                                     }
-
-                                    String finalUrl = url.substring(url.indexOf("https://v.douyin.com/"));
-                                    String title = url.substring(0,url.indexOf("https://v.douyin.com/"));
                                     if(finalUrl.equals(SPStaticUtils.getString("video_cli"))){
                                         return;
                                     }
 
+                                    String finalTitle = title;
+                                    String finalUrl1 = finalUrl;
                                     AlertDialog dialog =   new AlertDialog.Builder(ActivityUtils.getTopActivity())
                                             .setTitle("视频自动下载")
                                             .setMessage("检测到有头条/抖音拷贝的链接,是否自动下载?")
@@ -81,8 +90,8 @@ public class BaseApp extends MultiDexApplication {
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which) {
                                                     try {
-                                                        BaseWebviewActivity.start(activity,url,title);
-                                                        SPStaticUtils.put("video_cli",finalUrl);
+                                                        BaseWebviewActivity.start(activity,url, finalTitle);
+                                                        SPStaticUtils.put("video_cli", finalUrl1);
                                                         activity.finish();
                                                     }catch (Throwable throwable){
                                                         LogUtils.w(throwable);

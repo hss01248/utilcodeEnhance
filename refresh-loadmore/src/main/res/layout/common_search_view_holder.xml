@@ -46,6 +46,15 @@
             android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"/>
+        <TextView
+            android:id="@+id/tv_menus"
+            android:text="●●●"
+            android:padding="10dp"
+            android:layout_marginLeft="5dp"
+            android:gravity="center"
+            android:textSize="10sp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
     </LinearLayout>
     <RelativeLayout
         android:id="@+id/rl_container"

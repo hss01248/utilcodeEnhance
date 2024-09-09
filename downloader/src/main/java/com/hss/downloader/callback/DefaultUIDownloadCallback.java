@@ -28,7 +28,8 @@ public class DefaultUIDownloadCallback implements IDownloadCallback {
 
     @Override
     public void onStart(String url, String realPath) {
-         dialog =  new ProgressDialog(ActivityUtils.getTopActivity(),ProgressDialog.STYLE_HORIZONTAL);
+         dialog =  new ProgressDialog(ActivityUtils.getTopActivity());
+        dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
          String msg = "文件下载中:"+url+"\n-->\n"+realPath+"\n";
         dialog.setMessage(msg);
         dialog.setCanceledOnTouchOutside(false);

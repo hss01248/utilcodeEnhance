@@ -791,6 +791,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
         DownloadApi.create(url1)
                 .setName(fileName)
                 .setDir(dir)
+                .useServiceToDownload(true)
                 .callback(new IDownloadCallback() {
                     @Override
                     public void onStart(String url, String realPath) {
@@ -800,7 +801,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
 
                     @Override
                     public void onProgress(String url, String realPath, long currentOffset, long total, long speed) {
-                        String msg = String.format("%.2f",currentOffset/1024/1024) +"MB/"+String.format("%.2f", total*1.0f/1024/1024)+"MB";
+                        String msg = String.format("%.2f",currentOffset/1024/1024f) +"MB/"+String.format("%.2f", total*1.0f/1024/1024f)+"MB";
                         //dialog.setMessage(msg);
                         dialog.setTitle("下载文件: "+"\n"+msg);
                         //title最多两行

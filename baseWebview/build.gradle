@@ -58,6 +58,7 @@ dependencies {
     api project(path: ':qr-scan')
     api project(path: ':iwidget')
     api project(path: ':viewState')
+    api project(path: ':downloader')
     api project(path: ':viewholder')
     //api project(path: ':basewebview-ajax-proxy')
     api project(path: ':refresh-loadmore')
@@ -66,7 +67,6 @@ dependencies {
     //api project(path: ':download-list')
     api project(path: ':ext')
     api project(path: ':cipher')
-    api "com.github.hss01248.ImageLoader:downloader:${imageLoaderVersion}"
 
     api 'com.github.skyNet2017.Luban:luban:3.2.7'
     //api 'com.github.skyNet2017.Luban:showResult:3.2.7'

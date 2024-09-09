@@ -56,6 +56,8 @@ public class DownloadRecordListHolder extends BaseViewHolder<ContainerHistoryCol
                 holder1.init("");
                 pair.second.getBinding().realTitleBar.setVisibility(View.GONE);
 
+
+
             }
         });
 
@@ -94,6 +96,14 @@ public class DownloadRecordListHolder extends BaseViewHolder<ContainerHistoryCol
                 return true;
             }
         });
+        holder.binding.tvMenus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MyToast.show("筛选状态,排序");
+            }
+        });
+
+
     }
 
     public static void onItemLongClick2(BaseQuickAdapter adapter, View view, int position) {
