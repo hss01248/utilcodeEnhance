@@ -1527,4 +1527,16 @@ public class MainActivity extends AppCompatActivity {
     public void sentryMsg(View view) {
         SentryUtil.testMsg(" i am a msg");
     }
+
+    public void testMetrics1(View view) {
+        SentryUtil.testMetrics1();
+    }
+
+    public void testMetrics2(View view) {
+        SentryUtil.testMetrics2();
+    }
+
+    public void testInstrumentation(View view) {
+        SentryUtil.testInstrumentation();
+    }
 }

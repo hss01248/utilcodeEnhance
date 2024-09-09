@@ -429,6 +429,24 @@
                 android:textAllCaps="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="testMetrics1"
+                android:onClick="testMetrics1"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="testMetrics2"
+                android:onClick="testMetrics2"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="testInstrumentation"
+                android:onClick="testInstrumentation"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
         </com.google.android.flexbox.FlexboxLayout>
         <TextView
             android:layout_margin="10dp"
