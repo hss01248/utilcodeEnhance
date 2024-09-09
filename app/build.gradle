@@ -59,6 +59,7 @@ dependencies {
     implementation project(path: ':viewholder-media')
     implementation project(':baseWebview')
     implementation project(':bitmap-saver')
+    implementation project(':sentry')
     implementation project(path: ':webviewspider')
    // implementation project(':lock-app')
     testImplementation 'junit:junit:4.+'

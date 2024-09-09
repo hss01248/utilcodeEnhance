@@ -1,32 +1,19 @@
 package com.hss01248.sentry;
 
 import android.annotation.SuppressLint;
-import android.app.Application;
 import android.os.Build;
-
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.NetworkUtils;
-import com.blankj.utilcode.util.ThreadUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import io.sentry.Breadcrumb;
-import io.sentry.Hint;
 import io.sentry.Sentry;
 import io.sentry.SentryEvent;
 import io.sentry.SentryLevel;
-import io.sentry.SentryOptions;
-import io.sentry.android.core.SentryAndroid;
-import io.sentry.protocol.Device;
 import io.sentry.protocol.Message;
 import io.sentry.protocol.User;
 
@@ -74,6 +61,7 @@ public class SentryUtil {
      */
     private final Map<String, String> tags;
     private Throwable throwable;
+
 
 
 

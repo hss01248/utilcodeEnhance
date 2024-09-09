@@ -89,6 +89,7 @@ import com.hss01248.media.uri.ContentUriUtil;
 import com.hss01248.openuri2.OpenUri2;
 import com.hss01248.permission.MyPermissions;
 import com.hss01248.qrscan.ScanCodeActivity;
+import com.hss01248.sentry.SentryUtil;
 import com.hss01248.toast.MyToast;
 import com.hss01248.viewholder_media.FileTreeViewHolder;
 import com.hss01248.webviewspider.SpiderWebviewActivity;
@@ -1516,5 +1517,14 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void sentryException(View view) {
+
+        SentryUtil.testException();
+    }
+
+    public void sentryMsg(View view) {
+        SentryUtil.testMsg(" i am a msg");
     }
 }
