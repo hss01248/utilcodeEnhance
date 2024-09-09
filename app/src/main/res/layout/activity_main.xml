@@ -77,7 +77,13 @@
                 android:onClick="encodeFilePathToUrlUsage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
-
+            <Button
+                android:onClick="goWebSpider"
+                android:layout_margin="10dp"
+                android:text="webview爬取urls并加载"
+                android:textAllCaps="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
             <Button
                 android:text="share"
                 android:textAllCaps="false"
@@ -172,6 +178,21 @@
                 android:layout_width="wrap_content"
                 android:onClick="takeVideo"
                 android:text="调用系统拍视频intent-前摄像头"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:onClick="saveBitmapToAlbumWithoutPermission"
+                android:text="保存截图到相册-无权限版"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:onClick="createDoc"
+                android:text="文件另存为-ACTION_CREATE_DOCUMENT-拿到合法uri,然后就能对uri来写文件"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:onClick="safDir"
+                android:text="是否允许用户访问特定目录-ACTION_OPEN_DOCUMENT-拿到合法uri,然后可以使用documentFile来读取目录"
                 android:layout_height="wrap_content"/>
             <Button
                 android:layout_width="wrap_content"
@@ -393,6 +414,36 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:text="crash test"
                 android:onClick="crashTest"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="sentry exception"
+                android:onClick="sentryException"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="sentry msg"
+                android:onClick="sentryMsg"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="testMetrics1"
+                android:onClick="testMetrics1"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="testMetrics2"
+                android:onClick="testMetrics2"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="testInstrumentation"
+                android:onClick="testInstrumentation"
                 android:textAllCaps="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>

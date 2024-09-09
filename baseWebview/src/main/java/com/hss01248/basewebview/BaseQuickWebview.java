@@ -50,6 +50,8 @@ import com.blankj.utilcode.util.Utils;
 import com.hjq.permissions.OnPermissionCallback;
 import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
+import com.hss.downloader.IDownloadCallback;
+import com.hss.downloader.api.DownloadApi;
 import com.hss.utils.enhance.MyKeyboardUtil;
 import com.hss.utils.enhance.UrlEncodeUtil;
 import com.hss01248.basewebview.adblock.AdBlockClient;
@@ -61,8 +63,6 @@ import com.hss01248.basewebview.dom.JsPermissionImpl;
 import com.hss01248.basewebview.history.db.MyDbUtil;
 import com.hss01248.basewebview.menus.DefaultMenus;
 import com.hss01248.basewebview.search.WebSearchViewHolder;
-import com.hss01248.download_list2.DownloadCallback;
-import com.hss01248.download_list2.DownloadImplByFileDownloaderLib;
 import com.hss01248.iwidget.BaseDialogListener;
 import com.hss01248.iwidget.msg.AlertDialogImplByDialogUtil;
 import com.hss01248.iwidget.singlechoose.ISingleChooseItem;
@@ -703,14 +703,14 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
 
             }
 
-            //XXPermissions.with()
+
             int[] position = new int[]{0};
             String finalUrl = url1;
             String finalFileName = fileName;
             if(dialog != null && dialog.isShowing()){
                 dialog.dismiss();
             }
-             dialog =  new AlertDialog.Builder(getContext())
+            dialog =  new AlertDialog.Builder(getContext())
                     .setTitle("检测到视频下载,是下载到普通文件夹还是隐藏文件夹?")
                     //.setMessage("检测到视频下载,是下载到普通文件夹还是隐藏文件夹?")
                     .setSingleChoiceItems(new String[]{"普通文件夹", "隐藏文件夹"}, position[0], new DialogInterface.OnClickListener() {
@@ -788,31 +788,30 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
         dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         dialog.setTitle("下载文件: "+fileName);
         dialog.setCanceledOnTouchOutside(false);
-        new DownloadImplByFileDownloaderLib()
-                .download(url1, dir, fileName, null, new DownloadCallback() {
+        DownloadApi.create(url1)
+                .setName(fileName)
+                .setDir(dir)
+                .useServiceToDownload(true)
+                .callback(new IDownloadCallback() {
                     @Override
-                    public void onStart(String url) {
+                    public void onStart(String url, String realPath) {
+                        IDownloadCallback.super.onStart(url, realPath);
                         dialog.show();
                     }
 
                     @Override
-                    public void onProgress(float progress, long total) {
-                        String msg = String.format("%.2f",progress*total/1024/1024) +"MB/"+String.format("%.2f", total*1.0f/1024/1024)+"MB";
+                    public void onProgress(String url, String realPath, long currentOffset, long total, long speed) {
+                        String msg = String.format("%.2f",currentOffset/1024/1024f) +"MB/"+String.format("%.2f", total*1.0f/1024/1024f)+"MB";
                         //dialog.setMessage(msg);
                         dialog.setTitle("下载文件: "+"\n"+msg);
                         //title最多两行
                         dialog.setMax((int) total);
-                        dialog.setProgress((int) (progress*total));
+                        dialog.setProgress((int) (currentOffset));
                     }
 
                     @Override
-                    public void onError(String msg) {
-                        DownloadCallback.super.onError(msg);
-                        ToastUtils.showShort("文件下载失败: \n" + msg);
-                    }
-
-                    @Override
-                    public void onSuccess(File file) {
+                    public void onSuccess(String url, String realPath) {
+                        File file = new File(realPath);
                         try {
                             dialog.dismiss();
                         }catch (Throwable throwable){
@@ -846,7 +845,11 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                                 doFinish();
                             }
                         });
+                    }
 
+                    @Override
+                    public void onFail(String url, String realPath, String msg, Throwable throwable) {
+                        ToastUtils.showShort("文件下载失败: \n" + msg);
                     }
                 });
     }
@@ -863,54 +866,62 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
     private void copyFileToDownloadsDir(File file) {
         Uri uri = MediaStore.Files.getContentUri("external");
         ContentValues contentValues = new ContentValues();
-        contentValues.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/"+AppUtils.getAppName());
-        // 设置文件名称
-        contentValues.put(MediaStore.Downloads.DISPLAY_NAME, file.getName());
-        // 设置文件标题, 一般是删除后缀, 可以不设置
-        //contentValues.put(MediaStore.Downloads.TITLE, "hello");
-        // uri 表示操作哪个数据库 , contentValues 表示要插入的数据内容
-        Uri insert = Utils.getApp().getContentResolver().insert(uri, contentValues);
-        // 向 Download/hello/hello.txt 文件中插入数据
+        //contentValues.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/"+AppUtils.getAppName());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + File.separator + AppUtils.getAppName());
+        } else {
+            contentValues.put(
+                    MediaStore.MediaColumns.DATA,
+                    Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + Environment.DIRECTORY_DOWNLOADS + File.separator + AppUtils.getAppName()
+            );
+            // 设置文件名称
+            contentValues.put(MediaStore.Downloads.DISPLAY_NAME, file.getName());
+            // 设置文件标题, 一般是删除后缀, 可以不设置
+            //contentValues.put(MediaStore.Downloads.TITLE, "hello");
+            // uri 表示操作哪个数据库 , contentValues 表示要插入的数据内容
+            Uri insert = Utils.getApp().getContentResolver().insert(uri, contentValues);
+            // 向 Download/hello/hello.txt 文件中插入数据
 
-        try {
-            int sBufferSize = 524288;
-            InputStream is = new FileInputStream(file);
-            OutputStream os = Utils.getApp().getContentResolver().openOutputStream(insert);
             try {
-                os = new BufferedOutputStream(os, sBufferSize);
-
-                double totalSize = is.available();
-                int curSize = 0;
-
-                byte[] data = new byte[sBufferSize];
-                for (int len; (len = is.read(data)) != -1; ) {
-                    os.write(data, 0, len);
-                    curSize += len;
-                }
-                os.flush();
-                LogUtils.i("拷贝文件到download文件夹: download/"+AppUtils.getAppName()+"/" + file.getName());
-                ToastUtils.showLong("文件下载到download文件夹: download/"+AppUtils.getAppName()+"/" + file.getName());
-                file.delete();
-
-            } catch (IOException e) {
-                LogUtils.w(e);
-
-            } finally {
+                int sBufferSize = 524288;
+                InputStream is = new FileInputStream(file);
+                OutputStream os = Utils.getApp().getContentResolver().openOutputStream(insert);
                 try {
-                    is.close();
-                } catch (IOException e) {
-                    LogUtils.w(e);
-                }
-                try {
-                    if (os != null) {
-                        os.close();
+                    os = new BufferedOutputStream(os, sBufferSize);
+
+                    double totalSize = is.available();
+                    int curSize = 0;
+
+                    byte[] data = new byte[sBufferSize];
+                    for (int len; (len = is.read(data)) != -1; ) {
+                        os.write(data, 0, len);
+                        curSize += len;
                     }
+                    os.flush();
+                    LogUtils.i("拷贝文件到download文件夹: download/" + AppUtils.getAppName() + "/" + file.getName());
+                    ToastUtils.showLong("文件下载到download文件夹: download/" + AppUtils.getAppName() + "/" + file.getName());
+                    file.delete();
+
                 } catch (IOException e) {
                     LogUtils.w(e);
+
+                } finally {
+                    try {
+                        is.close();
+                    } catch (IOException e) {
+                        LogUtils.w(e);
+                    }
+                    try {
+                        if (os != null) {
+                            os.close();
+                        }
+                    } catch (IOException e) {
+                        LogUtils.w(e);
+                    }
                 }
+            } catch (Exception e) {
+                LogUtils.w(e);
             }
-        } catch (Exception e) {
-            LogUtils.w(e);
         }
     }
 

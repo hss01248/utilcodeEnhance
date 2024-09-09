@@ -19,7 +19,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
-
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ThreadUtils;
 
@@ -59,7 +58,9 @@ public class StatefulLayout extends FrameLayout implements IViewState{
         return layout;
     }
 
-    public static StatefulLayout wrapWithStateOfPage(@NonNull View view,@NonNull Runnable errorClick){
+
+
+    public static StatefulLayout wrapWithStateOfPage(@NonNull View view, @NonNull Runnable errorClick){
         return wrapWithState(view,false,errorClick);
     }
     public static StatefulLayout wrapWithStateOfSmallView(@NonNull View view, @NonNull Runnable errorClick){

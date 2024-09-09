@@ -1,32 +1,24 @@
 package com.hss01248.sentry;
 
 import android.annotation.SuppressLint;
-import android.app.Application;
 import android.os.Build;
-
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import com.blankj.utilcode.util.AppUtils;
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.NetworkUtils;
-import com.blankj.utilcode.util.ThreadUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import io.sentry.Breadcrumb;
-import io.sentry.Hint;
+import io.sentry.ISpan;
+import io.sentry.ITransaction;
+import io.sentry.MeasurementUnit;
 import io.sentry.Sentry;
 import io.sentry.SentryEvent;
 import io.sentry.SentryLevel;
-import io.sentry.SentryOptions;
-import io.sentry.android.core.SentryAndroid;
-import io.sentry.protocol.Device;
+import io.sentry.SpanStatus;
 import io.sentry.protocol.Message;
 import io.sentry.protocol.User;
 
@@ -74,6 +66,7 @@ public class SentryUtil {
      */
     private final Map<String, String> tags;
     private Throwable throwable;
+
 
 
 
@@ -371,6 +364,53 @@ public class SentryUtil {
             int i = 1/0;
         }catch (Throwable throwable){
             SentryUtil.report(throwable);
+        }
+    }
+
+    public static void testMetrics1(){
+        final ISpan span = Sentry.getSpan();
+        if (span != null) {
+            // Record amount of memory used
+            span.setMeasurement("memory_used", 64, MeasurementUnit.Information.MEGABYTE);
+
+            // Record time it took to load user profile
+            //span.setMeasurement("user_profile_loading_time", 1.3, MeasurementUnit.Duration.SECOND);
+
+            // Record number of times the screen was loaded
+            //span.setMeasurement("screen_load_count", 4);
+            span.finish();
+        }else{
+            LogUtils.w("span == null");
+        }
+    }
+
+    public static void testMetrics2(){
+        final ISpan span = Sentry.getSpan();
+        if (span != null) {
+            // Record amount of memory used
+            span.setMeasurement("memory_used", 64, MeasurementUnit.Information.MEGABYTE);
+
+            // Record time it took to load user profile
+            span.setMeasurement("user_profile_loading_time", 1.3, MeasurementUnit.Duration.SECOND);
+
+            // Record number of times the screen was loaded
+            //span.setMeasurement("screen_load_count", 4);
+            span.finish();
+        }else{
+            LogUtils.w("span == null");
+        }
+    }
+
+    public static void testInstrumentation(){
+        ITransaction transaction = Sentry.startTransaction("processOrderBatch()", "task");
+        try {
+            Thread.sleep(5000);
+        } catch (Exception e) {
+            e.printStackTrace();
+            transaction.setThrowable(e);
+            transaction.setStatus(SpanStatus.INTERNAL_ERROR);
+        } finally {
+            transaction.finish();
         }
     }
 

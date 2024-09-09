@@ -8,17 +8,20 @@ import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.security.identity.IdentityCredential;
 import android.util.Base64;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -36,7 +39,9 @@ import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ThreadUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
+import com.bumptech.glide.Glide;
 import com.google.gson.GsonBuilder;
+import com.hss.downloader.MyDownloader;
 import com.hss.utils.base.api.MyCommonCallback3;
 import com.hss.utils.enhance.BarColorUtil;
 import com.hss.utils.enhance.HomeMaintaner;
@@ -47,7 +52,9 @@ import com.hss.utils.enhance.intent.ShareUtils;
 import com.hss.utils.enhance.intent.SysIntentUtil;
 import com.hss.utils.enhance.viewholder.ContainerActivity2;
 import com.hss.utils.enhance.viewholder.mvvm.ContainerViewHolderWithTitleBar;
+import com.hss.utilsenhance.databinding.DisplayMetaViewBinding;
 import com.hss.utilsenhance.databinding.TestFullBinding;
+import com.hss01248.activityresult.ActivityResultListener;
 import com.hss01248.activityresult.StartActivityUtil;
 import com.hss01248.activityresult.TheActivityListener;
 import com.hss01248.basewebview.BaseWebviewActivity;
@@ -66,6 +73,7 @@ import com.hss01248.iwidget.BaseDialogListener;
 import com.hss01248.iwidget.msg.AlertDialogImplByDialogUtil;
 import com.hss01248.iwidget.msg.AlertDialogImplByMmDialog;
 import com.hss01248.iwidget.msg.AlertDialogImplByXStyleDialog;
+import com.hss01248.iwidget.pop.PopList;
 import com.hss01248.iwidget.singlechoose.SingleChooseDialogImpl;
 import com.hss01248.iwidget.singlechoose.SingleChooseDialogListener;
 import com.hss01248.media.contact.ContactInfo;
@@ -81,9 +89,10 @@ import com.hss01248.media.uri.ContentUriUtil;
 import com.hss01248.openuri2.OpenUri2;
 import com.hss01248.permission.MyPermissions;
 import com.hss01248.qrscan.ScanCodeActivity;
+import com.hss01248.sentry.SentryUtil;
 import com.hss01248.toast.MyToast;
-import com.hss01248.viewholder.databinding.ActivityCommonContainerBinding;
 import com.hss01248.viewholder_media.FileTreeViewHolder;
+import com.hss01248.webviewspider.SpiderWebviewActivity;
 
 import org.devio.takephoto.wrap.TakeOnePhotoListener;
 import org.devio.takephoto.wrap.TakePhotoUtil;
@@ -104,6 +113,8 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
 public class MainActivity extends AppCompatActivity {
@@ -350,10 +361,35 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         desc  = path0.toString()+"\n"+  new GsonBuilder().setPrettyPrinting().create().toJson(map);
-        new AlertDialog.Builder(this)
-                .setTitle("mata data")
-                .setMessage(desc)
-                .setPositiveButton("预览", new DialogInterface.OnClickListener() {
+        String type = map.get("mime_type")+"";
+
+        View contentView = null;
+        if(type.contains("image") || type.contains("video")
+                || path0.toString().endsWith(".mp4")
+                || path0.toString().endsWith(".jpg")){
+            DisplayMetaViewBinding binding = DisplayMetaViewBinding.inflate(MainActivity.this.getLayoutInflater(),findViewById(android.R.id.content),false);
+            //ViewGroup group = (ViewGroup) View.inflate(this,R.layout.display_meta_view,findViewById(android.R.id.content));
+            contentView = binding.getRoot();
+
+           ImageView imageView =  binding.ivImage;
+            Glide.with(this)
+                    .load(path0)
+                    //.override(SizeUtils.dp2px(100),SizeUtils.dp2px(100))
+                    .into(imageView);
+
+            TextView textView =  binding.tvDesc;
+            textView.setText(desc);
+
+        }
+
+        AlertDialog.Builder builder =   new AlertDialog.Builder(this)
+                .setTitle("mata data");
+        if(contentView !=null){
+            builder.setView(contentView);
+        }else {
+              builder.setMessage(desc);
+        }
+        builder.setPositiveButton("预览", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if(map.containsKey("_data")){
@@ -442,6 +478,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Uri uri) {
                 showMata(uri);
+            }
+
+            @Override
+            public void onError(String msg) {
+                MyCommonCallback.super.onError(msg);
+                MyToast.error(msg);
             }
         });
     }
@@ -814,20 +856,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void pickImage13(View view) {
-        MyPermissions.requestByMostEffort(false, true, new PermissionUtils.FullCallback() {
-            @Override
-            public void onGranted(@NonNull List<String> granted) {
-                doPick13();
-            }
-
-            @Override
-            public void onDenied(@NonNull List<String> deniedForever, @NonNull List<String> denied) {
-
-            }
-        },Manifest.permission.READ_EXTERNAL_STORAGE);
-
-
-
+        doPick13();
     }
 
     private void doPick13() {
@@ -1247,11 +1276,61 @@ public class MainActivity extends AppCompatActivity {
     public void dirTree(View view) {
 
 
-        FileTreeViewHolder.viewDirInActivity(Environment.getExternalStorageDirectory().getAbsolutePath());
+        BitmapSaveUtil.askWritePermission(new Observer<Boolean>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(Boolean aBoolean) {
+                FileTreeViewHolder.viewDirInActivity(Environment.getExternalStorageDirectory().getAbsolutePath());
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+
 
        /* Dialog dialog1 = new Dialog(this);
         dialog1.setContentView(viewHolder.getRootView());
         dialog1.show();*/
+    }
+
+    public void goWebSpider(View view) {
+        List<String> menus = SpiderWebviewActivity.getSpiders();
+        menus.add("浏览全部下载列表");
+        menus.add("浏览下载列表");
+        menus.add("修复升级前的数据");
+        menus.add("继续下载未完成的图片");
+
+        PopList.showPop(this, -1, view, menus, new PopList.OnItemClickListener() {
+            @Override
+            public void onClick(int position, String str) {
+                if(position == menus.size()-1){
+                    MyDownloader.continueDownload();
+                    //ImgDownloader.downladUrlsInDB(MainActivity.this,new File(SpiderWebviewActivity.getSaveDir("继续下载","")));
+                }else if(position ==  menus.size()-4) {
+                    MyDownloader.showWholeDownloadPage();
+                }else if(position ==  menus.size()-3) {
+                    MyDownloader.showDownloadPage();
+                }else if(position == menus.size()-2) {
+                    MyDownloader.fixDbWhenUpdate();
+                }else {
+                    SpiderWebviewActivity.start(MainActivity.this,str);
+                }
+
+            }
+        });
+
+
     }
 
     public void bitmapSaveConfig(View view) {
@@ -1352,5 +1431,112 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void saveBitmapToAlbumWithoutPermission(View view) {
+        try {
+            View view1 = findViewById(android.R.id.content);
+            view1.setDrawingCacheEnabled(true);
+            Bitmap drawingCache = view1.getDrawingCache();
+
+            /*File externalFilesDir = getExternalFilesDir(Environment.DIRECTORY_DCIM);
+            externalFilesDir.mkdirs();
+            File file = new File(externalFilesDir,System.currentTimeMillis()+".jpg");
+            drawingCache.compress(Bitmap.CompressFormat.JPEG,85,new FileOutputStream(file));
+            MediaStoreRefresher.refreshMediaCenter(getApplicationContext(),file.getAbsolutePath());*/
+
+            BitmapSaveUtil.saveBitmap(drawingCache);
+            ToastUtils.showShort("保存成功,跳去选择界面查看");
+            MediaPickUtil.pickImage(new MyCommonCallback<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+
+                }
+            });
+        }catch (Throwable throwable){
+            LogUtils.w(throwable);
+            ToastUtils.showShort(throwable.getMessage());
+        }
+
+    }
+
+    public void createDoc(View view) {
+        // 创建一个新的 Intent 对象来创建文档
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+// 设置这个文件可以被打开
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+// 设置文件的 MIME 类型为 PDF
+        intent.setType("text/plain");
+// 设置创建的文件名
+        intent.putExtra(Intent.EXTRA_TITLE, "invoice.txt");
+
+// 可选：为系统文件选择器指定打开的初始目录的 URI
+        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, "file://"+Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+Environment.DIRECTORY_DOWNLOADS);
+
+// 开始 Activity 并请求返回结果
+        StartActivityUtil.goOutAppForResult(this, intent, new ActivityResultListener() {
+            @Override
+            public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+                LogUtils.d(data,data==null ? "null":data.getData());
+                if(data !=null){
+                    MyToast.show("可以往这个uri写文件了: \n"+data.getDataString());
+                }
+
+                //data.getData()
+                //然后就可以往这个uri写文件流了
+            }
+
+            @Override
+            public void onActivityNotFound(Throwable e) {
+
+            }
+        });
+    }
+
+    public void safDir(View view) {
+        // 使用系统文件选择器选择一个目录
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+        // 可选，指定一个 URI，作为系统文件选择器加载时应该打开的目录
+        String pkgName = "com.hss01248.finalcompress";
+        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Android/data/"+pkgName);
+        Uri uri = Uri.fromFile(file);
+        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, uri);
+        //intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
+
+        StartActivityUtil.goOutAppForResult(this, intent, new ActivityResultListener() {
+            @Override
+            public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+                LogUtils.d(data,data.getData());
+                MyToast.show("可以遍历这个目录了: \n"+data.getDataString());
+                //data.getData()
+                //然后就可以往这个uri写文件流了
+            }
+
+            @Override
+            public void onActivityNotFound(Throwable e) {
+
+            }
+        });
+    }
+
+    public void sentryException(View view) {
+
+        SentryUtil.testException();
+    }
+
+    public void sentryMsg(View view) {
+        SentryUtil.testMsg(" i am a msg");
+    }
+
+    public void testMetrics1(View view) {
+        SentryUtil.testMetrics1();
+    }
+
+    public void testMetrics2(View view) {
+        SentryUtil.testMetrics2();
+    }
+
+    public void testInstrumentation(View view) {
+        SentryUtil.testInstrumentation();
     }
 }

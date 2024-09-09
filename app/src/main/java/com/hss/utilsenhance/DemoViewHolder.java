@@ -7,6 +7,7 @@ import androidx.lifecycle.LifecycleOwner;
 import com.blankj.utilcode.util.ThreadUtils;
 import com.hss.utils.enhance.viewholder.mvvm.BaseViewHolder;
 import com.hss.utilsenhance.databinding.ActivityViewHolderDemoHttpStatusBinding;
+import com.hss01248.toast.MyToast;
 import com.hss01248.viewstate.StatefulLayout;
 
 import java.util.Random;
@@ -29,8 +30,9 @@ public class DemoViewHolder extends BaseViewHolder<ActivityViewHolderDemoHttpSta
             }
         });
         rootView = stateManager;
-
     }
+
+
 
     @Override
     protected void initDataAndEventInternal(LifecycleOwner lifecycleOwner, String bean) {
@@ -41,8 +43,10 @@ public class DemoViewHolder extends BaseViewHolder<ActivityViewHolderDemoHttpSta
                 if(new Random().nextBoolean()){
                     stateManager.showContent();
                     binding.tvContent.setText(bean);
+                    setShouldInterceptBackPressed(true);
                 }else {
                     stateManager.showError("请求错误");
+                    setShouldInterceptBackPressed(false);
                 }
 
             }
@@ -51,4 +55,9 @@ public class DemoViewHolder extends BaseViewHolder<ActivityViewHolderDemoHttpSta
     }
 
 
+    @Override
+    protected void onBackPressed2() {
+        super.onBackPressed2();
+        MyToast.show("点击了后退键2222");
+    }
 }

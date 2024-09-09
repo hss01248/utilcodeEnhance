@@ -29,17 +29,16 @@ import io.reactivex.functions.Consumer;
  * @Date 5/14/24 9:47 AM
  * @Version 1.0
  */
-public class FileItemGridViewHolder extends MyRecyclerViewHolder<LayoutFileItemGridBinding,String> {
+public class FileItemGridViewHolder extends MyRecyclerViewHolder<LayoutFileItemGridBinding, String> {
 
-    public static final  float dividerWidth = 1.0f;
+    public static final float dividerWidth = 1.0f;
 
-    public static int getSpanCount(){
+    public static int getSpanCount() {
         return DeviceUtils.isTablet() ? 6 : 5;
     }
 
 
-    static int width = (ScreenUtils.getScreenWidth()-(getSpanCount()-1)* SizeUtils.dp2px(dividerWidth)) /getSpanCount();
-
+    static int width = (ScreenUtils.getScreenWidth() - (getSpanCount() - 1) * SizeUtils.dp2px(dividerWidth)) / getSpanCount();
 
 
     public FileItemGridViewHolder(@NonNull View itemView) {
@@ -51,6 +50,12 @@ public class FileItemGridViewHolder extends MyRecyclerViewHolder<LayoutFileItemG
         return this;
     }
 
+    public FileItemGridViewHolder setFilterInfo(DisplayAndFilterInfo filterInfo) {
+        this.filterInfo = filterInfo;
+        return this;
+    }
+
+    DisplayAndFilterInfo filterInfo;
     Consumer<String> onItemClicked;
 
     @Override
@@ -63,39 +68,53 @@ public class FileItemGridViewHolder extends MyRecyclerViewHolder<LayoutFileItemG
 
         showInfo(data, itemView.getContext(), itemView,
                 binding.tv,
-                binding.iv,onItemClicked);
+                binding.iv, onItemClicked,filterInfo.showFileName);
     }
 
     public static void showInfo(String data, Context context,
                                 View rootView,
                                 TextView textView,
-                                ImageView iv,Consumer<String> onItemClicked) {
+                                ImageView iv, Consumer<String> onItemClicked,boolean showFileName) {
         File file = new File(data);
-        if(file.isDirectory()){
+        if (file.isDirectory()) {
             ImageLoader.with(context)
                     .res(R.drawable.icon_folder)
                     .scale(ScaleMode.CENTER_INSIDE)
                     .into(iv);
-        }else {
-            if(file.getName().endsWith(".jpg")||
-            file.getName().endsWith(".png")||
-                    file.getName().endsWith(".gif")||
-                    file.getName().endsWith(".webp")||
-            file.getName().endsWith(".mp4")){
+            textView.setVisibility(View.VISIBLE);
+        } else {
+            if (file.getName().endsWith(".jpg") ||
+                    file.getName().endsWith(".jpeg") ||
+                    file.getName().endsWith(".JPG") ||
+                    file.getName().endsWith(".png") ||
+                    file.getName().endsWith(".avif") ||
+                    file.getName().endsWith(".gif") ||
+                    file.getName().endsWith(".webp") ||
+                    file.getName().endsWith(".MP4") ||
+                    file.getName().endsWith(".mkv") ||
+                    file.getName().endsWith(".mp4")) {
+                //todo ulr
                 ImageLoader.with(context)
                         .file(data)
                         .defaultErrorRes(true)
                         .scale(ScaleMode.CENTER_CROP)
                         .into(iv);
-            }else {
+                if(!showFileName){
+                    textView.setVisibility(View.GONE);
+                }else {
+                    textView.setVisibility(View.VISIBLE);
+                }
+            } else {
                 ImageLoader.with(context)
                         .res(R.drawable.icon_file)
                         .scale(ScaleMode.CENTER_INSIDE)
                         .into(iv);
+                textView.setVisibility(View.VISIBLE);
             }
         }
-        String name = data.substring(data.lastIndexOf("/")+1);
+        String name = data.substring(data.lastIndexOf("/") + 1);
         textView.setText(name);
+
 
         rootView.setOnClickListener(new View.OnClickListener() {
             @Override

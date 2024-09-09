@@ -19,20 +19,18 @@ import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.IntentUtils;
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ReflectUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
-import com.hss.utils.enhance.api.MyCommonCallback;
 import com.hss.utils.enhance.R;
-
-
+import com.hss.utils.enhance.api.MyCommonCallback;
 import com.hss01248.openuri2.OpenUri2;
 import com.hss01248.toast.MyToast;
 
-
 import java.io.File;
 import java.util.List;
-
+import java.util.Map;
 
 
 /**
@@ -130,10 +128,26 @@ public class SysIntentUtil {
         try {
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_VIEW);
-            OpenUri2.addPermissionRW(intent);
+            OpenUri2.addPermissionR(intent);
+
+
             String extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString());
             String type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
-            intent.setDataAndType(uri,type);
+            if(TextUtils.isEmpty(type)){
+                try{
+                    Map<String, Object> map =  ReflectUtils.reflect("com.hss01248.media.uri.ContentUriUtil")
+                            .method("getInfos",uri)
+                            .get();
+                    String type2 = (String) map.get("mime_type");
+                    if(!TextUtils.isEmpty(type2)){
+                        intent.setDataAndType(uri,type);
+                    }
+                }catch (Throwable throwable){
+                    LogUtils.w(throwable);
+                }
+            }else{
+                intent.setDataAndType(uri,type);
+            }
             ActivityUtils.startActivity(intent);
         }catch (Throwable throwable){
             MyToast.error(StringUtils.getString(R.string.open_no_activity));

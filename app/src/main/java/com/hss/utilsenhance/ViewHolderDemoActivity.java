@@ -22,4 +22,9 @@ public class ViewHolderDemoActivity extends AppCompatActivity {
 
         viewHolder.init("请求成功");
     }
+
+
+
+
+
 }

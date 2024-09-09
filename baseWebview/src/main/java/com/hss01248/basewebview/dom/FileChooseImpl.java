@@ -11,7 +11,6 @@ import androidx.annotation.RequiresApi;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.StringUtils;
-import com.blankj.utilcode.util.UriUtils;
 import com.hss.utils.enhance.api.MyCommonCallback;
 import com.hss01248.basewebview.R;
 import com.hss01248.iwidget.singlechoose.SingleChooseDialogImpl;
@@ -61,7 +60,8 @@ public class FileChooseImpl extends MiddlewareWebChromeBase {
                 "getFilenameHint-"+fileChooserParams.getFilenameHint(),
                 fileChooserParams.getAcceptTypes(),
                 "isCaptureEnabled-"+fileChooserParams.isCaptureEnabled(),
-                //Use getAcceptTypes to determine suitable capture devices.  caputure="user" 前置摄像头,但传不过来
+                "createIntent:",
+                //Use getAcceptTypes to determine suitable capture devices.  caputure="user/envirement" 前置摄像头/后置摄像头,但传不过来
                 intent0);
         String[] washMimeTypes = MimeTypeUtil.washMimeType(fileChooserParams.getAcceptTypes());
        // LogUtils.d(washMimeTypes);
@@ -72,6 +72,7 @@ public class FileChooseImpl extends MiddlewareWebChromeBase {
                     Uri[] uris1 = new Uri[uris.size()];
                     for (int i = 0; i < uris.size(); i++) {
                         uris1[i] = uris.get(i);
+                        uris1[i] = MediaPickUtil.doCompress( uris1[i]);
                     }
                     filePathCallback.onReceiveValue(uris1);
                 }
@@ -104,7 +105,12 @@ public class FileChooseImpl extends MiddlewareWebChromeBase {
                     @Override
                     public void onSuccess(Uri uri) {
                         //压缩
-                        File file = LubanUtil.compressWithNoResize(UriUtils.uri2File(uri).getAbsolutePath());
+                        File file0 = MediaPickUtil.transUriToInnerFilePath(uri.toString());
+                        if(file0 ==null){
+                            filePathCallback.onReceiveValue(null);
+                            return;
+                        }
+                        File file = LubanUtil.compressWithNoResize(file0.getAbsolutePath());
                         Uri[] uris1 = {Uri.fromFile(file)};
                         filePathCallback.onReceiveValue(uris1);
                     }
@@ -148,6 +154,7 @@ public class FileChooseImpl extends MiddlewareWebChromeBase {
             }
             return true;
         }
+        //目标类型是图片或者视频
         if(isOnlyVideoOrImage(washMimeTypes)){
             if(fileChooserParams.isCaptureEnabled()){
                 new SingleChooseDialogImpl().showAtBottom(
@@ -175,6 +182,7 @@ public class FileChooseImpl extends MiddlewareWebChromeBase {
                                     CaptureImageUtil.takePicture(false,new MyCommonCallback<String>() {
                                         @Override
                                         public void onSuccess(String s) {
+
                                             File file = LubanUtil.compressWithNoResize(s);
                                             Uri[] uris1 = {Uri.fromFile(file)};
                                             filePathCallback.onReceiveValue(uris1);
@@ -196,12 +204,14 @@ public class FileChooseImpl extends MiddlewareWebChromeBase {
                         }
                 );
             }else {
+                //todo 没有capture时,应该只支持选图,不支持拍摄
                 MediaPickOrCaptureUtil.pickOrCaptureImageOrVideo(true,30, new MyCommonCallback<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
                         //Uri[] uris1 = {uri};
-                        File file = LubanUtil.compressWithNoResize(UriUtils.uri2File(uri).getAbsolutePath());
-                        Uri[] uris1 = {Uri.fromFile(file)};
+                        uri = MediaPickUtil.doCompress(uri);
+
+                        Uri[] uris1 = new Uri[]{uri};
                         filePathCallback.onReceiveValue(uris1);
                     }
                     @Override
@@ -245,15 +255,13 @@ public class FileChooseImpl extends MiddlewareWebChromeBase {
             }
             return true;
         }
-
-
-
+        //任意类型的文件
         MediaPickUtil.pickOne(new MyCommonCallback<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                //Uri[] uris1 = {uri};
-                File file = LubanUtil.compressWithNoResize(UriUtils.uri2File(uri).getAbsolutePath());
-                Uri[] uris1 = {Uri.fromFile(file)};
+                //图片/视频应压缩后上传....
+                uri = MediaPickUtil.doCompress(uri);
+                Uri[] uris1 = {uri};
                 filePathCallback.onReceiveValue(uris1);
             }
 
@@ -262,11 +270,12 @@ public class FileChooseImpl extends MiddlewareWebChromeBase {
                 MyCommonCallback.super.onError(code, msg, throwable);
                 filePathCallback.onReceiveValue(null);
             }
-        },washMimeTypes);
-
-
+        });
+        //washMimeTypes
         return true;
     }
+
+
 
     @Override
     public void openFileChooser(ValueCallback<Uri> valueCallback) {

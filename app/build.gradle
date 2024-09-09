@@ -4,11 +4,11 @@ plugins {
 //apply from: "configs/andresguard.gradle"
 android {
     compileSdk 34
-    //buildToolsVersion "30.0.0"
+    //
 
     defaultConfig {
         applicationId "com.hss.utilsenhance"
-        minSdk 21
+        minSdk 23
         targetSdk 34
         versionCode 1
         versionName "1.0"
@@ -59,6 +59,8 @@ dependencies {
     implementation project(path: ':viewholder-media')
     implementation project(':baseWebview')
     implementation project(':bitmap-saver')
+    implementation project(':sentry')
+    implementation project(path: ':webviewspider')
    // implementation project(':lock-app')
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

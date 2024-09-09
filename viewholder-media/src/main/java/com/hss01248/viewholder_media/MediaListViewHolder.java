@@ -81,6 +81,7 @@ public class MediaListViewHolder extends BaseViewHolder<LayoutMediaListBinding, 
                                 LayoutInflater.from(context), binding.getRoot(), false);
                         return new FileItemGridViewHolder(inflate.getRoot())
                                 .setOnItemClicked(onItemClicked)
+                                .setFilterInfo(filterInfo)
                                 .setBinding(inflate);
                     }else {
                         LayoutFileItemLinearBinding inflate = LayoutFileItemLinearBinding.inflate(

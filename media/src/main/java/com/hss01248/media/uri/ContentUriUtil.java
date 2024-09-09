@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
 
+import androidx.annotation.Keep;
+
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
 
@@ -22,6 +24,7 @@ import java.util.TreeMap;
  * @Date 24/11/2022 15:42
  * @Version 1.0
  */
+@Keep
 public class ContentUriUtil {
 
     public static Map<String, Object> queryMediaStore(Uri uri) {

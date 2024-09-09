@@ -34,6 +34,13 @@
         <activity android:name=".StateActivityHasParent" />
         <activity android:name=".StateActivitySmallView" />
         <activity android:name=".ViewHolderDemoActivity" />
+
+
+        <meta-data android:name="io.sentry.dsn" android:value="" />
+        <meta-data
+            android:name="io.sentry.traces.sample-rate"
+            android:value="1.0"
+            />
     </application>
 
 </manifest>

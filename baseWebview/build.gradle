@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 33
+        targetSdkVersion 34
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -53,19 +53,20 @@ dependencies {
     api project(path: ':openuri')
     //api 'org.jsoup:jsoup:1.11.2'
     api 'com.blankj:utilcodex:1.30.6'
-    api "com.github.hss01248.MyPermission:location:2.4.1"
+    api "com.github.hss01248.MyPermission:location:2.4.6"
     api project(path: ':media')
     api project(path: ':qr-scan')
     api project(path: ':iwidget')
     api project(path: ':viewState')
+    api project(path: ':downloader')
     api project(path: ':viewholder')
     //api project(path: ':basewebview-ajax-proxy')
     api project(path: ':refresh-loadmore')
+    api project(path: ':viewholder-media')
     api project(path: ':search-history-api')
-    api project(path: ':download-list')
+    //api project(path: ':download-list')
     api project(path: ':ext')
     api project(path: ':cipher')
-    api "com.github.hss01248.ImageLoader:downloader:3.8.2"
 
     api 'com.github.skyNet2017.Luban:luban:3.2.7'
     //api 'com.github.skyNet2017.Luban:showResult:3.2.7'
@@ -79,11 +80,12 @@ dependencies {
     api "androidx.sqlite:sqlite:2.0.1"
     api 'io.github.yuweiguocn:GreenDaoUpgradeHelper:v2.2.1'
 
-    api 'com.github.hss01248.ImageLoader:bigimageviewpager:3.8.3'
+    api "com.github.hss01248.ImageLoader:bigimageviewpager:${imageLoaderVersion}"
     api "org.jsoup:jsoup:1.13.1"
 
     api 'com.github.pinguo-zhouwei:CustomPopwindow:2.1.1'
     api 'com.github.hss01248.flipperUtil:network-hooks-auth:1.7.20-dev'
+    api 'com.github.getActivity:XXPermissions:20.0'//请求存储权限
     //api 'org.adblockplus:adblock-android:4.4.0'
     //implementation group: 'org.adblockplus', name: 'adblock-android-webview', version: '4.4.0'
 }
