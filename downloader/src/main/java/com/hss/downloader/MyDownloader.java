@@ -291,6 +291,7 @@ public class MyDownloader {
                      @Override
                      public void run() {
                          info.status = DownloadInfo.STATUS_DOWNLOADING;
+                         info.createTime = System.currentTimeMillis();
                          DownloadInfoUtil.getDao().update(info);
                          EventBus.getDefault().post(info);
                      }
