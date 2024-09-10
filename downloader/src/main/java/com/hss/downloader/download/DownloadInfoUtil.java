@@ -3,6 +3,8 @@ package com.hss.downloader.download;
 import android.Manifest;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
+import android.os.Environment;
 import android.text.TextUtils;
 
 import com.blankj.utilcode.util.LogUtils;
@@ -44,9 +46,12 @@ public class DownloadInfoUtil {
     static void init(Context context) {
         Context context2 = context;
 
-        if(  PermissionUtils.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE) ||
-                PermissionUtils.isGranted(Manifest.permission.MANAGE_EXTERNAL_STORAGE)){
+        if(  PermissionUtils.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE) ){
             context2 = new MyDBContext(context);
+        }else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if(Environment.isExternalStorageManager()){
+                context2 = new MyDBContext(context);
+            }
         }
         DaoMaster.OpenHelper helper = new MySQLiteOpenHelper(context2, "imgdownload.db");
         SQLiteDatabase db = helper.getWritableDatabase();

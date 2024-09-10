@@ -36,7 +36,7 @@
         <activity android:name=".ViewHolderDemoActivity" />
 
 
-        <meta-data android:name="io.sentry.dsn" android:value="" />
+        <meta-data android:name="io.sentry.dsn" android:value="https://0d7370b9f13b419bbf0761fe3867aa22@sentry-web.hss01248.tech/2" />
         <meta-data
             android:name="io.sentry.traces.sample-rate"
             android:value="1.0"

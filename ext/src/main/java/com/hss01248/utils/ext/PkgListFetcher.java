@@ -73,10 +73,10 @@ public class PkgListFetcher {
             for (Fragment fragment : fragments) {
                 if(fragment.isAdded()){
                     if(fragment instanceof InAppResultFragment){
-                        LogUtils.w("have a InAppResultFragment",fragment);
+                        LogUtils.i("have a InAppResultFragment",fragment);
                         return true;
                     }else if(fragment instanceof GoOutOfAppForResultFragment){
-                        LogUtils.w("have a GoOutOfAppForResultFragment",fragment);
+                        LogUtils.i("have a GoOutOfAppForResultFragment",fragment);
                         return true;
                     }
                 }

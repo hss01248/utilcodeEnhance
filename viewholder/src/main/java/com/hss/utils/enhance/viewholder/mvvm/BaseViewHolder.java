@@ -125,13 +125,13 @@ public abstract class BaseViewHolder<VB extends ViewBinding, InitInfo>
         visiableListenerFrameLayout.getViewTreeObserver().addOnWindowAttachListener(new ViewTreeObserver.OnWindowAttachListener() {
             @Override
             public void onWindowAttached() {
-                LogUtils.w("onWindowAttached");
+                LogUtils.d("onWindowAttached");
                 onBackPressedCallback.setEnabled(shouldInterceptBackPressed2());
             }
 
             @Override
             public void onWindowDetached() {
-                LogUtils.w("onWindowDetached");
+                LogUtils.d("onWindowDetached");
                 onBackPressedCallback.setEnabled(false);
             }
         });

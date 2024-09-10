@@ -2,6 +2,8 @@ package com.hss01248.viewholder_media;
 
 import android.content.Context;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.core.util.Pair;
 import androidx.lifecycle.LifecycleOwner;
@@ -87,6 +89,8 @@ public class FileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBinding,Str
                 loadDir(currentPath);
             }
         });
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        stateManager.setLayoutParams(params);
         binding.llContainer.addView(stateManager);
 
         listViewHolder.setOnItemClicked(new Consumer<String>() {
@@ -275,7 +279,7 @@ public class FileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBinding,Str
                     }
                 });
                 //只列出文件名,不列出上级路径,蛋疼的api
-                LogUtils.w(dirs,files2);
+                LogUtils.d(dirs,files2);
                 List<String> list = new ArrayList<>();
 
                 //排序

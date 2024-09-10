@@ -59,6 +59,7 @@ dependencies {
     implementation project(path: ':viewholder-media')
     implementation project(':baseWebview')
     implementation project(':bitmap-saver')
+    api "com.github.hss01248.flipperUtil:aop-utilcode:1.7.21-dev"
     implementation project(':sentry')
     implementation project(path: ':webviewspider')
    // implementation project(':lock-app')
@@ -69,7 +70,7 @@ dependencies {
     //api 'com.google.android:flexbox:0.3.1'
     api 'com.google.android.flexbox:flexbox:3.0.0'
     implementation 'com.github.skyNet2017.Luban:dataForPhotoSelet:3.3.0'
-    debugImplementation 'com.github.hss01248.accountCacher:accountcache:1.1.6'
+    debugImplementation 'com.github.hss01248.accountCacher:accountcache:1.2.0'
 
     implementation group: 'cn.qqtheme.framework', name: 'FilePicker', version: '1.5.5'
 

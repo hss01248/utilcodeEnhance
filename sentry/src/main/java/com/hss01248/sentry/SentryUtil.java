@@ -45,6 +45,8 @@ public class SentryUtil {
 
     static  IGetInfo iGetInfo = new DefaultGetInfo();
 
+
+
     /**
      * 业务名
      */
@@ -310,6 +312,8 @@ public class SentryUtil {
            /* if(ReporterContainer.shouldNotReport(o)){
                 return;
             }*/
+            //缩减上报数据大小
+            Sentry.clearBreadcrumbs();
             if (o instanceof SentryEvent) {
                 Sentry.captureEvent((SentryEvent) o);
             }  else if(o instanceof String){
