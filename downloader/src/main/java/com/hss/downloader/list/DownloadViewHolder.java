@@ -1,11 +1,13 @@
 package com.hss.downloader.list;
 
+import android.os.Environment;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 
+import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.ConvertUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.TimeUtils;
@@ -156,7 +158,18 @@ public class DownloadViewHolder extends BaseViewHolder {
                 binding.tvStatusMsg.setText("下载完成");
             }
             if(!new File(info.dir+"/"+info.name).exists()){
-                binding.tvStatusMsg.setText("下载完成但文件已删除");
+                if(info.dir ==null){
+                    binding.tvStatusMsg.setText("下载完成,page");
+                }else if(info.dir.startsWith(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Android/data/")){
+                    if(info.dir.contains(AppUtils.getAppPackageName())){
+                        binding.tvStatusMsg.setText("下载完成但文件已删除");
+                    }else {
+                        binding.tvStatusMsg.setText("下载完成,在其他应用私有目录");
+                    }
+                }else {
+                    binding.tvStatusMsg.setText("下载完成但文件已删除");
+                }
+
             }
         }
 

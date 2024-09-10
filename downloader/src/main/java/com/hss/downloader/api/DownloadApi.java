@@ -17,6 +17,7 @@ import com.hss.downloader.callback.ExeOnMainDownloadCallback;
 import com.hss.downloader.download.DownloadInfoUtil;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,6 +58,33 @@ public class DownloadApi {
     }
 
     private boolean forceReDownload;
+
+
+    public void setSaveToHiddenDir(boolean saveToHiddenDir) {
+        this.saveToHiddenDir = saveToHiddenDir;
+        if(saveToHiddenDir){
+            File dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
+                    +"/.toyota/"+AppUtils.getAppName().toLowerCase());
+            if(!dir.exists()){
+                dir.mkdirs();
+            }
+            File file = new File(dir,".nomedia");
+            if(!file.exists()){
+                try {
+                    file.createNewFile();
+                } catch (IOException e) {
+                    LogUtils.w(e);
+                }
+            }
+            this.dir = dir.getAbsolutePath();
+        }
+    }
+
+    public boolean isSaveToHiddenDir() {
+        return saveToHiddenDir;
+    }
+
+    private boolean saveToHiddenDir;
     private Map<String,String> headers = new HashMap<>();
 
     public String getUrl() {
@@ -175,9 +203,6 @@ public class DownloadApi {
                     //批量下载的,在list api里批量判断
                     return null;
                 }
-
-
-
                 // 优化判断逻辑: 判断一个文件是否下载过,是否强制下载
                 return DownloadCallbackDbDecorator.shouldStartRealDownload(url,path,forceReDownload,DownloadApi.this);
             }
@@ -187,6 +212,7 @@ public class DownloadApi {
                 if(result == null){
                     downlodImpl.download(DownloadApi.this);
                 }else {
+
                     callback.onSuccess(url,result.getAbsolutePath());
                 }
             }
@@ -232,7 +258,8 @@ public class DownloadApi {
         if(TextUtils.isEmpty(dir)){
             dir = getSaveDir().getAbsolutePath();
         }
-        File folder = new File(dir);
+        //底层库会做这个事情
+        /*File folder = new File(dir);
         folder.mkdirs();
         String[] list = folder.list();
         //一级目录下最多500个文件/文件夹
@@ -252,7 +279,7 @@ public class DownloadApi {
                     return dir;
                 }
             }
-        }
+        }*/
         return dir;
     }
 
@@ -267,15 +294,30 @@ public class DownloadApi {
     }
 
     static File getSaveDir(){
-        File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        //和AndroidDownloader类里保持一致
+        File dir2 = Utils.getApp().getExternalFilesDir("downloader");
+        if(dir2 == null){
+            dir2 = new File(Utils.getApp().getFilesDir(),"downloader");
+        }
+        if(!dir2.exists()){
+            dir2.mkdirs();
+        }
+        return dir2;
+        /*File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         dir.mkdirs();
         LogUtils.i("sd卡是否有写权限: "+ dir.canWrite()+", "+dir.getAbsolutePath());
         if(dir.canWrite()){
-            File file = new File(dir, AppUtils.getAppName());
+            File file = new File(dir, AppUtils.getAppName().toLowerCase());
             file.mkdirs();
             return file;
         }else {
-            return Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
-        }
+            //和AndroidDownloader类里保持一致
+            File dir2 = Utils.getApp().getExternalFilesDir("downloader");
+            if(dir2 == null){
+                dir2 = new File(Utils.getApp().getFilesDir(),"downloader");
+            }
+            dir2.mkdirs();
+            return dir2;
+        }*/
     }
 }

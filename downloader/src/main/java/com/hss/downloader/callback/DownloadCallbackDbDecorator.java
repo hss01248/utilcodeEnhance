@@ -49,11 +49,12 @@ public class DownloadCallbackDbDecorator implements IDownloadCallback {
         DownloadInfo load = DownloadInfoUtil.getDao().load(url);
         if (load != null) {
             load.updateTime = System.currentTimeMillis();
-            if (load.downloadSuccess() && !forceRedownload) {
+            if (load.downloadSuccess() && !forceRedownload && load.filePath !=null) {
                 File file = new File(load.filePath);
                 if (file.exists() && file.length() > 0) {
                     load.status = DownloadInfo.STATUS_SUCCESS;
                     DownloadInfoUtil.getDao().update(load);
+                    LogUtils.w("已经下载成功", load.filePath,load.url);
                     //callback.onSuccess(url,load.filePath);
                     return file;
                     //return ;
@@ -69,9 +70,7 @@ public class DownloadCallbackDbDecorator implements IDownloadCallback {
             load.updateTime = System.currentTimeMillis();
             load.status = DownloadInfo.STATUS_ORIGINAL;
             load.url = url;
-            load.filePath = realPath;
-            load.name = realPath.substring(realPath.lastIndexOf("/") + 1);
-            load.dir = realPath.substring(0, realPath.lastIndexOf("/"));
+            load.resetFilePath(realPath);
             DownloadInfoUtil.getDao().insert(load);
         }
         return null;
@@ -130,9 +129,11 @@ public class DownloadCallbackDbDecorator implements IDownloadCallback {
                 long len = compress.length();
                 //裁剪到mediastore
                 if (api.isCutToMediaStore()) {
-                    boolean success = cutFileToMediaStore(compress, api.getMediaStoreRelativePath());
+                    boolean success = cutFileToMediaStore(compress,
+                            api.getMediaStoreRelativePath() +"/"+ compress.getName());
                     if (success) {
-                        path2 = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + realPath;
+                        path2 = Environment.getExternalStorageDirectory().getAbsolutePath() + "/"
+                                + api.getMediaStoreRelativePath()+"/"+ compress.getName();
                     }
                 }
                 callback.onSuccess(url, path2);
@@ -141,7 +142,7 @@ public class DownloadCallbackDbDecorator implements IDownloadCallback {
                     LogUtils.e("download info in db == null onSuccess, " + url);
                 } else {
                     load.status = DownloadInfo.STATUS_SUCCESS;
-                    load.filePath = realPath;
+                    load.resetFilePath(path2);
                     load.totalLength = len;
                     load.currentOffset = len;
                     DownloadInfoUtil.getDao().update(load);

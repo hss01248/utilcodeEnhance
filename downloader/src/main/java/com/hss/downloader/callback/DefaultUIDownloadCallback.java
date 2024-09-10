@@ -7,6 +7,8 @@ import com.blankj.utilcode.util.ConvertUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.hss.downloader.IDownloadCallback;
 
+import java.net.URLDecoder;
+
 /**
  * @author: Administrator
  * @date: 2023/2/4
@@ -30,7 +32,7 @@ public class DefaultUIDownloadCallback implements IDownloadCallback {
     public void onStart(String url, String realPath) {
          dialog =  new ProgressDialog(ActivityUtils.getTopActivity());
         dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-         String msg = "文件下载中:"+url+"\n-->\n"+realPath+"\n";
+         String msg = "文件下载中:"+ URLDecoder.decode(url)+"\n-->\n"+realPath+"\n";
         dialog.setMessage(msg);
         dialog.setCanceledOnTouchOutside(false);
         //dialog.setCancelable(false);
@@ -47,6 +49,10 @@ public class DefaultUIDownloadCallback implements IDownloadCallback {
             dialog.setMessage(msg);
             dialog.setMax((int) totalLength);
             dialog.setProgress((int) currentOffset);
+            if(currentOffset == totalLength && currentOffset >0){
+                dialog.dismiss();
+            }
+
         }
         callback.onProgress(url, realPath, currentOffset, totalLength,speed);
     }

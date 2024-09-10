@@ -1,10 +1,6 @@
 package com.hss01248.basewebview.download;
 
-import android.Manifest;
 import android.content.DialogInterface;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Environment;
 import android.text.TextUtils;
 import android.webkit.DownloadListener;
 import android.webkit.URLUtil;
@@ -12,51 +8,49 @@ import android.webkit.URLUtil;
 import androidx.appcompat.app.AlertDialog;
 
 import com.blankj.utilcode.util.ActivityUtils;
-import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.ConvertUtils;
 import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.PermissionUtils;
-import com.blankj.utilcode.util.Utils;
-import com.hss01248.basewebview.WebConfigger;
+import com.hss.downloader.api.DownloadApi;
+import com.hss.downloader.callback.DefaultSilentDownloadCallback;
 
-import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class WebviewDownladListenerImpl implements DownloadListener {
+
+    static Pattern pattern = Pattern.compile("filename=['\"]?([^'\";]+)['\"]?");
+    public static String parseFileName(String contentDisposition) {
+        if (contentDisposition == null) {
+            return null;
+        }
+
+        // 正则表达式匹配 filename="xxx" 或 filename='xxx' 或 filename=xxx（不带引号）的形式
+
+        Matcher matcher = pattern.matcher(contentDisposition);
+
+        if (matcher.find()) {
+            return matcher.group(1);
+            // 返回匹配到的文件名部分，去掉引号和前缀 "filename=" 等字符串。  注意这里假设了第一个捕获组就是我们要找的文件名内容。
+            // 如果有多余的前后缀需要进一步处理可以自行修改正则表达式或者增加额外的逻辑判断来确保准确性。
+            // 例如对于某些特殊情况可能还需要考虑编码问题等等细节因素影响最终结果展示效果和用户体验感受度提升空间还是很大的哦！不过目前这个简单版本已经能够满足大部分常见场景需求啦~
+        }
+        return null;
+    }
 
     @Override
     public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
         LogUtils.i(url,userAgent,contentDisposition,mimetype,contentLength);
         String name = URLUtil.guessFileName(url,contentDisposition,mimetype);
         //contentDisposition:  attachment; filename="redditsave.com_p0dqho9nqh891.gif"
-        if(!TextUtils.isEmpty(contentDisposition)){
-            if(contentDisposition.contains(";")){
-                String[] split = contentDisposition.split(";");
-                for (String s : split) {
-                    if(!TextUtils.isEmpty(s)){
-                        s = s.trim();
-                        if(s.contains("=")){
-                            String[] split1 = s.split("=");
-                           if(split1.length == 2){
-                               if("filename".equals(split1[0])){
-                                   String str = split1[1];
-                                   str = str.replace("\"","");
-                                   str = str.replace("\"","");
-                                   str = str.replace("\"","");
-                                   str = str.replace("\"","");
-                                   name = str;
-                                   break ;
-                               }
-                           }
-                        }
-                    }
-                }
-            }
+        String name2 = parseFileName(contentDisposition);
+        if(!TextUtils.isEmpty(name2) && name2.contains(".")){
+            name = name2;
         }
         String size = "未知";
         if(contentLength >0){
             size = ConvertUtils.byte2FitMemorySize(contentLength,1);
         }
-        String str = "是否从\n"+url+"下载文件:\n"+name+"?\n文件大小预计:"+ size;
+        String str = "是否从\n"+url+"\n下载文件:\n"+name+"?\n文件大小预计:"+ size;
 
         String finalName = name;
         AlertDialog dialog  = new AlertDialog.Builder(ActivityUtils.getTopActivity())
@@ -65,7 +59,7 @@ public class WebviewDownladListenerImpl implements DownloadListener {
                 .setPositiveButton("ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        doDownload(url, finalName);
+                        doDownload(url, finalName,contentLength);
 
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -80,56 +74,16 @@ public class WebviewDownladListenerImpl implements DownloadListener {
 
     }
 
-    private void doDownload(String url, String name) {
+    private void doDownload(String url, String name,long contentLength) {
+        DownloadApi.create(url)
+                .setName(name)
+                .useServiceToDownload(contentLength > 5*1024*1024)
+                .setCutToMediaStore(true)
+                .setShowDefaultLoadingAndToast(true)
+                .callback(new DefaultSilentDownloadCallback());
 
-        String dir = subDir(getRightDir(),url);
-        //Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
-        WebConfigger.getInit().getIDownloader().doDownload(url, name,dir);
-       /* List<DownloadUrls> downloadInfos = new ArrayList<>();
-        DownloadUrls info = new DownloadUrls();
-        info.url = url;
-        info.name = name;
-        info.dir = subDir(getRightDir(),url);//Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
-        downloadInfos.add(info);
-        MyDownloader.download(downloadInfos);*/
     }
 
-    private String subDir(String rightDir, String url) {
-        Uri uri = Uri.parse(url);
-        File dir = new File(rightDir,uri.getHost());
-        if(!dir.exists()){
-            dir.mkdirs();
-        }
-        return dir.getAbsolutePath();
-    }
-
-    private String getRightDir() {
-        //File directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-
-      /*  File file = new File(directory,"tmp001.txt");
-        if(file.canWrite() && file.canRead()){
-
-        }else {
-
-        }*/
 
 
-        if(PermissionUtils.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                || ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
-                && Environment.isExternalStorageManager())){
-            File directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-            File dir = new File(directory, AppUtils.getAppName());
-            if(!dir.exists()){
-                boolean mkdirs = dir.mkdirs();
-                if(mkdirs){
-                    return dir.getAbsolutePath();
-                }
-            }else {
-                return dir.getAbsolutePath();
-            }
-        }
-
-
-        return Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
-    }
 }

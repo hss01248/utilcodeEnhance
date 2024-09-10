@@ -74,7 +74,9 @@ public class OkDownloadImpl2 implements IDownload, IDownload2 {
             api.getHeaders().put("User-Agent", userAgent);
         }
         AndroidDownloader.prepareDownload(api.getUrl())
-                .filePath(api.getRealPath())
+                //.filePath(api.getRealPath())
+                .saveDir(api.getDir())
+                .fileName(api.getName())
                 .headers(api.getHeaders())
                 .start(new DownloadCallbackOnMainThreadWrapper(new com.hss01248.download_okhttp.IDownloadCallback() {
                     @Override

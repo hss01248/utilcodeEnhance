@@ -99,7 +99,7 @@ public class DownloadRecordListHolder extends BaseViewHolder<ContainerHistoryCol
         holder.binding.tvMenus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MyToast.show("筛选状态,排序");
+
             }
         });
 

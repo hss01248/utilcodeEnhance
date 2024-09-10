@@ -4,6 +4,6 @@ public interface WebviewInit {
 
     Class html5ActivityClass();
 
-    IDownloader getIDownloader();
+
 
 }
