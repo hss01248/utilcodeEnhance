@@ -184,6 +184,7 @@ public class DownloadInfoUtil {
         PagerDto<DownloadInfo> pagerDto1 = new PagerDto<DownloadInfo>();
         pagerDto1.isLast = list.size() < pagerDto.pageSize;
         pagerDto1.datas = list;
+        pagerDto1.totalPage = (long) Math.ceil(builder.count()*1.0f/pagerDto.pageSize);
         //在这里自动计算偏移,在界面里直接透传即可
         pagerDto1.offset = pagerDto.offset+ list.size();
         pagerDto1.pageSize = pagerDto.pageSize;

@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.blankj.utilcode.util.SizeUtils;
@@ -18,6 +17,9 @@ import com.hss01248.toast.MyToast;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
+import com.warkiz.widget.IndicatorSeekBar;
+import com.warkiz.widget.OnSeekChangeListener;
+import com.warkiz.widget.SeekParams;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.util.ArrayList;
@@ -43,13 +45,13 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
     }
 
     public void initRecyclerViewDefault() {
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
-       /* RecyclerView.ItemDecoration itemDecoration = (RecyclerView.ItemDecoration) DividerDecoration.builder(binding.getRoot().getContext())
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(binding.statefulLayout.getContext()));
+       /* RecyclerView.ItemDecoration itemDecoration = (RecyclerView.ItemDecoration) DividerDecoration.builder(binding.statefulLayout.getContext())
                 .color(Color.parseColor("#eeeeee"))
                 .size(SizeUtils.dp2px(1))
                 .build();*/
-        binding.recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(binding.getRoot().getContext())
-                        .color(Color.parseColor("#eeeeee"))
+        binding.recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(binding.statefulLayout.getContext())
+                .color(Color.parseColor("#eeeeee"))
                 .size(SizeUtils.dp2px(1))
                 .build());
     }
@@ -59,7 +61,7 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
      * @return
      */
     public void setPageSize(int pageSize) {
-         dto.pageSize = pageSize;
+        dto.pageSize = pageSize;
     }
 
     public void setEmptyMsg(String emptyMsg) {
@@ -87,14 +89,14 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
         adapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
-               if(! loadDataImpl.onItemLongPressed(view, adapter,(T) adapter.getData().get(position),position)){
-                   if(onItemLongClickListener != null){
-                      return onItemLongClickListener.onItemLongClick(adapter, view, position);
-                   }
-                   return false;
-               }else {
-                   return true;
-               }
+                if(! loadDataImpl.onItemLongPressed(view, adapter,(T) adapter.getData().get(position),position)){
+                    if(onItemLongClickListener != null){
+                        return onItemLongClickListener.onItemLongClick(adapter, view, position);
+                    }
+                    return false;
+                }else {
+                    return true;
+                }
 
             }
         });
@@ -126,6 +128,11 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
     ILoadData<T> loadDataImpl;
     boolean hasSucceed;
 
+    public void setAsPageLoad(boolean asPageLoad) {
+        this.asPageLoad = asPageLoad;
+    }
+
+    boolean asPageLoad = true;
     private void init2() {
         RefreshLayout refreshLayout = binding.refreshLayout;
         //refreshLayout.setRefreshHeader(new MaterialHeader(parent.getContext()));
@@ -134,73 +141,162 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
                 //refreshlayout.finishRefresh(2000/*,false*/);//传入false表示刷新失败
-                PagerDto<T> firstPage = dto.firstPage();
-                loadDataImpl.queryData(firstPage, new MyCommonCallback<PagerDto<T>>() {
-                    @Override
-                    public void onSuccess(PagerDto<T> tPagerDto) {
-                        binding.getRoot().showContent();
-                        refreshlayout.finishRefresh();
-                        hasSucceed = true;
-                        if(tPagerDto.datas == null || tPagerDto.datas.isEmpty()){
-                            adapter.replaceData(new ArrayList<>());
-                            binding.getRoot().showEmpty(emptyMsg,0,null,null);
-                        }else {
-                            binding.getRoot().showContent();
-                            adapter.replaceData(tPagerDto.datas);
-                            //dto = tPagerDto;
-                            RefreshLoadMoreRecycleViewHolder.this.dto = firstPage;
-                            RefreshLoadMoreRecycleViewHolder.this.dto.isLast = tPagerDto.isLast;
-
-                        }
-                    }
-
-                    @Override
-                    public void onError(String msg) {
-                        MyCommonCallback.super.onError(msg);
-                        refreshlayout.finishRefresh();
-                        if(hasSucceed){
-                            MyToast.error(msg);
-                        }else {
-                            binding.getRoot().showError(msg);
-                        }
-                    }
-                });
+                onPre(refreshlayout);
             }
+
+
         });
         refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshlayout) {
                 //refreshlayout.finishLoadMore(2000/*,false*/);//传入false表示加载失败
-                PagerDto<T> copy = dto.copy();
-                copy.pageIndex++;
-                copy.offset += copy.pageSize;
-                loadDataImpl.queryData(copy, new MyCommonCallback<PagerDto<T>>() {
-                    @Override
-                    public void onSuccess(PagerDto<T> tPagerDto) {
+                onNext(refreshlayout,dto.pageIndex+1);
+            }
+        });
 
-                        if(tPagerDto.datas == null || tPagerDto.datas.isEmpty()){
-                            refreshlayout.finishLoadMoreWithNoMoreData();
-                        }else {
-                            refreshlayout.finishLoadMore(true);
-                            adapter.addData(tPagerDto.datas);
+        if(asPageLoad){
+            binding.llPager.setVisibility(View.VISIBLE);
+            binding.tvPre.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onPre(binding.refreshLayout);
 
-                            dto.pageIndex = copy.pageIndex;
-                            dto.offset = copy.offset;
-                            dto.isLast = tPagerDto.isLast;
-                        }
-                    }
+                }
+            });
+            binding.tvNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onNext(binding.refreshLayout,dto.pageIndex+1);
+                }
+            });
 
-                    @Override
-                    public void onError(String msg) {
-                        MyCommonCallback.super.onError(msg);
-                       refreshlayout.finishLoadMore(false);
-                    }
-                });
+            binding.sbPager.setOnSeekChangeListener(new OnSeekChangeListener() {
+                @Override
+                public void onSeeking(SeekParams seekParams) {
+
+                }
+
+                @Override
+                public void onStartTrackingTouch(IndicatorSeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(IndicatorSeekBar seekBar) {
+                    onNext(binding.refreshLayout,seekBar.getProgress());
+                }
+            });
+        }else {
+            binding.llPager.setVisibility(View.GONE);
+        }
+
+
+    }
+
+    private void onPre(RefreshLayout refreshlayout) {
+        PagerDto<T> firstPage = null;
+        if(asPageLoad){
+            firstPage = dto.prePage();
+        }else {
+            firstPage = dto.firstPage();
+        }
+        PagerDto<T> finalFirstPage = firstPage;
+        if(asPageLoad){
+            binding.statefulLayout.showLoading();
+        }
+        loadDataImpl.queryData(firstPage, new MyCommonCallback<PagerDto<T>>() {
+            @Override
+            public void onSuccess(PagerDto<T> tPagerDto) {
+                binding.statefulLayout.showContent();
+                refreshlayout.finishRefresh();
+                hasSucceed = true;
+                if(tPagerDto.datas == null || tPagerDto.datas.isEmpty()){
+                    adapter.replaceData(new ArrayList<>());
+                    binding.statefulLayout.showEmpty(emptyMsg,0,null,null);
+                }else {
+                    binding.statefulLayout.showContent();
+                    adapter.replaceData(tPagerDto.datas);
+                    //dto = tPagerDto;
+                }
+                RefreshLoadMoreRecycleViewHolder.this.dto = finalFirstPage;
+                RefreshLoadMoreRecycleViewHolder.this.dto.isLast = tPagerDto.isLast;
+                RefreshLoadMoreRecycleViewHolder.this.dto.totalPage = tPagerDto.totalPage;
+                if(asPageLoad){
+                    binding.sbPager.setProgress(dto.pageIndex);
+                    binding.sbPager.setMax(dto.totalPage);
+                    binding.tvPageIndex.setText(dto.pageIndex+"/"+dto.totalPage);
+                }
+            }
+
+            @Override
+            public void onError(String msg) {
+                MyCommonCallback.super.onError(msg);
+                refreshlayout.finishRefresh();
+                if(hasSucceed && !asPageLoad){
+                    MyToast.error(msg);
+                }else {
+                    binding.statefulLayout.showError(msg);
+                }
             }
         });
     }
 
+    private void onNext(RefreshLayout refreshlayout,long pageIndex) {
+        PagerDto<T> copy = dto.copy();
+        copy.pageIndex =  pageIndex;
+        copy.offset =  copy.pageSize * pageIndex;
 
+        if(asPageLoad){
+            binding.statefulLayout.showLoading();
+        }
+        loadDataImpl.queryData(copy, new MyCommonCallback<PagerDto<T>>() {
+            @Override
+            public void onSuccess(PagerDto<T> tPagerDto) {
+
+                if(tPagerDto.datas == null || tPagerDto.datas.isEmpty()){
+                    if(asPageLoad){
+                        binding.statefulLayout.showEmpty();
+                    }else {
+                        refreshlayout.finishLoadMoreWithNoMoreData();
+                    }
+
+                }else {
+                    if(asPageLoad){
+                        binding.statefulLayout.showContent();
+                    }else {
+                        refreshlayout.finishLoadMore(true);
+                    }
+                    if(asPageLoad){
+                        adapter.replaceData(tPagerDto.datas);
+                    }else {
+                        adapter.addData(tPagerDto.datas);
+                    }
+                }
+                dto.pageIndex = copy.pageIndex;
+                dto.offset = copy.offset;
+                dto.isLast = tPagerDto.isLast;
+                dto.totalPage = tPagerDto.totalPage;
+                if(asPageLoad){
+                    binding.sbPager.setProgress(dto.pageIndex);
+                    binding.sbPager.setMax(dto.totalPage);
+                    binding.tvPageIndex.setText(dto.pageIndex+"/"+dto.totalPage);
+                }
+            }
+
+            @Override
+            public void onError(String msg) {
+                MyCommonCallback.super.onError(msg);
+                dto.pageIndex = copy.pageIndex;
+                dto.offset = copy.offset;
+                if(asPageLoad){
+                    binding.statefulLayout.showError(msg);
+                }else {
+                    refreshlayout.finishLoadMore(false);
+                }
+
+            }
+        });
+    }
 
     @Override
     protected void assignDataAndEventReal(Map<String,Object> data) {
@@ -210,7 +306,7 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
     }
 
     private void loadFirstTime(String searchKey,Map<String,Object> data) {
-        binding.getRoot().showLoading();
+        binding.statefulLayout.showLoading();
         PagerDto<T> firstPage = dto.firstPage();
         firstPage.searchText = searchKey;
         firstPage.searchParams = data;
@@ -221,11 +317,11 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
                 if(tPagerDto.datas == null || tPagerDto.datas.isEmpty()){
                     dto = firstPage;
                     dto.isLast = true;
-                    binding.getRoot().showEmpty(emptyMsg,0,null,null);
+                    binding.statefulLayout.showEmpty(emptyMsg,0,null,null);
                 }else {
                     dto = firstPage;
                     dto.isLast = tPagerDto.isLast;
-                    binding.getRoot().showContent();
+                    binding.statefulLayout.showContent();
                     adapter.replaceData(tPagerDto.datas);
                 }
             }
@@ -233,7 +329,7 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
             @Override
             public void onError(String msg) {
                 MyCommonCallback.super.onError(msg);
-                binding.getRoot().showError(msg);
+                binding.statefulLayout.showError(msg);
             }
         });
     }
