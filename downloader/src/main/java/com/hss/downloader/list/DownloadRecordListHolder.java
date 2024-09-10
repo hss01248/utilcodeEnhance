@@ -1,11 +1,13 @@
 package com.hss.downloader.list;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 
 import androidx.core.util.Pair;
 import androidx.lifecycle.LifecycleOwner;
 
+import com.blankj.utilcode.util.ThreadUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -128,28 +130,48 @@ public class DownloadRecordListHolder extends BaseViewHolder<ContainerHistoryCol
         ISingleChooseItem<String> item2 = new ISingleChooseItem<String>() {
             @Override
             public String text() {
-                return "当前批次所有失败项全部重试";
+                return "当前批次所有失败项全部重试(404的会自动移除)";
             }
 
             @Override
             public void onItemClicked(int position, String bean) {
-                List data = adapter.getData();
-                List<DownloadInfo> infos = new ArrayList<>();
-                for (Object datum : data) {
-                    DownloadInfo info = (DownloadInfo) datum;
-                    if(info.status == DownloadInfo.STATUS_FAIL){
-                        infos.add(info);
-                        File file = new File(info.dir,info.name);
-                        if(file.exists()){
-                            file.delete();
+
+                ThreadUtils.executeByIo(new ThreadUtils.SimpleTask<Object>() {
+                    @Override
+                    public Object doInBackground() throws Throwable {
+                        List data = adapter.getData();
+                        List<DownloadInfo> infos = new ArrayList<>();
+                        for (Object datum : data) {
+                            DownloadInfo info = (DownloadInfo) datum;
+                            if(info.status == DownloadInfo.STATUS_FAIL){
+                                if(info.dir !=null && info.name !=null){
+                                    File file = new File(info.dir,info.name);
+                                    if(file.exists()){
+                                        file.delete();
+                                    }
+                                }
+                                if(!TextUtils.isEmpty(info.errMsg)  ){
+                                    if(info.errMsg.contains("404")){
+                                        DownloadInfoUtil.getDao().delete(info);
+                                        continue;
+                                    }
+                                }
+                                infos.add(info);
+                                MyDownloader.startDownload(info);
+                            }
                         }
-                        MyDownloader.startDownload(info);
+                        if(infos.isEmpty()){
+                            MyToast.error("当前没有失败条目");
+                        }
+                        return null;
                     }
-                }
-                if(infos.isEmpty()){
-                    MyToast.error("当前没有失败条目");
-                    return;
-                }
+
+                    @Override
+                    public void onSuccess(Object result) {
+
+                    }
+                });
+
 
 
 
