@@ -13,6 +13,7 @@ import com.hss.downloader.MyDownloader;
 import com.hss.downloader.R;
 import com.hss.downloader.databinding.ContainerHistoryCollectBinding;
 import com.hss.downloader.download.DownloadInfo;
+import com.hss.downloader.download.DownloadInfoUtil;
 import com.hss.utils.enhance.viewholder.ContainerActivity2;
 import com.hss.utils.enhance.viewholder.mvvm.BaseViewHolder;
 import com.hss.utils.enhance.viewholder.mvvm.ContainerViewHolderWithTitleBar;
@@ -66,7 +67,7 @@ public class DownloadRecordListHolder extends BaseViewHolder<ContainerHistoryCol
     int type = 0;
 
     SearchViewHolder<DownloadInfo> holder;
-
+    BaseQuickAdapter adapter;
 
     @Override
     protected void initDataAndEventInternal(LifecycleOwner lifecycleOwner, String bean) {
@@ -79,7 +80,7 @@ public class DownloadRecordListHolder extends BaseViewHolder<ContainerHistoryCol
 
         holder.getLoadMoreRecycleViewHolder().setEmptyMsg("下载记录为空");
         holder.getLoadMoreRecycleViewHolder().setLoadDataImpl(new LoadDataByHistoryDb());
-        BaseQuickAdapter adapter = new DownloadItemAdapter(R.layout.item_download_ui);
+         adapter = new DownloadItemAdapter(R.layout.item_download_ui);
         holder.getLoadMoreRecycleViewHolder().setAdapter(adapter);
         holder.getLoadMoreRecycleViewHolder().assignDataAndEvent(new HashMap<>());
 
@@ -100,10 +101,62 @@ public class DownloadRecordListHolder extends BaseViewHolder<ContainerHistoryCol
             @Override
             public void onClick(View view) {
 
+                showRightTopMenus(view);
+
             }
         });
 
 
+    }
+
+    private void showRightTopMenus(View view) {
+        List<ISingleChooseItem<String>> menus = new ArrayList<>();
+        ISingleChooseItem<String> item1 = new ISingleChooseItem<String>() {
+            @Override
+            public String text() {
+                return "显示所有失败的下载";
+            }
+
+            @Override
+            public void onItemClicked(int position, String bean) {
+                Map map = new HashMap();
+                map.put("status_failed",true);
+                holder.getLoadMoreRecycleViewHolder().loadByNewParams(holder.searchText(),map);
+            }
+        };
+        menus.add(item1);
+        ISingleChooseItem<String> item2 = new ISingleChooseItem<String>() {
+            @Override
+            public String text() {
+                return "当前批次所有失败项全部重试";
+            }
+
+            @Override
+            public void onItemClicked(int position, String bean) {
+                List data = adapter.getData();
+                List<DownloadInfo> infos = new ArrayList<>();
+                for (Object datum : data) {
+                    DownloadInfo info = (DownloadInfo) datum;
+                    if(info.status == DownloadInfo.STATUS_FAIL){
+                        infos.add(info);
+                        File file = new File(info.dir,info.name);
+                        if(file.exists()){
+                            file.delete();
+                        }
+                        MyDownloader.startDownload(info);
+                    }
+                }
+                if(infos.isEmpty()){
+                    MyToast.error("当前没有失败条目");
+                    return;
+                }
+
+
+
+            }
+        };
+        menus.add(item2);
+        ISingleChooseItem.showAsMenu2(view,menus,"info");
     }
 
     public static void onItemLongClick2(BaseQuickAdapter adapter, View view, int position) {
@@ -167,6 +220,27 @@ public class DownloadRecordListHolder extends BaseViewHolder<ContainerHistoryCol
             }
         };
         menus.add(item3);
+
+        ISingleChooseItem<DownloadInfo> item4 = new ISingleChooseItem<DownloadInfo>() {
+            @Override
+            public String text() {
+                return "删除";
+            }
+
+            @Override
+            public void onItemClicked(int position, DownloadInfo bean) {
+                DownloadInfoUtil.getDao().delete(bean);
+                File file = new File(bean.dir,bean.name);
+                if(file.exists()){
+                    file.delete();
+                }
+                int i = adapter.getData().indexOf(bean);
+                if(i >=0){
+                    adapter.remove(i);
+                }
+            }
+        };
+        menus.add(item4);
 
         ISingleChooseItem.showAsMenu2(view,menus,info);
     }

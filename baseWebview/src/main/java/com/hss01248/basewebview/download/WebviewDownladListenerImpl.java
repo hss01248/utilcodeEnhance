@@ -37,6 +37,10 @@ public class WebviewDownladListenerImpl implements DownloadListener {
         return null;
     }
 
+    public static void download(String url,String fileName){
+        new WebviewDownladListenerImpl().onDownloadStart(url,"","filename=\""+fileName+"\"","",0);
+    }
+
     @Override
     public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
         LogUtils.i(url,userAgent,contentDisposition,mimetype,contentLength);
@@ -46,23 +50,29 @@ public class WebviewDownladListenerImpl implements DownloadListener {
         if(!TextUtils.isEmpty(name2) && name2.contains(".")){
             name = name2;
         }
-        String size = "未知";
+        String size = "";
         if(contentLength >0){
             size = ConvertUtils.byte2FitMemorySize(contentLength,1);
         }
         String str = "是否从\n"+url+"\n下载文件:\n"+name+"?\n文件大小预计:"+ size;
-
+        String str2 = "是否下载文件:\n"+name+"?";
+        if(!TextUtils.isEmpty(size)){
+            str2 += "\n文件大小预计:"+size;
+        }
+        int[] position = new int[]{0};
         String finalName = name;
         AlertDialog dialog  = new AlertDialog.Builder(ActivityUtils.getTopActivity())
-                .setTitle("文件下载")
-                .setMessage(str)
-                .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                .setTitle(str2)
+                .setSingleChoiceItems(new String[]{"下载到普通文件夹", "下载到隐藏文件夹"}, position[0], new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        doDownload(url, finalName,contentLength);
+                        dialog.dismiss();
+                        position[0] = which;
+                        doDownload(which ==1,url, finalName,contentLength);
 
                     }
-                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -74,11 +84,12 @@ public class WebviewDownladListenerImpl implements DownloadListener {
 
     }
 
-    private void doDownload(String url, String name,long contentLength) {
+    private void doDownload(boolean hidden,String url, String name,long contentLength) {
         DownloadApi.create(url)
                 .setName(name)
                 .useServiceToDownload(contentLength > 5*1024*1024)
-                .setCutToMediaStore(true)
+                .setCutToMediaStore(!hidden)
+                .setSaveToHiddenDir(hidden)
                 .setShowDefaultLoadingAndToast(true)
                 .callback(new DefaultSilentDownloadCallback());
 

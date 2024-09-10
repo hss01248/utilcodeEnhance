@@ -176,6 +176,10 @@ public class DownloadInfoUtil {
             builder.whereOr(DownloadInfoDao.Properties.Name.like("%"+pagerDto.searchText+"%"),
                     DownloadInfoDao.Properties.Url.like("%"+pagerDto.searchText+"%"));
         }
+        if("true".equals(pagerDto.searchParams.get("status_failed")+"")){
+            builder.where(DownloadInfoDao.Properties.Status.eq(DownloadInfo.STATUS_FAIL));
+        }
+
         List<DownloadInfo> list = builder.list();
         PagerDto<DownloadInfo> pagerDto1 = new PagerDto<DownloadInfo>();
         pagerDto1.isLast = list.size() < pagerDto.pageSize;

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.hss01248.viewstate.StatefulLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.hss01248.viewstate.StatefulLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <com.scwang.smart.refresh.layout.SmartRefreshLayout
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
@@ -16,6 +16,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overScrollMode="never"
+            app:fastScrollEnabled="true"
+            app:fastScrollHorizontalThumbDrawable="@drawable/fast_thumb_drawable"
+            app:fastScrollHorizontalTrackDrawable="@drawable/fast_line_drawable"
+            app:fastScrollVerticalThumbDrawable="@drawable/fast_thumb_drawable"
+            app:fastScrollVerticalTrackDrawable="@drawable/fast_line_drawable"
+            android:fadeScrollbars="false"
+            android:scrollbarThumbVertical="@drawable/my_scrollbar_shape"
+            android:scrollbars="vertical"
             android:background="#fff" />
         <com.scwang.smart.refresh.footer.ClassicsFooter
             android:id="@+id/refresh_footer"

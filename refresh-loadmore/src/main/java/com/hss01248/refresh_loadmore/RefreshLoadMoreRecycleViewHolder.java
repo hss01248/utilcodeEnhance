@@ -119,6 +119,10 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
         loadFirstTime(searchKey,params);
     }
 
+    public ILoadData<T> getLoadDataImpl() {
+        return loadDataImpl;
+    }
+
     ILoadData<T> loadDataImpl;
     boolean hasSucceed;
 

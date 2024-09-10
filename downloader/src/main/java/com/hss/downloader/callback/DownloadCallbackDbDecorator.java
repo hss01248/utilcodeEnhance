@@ -160,7 +160,7 @@ public class DownloadCallbackDbDecorator implements IDownloadCallback {
         if (currentOffset == totalLength) {
             lastTime = 0;
         }
-        if (System.currentTimeMillis() - lastTime < 1000) {
+        if (System.currentTimeMillis() - lastTime < 300) {
             //每秒更新一次进度
             return;
         }

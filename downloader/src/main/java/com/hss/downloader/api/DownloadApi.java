@@ -60,7 +60,7 @@ public class DownloadApi {
     private boolean forceReDownload;
 
 
-    public void setSaveToHiddenDir(boolean saveToHiddenDir) {
+    public DownloadApi setSaveToHiddenDir(boolean saveToHiddenDir) {
         this.saveToHiddenDir = saveToHiddenDir;
         if(saveToHiddenDir){
             File dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
@@ -78,6 +78,7 @@ public class DownloadApi {
             }
             this.dir = dir.getAbsolutePath();
         }
+        return this;
     }
 
     public boolean isSaveToHiddenDir() {

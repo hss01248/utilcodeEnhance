@@ -110,6 +110,9 @@ public class SearchViewHolder<T> extends MyViewHolder<CommonSearchViewHolderBind
         doSearch(text);
     }
 
+    public String searchText(){
+        return binding.etInput.getText().toString().trim();
+    }
     private void doSearch(String text) {
         loadMoreRecycleViewHolder.loadByNewParams(text,new HashMap<>());
     }
