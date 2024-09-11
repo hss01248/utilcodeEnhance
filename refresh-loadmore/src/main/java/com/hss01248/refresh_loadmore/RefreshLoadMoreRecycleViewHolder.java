@@ -132,7 +132,7 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
         this.asPageLoad = asPageLoad;
     }
 
-    boolean asPageLoad = true;
+    boolean asPageLoad = false;
     private void init2() {
         RefreshLayout refreshLayout = binding.refreshLayout;
         //refreshLayout.setRefreshHeader(new MaterialHeader(parent.getContext()));
