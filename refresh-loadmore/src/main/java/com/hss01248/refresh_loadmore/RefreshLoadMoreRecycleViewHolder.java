@@ -141,6 +141,10 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
                 //refreshlayout.finishRefresh(2000/*,false*/);//传入false表示刷新失败
+                if(asPageLoad && dto.pageIndex ==0){
+                    refreshLayout.finishRefreshWithNoMoreData();
+                    return;
+                }
                 onPre(refreshlayout);
             }
 
@@ -150,6 +154,10 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
             @Override
             public void onLoadMore(RefreshLayout refreshlayout) {
                 //refreshlayout.finishLoadMore(2000/*,false*/);//传入false表示加载失败
+                if(asPageLoad &&  dto.pageIndex == dto.totalPage){
+                    refreshlayout.finishLoadMoreWithNoMoreData();
+                    return;
+                }
                 onNext(refreshlayout,dto.pageIndex+1);
             }
         });
@@ -183,7 +191,7 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
 
                 @Override
                 public void onStopTrackingTouch(IndicatorSeekBar seekBar) {
-                    onNext(binding.refreshLayout,seekBar.getProgress());
+                    onNext(binding.refreshLayout,seekBar.getProgress()-1);
                 }
             });
         }else {
@@ -222,9 +230,9 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
                 RefreshLoadMoreRecycleViewHolder.this.dto.isLast = tPagerDto.isLast;
                 RefreshLoadMoreRecycleViewHolder.this.dto.totalPage = tPagerDto.totalPage;
                 if(asPageLoad){
-                    binding.sbPager.setProgress(dto.pageIndex);
-                    binding.sbPager.setMax(dto.totalPage);
-                    binding.tvPageIndex.setText(dto.pageIndex+"/"+dto.totalPage);
+                    binding.sbPager.setProgress(dto.pageIndex+1);
+                    binding.sbPager.setMax(dto.totalPage+1);
+                    binding.tvPageIndex.setText((dto.pageIndex+1)+"/"+(dto.totalPage+1));
                 }
             }
 
@@ -256,16 +264,14 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
                 if(tPagerDto.datas == null || tPagerDto.datas.isEmpty()){
                     if(asPageLoad){
                         binding.statefulLayout.showEmpty();
-                    }else {
-                        refreshlayout.finishLoadMoreWithNoMoreData();
                     }
+                    refreshlayout.finishLoadMoreWithNoMoreData();
 
                 }else {
                     if(asPageLoad){
                         binding.statefulLayout.showContent();
-                    }else {
-                        refreshlayout.finishLoadMore(true);
                     }
+                    refreshlayout.finishLoadMore(true);
                     if(asPageLoad){
                         adapter.replaceData(tPagerDto.datas);
                     }else {
@@ -277,9 +283,9 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
                 dto.isLast = tPagerDto.isLast;
                 dto.totalPage = tPagerDto.totalPage;
                 if(asPageLoad){
-                    binding.sbPager.setProgress(dto.pageIndex);
-                    binding.sbPager.setMax(dto.totalPage);
-                    binding.tvPageIndex.setText(dto.pageIndex+"/"+dto.totalPage);
+                    binding.sbPager.setProgress(dto.pageIndex+1);
+                    binding.sbPager.setMax(dto.totalPage+1);
+                    binding.tvPageIndex.setText((dto.pageIndex+1)+"/"+(dto.totalPage+1));
                 }
             }
 
@@ -321,9 +327,16 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
                 }else {
                     dto = firstPage;
                     dto.isLast = tPagerDto.isLast;
+                    dto.totalPage = tPagerDto.totalPage;
                     binding.statefulLayout.showContent();
                     adapter.replaceData(tPagerDto.datas);
+                    if(asPageLoad){
+                        binding.sbPager.setMax(dto.totalPage+1);
+                        binding.sbPager.setProgress(dto.pageIndex+1);
+                        binding.tvPageIndex.setText((dto.pageIndex+1)+"/"+(dto.totalPage+1));
+                    }
                 }
+
             }
 
             @Override

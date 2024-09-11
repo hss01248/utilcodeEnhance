@@ -77,11 +77,11 @@ public class DownloadRecordListHolder extends BaseViewHolder<ContainerHistoryCol
         binding.getRoot().addView(holder.binding.getRoot());
         //binding.getRoot().setPadding(0, BarUtils.getStatusBarHeight(),0,0);
 
-        holder.getLoadMoreRecycleViewHolder().getDto().pageSize = 500;
+        holder.getLoadMoreRecycleViewHolder().getDto().pageSize = 50;
         holder.getLoadMoreRecycleViewHolder().initRecyclerViewDefault();
 
         holder.getLoadMoreRecycleViewHolder().setEmptyMsg("下载记录为空");
-        holder.getLoadMoreRecycleViewHolder().setLoadDataImpl(new LoadDataByHistoryDb());
+        holder.getLoadMoreRecycleViewHolder().setLoadDataImpl(new LoadDataByDownloadDb());
          adapter = new DownloadItemAdapter(R.layout.item_download_ui);
         holder.getLoadMoreRecycleViewHolder().setAdapter(adapter);
         holder.getLoadMoreRecycleViewHolder().assignDataAndEvent(new HashMap<>());

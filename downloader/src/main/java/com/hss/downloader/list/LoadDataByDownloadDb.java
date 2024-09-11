@@ -13,9 +13,9 @@ import com.hss01248.refresh_loadmore.PagerDto;
  * @Date 10/01/2023 19:54
  * @Version 1.0
  */
-public class LoadDataByHistoryDb implements ILoadData<DownloadInfo> {
+public class LoadDataByDownloadDb implements ILoadData<DownloadInfo> {
 
-    public LoadDataByHistoryDb() {
+    public LoadDataByDownloadDb() {
 
     }
 

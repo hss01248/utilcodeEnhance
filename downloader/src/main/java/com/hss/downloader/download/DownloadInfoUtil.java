@@ -181,13 +181,19 @@ public class DownloadInfoUtil {
         }
 
         List<DownloadInfo> list = builder.list();
-        PagerDto<DownloadInfo> pagerDto1 = new PagerDto<DownloadInfo>();
+
+
+
+        PagerDto<DownloadInfo> pagerDto1 = pagerDto.copy();
         pagerDto1.isLast = list.size() < pagerDto.pageSize;
         pagerDto1.datas = list;
-        pagerDto1.totalPage = (long) Math.ceil(builder.count()*1.0f/pagerDto.pageSize);
+        if(pagerDto1.totalPage ==1 || pagerDto1.totalPage ==0){
+            pagerDto1.totalPage = (long) Math.ceil(builder.count()*1.0f/pagerDto.pageSize) -1;
+        }
+
         //在这里自动计算偏移,在界面里直接透传即可
         pagerDto1.offset = pagerDto.offset+ list.size();
-        pagerDto1.pageSize = pagerDto.pageSize;
+
         return pagerDto1;
     }
 }
