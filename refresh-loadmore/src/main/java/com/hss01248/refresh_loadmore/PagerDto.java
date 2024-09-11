@@ -36,6 +36,7 @@ public class PagerDto<T> {
      dto.searchText = searchText;
      dto.extras = extras;
      dto.datas = datas;
+     dto.totalPage = totalPage;
      return dto;
     }
 

@@ -208,7 +208,6 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
         }else {
             firstPage = dto.firstPage();
         }
-        PagerDto<T> finalFirstPage = firstPage;
         if(asPageLoad){
             binding.statefulLayout.showLoading();
         }
@@ -218,6 +217,7 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
                 binding.statefulLayout.showContent();
                 refreshlayout.finishRefresh();
                 hasSucceed = true;
+                dto = tPagerDto;
                 if(tPagerDto.datas == null || tPagerDto.datas.isEmpty()){
                     adapter.replaceData(new ArrayList<>());
                     binding.statefulLayout.showEmpty(emptyMsg,0,null,null);
@@ -226,9 +226,6 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
                     adapter.replaceData(tPagerDto.datas);
                     //dto = tPagerDto;
                 }
-                RefreshLoadMoreRecycleViewHolder.this.dto = finalFirstPage;
-                RefreshLoadMoreRecycleViewHolder.this.dto.isLast = tPagerDto.isLast;
-                RefreshLoadMoreRecycleViewHolder.this.dto.totalPage = tPagerDto.totalPage;
                 if(asPageLoad){
                     binding.sbPager.setProgress(dto.pageIndex+1);
                     binding.sbPager.setMax(dto.totalPage+1);
@@ -260,7 +257,7 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
         loadDataImpl.queryData(copy, new MyCommonCallback<PagerDto<T>>() {
             @Override
             public void onSuccess(PagerDto<T> tPagerDto) {
-
+                dto = tPagerDto;
                 if(tPagerDto.datas == null || tPagerDto.datas.isEmpty()){
                     if(asPageLoad){
                         binding.statefulLayout.showEmpty();
@@ -274,14 +271,12 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
                     refreshlayout.finishLoadMore(true);
                     if(asPageLoad){
                         adapter.replaceData(tPagerDto.datas);
+                        binding.recyclerView.smoothScrollToPosition(0);
                     }else {
                         adapter.addData(tPagerDto.datas);
                     }
                 }
-                dto.pageIndex = copy.pageIndex;
-                dto.offset = copy.offset;
-                dto.isLast = tPagerDto.isLast;
-                dto.totalPage = tPagerDto.totalPage;
+
                 if(asPageLoad){
                     binding.sbPager.setProgress(dto.pageIndex+1);
                     binding.sbPager.setMax(dto.totalPage+1);
@@ -320,14 +315,10 @@ public class RefreshLoadMoreRecycleViewHolder<T> extends MyViewHolder<CommonRefr
             @Override
             public void onSuccess(PagerDto<T> tPagerDto) {
                 hasSucceed = true;
+                dto = tPagerDto;
                 if(tPagerDto.datas == null || tPagerDto.datas.isEmpty()){
-                    dto = firstPage;
-                    dto.isLast = true;
                     binding.statefulLayout.showEmpty(emptyMsg,0,null,null);
                 }else {
-                    dto = firstPage;
-                    dto.isLast = tPagerDto.isLast;
-                    dto.totalPage = tPagerDto.totalPage;
                     binding.statefulLayout.showContent();
                     adapter.replaceData(tPagerDto.datas);
                     if(asPageLoad){

@@ -187,9 +187,9 @@ public class DownloadInfoUtil {
         PagerDto<DownloadInfo> pagerDto1 = pagerDto.copy();
         pagerDto1.isLast = list.size() < pagerDto.pageSize;
         pagerDto1.datas = list;
-        if(pagerDto1.totalPage ==1 || pagerDto1.totalPage ==0){
+        //if(pagerDto1.totalPage ==1 || pagerDto1.totalPage ==0){
             pagerDto1.totalPage = (long) Math.ceil(builder.count()*1.0f/pagerDto.pageSize) -1;
-        }
+       // }
 
         //在这里自动计算偏移,在界面里直接透传即可
         pagerDto1.offset = pagerDto.offset+ list.size();
