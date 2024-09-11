@@ -44,6 +44,11 @@ allprojects {
 
         maven { url 'https://nexus.hss01248.tech/repository/maven-releases/' }
         mavenLocal()
+        mavenCentral()
+        google()
+        maven {
+            url 'https://maven.aliyun.com/repository/jcenter'
+        }
         //maven { url 'https://cdn.jsdelivr.net/gh/link-u/AndroidGlideAvifDecoder@master/repository' }
     }
 
