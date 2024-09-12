@@ -13,6 +13,9 @@ import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
 import com.hss01248.basewebview.dom.JsCreateNewWinImpl;
 import com.hss01248.basewebview.download.WebviewDownladListenerImpl;
+import com.hss01248.basewebview.intent.BrowserIntentParser;
+import com.hss01248.basewebview.intent.TiktokToutiaoIntentParser;
+import com.hss01248.utils.ext.intent.SysIntentShareDispatcherActivity;
 
 public class WebConfigger {
 
@@ -23,7 +26,12 @@ public class WebConfigger {
     static WebviewInit init = new DefaultWebConfig();
 
     public static void init(WebviewInit init){
-        WebConfigger.init = init;
+        if(init != null){
+            WebConfigger.init = init;
+        }
+        SysIntentShareDispatcherActivity.addParser(new TiktokToutiaoIntentParser());
+        SysIntentShareDispatcherActivity.addParser(new BrowserIntentParser());
+
     }
 
 

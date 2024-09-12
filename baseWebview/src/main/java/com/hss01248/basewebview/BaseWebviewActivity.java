@@ -4,16 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.blankj.utilcode.util.ActivityUtils;
-import com.blankj.utilcode.util.KeyboardUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.hss.utils.enhance.MyKeyboardUtil;
 
@@ -53,6 +49,8 @@ public class BaseWebviewActivity extends AppCompatActivity implements ISetWebvie
            quickWebview.loadUrl(url);
 
         }
+
+        MyKeyboardUtil.adaptView(quickWebview.webView);
     }
 
     protected  void initWebview2(BaseQuickWebview quickWebview) {

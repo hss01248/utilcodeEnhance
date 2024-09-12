@@ -9,7 +9,7 @@ import android.webkit.MimeTypeMap;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.Utils;
-import com.hss01248.openuri.OpenUri;
+import com.hss01248.openuri2.OpenUri2;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -78,7 +78,7 @@ public class ShareUtils {
 
 
     public static void shareFile( File file) {
-        Uri uri = OpenUri.fromFile(Utils.getApp(), file);
+        Uri uri = OpenUri2.fromFile(Utils.getApp(), file);
         shareFile(uri);
 
     }

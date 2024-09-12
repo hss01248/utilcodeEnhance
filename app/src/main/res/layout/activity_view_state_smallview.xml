@@ -16,7 +16,6 @@
 
     <ImageView
         android:id="@+id/iv"
-        android:src="@drawable/page_error_btn_bg_normal"
         android:layout_width="50dp"
         android:layout_marginBottom="20dp"
         android:layout_height="50dp"/>

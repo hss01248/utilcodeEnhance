@@ -7,27 +7,22 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ServiceInfo;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
-import android.util.Log;
-import android.view.View;
-import android.widget.RemoteViews;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.ThreadUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
 import com.hss.utils.enhance.R;
-import com.hss01248.permission.MyPermissions;
 import com.hss01248.permission.ext.IExtPermissionCallback;
 import com.hss01248.permission.ext.MyPermissionsExt;
-import com.hss01248.permission.ext.permissions.NotificationListenerPermissionImpl;
 import com.hss01248.permission.ext.permissions.NotificationPermission;
 
 import java.io.BufferedReader;
@@ -70,8 +65,6 @@ public class CommonProgressService extends Service {
                         ToastUtils.showLong("必须有通知权限才能开始后台下载,避免进程被杀");
                     }
                 });
-
-
     }
 
     public static void updateProgress(int progress,int max,String title,String msg,int notifyId){
@@ -83,12 +76,18 @@ public class CommonProgressService extends Service {
         //无法取消
             //mNotificationManager.cancel(notify_id);
             mNotificationManager.notify(notifyId,getNotification(Utils.getApp(), title, progress+"/"+max+"(完成)",progress,max));
+            //mNotificationManager.cancel(notifyId);
         }else {
             mNotificationManager.notify(notifyId,getNotification(Utils.getApp(), title, msg,progress,max));
         }
-
-
         //mNotificationManager.getno
+    }
+
+    public static void stopService(int notifyId){
+        Intent stopIntent = new Intent(Utils.getApp(), CommonProgressService.class);
+        Utils.getApp().stopService(stopIntent);
+        NotificationManager mNotificationManager = (NotificationManager) Utils.getApp().getSystemService(NOTIFICATION_SERVICE);
+        mNotificationManager.cancel(notifyId);
     }
     @Nullable
     @Override
@@ -98,17 +97,32 @@ public class CommonProgressService extends Service {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+    }
+
+    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         //调用startForeground() 方法
         //LogUtils.d("onStartCommand: ","------>");
-        String title = intent.getStringExtra("title");
-        String msg = intent.getStringExtra("msg");
-        int notifyId = intent.getIntExtra("notifyId",-1);
-        if(notifyId<=0){
-            notifyId = notify_id;
-        }
-        startForeground(notifyId, getNotification(ActivityUtils.getTopActivity(), title, msg,-1,100));//创建一个通知，创建通知前记得获取开启通知权限
+        if(intent !=null){
+            String title = intent.getStringExtra("title");
+            String msg = intent.getStringExtra("msg");
+            int notifyId = intent.getIntExtra("notifyId",-1);
+            if(notifyId<=0){
+                notifyId = notify_id;
+            }
+            //前台服务类型（foregroundServiceType）是在 Android 10 引入的, 14开始强制要求
+            if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.R){
+                startForeground(notifyId, getNotification(ActivityUtils.getTopActivity(), title, msg,-1,100));//创建一个通知，创建通知前记得获取开启通知权限
+            }else {
+                startForeground(notifyId,
+                        getNotification(ActivityUtils.getTopActivity(), title, msg,-1,100),
+                        ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC);//创建一个通知，创建通知前记得获取开启通知权限
+            }
 
+        }
         //doTask();
 
         return super.onStartCommand(intent, flags, startId);
@@ -206,7 +220,13 @@ public class CommonProgressService extends Service {
         String category = Notification.CATEGORY_SERVICE;
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         //notificationManager.areNotificationsEnabled()
-        Intent nfIntent = new Intent(context, ActivityUtils.getTopActivity().getClass());
+        //ActivityUtils.getTopActivity()可能为空
+        Intent nfIntent = null;
+        if(ActivityUtils.getTopActivity() != null){
+            nfIntent = new Intent(context, ActivityUtils.getTopActivity().getClass());
+        }else {
+            nfIntent = new Intent(Intent.ACTION_VIEW);
+        }
         int  mFlag = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ? PendingIntent.FLAG_IMMUTABLE : PendingIntent.FLAG_UPDATE_CURRENT;
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, nfIntent, mFlag);
 

@@ -12,10 +12,13 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:backgroundDimEnabled">false</item>&ndash;&gt;
     </style>-->
-
+    <color name="color_bg_white">#FFFFFF</color>
     <style name="Dialog.FullScreen2" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:windowNoTitle">true</item>
-        <item name="android:windowBackground">#FFFFFF</item>
+        <item name="android:windowBackground">@color/color_bg_white</item>
         <item name="android:windowIsFloating">false</item>
+        <!-- 根据需求设置软键盘模式-->
+        <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
+
 </resources>

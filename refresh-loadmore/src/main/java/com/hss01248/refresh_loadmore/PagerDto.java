@@ -2,6 +2,7 @@ package com.hss01248.refresh_loadmore;
 
 import androidx.annotation.Keep;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,8 +20,9 @@ public class PagerDto<T> {
     public int pageSize = 20;
     public long offset = 0;
     public long pageIndex = 0;
-    public Map<String,Object> extras;
-    public Map<String,Object> searchParams;
+    public long totalPage = 0;
+    public Map<String,Object> extras = new HashMap<>();
+    public Map<String,Object> searchParams = new HashMap<>();
     public String searchText;
 
 
@@ -44,4 +46,23 @@ public class PagerDto<T> {
      copy.isLast = false;
      return copy;
     }
+
+ public PagerDto<T> prePage(){
+  PagerDto<T> copy = copy();
+  copy.pageIndex --;
+  if(copy.pageIndex <0){
+   copy.pageIndex = 0;
+  }
+  copy.offset = copy.pageIndex * copy.pageSize;
+  copy.isLast = false;
+  return copy;
+ }
+
+ public PagerDto<T> nextPage(){
+  PagerDto<T> copy = copy();
+  copy.pageIndex ++;
+  copy.offset = copy.pageIndex * copy.pageSize;
+  copy.isLast = false;
+  return copy;
+ }
 }

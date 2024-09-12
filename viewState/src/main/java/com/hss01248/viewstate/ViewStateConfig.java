@@ -151,8 +151,8 @@ public class ViewStateConfig {
         private int errorLayout = globalConfig == null ? 0 : globalConfig.errorLayout;
         private int loadingLayout = globalConfig == null ? 0 : globalConfig.loadingLayout;
         private OnViewStateChangedListener listener;
-        private String loadingMsg;
-        private String emptyMsg;
+        private String loadingMsg = "";
+        private String emptyMsg = "";
         private int emptyIcon;
         private int errorIcon;
         private boolean darkMode = false;

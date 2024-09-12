@@ -6,11 +6,11 @@ apply from:'configs/ui_kit.gradle'
 apply from:'configs/compact.gradle'
 
 android {
-    compileSdkVersion 33
+    compileSdk 34
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 33
+        targetSdkVersion 34
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -46,26 +46,26 @@ dependencies {
     //annotationProcessor "com.github.hss01248.AppStartUp:startup-compile:1.1.8"
 
     //网络库:
-    api "com.github.hss01248.HttpUtil2:friendlymsg:3.1.4"
-    api "com.github.hss01248.HttpUtil2:http:3.1.4"
-    api "com.github.hss01248.HttpUtil2:clientGateway:3.1.4"
+    //api "com.github.hss01248.HttpUtil2:friendlymsg:3.1.4"
+    //api "com.github.hss01248.HttpUtil2:http:3.1.4"
+    //api "com.github.hss01248.HttpUtil2:clientGateway:3.1.4"
     //文件下载
     api 'com.liulishuo.filedownloader:library:1.7.7'
     //时间同步服务
-    api "com.github.hss01248.HttpUtil2:serverclock:3.1.4"
+    //api "com.github.hss01248.HttpUtil2:serverclock:3.1.4"
 
-    api "com.github.hss01248.HttpUtil2:logforaop:3.1.2"
+    //api "com.github.hss01248.HttpUtil2:logforaop:3.1.2"
 
     //webview
-    api "com.github.hss01248.ImageLoader:baseWebview:3.5.2"
+    //api "com.github.hss01248.ImageLoader:baseWebview:3.5.2"
 
     //记住测试账号功能:
     debugApi 'com.github.hss01248.accountCacher:accountcache:1.1.6'
     releaseApi 'com.github.hss01248.accountCacher:no-op:1.1.1'
 
     //app更新  https://github.com/skyNet2017/AppUpdate
-    api "com.github.skyNet2017.AppUpdate:update-app:4.0.1"
-    api  "com.github.skyNet2017.AppUpdate:http:4.0.1"
+    api "com.github.skyNet2017.AppUpdate:update-app:4.1.5"
+   // api  "com.github.skyNet2017.AppUpdate:http:4.0.1"
 
     api "io.reactivex.rxjava2:rxjava:2.2.6"
     api "io.reactivex.rxjava2:rxandroid:2.1.0"

@@ -22,6 +22,42 @@
             app:flexDirection="row"
             app:flexWrap="wrap" >
             <Button
+                android:text="viewHolder demo"
+                android:textAllCaps="false"
+                android:onClick="viewHolderDemo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:text="外部存储文件夹浏览"
+                android:textAllCaps="false"
+                android:onClick="dirTree"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:text="containeractivity-带标题"
+                android:textAllCaps="false"
+                android:onClick="containeractivityWithTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:text="containeractivity-无标题-有状态栏占位符"
+                android:textAllCaps="false"
+                android:onClick="containeractivityWithNoTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:text="containeractivity-无标题-无状态栏占位符"
+                android:textAllCaps="false"
+                android:onClick="containeractivityWithNoTitleAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:text="containeractivity-相对布局,标题透明"
+                android:textAllCaps="false"
+                android:onClick="containeractivityWithTransTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <Button
                 android:text="urlEncode"
                 android:textAllCaps="false"
                 android:onClick="urlEncode"
@@ -41,7 +77,13 @@
                 android:onClick="encodeFilePathToUrlUsage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
-
+            <Button
+                android:onClick="goWebSpider"
+                android:layout_margin="10dp"
+                android:text="webview爬取urls并加载"
+                android:textAllCaps="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
             <Button
                 android:text="share"
                 android:textAllCaps="false"
@@ -49,9 +91,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <Button
+                android:text="bitmap-save-config"
+                android:textAllCaps="false"
+                android:onClick="bitmapSaveConfig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:text="bitmap-save-action"
+                android:textAllCaps="false"
+                android:onClick="bitmapSaveAction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <Button
                 android:text="透明状态栏"
                 android:textAllCaps="false"
                 android:onClick="statusbarTrans"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:text="全屏dialog-alert"
+                android:textAllCaps="false"
+                android:onClick="fullScreenDialog2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <Button
@@ -118,6 +178,21 @@
                 android:layout_width="wrap_content"
                 android:onClick="takeVideo"
                 android:text="调用系统拍视频intent-前摄像头"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:onClick="saveBitmapToAlbumWithoutPermission"
+                android:text="保存截图到相册-无权限版"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:onClick="createDoc"
+                android:text="文件另存为-ACTION_CREATE_DOCUMENT-拿到合法uri,然后就能对uri来写文件"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:onClick="safDir"
+                android:text="是否允许用户访问特定目录-ACTION_OPEN_DOCUMENT-拿到合法uri,然后可以使用documentFile来读取目录"
                 android:layout_height="wrap_content"/>
             <Button
                 android:layout_width="wrap_content"
@@ -264,8 +339,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <androidx.appcompat.widget.AppCompatButton
-                android:text="指纹/人脸/密码验证"
+                android:text="指纹/人脸/密码验证-cipher"
                 android:onClick="biometric"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="指纹/人脸/密码验证-signature"
+                android:onClick="biometricSignature"
                 android:textAllCaps="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -284,6 +365,85 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:text="keystore列表"
                 android:onClick="listKeystore"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="rsa加解密"
+                android:onClick="rsaCipher"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="指纹/密码验证的-rsa加解密"
+                android:onClick="bioDecryptByPrivate"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="指纹/密码验证的-rsa加解密-passwordLogin方法验证"
+                android:onClick="bioDecryptByPrivateForPasswordLogin"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="加签和验证"
+                android:onClick="signAndVerify"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="指纹/密码验证的-加签和验证"
+                android:onClick="signAndVerifyByBio"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="aes加密-解密"
+                android:onClick="aesEncrypt"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="https模拟"
+                android:onClick="sslMock"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="crash test"
+                android:onClick="crashTest"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="sentry exception"
+                android:onClick="sentryException"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="sentry msg"
+                android:onClick="sentryMsg"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="testMetrics1"
+                android:onClick="testMetrics1"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="testMetrics2"
+                android:onClick="testMetrics2"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="testInstrumentation"
+                android:onClick="testInstrumentation"
                 android:textAllCaps="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>

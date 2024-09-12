@@ -10,14 +10,14 @@ props.load(new FileInputStream(file(project.rootDir.toString() +"/local.properti
 println(props.toMapString())
 
 android {
-    compileSdkVersion 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.hss01248.basewebviewdemo"
-        minSdkVersion 21
-        targetSdkVersion 33
-        versionCode 1006
-        versionName "1.0.06"
+        minSdkVersion 23
+        targetSdkVersion 34
+        versionCode 1008
+        versionName "1.0.08"
         multiDexEnabled true
         ndk {
             abiFilters "arm64-v8a" //"armeabi-v7a", "x86"//, "x86", "x86_64"
@@ -28,23 +28,23 @@ android {
         debug{
 
         }
-        release {
+        /*release {
             storeFile file(props['keystore.relPath'])
             storePassword props['keystore.password']
             keyAlias props['keystore.alias']
             keyPassword props['keystore.kpassword']
-        }
+        }*/
     }
 
     buildTypes {
         debug{
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.debug
         }
         release {
             ndk {
                 abiFilters  "arm64-v8a"
             }
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.debug
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -69,7 +69,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
     implementation project(path: ':baseWebview')
     api project(path: ':ext')
-    api project(path: ':sentry')
+    //api project(path: ':sentry')
+     api 'com.github.hss01248.flipperUtil:network-hooks-auth:1.7.20-dev'
 
 
 }

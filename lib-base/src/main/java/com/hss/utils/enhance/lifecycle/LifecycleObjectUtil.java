@@ -7,6 +7,8 @@ import android.content.ContextWrapper;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 
+import com.blankj.utilcode.util.LogUtils;
+
 /**
  * @Despciption todo
  * @Author hss
@@ -44,6 +46,7 @@ public class LifecycleObjectUtil {
         if(contextOrFragment instanceof android.app.Fragment){
             return contextOrFragment;
         }
+        LogUtils.w("getLifecycledObjectFromObj is null "+contextOrFragment);
         return null;
     }
 
@@ -51,6 +54,7 @@ public class LifecycleObjectUtil {
 
     public static Activity getActivityFromContext(Context context) {
         if (context == null) {
+            LogUtils.w("getActivityFromContext is null : context is null");
             return null;
         }
         if (context instanceof Activity) {
@@ -62,6 +66,7 @@ public class LifecycleObjectUtil {
             }
             context = ((ContextWrapper) context).getBaseContext();
         }
+        LogUtils.w("getActivityFromContext is null: "+context);
         return null;
     }
 }

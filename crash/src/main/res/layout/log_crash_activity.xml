@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_marginLeft="16dp"
+            android:id="@+id/tv_title"
+            android:layout_centerVertical="true"
+            android:textColor="#333333"
+            android:text="崩溃信息"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_marginRight="100dp"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/tv_share"
+            android:text="分享"
+            android:textColor="#00ff00"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:layout_width="wrap_content"
+           android:layout_alignParentRight="true"
+            android:layout_height="50dp"/>
+        <TextView
+            android:id="@+id/tv_list"
+            android:text="崩溃列表"
+            android:textColor="#0000ff"
+            android:gravity="center"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:layout_width="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="60dp"
+            android:layout_height="50dp"/>
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:background="#f0f2f5"
+        android:layout_height="1dp"/>
+    <ScrollView
+        android:background="#ffffff"
+        android:layout_width="match_parent" android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/tv_text"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    </ScrollView>
+</LinearLayout>

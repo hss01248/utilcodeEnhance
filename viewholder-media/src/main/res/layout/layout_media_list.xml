@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:fastScrollEnabled="true"
+        app:fastScrollHorizontalThumbDrawable="@drawable/fast_thumb_drawable"
+        app:fastScrollHorizontalTrackDrawable="@drawable/fast_line_drawable"
+        app:fastScrollVerticalThumbDrawable="@drawable/fast_thumb_drawable"
+        app:fastScrollVerticalTrackDrawable="@drawable/fast_line_drawable"
+        android:fadeScrollbars="false"
+        android:scrollbarThumbVertical="@drawable/my_scrollbar_shape"
+        android:scrollbars="vertical" />
+
+</LinearLayout>

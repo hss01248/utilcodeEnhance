@@ -30,6 +30,12 @@
         <androidx.appcompat.widget.AppCompatButton
             android:layout_width="wrap_content"
             android:textAllCaps="false"
+            android:text="401测试"
+            android:onClick="test401Login"
+            android:layout_height="wrap_content"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:textAllCaps="false"
             android:text="window.showOpenFilePicker-客户端webview不支持"
             android:onClick="showOpenFilePicker"
             android:layout_height="wrap_content"/>

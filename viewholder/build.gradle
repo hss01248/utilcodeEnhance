@@ -3,16 +3,18 @@ plugins {
 }
 
 android {
-    compileSdkVersion 33
+    compileSdk 34
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 33
+        targetSdkVersion 34
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
-
+    viewBinding {
+        enabled = true
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -32,4 +34,40 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    //api 'com.geyifeng.immersionbar:immersionbar:3.2.2'
+    api 'com.gitee.zackratos:UltimateBarX:0.8.0'
+
+    def lifecycle_version = "2.2.0"
+
+    // ViewModel
+    api "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
+    // LiveData
+    api "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
+    // Lifecycles only (without ViewModel or LiveData)
+    api "androidx.lifecycle:lifecycle-runtime:$lifecycle_version"
+
+    // Saved state module for ViewModel
+    api "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
+
+    // Annotation processor
+    //api "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+    // alternately - if using Java8, use the following instead of lifecycle-compiler
+    api "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+    // optional - ProcessLifecycleOwner provides a lifecycle for the whole application process
+    api("androidx.lifecycle:lifecycle-process:$lifecycle_version")
+
+
+    // optional - ReactiveStreams support for LiveData
+    api "androidx.lifecycle:lifecycle-reactivestreams:$lifecycle_version"
+
+    implementation "androidx.lifecycle:lifecycle-service:$lifecycle_version"
+
+    // lifecycle注解处理器
+    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+    //这个是包括所有的
+    api "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    api 'com.blankj:utilcodex:1.30.0'//基底
+    api project(':lib-base')
+    api 'com.github.getActivity:TitleBar:9.6'
+    //api 'com.wuhenzhizao:titlebar:1.2.0'
 }

@@ -2,22 +2,17 @@ package com.hss01248.basewebview;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -44,31 +39,23 @@ import com.blankj.utilcode.util.BarUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.SPStaticUtils;
 import com.blankj.utilcode.util.StringUtils;
-import com.blankj.utilcode.util.ThreadUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
-import com.bumptech.glide.load.data.mediastore.MediaStoreUtil;
-import com.hjq.permissions.OnPermissionCallback;
-import com.hjq.permissions.Permission;
-import com.hjq.permissions.XXPermissions;
 import com.hss.utils.enhance.MyKeyboardUtil;
 import com.hss.utils.enhance.UrlEncodeUtil;
 import com.hss01248.basewebview.adblock.AdBlockClient;
 import com.hss01248.basewebview.databinding.TitlebarForWebviewBinding;
+import com.hss01248.basewebview.dom.AuthImpl;
 import com.hss01248.basewebview.dom.FileChooseImpl;
 import com.hss01248.basewebview.dom.JsCreateNewWinImpl;
 import com.hss01248.basewebview.dom.JsPermissionImpl;
+import com.hss01248.basewebview.download.WebviewDownladListenerImpl;
 import com.hss01248.basewebview.history.db.MyDbUtil;
 import com.hss01248.basewebview.menus.DefaultMenus;
 import com.hss01248.basewebview.search.WebSearchViewHolder;
-import com.hss01248.download_list2.DownloadCallback;
-import com.hss01248.download_list2.DownloadImplByFileDownloaderLib;
 import com.hss01248.iwidget.BaseDialogListener;
 import com.hss01248.iwidget.msg.AlertDialogImplByDialogUtil;
 import com.hss01248.iwidget.singlechoose.ISingleChooseItem;
-import com.hss01248.iwidget.singlechoose.SingleChooseDialogImpl;
-import com.hss01248.iwidget.singlechoose.SingleChooseDialogListener;
-import com.hss01248.media.pick.MediaStoreRefresher;
 import com.hss01248.viewstate.StatefulLayout;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.AgentWebUIControllerImplBase;
@@ -83,12 +70,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -258,6 +239,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
         BaseQuickWebview quickWebview = new BaseQuickWebview(context);
         quickWebview.needBlockImageLoad = true;
         quickWebview.delayAfterOnFinish = delayAfterOnFinish;
+
 /*
         Dialog dialog = new Dialog(context);
         dialog.setCanceledOnTouchOutside(false);
@@ -630,6 +612,7 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                         jsCreateNewWin.onCloseWindow(window);
                     }
                 })
+                .useMiddlewareWebClient(new AuthImpl())
                 .useMiddlewareWebChrome(new JsPermissionImpl())
                 .useMiddlewareWebClient(new AdBlockClient(getContext()))
                 .useMiddlewareWebChrome(new FileChooseImpl());
@@ -702,214 +685,12 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
                 }
 
             }
+            WebviewDownladListenerImpl.download(url1,fileName);
 
-            //XXPermissions.with()
-            int[] position = new int[]{0};
-            String finalUrl = url1;
-            String finalFileName = fileName;
-            if(dialog != null && dialog.isShowing()){
-                dialog.dismiss();
-            }
-             dialog =  new AlertDialog.Builder(getContext())
-                    .setTitle("检测到视频下载,是下载到普通文件夹还是隐藏文件夹?")
-                    //.setMessage("检测到视频下载,是下载到普通文件夹还是隐藏文件夹?")
-                    .setSingleChoiceItems(new String[]{"普通文件夹", "隐藏文件夹"}, position[0], new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            position[0] = which;
-                            startDownload00(which, finalFileName, finalUrl);
-                        }
-                    }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }).setPositiveButton("开始下载", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            startDownload00(position[0], finalFileName, finalUrl);
-                        }
-                    }).create();
-            dialog.show();
 
         } catch (Throwable throwable) {
             LogUtils.w(throwable);
             ToastUtils.showLong(throwable.getMessage());
-        }
-    }
-
-    private void startDownload00(int which, String finalFileName, String finalUrl) {
-        if(which ==0){
-            startDownload0(null, finalFileName, finalUrl);
-        }else if(which ==1){
-            String permission = Permission.MANAGE_EXTERNAL_STORAGE;
-            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.R){
-                //Android 11（API 级别 30）
-                permission = Permission.WRITE_EXTERNAL_STORAGE;
-
-                //请注意，在搭载 Android 10（API 级别 29）或更高版本的设备上，
-                // 您的应用可以提供明确定义的媒体集合，例如 MediaStore.Downloads，而无需请求任何存储相关权限
-            }
-            XXPermissions.with(webView.getContext())
-                    .permission(permission)
-                    .request(new OnPermissionCallback() {
-                        @Override
-                        public void onGranted(List<String> permissions, boolean all) {
-                            File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath()
-                                    +"/"+AppUtils.getAppName()+"/.thefolder/");
-                            if(!dir.exists()){
-                                dir.mkdirs();
-                            }
-                            File file = new File(dir,".nomedia");
-                            if(!file.exists()){
-                                try {
-                                    file.createNewFile();
-                                } catch (IOException e) {
-                                    LogUtils.w(e);
-                                }
-                            }
-                            LogUtils.d("path: "+dir.getAbsolutePath());
-                            startDownload0(dir.getAbsolutePath(), finalFileName, finalUrl);
-                        }
-
-                        @Override
-                        public void onDenied(List<String> permissions, boolean never) {
-                            OnPermissionCallback.super.onDenied(permissions, never);
-                            ToastUtils.showLong("需要写存储权限才能创建隐藏文件夹");
-                        }
-                    });
-        }
-    }
-
-    private void startDownload0(String dir,String fileName, String url1) {
-        ToastUtils.showShort("检测到视频url,开始下载: \n" + fileName);
-        ProgressDialog dialog = new ProgressDialog(getContext());
-        dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        dialog.setTitle("下载文件: "+fileName);
-        dialog.setCanceledOnTouchOutside(false);
-        new DownloadImplByFileDownloaderLib()
-                .download(url1, dir, fileName, null, new DownloadCallback() {
-                    @Override
-                    public void onStart(String url) {
-                        dialog.show();
-                    }
-
-                    @Override
-                    public void onProgress(float progress, long total) {
-                        String msg = String.format("%.2f",progress*total/1024/1024) +"MB/"+String.format("%.2f", total*1.0f/1024/1024)+"MB";
-                        //dialog.setMessage(msg);
-                        dialog.setTitle("下载文件: "+"\n"+msg);
-                        //title最多两行
-                        dialog.setMax((int) total);
-                        dialog.setProgress((int) (progress*total));
-                    }
-
-                    @Override
-                    public void onError(String msg) {
-                        DownloadCallback.super.onError(msg);
-                        ToastUtils.showShort("文件下载失败: \n" + msg);
-                    }
-
-                    @Override
-                    public void onSuccess(File file) {
-                        try {
-                            dialog.dismiss();
-                        }catch (Throwable throwable){
-                            throwable.printStackTrace();
-                        }
-
-                        ///storage/emulated/0/Android/data/com.hss01248.basewebviewdemo
-                        // /files/Download/胆子真大，竟然选择在山沟里修房子，不怕泥石流吗-今日头条.mp4
-                        LogUtils.d("文件路径: " + file.getAbsolutePath());
-                        //ToastUtils.showShort("文件下载成功: \n" + file.getAbsolutePath());
-                        //然后保存到mediastore:
-                        if(file.getAbsolutePath().startsWith(
-                                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath())){
-                            ToastUtils.showShort("文件下载到download文件夹:"+ file.getAbsolutePath());
-                            if(!file.getAbsolutePath().contains(".thefolder")){
-                                MediaStoreRefresher.refreshMediaCenter(getContext().getApplicationContext(),file.getAbsolutePath());
-                            }
-                            doFinish();
-                            return;
-                        }
-                        ThreadUtils.executeByIo(new ThreadUtils.SimpleTask<Object>() {
-                            @Override
-                            public Object doInBackground() throws Throwable {
-                                copyFileToDownloadsDir(file);
-                                return null;
-                            }
-
-                            @Override
-                            public void onSuccess(Object result) {
-                                doFinish();
-                            }
-                        });
-
-                    }
-                });
-    }
-
-    private void doFinish() {
-        ThreadUtils.getMainHandler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                ActivityUtils.getTopActivity().finish();
-            }
-        },2000);
-    }
-
-    private void copyFileToDownloadsDir(File file) {
-        Uri uri = MediaStore.Files.getContentUri("external");
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/"+AppUtils.getAppName());
-        // 设置文件名称
-        contentValues.put(MediaStore.Downloads.DISPLAY_NAME, file.getName());
-        // 设置文件标题, 一般是删除后缀, 可以不设置
-        //contentValues.put(MediaStore.Downloads.TITLE, "hello");
-        // uri 表示操作哪个数据库 , contentValues 表示要插入的数据内容
-        Uri insert = Utils.getApp().getContentResolver().insert(uri, contentValues);
-        // 向 Download/hello/hello.txt 文件中插入数据
-
-        try {
-            int sBufferSize = 524288;
-            InputStream is = new FileInputStream(file);
-            OutputStream os = Utils.getApp().getContentResolver().openOutputStream(insert);
-            try {
-                os = new BufferedOutputStream(os, sBufferSize);
-
-                double totalSize = is.available();
-                int curSize = 0;
-
-                byte[] data = new byte[sBufferSize];
-                for (int len; (len = is.read(data)) != -1; ) {
-                    os.write(data, 0, len);
-                    curSize += len;
-                }
-                os.flush();
-                LogUtils.i("拷贝文件到download文件夹: download/"+AppUtils.getAppName()+"/" + file.getName());
-                ToastUtils.showLong("文件下载到download文件夹: download/"+AppUtils.getAppName()+"/" + file.getName());
-                file.delete();
-
-            } catch (IOException e) {
-                LogUtils.w(e);
-
-            } finally {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                    LogUtils.w(e);
-                }
-                try {
-                    if (os != null) {
-                        os.close();
-                    }
-                } catch (IOException e) {
-                    LogUtils.w(e);
-                }
-            }
-        } catch (Exception e) {
-            LogUtils.w(e);
         }
     }
 
@@ -980,6 +761,8 @@ public class BaseQuickWebview extends LinearLayout implements DefaultLifecycleOb
         if (mAgentWeb != null) {
             mAgentWeb.getWebLifeCycle().onDestroy();
         }
+        //解决内存泄漏的问题
+        sourceLoadListener = null;
     }
 
     public boolean onBackPressed() {

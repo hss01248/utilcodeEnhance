@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.hss01248.basewebview.BaseWebviewActivity;
 import com.hss01248.basewebview.video.ClipboardMonitorService;
-import com.hss01248.sentry.SentryUtil;
+
 
 
 import top.zibin.luban.LubanUtil;
@@ -26,6 +26,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void geoLocation(View view) {
         BaseWebviewActivity.start(this,"https://www.runoob.com/try/try.php?filename=tryhtml5_geolocation");
+    }
+
+    public void test401Login(View view) {
+        BaseWebviewActivity.start(this,"http://192.168.1.12:9625");
     }
 
     public void showOpenFilePicker(View view) {
@@ -52,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void getUserMedia(View view) {
         //https://developer.mozilla.org/zh-CN/docs/Web/API/MediaDevices/getUserMedia
-        BaseWebviewActivity.start(this,"https://webrtc.github.io/samples/src/content/getusermedia/gum/");
+        BaseWebviewActivity.start(this,"https://static.hss01248.tech/webrtc.html");
     }
 
     public void windowHistory(View view) {
@@ -81,10 +85,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sentry_msg(View view) {
-        SentryUtil.testMsg("msg test");
+        //SentryUtil.testMsg("msg test");
     }
 
     public void sentry_ex(View view) {
-        SentryUtil.testException();
+        //SentryUtil.testException();
     }
 }

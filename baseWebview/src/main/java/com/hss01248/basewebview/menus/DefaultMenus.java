@@ -1,16 +1,13 @@
 package com.hss01248.basewebview.menus;
 
-import android.webkit.WebView;
-
 import com.blankj.utilcode.util.ActivityUtils;
+import com.hss.downloader.MyDownloader;
 import com.hss.utils.enhance.intent.ShareUtils;
 import com.hss01248.basewebview.BaseQuickWebview;
 import com.hss01248.basewebview.IShowRightMenus;
 import com.hss01248.basewebview.history.db.MyDbUtil;
 import com.hss01248.basewebview.history.ui.HistoryCollectVpHolder;
 import com.hss01248.iwidget.singlechoose.ISingleChooseItem;
-import com.hss01248.iwidget.singlechoose.SingleChooseDialogImpl;
-import com.hss01248.iwidget.singlechoose.SingleChooseDialogListener;
 import com.hss01248.qrscan.ScanCodeActivity;
 
 import java.util.ArrayList;
@@ -49,12 +46,13 @@ public class DefaultMenus implements IShowRightMenus {
         menus.add(new ISingleChooseItem<BaseQuickWebview>() {
             @Override
             public String text() {
-                return "切换为全功能浏览器模式";
+                return "查看下载列表";
             }
 
             @Override
             public void onItemClicked(int position, BaseQuickWebview bean) {
-                quickWebview.getTitlebarHolder().setFullWebBrowserMode(true);
+                //quickWebview.getTitlebarHolder().setFullWebBrowserMode(true);
+                MyDownloader.showWholeDownloadPage();
             }
         });
         menus.add(new ISingleChooseItem<BaseQuickWebview>() {

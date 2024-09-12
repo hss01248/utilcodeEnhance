@@ -2,4 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hss01248.viewholder">
 
+    <application>
+        <activity android:name="com.hss.utils.enhance.viewholder.ContainerActivity2"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize"
+            />
+    </application>
 </manifest>

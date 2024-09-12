@@ -17,7 +17,6 @@ public interface AppFirstActivityOnCreateListener {
      *  从桌面启动:from_launcher 其他: 按activity.getReferrer()本身的规则  示例:
      *                 //android-app://com.huawei.android.launcher launcher点击图标启动--> 归类到from_launcher
      *                  //android-app://com.android.shell  - android studio adb启动
-     *                   //android-app://com.aku.fbdemo  app内startactivity 点击打开普通页面
      *                   //android-app://com.android.packageinstaller
      */
     default void onFirtActivityCreated(Activity activity,@Nullable Bundle savedInstanceState){

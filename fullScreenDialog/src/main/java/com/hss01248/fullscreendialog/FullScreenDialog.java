@@ -20,6 +20,7 @@ import androidx.lifecycle.LifecycleOwner;
  * @Date 06/01/2023 17:08
  * @Version 1.0
  */
+@Deprecated
 public class FullScreenDialog extends Dialog implements DefaultLifecycleObserver {
     public FullScreenDialog(Context context) {
        this(context,R.style.Dialog_FullScreen2);

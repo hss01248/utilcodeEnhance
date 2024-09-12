@@ -3,14 +3,19 @@ package com.hss01248.biometric;
 import android.app.KeyguardManager;
 import android.content.Context;
 import android.os.Build;
+import android.security.keystore.KeyPermanentlyInvalidatedException;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
+
+import java.security.KeyStore;
+import java.security.PrivateKey;
+import java.security.Signature;
 
 /**
  * @Despciption todo
@@ -108,6 +113,29 @@ public class BiometricHelper {
         return  promptInfo;
     }
 
+    /**
+     * 在Android设备上添加新的指纹时，系统会重新生成一个新的密钥，将旧的密钥无效化。这是为了保证安全性，防止旧的指纹信息被滥用 (返回true,此时需清除本地秘钥，重新生成)
+     * 删除某个指纹时，系统并不会删除相应的密钥 返回false
+     * @param userkey
+     * @return
+     */
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public static boolean isFingerprintChanged(String userkey) {
+        try {
+            Signature signature = Signature.getInstance("SHA256withRSA");
+            KeyStore keyStore = KeyStore.getInstance("AndroidKeyStore");
+            keyStore.load(null);
+            signature.initSign((PrivateKey)keyStore.getKey(userkey, null));
+            signature.update("Hello, world!".getBytes());
+            signature.sign();
+            return false;
+        } catch (KeyPermanentlyInvalidatedException var3) {
+            return true;
+        } catch (Exception var4) {
+            return false;
+        }
+    }
+
 
     /**  https://zhuanlan.zhihu.com/p/489913461
      * 加密:
@@ -128,6 +156,7 @@ public class BiometricHelper {
      */
     public static  void showBiometricDialog(FragmentActivity activityContext,
                                             @Nullable BiometricPrompt.CryptoObject crypto,
+                                            boolean canUseOnlyPasswordPin,
                                             BiometricPrompt.AuthenticationCallback callback) {
         BiometricPrompt.PromptInfo promptInfo = null;
         if (isBiometricHardWareAvailable(activityContext)) {
@@ -138,7 +167,7 @@ public class BiometricHelper {
                     BioConstants.BIOMETRIC_AUTHENTICATION_DESCRIPTION,
                     false
             );
-        } else if (deviceHasPasswordPinLock(activityContext)) {
+        } else if (canUseOnlyPasswordPin && deviceHasPasswordPinLock(activityContext)) {
 
             promptInfo = initBiometricPrompt(
                     BioConstants.PASSWORD_PIN_AUTHENTICATION,
@@ -148,6 +177,7 @@ public class BiometricHelper {
             );
         }
         if (promptInfo == null) {
+            callback.onAuthenticationError(BiometricPrompt.ERROR_NO_DEVICE_CREDENTIAL,"not supported");
             return;
         }
         BiometricPrompt biometricPrompt = new BiometricPrompt(activityContext, ContextCompat.getMainExecutor(activityContext), callback);

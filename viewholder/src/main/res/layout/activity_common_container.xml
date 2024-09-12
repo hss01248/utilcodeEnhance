@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:id="@+id/ll_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/ll_titlebar"
+        android:orientation="vertical"
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <View
+            android:id="@+id/v_status"
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"/>
+        <com.hjq.bar.TitleBar
+            android:id="@+id/real_title_bar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            app:titleColor="#333333"
+            app:title=""
+            app:titleSize="18sp"
+            app:titleStyle="bold"
+            app:leftIcon="@drawable/arrow_back_black"
+            app:leftTitleSize="18sp"
+            app:leftTitleColor="#333333"
+            app:leftIconPadding="10dp"
+            app:leftTitleStyle="bold"
+            app:leftTitle="" />
+    </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/rl_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
+</LinearLayout>

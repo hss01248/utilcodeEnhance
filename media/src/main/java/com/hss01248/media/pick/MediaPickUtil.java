@@ -1,46 +1,37 @@
 package com.hss01248.media.pick;
 
 import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_OK;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.provider.BaseColumns;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
 import android.webkit.MimeTypeMap;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContentResolverCompat;
 
 import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.FileIOUtils;
 import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.Utils;
 import com.hss.utils.enhance.api.MyCommonCallback;
-import com.hss01248.activityresult.ActivityResultListener;
 import com.hss01248.activityresult.StartActivityUtil;
 import com.hss01248.activityresult.TheActivityListener;
 import com.hss01248.media.uri.ContentUriUtil;
-import com.hss01248.permission.MyPermissions;
 
 import java.io.File;
-import java.net.URLEncoder;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
+
+import top.zibin.luban.LubanUtil;
 
 /**
  * @author: Administrator
@@ -67,24 +58,49 @@ import java.util.TreeMap;
 public class MediaPickUtil {
 
     public static void pickImage(MyCommonCallback<Uri> callback) {
-        pickOne(callback,"image/*");
+        pickOneMedia(callback,"image/*");
     }
 
     public static void pickVideo(MyCommonCallback<Uri> callback) {
-        pickOne( callback,"video/*");
+        pickOneMedia( callback,"video/*");
     }
 
     public static void pickAudio(MyCommonCallback<Uri> callback) {
-        pickOne( callback,"audio/*");
+        pickOneMedia( callback,"audio/*");
     }
 
 
-    @Deprecated
+
     public static void pickPdf(MyCommonCallback<Uri> callback) {
-        pickOne( callback,"application/pdf");
+        pickMulti( new MyCommonCallback<List<Uri>>(){
+
+            @Override
+            public void onSuccess(List<Uri> uris) {
+                //这里判断类型,而不是传入到选择器,否则选择器界面极度难用
+                Uri uri = uris.get(0);
+                if(uri.toString().endsWith(".pdf")){
+                    callback.onSuccess(uri);
+                }else {
+                    callback.onError("not a pdf file: \n"+uri.toString());
+                }
+
+            }
+
+            @Override
+            public void onError(String msg) {
+                //MyCommonCallback.super.onError(msg);
+                callback.onError(msg);
+            }
+
+            @Override
+            public void onError(String code, String msg, @Nullable Throwable throwable) {
+                //MyCommonCallback.super.onError(code, msg, throwable);
+                callback.onError(code, msg, throwable);
+            }
+        },false,"*/*");
     }
     public static void pickOneFile(MyCommonCallback<Uri> callback) {
-        pickOne( callback,"*/*");
+        pickOneMedia( callback,"*/*");
     }
     /**
      * 多文件选择特点: 大多数响应的intent只返回单个文件,不支持多文件选择
@@ -93,25 +109,47 @@ public class MediaPickUtil {
      * @param callback
      */
     public static void pickMultiFiles(MyCommonCallback<List<Uri>> callback) {
-        pickMulti( callback,"*/*");
+        pickMulti( callback,true,"*/*");
+    }
+    public static void pickOne(MyCommonCallback<Uri> callback) {
+        pickMulti(new MyCommonCallback<List<Uri>>() {
+            @Override
+            public void onSuccess(List<Uri> uris) {
+                callback.onSuccess(uris.get(0));
+            }
+
+            @Override
+            public void onError(String code, String msg, @Nullable Throwable throwable) {
+                MyCommonCallback.super.onError(code, msg, throwable);
+                callback.onError(code, msg, throwable);
+            }
+        }, false, "*/*");
     }
 
 
-    public static void pickMulti( MyCommonCallback<List<Uri>> callback,String... mimeTypes) {
+    public static void pickMulti( MyCommonCallback<List<Uri>> callback,
+                                  boolean multi,
+                                  String... mimeTypes) {
         String mimeType = MimeTypeUtil.buildMimeTypeWithDot(mimeTypes);
-        MyPermissions.requestByMostEffort(false, true,
-                new PermissionUtils.FullCallback() {
-                    @Override
-                    public void onGranted(@NonNull List<String> granted) {
-                        startIntent2(mimeType, callback);
-                    }
 
-                    @Override
-                    public void onDenied(@NonNull List<String> deniedForever, @NonNull List<String> denied) {
-                        callback.onError("permission", "[read external storage] permission denied", null);
-                    }
-                }, Manifest.permission.READ_EXTERNAL_STORAGE);
+        //不建议传入选择器,而是应该选择后自行检查. 传入选择器会导致选择器界面无法筛选类型,交互极度难用
+        startIntent2(mimeType,multi, callback);
+        /*if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ){
+            startIntent2(mimeType,multi, callback);
+        }else {
+            MyPermissions.requestByMostEffort(false, true,
+                    new PermissionUtils.FullCallback() {
+                        @Override
+                        public void onGranted(@NonNull List<String> granted) {
+                            startIntent2(mimeType,multi, callback);
+                        }
 
+                        @Override
+                        public void onDenied(@NonNull List<String> deniedForever, @NonNull List<String> denied) {
+                            callback.onError("permission", "[read external storage] permission denied", null);
+                        }
+                    }, Manifest.permission.READ_EXTERNAL_STORAGE);
+        }*/
     }
 
     /**
@@ -123,10 +161,11 @@ public class MediaPickUtil {
      * @param mimeType
      * @param callback
      */
-    private static void startIntent2(String mimeType, MyCommonCallback<List<Uri>> callback) {
+    private static void startIntent2(String mimeType,boolean multi ,MyCommonCallback<List<Uri>> callback) {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        //intent.setType(mimeType);
         intent.setType("*/*");
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);//打开多个文件
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,multi);//打开多个文件
         intent.addCategory(Intent.CATEGORY_DEFAULT);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
@@ -177,10 +216,12 @@ public class MediaPickUtil {
     /**
      * 虽然高版本Android不再需要READ_EXTERNAL_STORAGE就可以查看选择的图片,但用户不知道啊,能多拿权限就多拿
      *  Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q ? Manifest.permission.INTERNET : Manifest.permission.READ_EXTERNAL_STORAGE
+     *
+     *  经由系统或第三方选择器的,通通不需要权限,因为他们会自动赋予uri以read权限!!!
      * @param callback
      * @param mimeTypes
      */
-    public static void pickOne( MyCommonCallback<Uri> callback,String... mimeTypes) {
+    public static void pickOneMedia(MyCommonCallback<Uri> callback, String... mimeTypes) {
         String mimeType = MimeTypeUtil.buildMimeTypeWithDot(mimeTypes);
         LogUtils.i("request mimetype: "+mimeType);
         String mime = mimeTypes[0];
@@ -193,22 +234,40 @@ public class MediaPickUtil {
             }else if(mime.startsWith("video")){
                 permission = Manifest.permission.READ_MEDIA_VIDEO;
             }else if(mime.startsWith("audio")){
-                //permission = Manifest.permission.READ_MEDIA_AUDIO;
+                permission = Manifest.permission.READ_MEDIA_AUDIO;
                 //TMD 设置页面根本没有对应的权限
             }
         }
-        MyPermissions.requestByMostEffort(false, true,
-                new PermissionUtils.FullCallback() {
-                    @Override
-                    public void onGranted(@NonNull List<String> granted) {
-                        startIntent(mimeType, callback);
-                    }
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ){
+            startIntent(mimeType, callback);
+            /*MyPermissions.requestByMostEffort(false, true,
+                    new PermissionUtils.FullCallback() {
+                        @Override
+                        public void onGranted(@NonNull List<String> granted) {
+                            startIntent(mimeType, callback);
+                        }
 
-                    @Override
-                    public void onDenied(@NonNull List<String> deniedForever, @NonNull List<String> denied) {
-                        callback.onError("permission", "[read external storage] permission denied", null);
-                    }
-                }, permission,Manifest.permission.READ_EXTERNAL_STORAGE);
+                        @Override
+                        public void onDenied(@NonNull List<String> deniedForever, @NonNull List<String> denied) {
+                            callback.onError("permission", "[read external storage] permission denied", null);
+                        }
+                    }, permission);*/
+        }else {
+            startIntent(mimeType, callback);
+            /*MyPermissions.requestByMostEffort(false, true,
+                    new PermissionUtils.FullCallback() {
+                        @Override
+                        public void onGranted(@NonNull List<String> granted) {
+                            startIntent(mimeType, callback);
+                        }
+
+                        @Override
+                        public void onDenied(@NonNull List<String> deniedForever, @NonNull List<String> denied) {
+                            callback.onError("permission", "[read external storage] permission denied", null);
+                        }
+                    }, permission,Manifest.permission.READ_EXTERNAL_STORAGE);*/
+        }
+
 
     }
 
@@ -272,7 +331,7 @@ public class MediaPickUtil {
                 callback.onSuccess(uri);
                 //后续操作:
                 //ContentUriUtil.getRealPath(uri);
-                ContentUriUtil.getInfos(uri);
+                //ContentUriUtil.getInfos(uri);
                 //ContentUriUtil.queryMediaStore(uri);
                 //content://com.android.providers.media.documents/document/video%3A114026
             }
@@ -285,5 +344,95 @@ public class MediaPickUtil {
         });
     }
 
+
+    public static @Nullable File transUriToInnerFilePath(String pathOrUriString) {
+        if(pathOrUriString.startsWith("content://")){
+            Uri uri = Uri.parse(pathOrUriString);
+            File dir  = Utils.getApp().getExternalFilesDir("pickCache");
+            dir.mkdirs();
+            Map<String, Object> infos = ContentUriUtil.getInfos(uri);
+            String name = System.currentTimeMillis()+".jpg";
+            if(infos !=null && infos.containsKey("_display_name")){
+                name = infos.get("_display_name")+"";
+            }
+            File file = new File(dir,name);
+
+            try {
+                boolean success = FileIOUtils.writeFileFromIS(file, Utils.getApp().getContentResolver().openInputStream(uri));
+                if(success && file.exists() && file.length() >0){
+                    return file;
+                }else {
+                    return null;
+                }
+            } catch (Throwable e) {
+                LogUtils.w(e);
+                return null;
+            }
+        }else {
+            if(pathOrUriString.startsWith("file://")){
+                Uri uri = Uri.parse(pathOrUriString);
+                pathOrUriString = uri.getPath();
+            }
+            File file = new File(pathOrUriString);
+            if(file.exists() && file.length() >0 && file.canRead()){
+                return file;
+            }
+            return null;
+        }
+    }
+
+    public static @Nullable InputStream transUriToInputStream(String pathOrUriString) throws Exception{
+        if(pathOrUriString.startsWith("content://")){
+            Uri uri = Uri.parse(pathOrUriString);
+            return Utils.getApp().getContentResolver().openInputStream(uri);
+        }else {
+            if(pathOrUriString.startsWith("file://")){
+                Uri uri = Uri.parse(pathOrUriString);
+                pathOrUriString = uri.getPath();
+            }
+            File file = new File(pathOrUriString);
+            if(file.exists() && file.length() >0 && file.canRead()){
+                return new FileInputStream(file);
+            }
+            return null;
+        }
+    }
+
+    public static Uri doCompress(Uri uri) {
+        if("content".equals(uri.getScheme())){
+            Map<String, Object> infos = ContentUriUtil.getInfos(uri);
+            if(infos !=null  ){
+                String type =  infos.get(MediaStore.MediaColumns.MIME_TYPE)+"";
+                if(type.startsWith("image")){
+                    File file = MediaPickUtil.transUriToInnerFilePath(uri.toString());
+                    if(file !=null){
+                        file = LubanUtil.compressWithNoResize(file.getAbsolutePath());
+                        if(file.exists() && file.length() >0){
+                            uri = Uri.fromFile(file);
+                        }
+                    }
+                }else if(type.startsWith("video")){
+                    //todo 压缩视频
+                }
+            }
+        }else if("file".equals(uri.getScheme())){
+            String path = uri.getPath();
+            File file = new File(path);
+            String name = file.getName();
+            if(name.contains(".")){
+                String suffix = name.substring(name.lastIndexOf(".")+1);
+                String minetype =      MimeTypeMap.getSingleton().getMimeTypeFromExtension(suffix);
+                if(minetype !=null && minetype.startsWith("image")){
+                    file = LubanUtil.compressWithNoResize(file.getAbsolutePath());
+                    if(file.exists() && file.length() >0){
+                        uri = Uri.fromFile(file);
+                    }
+                }else  if(minetype !=null && minetype.startsWith("video")){
+                    //todo 压缩视频
+                }
+            }
+        }
+        return uri;
+    }
 
 }

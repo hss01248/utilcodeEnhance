@@ -2,15 +2,11 @@ package com.hss01248.basewebview.history.ui;
 
 import android.view.ViewGroup;
 
-import com.blankj.utilcode.util.BarUtils;
-import com.blankj.utilcode.util.SizeUtils;
 import com.hss.utils.enhance.viewholder.MyViewHolder;
 import com.hss01248.basewebview.BaseQuickWebview;
 import com.hss01248.basewebview.R;
 import com.hss01248.basewebview.databinding.ContainerHistoryCollectBinding;
 import com.hss01248.basewebview.history.db.BrowserHistoryInfo;
-import com.hss01248.history.api.SearchHistoryViewHolder;
-import com.hss01248.refresh_loadmore.RefreshLoadMoreRecycleViewHolder;
 import com.hss01248.refresh_loadmore.search.SearchViewHolder;
 
 import java.util.HashMap;

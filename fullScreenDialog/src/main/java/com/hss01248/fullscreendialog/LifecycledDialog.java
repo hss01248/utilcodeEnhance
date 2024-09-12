@@ -42,6 +42,12 @@ public class LifecycledDialog extends Dialog implements LifecycleOwner {
         lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_PAUSE);
     }
 
+    @Override
+    public void cancel() {
+        super.cancel();
+        lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY);
+    }
+
     @NonNull
     @Override
     public Lifecycle getLifecycle() {

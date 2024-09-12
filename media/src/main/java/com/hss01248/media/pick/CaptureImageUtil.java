@@ -17,7 +17,7 @@ import com.blankj.utilcode.util.Utils;
 import com.hss.utils.enhance.api.MyCommonCallback;
 import com.hss01248.activityresult.ActivityResultListener;
 import com.hss01248.activityresult.StartActivityUtil;
-import com.hss01248.openuri.OpenUri;
+import com.hss01248.openuri2.OpenUri2;
 import com.hss01248.permission.MyPermissions;
 
 import java.io.File;
@@ -85,8 +85,8 @@ public class CaptureImageUtil {
         // 根据文件地址创建文件
         File file=new File(path);
         // 把文件地址转换成Uri格式
-        Uri uri= OpenUri.fromFile(Utils.getApp(),file);
-        OpenUri.addPermissionRW(intent);
+        Uri uri= OpenUri2.fromFile(Utils.getApp(),file);
+        OpenUri2.addPermissionRW(intent);
         // 设置系统相机拍摄照片完成后图片文件的存放地址
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
 

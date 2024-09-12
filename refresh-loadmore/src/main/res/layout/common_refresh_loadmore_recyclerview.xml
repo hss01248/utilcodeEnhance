@@ -1,25 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.hss01248.viewstate.StatefulLayout
+<LinearLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.scwang.smart.refresh.layout.SmartRefreshLayout
-        android:id="@+id/refreshLayout"
+    <com.hss01248.viewstate.StatefulLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <com.scwang.smart.refresh.header.MaterialHeader
-            android:id="@+id/refresh_header"
+        android:layout_weight="1"
+        android:id="@+id/stateful_layout"
+        android:layout_height="0dp"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+        <com.scwang.smart.refresh.layout.SmartRefreshLayout
+            android:id="@+id/refreshLayout"
             android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <com.scwang.smart.refresh.header.MaterialHeader
+                android:id="@+id/refresh_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never"
+                app:fastScrollEnabled="true"
+                app:fastScrollHorizontalThumbDrawable="@drawable/fast_thumb_drawable"
+                app:fastScrollHorizontalTrackDrawable="@drawable/fast_line_drawable"
+                app:fastScrollVerticalThumbDrawable="@drawable/fast_thumb_drawable"
+                app:fastScrollVerticalTrackDrawable="@drawable/fast_line_drawable"
+                android:fadeScrollbars="false"
+                android:scrollbarThumbVertical="@drawable/my_scrollbar_shape"
+                android:scrollbars="vertical"
+                android:background="#fff" />
+            <com.scwang.smart.refresh.footer.ClassicsFooter
+                android:id="@+id/refresh_footer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+    </com.hss01248.viewstate.StatefulLayout>
+
+    <!--页码-->
+    <LinearLayout
+        android:id="@+id/ll_pager"
+        android:visibility="visible"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/tv_pre"
+            android:text="pre"
+            android:textColor="#333333"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:overScrollMode="never"
-            android:background="#fff" />
-        <com.scwang.smart.refresh.footer.ClassicsFooter
-            android:id="@+id/refresh_footer"
-            android:layout_width="match_parent"
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:layout_height="wrap_content">
+            <com.warkiz.widget.IndicatorSeekBar
+                android:layout_width="match_parent"
+                android:id="@+id/sb_pager"
+                android:layout_height="wrap_content"
+                app:isb_max="10"
+                app:isb_min="1"
+                app:isb_progress="1"
+                app:isb_seek_smoothly="true"
+                app:isb_thumb_size="20dp"
+                app:isb_show_indicator="rounded_rectangle"
+                app:isb_indicator_text_color="#333333"
+                app:isb_indicator_text_size="18sp"
+                app:isb_track_background_size="2dp"
+                app:isb_track_progress_size="4dp"
+                app:isb_only_thumb_draggable="false"/>
+            <TextView
+                android:id="@+id/tv_page_index"
+                android:textColor="#333333"
+                android:text="1/3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tv_next"
+            android:text="next"
+            android:textColor="#333333"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:gravity="center"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
-</com.hss01248.viewstate.StatefulLayout>
+    </LinearLayout>
+</LinearLayout>

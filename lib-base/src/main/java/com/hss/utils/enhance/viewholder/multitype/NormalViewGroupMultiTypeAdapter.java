@@ -1,9 +1,7 @@
 package com.hss.utils.enhance.viewholder.multitype;
 
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
-import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.LogUtils;
 
 import java.util.ArrayList;

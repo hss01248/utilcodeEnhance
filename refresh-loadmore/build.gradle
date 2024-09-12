@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    compileSdkVersion 33
+    compileSdk 34
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 33
+        targetSdkVersion 34
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -38,9 +38,10 @@ dependencies {
     api  'io.github.scwang90:refresh-footer-classics:2.0.5'    //经典加载
     api project(path: ':lib-base')
     api project(path: ':iwidget')
+    api project(path: ':viewholder')
     api project(path: ':search-history-api')
     api "com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.46"
-
+    api 'com.github.warkiz.widget:indicatorseekbar:2.1.2'
     api "com.github.fondesa:recycler-view-divider:3.5.0"
 
     api 'com.yqritc:recyclerview-flexibledivider:1.4.0'

@@ -1,6 +1,5 @@
 package com.hss.utils.enhance;
 
-import android.app.Activity;
 import android.graphics.Rect;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 
-import com.blankj.utilcode.util.KeyboardUtils;
 import com.hss.utils.enhance.lifecycle.LifecycleObjectUtil;
 
 /**
@@ -133,15 +131,22 @@ public class MyKeyboardUtil implements DefaultLifecycleObserver {
                     @Override
                     public void onSoftKeyBoardShow(int keyboardHeight) {
                         ViewGroup.LayoutParams layoutParams = innerScrollableView.getLayoutParams();
-                        layoutParams.height = totalHeight[0] - keyboardHeight;
-                        innerScrollableView.setLayoutParams(layoutParams);
+                        if(layoutParams ==null){
+
+                        }else {
+                            layoutParams.height = totalHeight[0] - keyboardHeight;
+                            innerScrollableView.setLayoutParams(layoutParams);
+                        }
                     }
 
                     @Override
                     public void onSoftKeyBoardHide() {
                         ViewGroup.LayoutParams layoutParams = innerScrollableView.getLayoutParams();
-                        layoutParams.height = totalHeight[0] ;
-                        innerScrollableView.setLayoutParams(layoutParams);
+                        if(layoutParams !=null){
+                            layoutParams.height = totalHeight[0] ;
+                            innerScrollableView.setLayoutParams(layoutParams);
+                        }
+
                     }
                 });
     }

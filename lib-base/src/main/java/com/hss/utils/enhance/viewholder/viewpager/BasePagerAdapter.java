@@ -14,6 +14,7 @@ import java.util.List;
  * @date: 2022/2/26
  * @desc: //todo
  */
+@Deprecated
 public class BasePagerAdapter<T> extends PagerAdapter {
     public BasePagerAdapter(List<T> datas, IViewPagerInstantiateItem<T> instantiateItem) {
         if(datas != null){

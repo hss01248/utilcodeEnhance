@@ -8,73 +8,91 @@ import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-
-import com.blankj.utilcode.util.ActivityUtils;
-import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.PermissionUtils;
-import com.blankj.utilcode.util.StringUtils;
-import com.blankj.utilcode.util.ThreadUtils;
-import com.blankj.utilcode.util.ThrowableUtils;
-import com.blankj.utilcode.util.ToastUtils;
-import com.blankj.utilcode.util.Utils;
-import com.github.gzuliyujiang.filepicker.ExplorerConfig;
-import com.github.gzuliyujiang.filepicker.FilePicker;
-import com.github.gzuliyujiang.filepicker.contract.OnFilePickedListener;
-import com.google.gson.GsonBuilder;
-import com.hss.utils.enhance.BarColorUtil;
-import com.hss.utils.enhance.HomeMaintaner;
-import com.hss.utils.enhance.foregroundservice.CommonProgressService;
-import com.hss.utils.enhance.intent.ShareUtils;
-import com.hss.utils.enhance.UrlEncodeUtil;
-import com.hss.utils.enhance.intent.SysIntentUtil;
-import com.hss01248.activityresult.ActivityResultListener;
-import com.hss01248.activityresult.StartActivityUtil;
-import com.hss01248.activityresult.TheActivityListener;
-import com.hss01248.basewebview.BaseWebviewActivity;
-import com.hss01248.biometric.BiometricHelper;
-import com.hss01248.biometric.CryptUtil;
-import com.hss01248.cipher.file.EncryptedUtil;
-import com.hss01248.cipher.sp.EnSpUtil;
-import com.hss01248.cipher.sp.SpUtil;
-import com.hss01248.image.dataforphotoselet.ImgDataSeletor;
-import com.hss01248.iwidget.BaseDialogListener;
-import com.hss01248.iwidget.msg.AlertDialogImplByDialogUtil;
-import com.hss01248.iwidget.msg.AlertDialogImplByMmDialog;
-import com.hss01248.iwidget.msg.AlertDialogImplByXStyleDialog;
-import com.hss01248.iwidget.singlechoose.SingleChooseDialogImpl;
-import com.hss01248.iwidget.singlechoose.SingleChooseDialogListener;
-import com.hss01248.media.contact.ContactInfo;
-import com.hss01248.media.contact.ContactPickUtil;
-import com.hss01248.media.pick.CaptureAudioUtil;
-import com.hss01248.media.pick.MediaPickOrCaptureUtil;
-import com.hss01248.media.pick.MediaPickUtil;
-import com.hss.utils.enhance.api.MyCommonCallback;
-import com.hss01248.media.pick.SafUtil;
-import com.hss01248.media.pick.CaptureImageUtil;
-import com.hss01248.media.pick.CaptureVideoUtil;
-import com.hss01248.media.metadata.MetaDataUtil;
-import com.hss01248.media.uri.ContentUriUtil;
-import com.hss01248.openuri.OpenUri;
-import com.hss01248.permission.MyPermissions;
-import com.hss01248.qrscan.ScanCodeActivity;
-import com.hss01248.toast.MyToast;
+import android.os.Environment;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
+import android.security.identity.IdentityCredential;
+import android.util.Base64;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricPrompt;
-import androidx.security.crypto.MasterKeys;
+import androidx.core.util.Pair;
 
-import android.provider.MediaStore;
-import android.security.keystore.KeyGenParameterSpec;
-import android.util.Base64;
-import android.util.Log;
-import android.view.View;
+import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.PermissionUtils;
+import com.blankj.utilcode.util.StringUtils;
+import com.blankj.utilcode.util.ThreadUtils;
+import com.blankj.utilcode.util.ToastUtils;
+import com.blankj.utilcode.util.Utils;
+import com.bumptech.glide.Glide;
+import com.google.gson.GsonBuilder;
+import com.hss.downloader.MyDownloader;
+import com.hss.utils.base.api.MyCommonCallback3;
+import com.hss.utils.enhance.BarColorUtil;
+import com.hss.utils.enhance.HomeMaintaner;
+import com.hss.utils.enhance.UrlEncodeUtil;
+import com.hss.utils.enhance.api.MyCommonCallback;
+import com.hss.utils.enhance.foregroundservice.CommonProgressService;
+import com.hss.utils.enhance.intent.ShareUtils;
+import com.hss.utils.enhance.intent.SysIntentUtil;
+import com.hss.utils.enhance.viewholder.ContainerActivity2;
+import com.hss.utils.enhance.viewholder.mvvm.ContainerViewHolderWithTitleBar;
+import com.hss.utilsenhance.databinding.DisplayMetaViewBinding;
+import com.hss.utilsenhance.databinding.TestFullBinding;
+import com.hss01248.activityresult.ActivityResultListener;
+import com.hss01248.activityresult.StartActivityUtil;
+import com.hss01248.activityresult.TheActivityListener;
+import com.hss01248.basewebview.BaseWebviewActivity;
+import com.hss01248.biometric.BiometricHelper;
+import com.hss01248.bitmap_saver.BitmapSaveUtil;
+import com.hss01248.cipher.AesCipherUtil;
+import com.hss01248.cipher.PasswordLoginByBiometric;
+import com.hss01248.cipher.RsaCipherUtil;
+import com.hss01248.cipher.SignUtil;
+import com.hss01248.cipher.SslUtil;
+import com.hss01248.cipher.file.EncryptedUtil;
+import com.hss01248.cipher.sp.EnSpUtil;
+import com.hss01248.fullscreendialog.FullScreenDialogUtil;
+import com.hss01248.image.dataforphotoselet.ImgDataSeletor;
+import com.hss01248.iwidget.BaseDialogListener;
+import com.hss01248.iwidget.msg.AlertDialogImplByDialogUtil;
+import com.hss01248.iwidget.msg.AlertDialogImplByMmDialog;
+import com.hss01248.iwidget.msg.AlertDialogImplByXStyleDialog;
+import com.hss01248.iwidget.pop.PopList;
+import com.hss01248.iwidget.singlechoose.SingleChooseDialogImpl;
+import com.hss01248.iwidget.singlechoose.SingleChooseDialogListener;
+import com.hss01248.media.contact.ContactInfo;
+import com.hss01248.media.contact.ContactPickUtil;
+import com.hss01248.media.metadata.MetaDataUtil;
+import com.hss01248.media.pick.CaptureAudioUtil;
+import com.hss01248.media.pick.CaptureImageUtil;
+import com.hss01248.media.pick.CaptureVideoUtil;
+import com.hss01248.media.pick.MediaPickOrCaptureUtil;
+import com.hss01248.media.pick.MediaPickUtil;
+import com.hss01248.media.pick.SafUtil;
+import com.hss01248.media.uri.ContentUriUtil;
+import com.hss01248.openuri2.OpenUri2;
+import com.hss01248.permission.MyPermissions;
+import com.hss01248.qrscan.ScanCodeActivity;
+import com.hss01248.sentry.SentryUtil;
+import com.hss01248.toast.MyToast;
+import com.hss01248.viewholder_media.FileTreeViewHolder;
+import com.hss01248.webviewspider.SpiderWebviewActivity;
 
 import org.devio.takephoto.wrap.TakeOnePhotoListener;
 import org.devio.takephoto.wrap.TakePhotoUtil;
@@ -82,7 +100,10 @@ import org.devio.takephoto.wrap.TakePhotoUtil;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.URLDecoder;
+import java.security.Key;
 import java.security.KeyStore;
+import java.security.NoSuchAlgorithmException;
+import java.security.Signature;
 import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -90,7 +111,10 @@ import java.util.Map;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.GCMParameterSpec;
 
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
 public class MainActivity extends AppCompatActivity {
@@ -293,7 +317,7 @@ public class MainActivity extends AppCompatActivity {
         CaptureVideoUtil.startVideoCapture(true,30, 1024 * 1024 * 1024, new MyCommonCallback<String>() {
             @Override
             public void onSuccess(String path) {
-                showMata(OpenUri.fromFile(Utils.getApp(),new File(path)));
+                showMata(OpenUri2.fromFile(Utils.getApp(),new File(path)));
                 LogUtils.d(path);
             }
 
@@ -337,10 +361,35 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         desc  = path0.toString()+"\n"+  new GsonBuilder().setPrettyPrinting().create().toJson(map);
-        new AlertDialog.Builder(this)
-                .setTitle("mata data")
-                .setMessage(desc)
-                .setPositiveButton("预览", new DialogInterface.OnClickListener() {
+        String type = map.get("mime_type")+"";
+
+        View contentView = null;
+        if(type.contains("image") || type.contains("video")
+                || path0.toString().endsWith(".mp4")
+                || path0.toString().endsWith(".jpg")){
+            DisplayMetaViewBinding binding = DisplayMetaViewBinding.inflate(MainActivity.this.getLayoutInflater(),findViewById(android.R.id.content),false);
+            //ViewGroup group = (ViewGroup) View.inflate(this,R.layout.display_meta_view,findViewById(android.R.id.content));
+            contentView = binding.getRoot();
+
+           ImageView imageView =  binding.ivImage;
+            Glide.with(this)
+                    .load(path0)
+                    //.override(SizeUtils.dp2px(100),SizeUtils.dp2px(100))
+                    .into(imageView);
+
+            TextView textView =  binding.tvDesc;
+            textView.setText(desc);
+
+        }
+
+        AlertDialog.Builder builder =   new AlertDialog.Builder(this)
+                .setTitle("mata data");
+        if(contentView !=null){
+            builder.setView(contentView);
+        }else {
+              builder.setMessage(desc);
+        }
+        builder.setPositiveButton("预览", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if(map.containsKey("_data")){
@@ -356,7 +405,7 @@ public class MainActivity extends AppCompatActivity {
         CaptureImageUtil.takePicture(true,new MyCommonCallback<String>() {
             @Override
             public void onSuccess(String s) {
-                showMata(OpenUri.fromFile(Utils.getApp(),new File(s)));
+                showMata(OpenUri2.fromFile(Utils.getApp(),new File(s)));
                 LogUtils.d(s);
             }
 
@@ -429,6 +478,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Uri uri) {
                 showMata(uri);
+            }
+
+            @Override
+            public void onError(String msg) {
+                MyCommonCallback.super.onError(msg);
+                MyToast.error(msg);
             }
         });
     }
@@ -801,20 +856,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void pickImage13(View view) {
-        MyPermissions.requestByMostEffort(false, true, new PermissionUtils.FullCallback() {
-            @Override
-            public void onGranted(@NonNull List<String> granted) {
-                doPick13();
-            }
-
-            @Override
-            public void onDenied(@NonNull List<String> deniedForever, @NonNull List<String> denied) {
-
-            }
-        },Manifest.permission.READ_EXTERNAL_STORAGE);
-
-
-
+        doPick13();
     }
 
     private void doPick13() {
@@ -884,7 +926,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void biometric(View view) {
-        BiometricHelper.showBiometricDialog(this, null,new BiometricPrompt.AuthenticationCallback() {
+        Cipher cipher = null;
+        try {
+            cipher = AesCipherUtil.getCipher();
+            cipher.init(Cipher.ENCRYPT_MODE, AesCipherUtil.getOrCreateSecretKey("pw",true));
+        } catch (Throwable e) {
+            LogUtils.w(e);
+        }
+
+        BiometricPrompt.CryptoObject cryptoObject = new BiometricPrompt.CryptoObject(cipher);
+        BiometricHelper.showBiometricDialog(this, cryptoObject,true,new BiometricPrompt.AuthenticationCallback() {
             @Override
             public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
@@ -912,6 +963,22 @@ public class MainActivity extends AppCompatActivity {
                 ToastUtils.showLong("验证成功:"+result.getAuthenticationType());
                 //result.getCryptoObject().getSignature();
                 //https://zhuanlan.zhihu.com/p/489913461   移动端系统生物认证技术详解
+                if(result.getCryptoObject() ==null){
+                    //DEVICE_CREDENTIAL = 1
+                    //TYPE_BIOMETRIC = 2
+                    LogUtils.w("result.getCryptoObject() ==null, type is "+result.getAuthenticationType());
+                    return;
+                }
+                IdentityCredential identityCredential = null;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                     identityCredential = result.getCryptoObject().getIdentityCredential();
+                }
+
+                LogUtils.d(result.getCryptoObject().getCipher(),
+                            result.getCryptoObject().getSignature(),
+                            result.getCryptoObject().getMac(),
+                            identityCredential
+                            );
                 try{
                     String str = "login_pw_123456";
                     Cipher cipher = result.getCryptoObject().getCipher();
@@ -919,10 +986,16 @@ public class MainActivity extends AppCompatActivity {
                    // if(SpUtil.getString("en_key"),"")
 
                     byte[] encrypted = cipher.doFinal(str.getBytes());
-                    byte[] IV = cipher.getIV();
+                    byte[] iv = cipher.getIV();
                     String se = Base64.encodeToString(encrypted, Base64.URL_SAFE);
-                    String siv = Base64.encodeToString(IV, Base64.URL_SAFE);
+                    String siv = Base64.encodeToString(iv, Base64.URL_SAFE);
                     //SpUtil.putString("en_key");
+                    LogUtils.i("加密后:"+se,"iv:"+siv);
+
+                    decrypt2(encrypted,iv);
+
+
+
                 }catch (Throwable throwable){
                     LogUtils.w(throwable);
                 }
@@ -936,6 +1009,48 @@ public class MainActivity extends AppCompatActivity {
                 ToastUtils.showLong("onAuthenticationFailed");
             }
         });
+    }
+
+    private void decrypt2(byte[] encrypted, byte[] iv) {
+        Cipher cipher = null;
+        try {
+            cipher = AesCipherUtil.getCipher();
+           int TAG_SIZE_IN_BYTES = 16;
+            //IV required when decrypting
+            //cipher.init(Cipher.DECRYPT_MODE, CryptUtil.getOrCreateSecretKey("pw",true));
+            cipher.init(Cipher.DECRYPT_MODE, AesCipherUtil.getOrCreateSecretKey("pw",true),
+                    new GCMParameterSpec(TAG_SIZE_IN_BYTES * 8, iv));
+        } catch (Throwable e) {
+            LogUtils.w(e);
+        }
+        BiometricPrompt.CryptoObject cryptoObject = new BiometricPrompt.CryptoObject(cipher);
+        BiometricHelper.showBiometricDialog(this, cryptoObject,true, new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                Cipher cipher2 = result.getCryptoObject().getCipher();
+                try {
+                    LogUtils.i("解密后:"+ AesCipherUtil.decryptData(encrypted,cipher2));
+                } catch (Throwable e) {
+                   LogUtils.w(e);
+                }
+
+            }
+
+            @Override
+            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+                ToastUtils.showLong("onAuthenticationError,"+errorCode+","+errString);
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+                ToastUtils.showLong("onAuthenticationFailed");
+            }
+        });
+
+
     }
 
     public void enSp(View view) {
@@ -1006,35 +1121,422 @@ public class MainActivity extends AppCompatActivity {
 
     public void listKeystore(View view) {
         try{
-
-            SecretKey testKeyStore1 = CryptUtil.getOrCreateSecretKey("test_key_store3",false);
-            //AndroidKeyStoreSecretKey storeSecretKey = null;
-            //android.security.keystore2.AndroidKeyStoreSecretKey@af6e2d2d
-            LogUtils.d(testKeyStore1.getAlgorithm(),testKeyStore1.getFormat(),testKeyStore1);
-
-            Cipher cipher = CryptUtil.getCipher();
-            cipher.init(Cipher.ENCRYPT_MODE,testKeyStore1);
-            //android.security.KeyStoreException: Key user not authenticated (internal Keystore code: -26 message: In KeystoreOperation::update
-            byte[] testData1s = CryptUtil.encryptData("testData1", cipher);
-
-            Cipher cipher2 = CryptUtil.getCipher();
-            // IV required when decrypting. Use IvParameterSpec or AlgorithmParameters to provide it.
-            cipher2.init(Cipher.DECRYPT_MODE,testKeyStore1);
-            String s1 = CryptUtil.decryptData(testData1s, cipher2);
-            LogUtils.i("decrypted",s1);
-
-
             KeyStore ks = KeyStore.getInstance("AndroidKeyStore");
             ks.load(null);
             Enumeration<String> aliases = ks.aliases();
 
+            Map strings = new LinkedHashMap();
             while (aliases.hasMoreElements()){
                 String s = aliases.nextElement();
-                System.out.println("key: "+s);
+
+                Key secretKey =  ks.getKey(s, null);
+                strings.put(s,secretKey.toString());
+                //android.security.keystore2.AndroidKeyStoreSecretKey
+                //android.security.keystore2.AndroidKeyStoreRSAPrivateKey
+                if(secretKey instanceof  SecretKey){
+                    //SecretKeySpec
+                    //android.security.keystore2.AndroidKeyStoreSecretKey
+                    //strings.put(s,secretKey.toString());
+                }else{
+                    KeyStore.Entry entry = ks.getEntry(s, null);
+                    if (entry instanceof KeyStore.PrivateKeyEntry ) {
+                        KeyStore.PrivateKeyEntry entry1 = (KeyStore.PrivateKeyEntry) entry;
+                        //strings.put(s,entry1.toString());
+                    }
+                }
+
             }
+            LogUtils.w(strings);
         }catch (Throwable throwable){
             LogUtils.w(throwable);
         }
 
+    }
+
+    public void biometricSignature(View view) {
+        Signature signature = null;
+        try {
+            signature = Signature.getInstance("");
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+        BiometricPrompt.CryptoObject cryptoObject = new BiometricPrompt.CryptoObject(signature);
+        BiometricHelper.showBiometricDialog(this, null,true, new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+            }
+
+            @Override
+            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+            }
+        });
+    }
+
+    public void rsaCipher(View view) {
+        try {
+            byte[] encryptedData = RsaCipherUtil.encryptByPublicKey("rsaCipher", "abc".getBytes());
+            byte[] data = RsaCipherUtil.decryptByPrivateKey("rsaCipher", encryptedData);
+            LogUtils.i("rsaCipher-解密后数据: "+new String(data));
+        } catch (Throwable e) {
+            LogUtils.w(e);
+        }
+    }
+
+    public void bioDecryptByPrivate(View view) {
+
+        try {
+            byte[]  encryptedData = RsaCipherUtil.encryptByPublicKeyWithUserVerify("bio-rsaCipher", "123456".getBytes());
+            RsaCipherUtil.decryptByPrivateKeyWithUserVerify("bio-rsaCipher", encryptedData, true,
+                    new MyCommonCallback3<byte[]>() {
+                        @Override
+                        public void onSuccess(byte[] bytes) {
+                            LogUtils.i("bio-rsaCipher-解密后: "+new String(bytes));
+                        }
+                    });
+
+
+        } catch (Throwable e) {
+            LogUtils.w(e);
+        }
+
+    }
+
+    public void signAndVerify(View view) {
+
+        try {
+            byte[] sign = SignUtil.sign("signtest", "123456".getBytes());
+            boolean signtest = SignUtil.verify("signtest", sign, "123456".getBytes());
+            LogUtils.i("签名验证结果: "+signtest);
+        } catch (Throwable e) {
+            LogUtils.w(e);
+        }
+    }
+
+    public void signAndVerifyByBio(View view) {
+        SignUtil.signWithUserVerify("signtest-bio", true,
+                new MyCommonCallback3<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+                        try {
+                            boolean signtest = SignUtil.verifyWithUserVerify("signtest-bio", bytes, "123456".getBytes());
+                            LogUtils.i("签名验证结果: "+signtest);
+                        } catch (Throwable e) {
+                            LogUtils.w(e);
+                        }
+                    }
+                },
+                "123456".getBytes()
+        );
+    }
+
+    public void aesEncrypt(View view) {
+        String str = "123456789U";
+        try {
+            byte[] aeskeys = AesCipherUtil.encrypt("aeskey", str.getBytes());
+            byte[] aeskeys1 = AesCipherUtil.decrypt("aeskey", aeskeys);
+            LogUtils.d("解密后数据: "+new String(aeskeys1));
+        } catch (Throwable e) {
+            LogUtils.w(e);
+        }
+
+    }
+
+    public void sslMock(View view) {
+        SslUtil.test();
+    }
+
+    public void bioDecryptByPrivateForPasswordLogin(View view) {
+        PasswordLoginByBiometric.savePw("7788","1234");
+        PasswordLoginByBiometric.getPwByName("7788",
+                true, new MyCommonCallback3<String>() {
+            @Override
+            public void onSuccess(String s) {
+                MyToast.show("密码是: "+s);
+            }
+        });
+    }
+
+
+
+    public void crashTest(View view) {
+        int i = 1/0;
+    }
+
+    public void viewHolderDemo(View view) {
+        startActivity(new Intent(this, ViewHolderDemoActivity.class));
+    }
+
+    public void dirTree(View view) {
+
+
+        BitmapSaveUtil.askWritePermission(new Observer<Boolean>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(Boolean aBoolean) {
+                FileTreeViewHolder.viewDirInActivity(Environment.getExternalStorageDirectory().getAbsolutePath());
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+
+
+       /* Dialog dialog1 = new Dialog(this);
+        dialog1.setContentView(viewHolder.getRootView());
+        dialog1.show();*/
+    }
+
+    public void goWebSpider(View view) {
+        List<String> menus = SpiderWebviewActivity.getSpiders();
+        menus.add("浏览全部下载列表");
+        menus.add("浏览下载列表");
+        menus.add("修复升级前的数据");
+        menus.add("继续下载未完成的图片");
+
+        PopList.showPop(this, -1, view, menus, new PopList.OnItemClickListener() {
+            @Override
+            public void onClick(int position, String str) {
+                if(position == menus.size()-1){
+                    MyDownloader.continueDownload();
+                    //ImgDownloader.downladUrlsInDB(MainActivity.this,new File(SpiderWebviewActivity.getSaveDir("继续下载","")));
+                }else if(position ==  menus.size()-4) {
+                    MyDownloader.showWholeDownloadPage();
+                }else if(position ==  menus.size()-3) {
+                    MyDownloader.showDownloadPage();
+                }else if(position == menus.size()-2) {
+                    MyDownloader.fixDbWhenUpdate();
+                }else {
+                    SpiderWebviewActivity.start(MainActivity.this,str);
+                }
+
+            }
+        });
+
+
+    }
+
+    public void bitmapSaveConfig(View view) {
+        BitmapSaveUtil.openConfigPage();
+    }
+
+    public void bitmapSaveAction(View view) {
+        try {
+            view.setDrawingCacheEnabled(true);
+            BitmapSaveUtil.saveBitmap(view.getDrawingCache());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void fullScreenDialog2(View view) {
+        TestFullBinding binding = TestFullBinding.inflate(getLayoutInflater());
+        FullScreenDialogUtil.showFullScreen(binding.getRoot());
+    }
+
+    public void containeractivityWithTitle(View view) {
+        ContainerActivity2.start( new Consumer<Pair<ContainerActivity2, ContainerViewHolderWithTitleBar>>() {
+            @Override
+            public void accept(Pair<ContainerActivity2, ContainerViewHolderWithTitleBar> pair) throws Exception {
+                TextView textView = new TextView(pair.first);
+                textView.setBackgroundColor(Color.GREEN);
+                textView.setText("center.........");
+                textView.setGravity(Gravity.CENTER);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
+                textView.setLayoutParams(params);
+                pair.second.getBinding().rlContainer.addView(textView);
+                pair.second.getBinding().realTitleBar.setTitle("我是标题啦啦啦啦啦我是");
+
+                pair.second.showRightMoreIcon(false);
+                pair.second.getBinding().realTitleBar.getRightView().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        MyToast.show("more icon clicked");
+                    }
+                });
+
+            }
+        });
+    }
+
+    public void containeractivityWithNoTitle(View view) {
+        ContainerActivity2.start( new Consumer<Pair<ContainerActivity2, ContainerViewHolderWithTitleBar>>() {
+            @Override
+            public void accept(Pair<ContainerActivity2, ContainerViewHolderWithTitleBar> pair) throws Exception {
+                TextView textView = new TextView(pair.first);
+                textView.setBackgroundColor(Color.GREEN);
+                textView.setText("center.........");
+                textView.setGravity(Gravity.CENTER);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
+                textView.setLayoutParams(params);
+                pair.second.getBinding().rlContainer.addView(textView);
+                pair.second.getBinding().realTitleBar.setTitle("我是标题啦啦啦啦啦我是");
+
+                pair.second.setTitleBarHidden(true);
+
+            }
+        });
+    }
+
+    public void containeractivityWithTransTitle(View view) {
+        ContainerActivity2.start( new Consumer<Pair<ContainerActivity2, ContainerViewHolderWithTitleBar>>() {
+            @Override
+            public void accept(Pair<ContainerActivity2, ContainerViewHolderWithTitleBar> pair) throws Exception {
+                TextView textView = new TextView(pair.first);
+                textView.setBackgroundColor(Color.GREEN);
+                textView.setText("center.........");
+                textView.setGravity(Gravity.CENTER);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
+                textView.setLayoutParams(params);
+                pair.second.getBinding().rlContainer.addView(textView);
+                pair.second.getBinding().realTitleBar.setTitle("我是标题啦啦啦啦啦我是");
+                pair.second.setTitleBarTransplantAndRelative(true);
+
+            }
+        });
+    }
+
+    public void containeractivityWithNoTitleAll(View view) {
+        ContainerActivity2.start( new Consumer<Pair<ContainerActivity2, ContainerViewHolderWithTitleBar>>() {
+            @Override
+            public void accept(Pair<ContainerActivity2, ContainerViewHolderWithTitleBar> pair) throws Exception {
+                TextView textView = new TextView(pair.first);
+                textView.setBackgroundColor(Color.GREEN);
+                textView.setText("center.........");
+                textView.setGravity(Gravity.CENTER);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
+                textView.setLayoutParams(params);
+                pair.second.getBinding().rlContainer.addView(textView);
+                pair.second.getBinding().realTitleBar.setTitle("我是标题啦啦啦啦啦我是");
+
+                pair.second.setTitleBarHidden(false);
+
+
+            }
+        });
+    }
+
+    public void saveBitmapToAlbumWithoutPermission(View view) {
+        try {
+            View view1 = findViewById(android.R.id.content);
+            view1.setDrawingCacheEnabled(true);
+            Bitmap drawingCache = view1.getDrawingCache();
+
+            /*File externalFilesDir = getExternalFilesDir(Environment.DIRECTORY_DCIM);
+            externalFilesDir.mkdirs();
+            File file = new File(externalFilesDir,System.currentTimeMillis()+".jpg");
+            drawingCache.compress(Bitmap.CompressFormat.JPEG,85,new FileOutputStream(file));
+            MediaStoreRefresher.refreshMediaCenter(getApplicationContext(),file.getAbsolutePath());*/
+
+            BitmapSaveUtil.saveBitmap(drawingCache);
+            ToastUtils.showShort("保存成功,跳去选择界面查看");
+            MediaPickUtil.pickImage(new MyCommonCallback<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+
+                }
+            });
+        }catch (Throwable throwable){
+            LogUtils.w(throwable);
+            ToastUtils.showShort(throwable.getMessage());
+        }
+
+    }
+
+    public void createDoc(View view) {
+        // 创建一个新的 Intent 对象来创建文档
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+// 设置这个文件可以被打开
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+// 设置文件的 MIME 类型为 PDF
+        intent.setType("text/plain");
+// 设置创建的文件名
+        intent.putExtra(Intent.EXTRA_TITLE, "invoice.txt");
+
+// 可选：为系统文件选择器指定打开的初始目录的 URI
+        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, "file://"+Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+Environment.DIRECTORY_DOWNLOADS);
+
+// 开始 Activity 并请求返回结果
+        StartActivityUtil.goOutAppForResult(this, intent, new ActivityResultListener() {
+            @Override
+            public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+                LogUtils.d(data,data==null ? "null":data.getData());
+                if(data !=null){
+                    MyToast.show("可以往这个uri写文件了: \n"+data.getDataString());
+                }
+
+                //data.getData()
+                //然后就可以往这个uri写文件流了
+            }
+
+            @Override
+            public void onActivityNotFound(Throwable e) {
+
+            }
+        });
+    }
+
+    public void safDir(View view) {
+        // 使用系统文件选择器选择一个目录
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+        // 可选，指定一个 URI，作为系统文件选择器加载时应该打开的目录
+        String pkgName = "com.hss01248.finalcompress";
+        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Android/data/"+pkgName);
+        Uri uri = Uri.fromFile(file);
+        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, uri);
+        //intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
+
+        StartActivityUtil.goOutAppForResult(this, intent, new ActivityResultListener() {
+            @Override
+            public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+                LogUtils.d(data,data.getData());
+                MyToast.show("可以遍历这个目录了: \n"+data.getDataString());
+                //data.getData()
+                //然后就可以往这个uri写文件流了
+            }
+
+            @Override
+            public void onActivityNotFound(Throwable e) {
+
+            }
+        });
+    }
+
+    public void sentryException(View view) {
+
+        SentryUtil.testException();
+    }
+
+    public void sentryMsg(View view) {
+        SentryUtil.testMsg(" i am a msg");
+    }
+
+    public void testMetrics1(View view) {
+        SentryUtil.testMetrics1();
+    }
+
+    public void testMetrics2(View view) {
+        SentryUtil.testMetrics2();
+    }
+
+    public void testInstrumentation(View view) {
+        SentryUtil.testInstrumentation();
     }
 }

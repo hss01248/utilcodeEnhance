@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    compileSdkVersion 33
+    compileSdk 34
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 33
+        targetSdkVersion 34
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -39,5 +39,5 @@ dependencies {
         exclude group: "com.davemorrissey.labs", module: "subsampling-scale-image-view-androidx"
     }
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
-    api 'com.github.skyNet2017.Luban:luban:3.2.6'
+    api 'com.github.skyNet2017.Luban:luban:3.2.7'
 }

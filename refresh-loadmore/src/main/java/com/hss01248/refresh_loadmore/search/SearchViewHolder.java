@@ -13,6 +13,7 @@ import com.hss01248.history.api.SearchHistoryViewHolder;
 import com.hss01248.history.api.db.SearchDbUtil;
 import com.hss01248.refresh_loadmore.RefreshLoadMoreRecycleViewHolder;
 import com.hss01248.refresh_loadmore.databinding.CommonSearchViewHolderBinding;
+import com.hss01248.viewstate.StatefulLayout;
 
 import java.util.HashMap;
 
@@ -45,11 +46,16 @@ public class SearchViewHolder<T> extends MyViewHolder<CommonSearchViewHolderBind
 
     }
 
+    @Override
+    public StatefulLayout getStatefulLayout() {
+        return loadMoreRecycleViewHolder.binding.statefulLayout;
+    }
+
     private void initContentView() {
         loadMoreRecycleViewHolder = new RefreshLoadMoreRecycleViewHolder<T>(getRootView().getContext());
        // loadMoreRecycleViewHolder.setLoadDataImpl();
         binding.rlContainer.addView(loadMoreRecycleViewHolder.getRootView());
-        loadMoreRecycleViewHolder.getStatefulLayout().showContent();
+        loadMoreRecycleViewHolder.binding.statefulLayout.showContent();
         //loadMoreRecycleViewHolder.getRootView()
 
     }
@@ -110,6 +116,9 @@ public class SearchViewHolder<T> extends MyViewHolder<CommonSearchViewHolderBind
         doSearch(text);
     }
 
+    public String searchText(){
+        return binding.etInput.getText().toString().trim();
+    }
     private void doSearch(String text) {
         loadMoreRecycleViewHolder.loadByNewParams(text,new HashMap<>());
     }

@@ -9,8 +9,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.ActivityUtils;
-import com.blankj.utilcode.util.BarUtils;
 import com.blankj.utilcode.util.KeyboardUtils;
 import com.blankj.utilcode.util.SPStaticUtils;
 import com.blankj.utilcode.util.ThreadUtils;
@@ -18,7 +16,6 @@ import com.hss.utils.enhance.viewholder.MyViewHolder;
 import com.hss01248.basewebview.BaseQuickWebview;
 import com.hss01248.basewebview.R;
 import com.hss01248.basewebview.databinding.WebSearchHolderBinding;
-import com.hss01248.dialog.fullscreen.FullScreenDialog;
 import com.hss01248.history.api.OnHistoryItemClickListener;
 import com.hss01248.history.api.SearchHistoryViewHolder;
 import com.hss01248.history.api.db.SearchDbUtil;
