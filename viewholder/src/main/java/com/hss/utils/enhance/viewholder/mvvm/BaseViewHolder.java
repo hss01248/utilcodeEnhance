@@ -97,7 +97,7 @@ public abstract class BaseViewHolder<VB extends ViewBinding, InitInfo>
             LogUtils.w("context not ComponentActivity",activity+"");
             return new OnBackPressedDispatcher();
         }
-        ComponentActivity topActivity = (ComponentActivity) ActivityUtils.getTopActivity();
+        ComponentActivity topActivity = (ComponentActivity) activity;
         return topActivity.getOnBackPressedDispatcher();
     }
 
