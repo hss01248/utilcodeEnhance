@@ -72,7 +72,7 @@ dependencies {
     implementation 'com.github.skyNet2017.Luban:dataForPhotoSelet:3.3.0'
     debugImplementation 'com.github.hss01248.accountCacher:accountcache:1.2.0'
 
-    implementation group: 'cn.qqtheme.framework', name: 'FilePicker', version: '1.5.5'
+    //implementation group: 'cn.qqtheme.framework', name: 'FilePicker', version: '1.5.5'
 
     implementation group: 'androidx.security', name: 'security-crypto', version: '1.1.0-alpha06'
 
@@ -101,6 +101,8 @@ configurations {
     //all*.exclude group: 'com.github.hss01248', module: 'DialogUtil'
     all*.exclude group: 'com.github.hss01248.utilcodeEnhance'
     all*.exclude group: 'com.github.hss01248.HttpUtil2' , module:'logforaop'
+    all*.exclude group: 'com.github.hss01248.ImageLoader' , module:'downloader'
+    //api "com.github.hss01248.ImageLoader:glidev4:${imageLoaderVersion}"
     all*.exclude group: 'org.jetbrains', module: 'annotations-java5'
     all*.exclude group: 'com.github.simplepeng.SpiderMan', module: 'spiderman'
     //     implementation "com.github.simplepeng.SpiderMan:spiderman:v1.1.8"
