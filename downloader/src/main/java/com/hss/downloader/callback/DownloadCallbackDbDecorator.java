@@ -13,7 +13,6 @@ import com.hss.downloader.IDownloadCallback;
 import com.hss.downloader.api.DownloadApi;
 import com.hss.downloader.download.DownloadInfo;
 import com.hss.downloader.download.DownloadInfoUtil;
-import com.hss01248.img.compressor.ImageCompressor;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -119,13 +118,14 @@ public class DownloadCallbackDbDecorator implements IDownloadCallback {
             public void run() {
                 String path2 = realPath;
                 //压缩图片
-                File compress = ImageCompressor.compress(realPath, false, false);
+                /*File compress = ImageCompressor.compress(realPath, false, false);
                 if (!compress.exists() || compress.length() == 0) {
                     LogUtils.e("file not exist after compress");
                     onFail(url, compress.getAbsolutePath(), "compress failed,file not exist", new Throwable("xxx"));
                     return;
                 }
-                path2 = compress.getAbsolutePath();
+                path2 = compress.getAbsolutePath();*/
+                File compress = new File(realPath);
                 long len = compress.length();
                 //裁剪到mediastore
                 if (api.isCutToMediaStore()) {

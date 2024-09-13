@@ -310,7 +310,8 @@ public class MyDownloader {
 
                  //EventBus.getDefault().post(info);
                  EventBus.getDefault().post(new DownloadResultEvent(true));
-                 compressImage(info);
+                 //不再压缩图片,图片放大8倍后,压缩和不压缩的图,清晰度有较大差别.
+                 //compressImage(info);
              }
 
              @Override
