@@ -2,6 +2,7 @@ package com.hss.utilsenhance;
 
 import android.content.Context;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.lifecycle.LifecycleOwner;
 
 import com.blankj.utilcode.util.ThreadUtils;
@@ -33,31 +34,35 @@ public class DemoViewHolder extends BaseViewHolder<ActivityViewHolderDemoHttpSta
     }
 
 
-
+    OnBackPressedCallback callback;
     @Override
     protected void initDataAndEventInternal(LifecycleOwner lifecycleOwner, String bean) {
         stateManager.showLoading("loading...xxxx");
+        if(callback ==null){
+            callback = new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                    MyToast.show("点击了后退键2222");
+                }
+            };
+
+            getBackPressedDispatcher().addCallback(lifecycleOwner,callback);
+        }
         ThreadUtils.getMainHandler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 if(new Random().nextBoolean()){
                     stateManager.showContent();
                     binding.tvContent.setText(bean);
-                    setShouldInterceptBackPressed(true);
+                    //拦截后退键
+                    callback.setEnabled(true);
                 }else {
                     stateManager.showError("请求错误");
-                    setShouldInterceptBackPressed(false);
+                    //不再拦截后退键
+                    callback.setEnabled(false);
                 }
 
             }
         }, 2000);
-
-    }
-
-
-    @Override
-    protected void onBackPressed2() {
-        super.onBackPressed2();
-        MyToast.show("点击了后退键2222");
     }
 }

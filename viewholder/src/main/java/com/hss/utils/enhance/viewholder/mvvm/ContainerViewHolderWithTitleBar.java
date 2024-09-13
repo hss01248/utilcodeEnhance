@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import androidx.fragment.app.FragmentActivity;
@@ -60,7 +59,7 @@ public class ContainerViewHolderWithTitleBar extends BaseViewHolder<ActivityComm
     public void showRightMoreIcon(boolean whiteIcon){
         binding.realTitleBar.setRightTitle("● ● ●");
         binding.realTitleBar.setRightTitleColor(whiteIcon?Color.WHITE:Color.parseColor("#333333"));
-        binding.realTitleBar.getRightView().setTextSize(10);
+        binding.realTitleBar.getRightView().setTextSize(8);
     }
 
 
