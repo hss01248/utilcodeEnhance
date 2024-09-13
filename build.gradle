@@ -12,8 +12,8 @@ buildscript {
     ext {
 // 快照版需要在版本号后面加-SNAPSHOT
         //groupId='com.github.hss01248.utilcodeEnhance'
-        versionCode = '1.6.7.00'
-        isPublisToLocal=false
+        versionCode = '1.6.9.00'
+        isPublisToLocal=true
 
         releaseUrl='https://nexus.hss01248.tech/repository/maven-releases/'
         snapshotUrl='https://nexus.hss01248.tech/repository/maven-snapshots/'
