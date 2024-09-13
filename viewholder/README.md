@@ -117,7 +117,42 @@ public class ViewHolderDemoActivity extends AppCompatActivity {
 
         viewHolder.init("请求成功");
     }
+
+long lastBack = 0;
+    @Override
+    public void onBackPressed() {
+        if(getOnBackPressedDispatcher().hasEnabledCallbacks()){
+            super.onBackPressed();
+        }else {
+            if(lastBack > 0 && System.currentTimeMillis() - lastBack < 4000){
+                super.onBackPressed();
+            }else {
+                lastBack = System.currentTimeMillis();
+                ToastUtils.showLong("再次后退则退出app");
+            }
+        }
+    }
 }
+```
+
+### activity里onbackpressed的处理:
+```java
+
+  long lastBack = 0;
+    @Override
+    public void onBackPressed() {
+        if(getOnBackPressedDispatcher().hasEnabledCallbacks()){
+            super.onBackPressed();
+        }else {
+            if(lastBack > 0 && System.currentTimeMillis() - lastBack < 4000){
+                super.onBackPressed();
+            }else {
+                lastBack = System.currentTimeMillis();
+                ToastUtils.showLong("再次后退则退出app");
+            }
+        }
+    }
+
 ```
 
 # 已写好的几个viewholder相关工具:
