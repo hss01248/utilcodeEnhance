@@ -80,7 +80,7 @@ dependencies {
     api "androidx.sqlite:sqlite:2.0.1"
     api 'io.github.yuweiguocn:GreenDaoUpgradeHelper:v2.2.1'
 
-    api "com.github.hss01248.ImageLoader:bigimageviewpager:${imageLoaderVersion}"
+    api project(":bigimageviewpager")
     api "org.jsoup:jsoup:1.13.1"
 
     api 'com.github.pinguo-zhouwei:CustomPopwindow:2.1.1'

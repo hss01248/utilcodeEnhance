@@ -102,7 +102,7 @@ configurations {
     all*.exclude group: 'com.github.hss01248.utilcodeEnhance'
     all*.exclude group: 'com.github.hss01248.HttpUtil2' , module:'logforaop'
     all*.exclude group: 'com.github.hss01248.ImageLoader' , module:'downloader'
-    //api "com.github.hss01248.ImageLoader:glidev4:${imageLoaderVersion}"
+    //api project(":glidev4")
     all*.exclude group: 'org.jetbrains', module: 'annotations-java5'
     all*.exclude group: 'com.github.simplepeng.SpiderMan', module: 'spiderman'
     //     implementation "com.github.simplepeng.SpiderMan:spiderman:v1.1.8"

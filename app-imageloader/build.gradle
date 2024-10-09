@@ -1,0 +1,139 @@
+apply plugin: 'com.android.application'
+
+//apply from: "${rootProject.rootDir}/function.gradle"
+android {
+
+    compileSdkVersion 34
+    defaultConfig {
+        applicationId "com.hss01248.imageloaderdemo"
+        minSdkVersion 23
+        targetSdkVersion 34
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        multiDexEnabled true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+    lintOptions {
+        abortOnError false
+    }
+    packagingOptions {
+        // Make sure libjsc.so does not packed in APK
+        //pickFirst '**/libc++_shared.so'
+        //exclude("META-INF/*.kotlin_module")
+        pickFirst '**/META-INF/DEPENDENCIES'
+    }
+    /*repositories {
+        flatDir {
+            dirs 'libs' //this way we can find the .aar file in libs folder
+        }
+    }*/
+}
+
+
+dependencies {
+    //implementation project(path: ':downloader')
+    implementation project(path: ':downloader-m3u8')
+    implementation project(path: ':fileOperation')
+    api fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    //compile 'com.android.support:appcompat-v7:25.0.0'
+    testImplementation 'junit:junit:4.12'
+    implementation project(path: ':imageloader')
+    implementation 'com.jakewharton:butterknife:10.2.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.0'
+
+   // compile project(':fresco')
+  //  compile project(':glide')
+    //compile project(':memory')
+    api project(':imagelist')
+    api project(':imagelist')
+    api project(':compressor')
+    //compile project(':picasso')
+    api project(':glidev4')
+
+    api 'com.elvishew:xlog:1.4.0'
+    api 'com.github.hss01248:SuperAdapter:2.0.2'
+
+    api 'com.blankj:utilcodex:1.30.0'
+    api('com.github.hss01248:Toasty:2.0.4') {
+        exclude group: 'com.android.support'
+    }
+    api 'com.facebook.fresco:fresco:1.10.0'
+    /* compile'com.github.hss01248:PhotoOut:1.0.3'
+     compile'com.github.hss01248.PhotoPicker:glide:1.0.8'
+     compile'com.github.hss01248.PhotoPicker:fresco:1.0.8'
+     compile'com.github.hss01248.PhotoPicker:picasso:1.0.8'*/
+    api('com.github.hss01248:DialogUtil:3.0.5') {
+        exclude group: 'com.android.support'
+    }
+    api 'androidx.appcompat:appcompat:1.0.0'
+    api 'androidx.recyclerview:recyclerview:1.0.0'
+    api 'com.google.android.material:material:1.0.0'
+    api 'com.makeramen:roundedimageview:2.3.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    api 'com.joooonho:selectableroundedimageview:1.0.1'
+    api 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
+
+    api 'org.raphets:roundimageview:1.2.0'
+    api('com.github.skyNet2017.Luban:dataForPhotoSelet:3.3.0')
+    //api project(path: ':webviewspider')
+   // api project(path: ':spiders')
+    api 'com.github.getActivity:XXPermissions:11.6'//请求存储权限
+    debugImplementation 'com.glance.guolindev:glance:1.0.0'
+
+    //debugImplementation 'com.github.hss01248.flipperUtil:oom:1.2.3'
+    api 'jp.co.link_u.library.glideavif:glideavif:0.8.1'
+    api 'com.github.bumptech.glide:glide:4.11.0'
+    configurations.all {
+        resolutionStrategy.force 'com.squareup.okhttp3:okhttp:3.12.0'
+        resolutionStrategy.force 'com.squareup.okio:okio:1.15.0'
+        resolutionStrategy.force 'com.github.bumptech.glide:glide:4.11.0'
+    }
+    api project(":downloader")
+    api project(":webviewspider")
+    api project(":bitmap-saver")
+    api project(":viewholder-media")
+    api('com.davemorrissey.labs:subsampling-scale-image-view:3.10.0') {
+        exclude group: 'com.android.support'
+    }
+    api "com.github.hss01248.media:localvideoplayer:1.0.0"
+
+}
+
+/*apply plugin: 'bugly'
+
+bugly {
+    debug = true
+    appId = '7ac352d904' // 注册时分配的App ID
+    appKey = '4f7a08bf-1fa1-453f-870d-da59f0131c02' // 注册时分配的App Key
+}*/
+
+configurations.all {
+
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == 'com.android.support') {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion '28.0.0' //这里改为你项目使用的版本即可
+            }
+        }
+    }
+
+}
+
+
+configurations {
+    //all*.exclude group: 'com.github.hss01248.ImageLoader'
+}

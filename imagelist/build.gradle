@@ -1,0 +1,71 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 34
+
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 34
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    //api 'com.github.hss01248.ImageLoader:glidev4:3.2.3'
+    //api 'com.github.hss01248.ImageLoader:bigimageviewpager:3.2.3'
+    api project(':glidev4')
+    //api project(":downloader")
+    //api project(':bigimageviewpager')
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+
+    api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.47'
+    //compile 'com.simplecityapps:recyclerview-fastscroll:1.0.20'
+    api 'com.futuremind.recyclerfastscroll:fastscroll:0.2.5'
+
+    api 'com.github.fondesa:recycler-view-divider:3.5.0'
+    //implementation 'com.yqritc:recyclerview-flexibledivider:1.4.0'
+
+    //api 'com.github.hss01248:UI:0.0.1'
+    api project(":iwidget")
+    api project(":downloader")
+    api 'com.github.hss01248:DialogUtil:3.0.5'
+    api project(":fullScreenDialog")
+    api project(":viewholder")
+    implementation 'com.github.hss01248:NotifyUtil:1.0.1'
+    api 'com.github.princekin-f:EasyFloat:2.0.3'
+    //implementation 'com.wuhenzhizao:titlebar:1.1.4'
+
+    api 'com.github.getActivity:XXPermissions:11.6'//请求存储权限
+
+    //api 'org.greenrobot:greendao:3.3.0' // add library
+    //api 'io.github.yuweiguocn:GreenDaoUpgradeHelper:v2.2.1'
+
+    api 'com.github.hss01248.StartActivityResult:transactivity:1.1.4'
+    api 'com.github.hss01248.StartActivityResult:activityresult:1.1.9'
+
+    //api 'com.liulishuo.filedownloader:library:1.7.7'
+
+
+}
+

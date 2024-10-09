@@ -43,5 +43,5 @@ dependencies {
     api 'com.github.hss01248.MyPermission:ext:2.3.9'
     api project(path: ':lib-base-base')
     api project(path: ':viewholder-media')
-    api "com.github.hss01248.ImageLoader:glide-aop:${imageLoaderVersion}"
+    api project(":glide-aop")
 }

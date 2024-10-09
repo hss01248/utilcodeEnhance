@@ -52,7 +52,7 @@ dependencies {
     api 'com.blankj:utilcodex:1.30.6'
     api project(':baseWebview')
     api project(':iwidget')
-    api "com.github.hss01248.ImageLoader:imagelist:${imageLoaderVersion}"
+    api project(":imagelist")
     //api project(':baseWebview')
 
 

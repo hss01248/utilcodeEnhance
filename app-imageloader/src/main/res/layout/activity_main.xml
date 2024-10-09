@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    tools:context="com.hss01248.imageloaderdemo.MainActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:text="download demo 页面"
+            android:onClick="downloadDemo"
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <Button
+            android:text="选图->删除图片文件->适配"
+            android:onClick="deleteFile"
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:text="申请管理媒体的权限"
+            android:onClick="askManagerMediaPermission"
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:text="webview加载url"
+            android:onClick="loadUrl"
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <Button
+            android:text="加载file或者选择文件夹->并压缩图片"
+            android:onClick="loadFile"
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <Button
+            android:text="motion photo"
+            android:onClick="motionPhoto"
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:text="选图-360全景图test"
+            android:onClick="pickImage360"
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btn_album"
+            android:layout_margin="10dp"
+            android:text="浏览系统相册"
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btn_album2"
+            android:layout_margin="10dp"
+            android:text="文件管理"
+            android:onClick="viewDir"
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:onClick="loadUrl2"
+            android:layout_margin="10dp"
+            android:text="加载一个url"
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:onClick="goWebSpider"
+            android:layout_margin="10dp"
+            android:text="webview爬取urls并加载"
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:onClick="copyDB"
+            android:layout_margin="10dp"
+            android:text="拷贝数据库到sd卡"
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btn_dir"
+            android:text="文件浏览器"
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btn_bigpic"
+            android:text="加载大图"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btn_bigpic_viewpager"
+            android:text="加载轮播大图"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btn_recycle"
+            android:text="recyvleview加载大量图片"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btn_fresco"
+            android:text="全部自由配置项"
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btn_scale"
+            android:text="查看大图小图的scale type效果"
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:onClick="loadFile3"
+            android:text="选择图片文件并加载"
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:onClick="hideDir"
+            android:text="选择一个文件夹,并隐藏它"
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <ImageView
+            android:id="@+id/iv_url"
+            android:layout_width="150dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/shape_main_list_bg"
+            android:layout_height="150dp" />
+
+        <ImageView
+            android:background="@drawable/shape_main_list_bg"
+            android:id="@+id/iv_file"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="20dp"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/iv_res"
+            android:layout_width="250dp"
+            android:layout_marginBottom="20dp"
+            android:layout_height="150dp" />
+
+        <ImageView
+            android:id="@+id/iv_url_blur"
+            android:layout_width="250dp"
+            android:layout_marginBottom="20dp"
+            android:layout_height="150dp" />
+
+        <com.hss01248.bigimageviewpager.MyLargeJpgViewBySubsumplingView
+            android:id="@+id/subsampling_iv"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="20dp"
+            android:layout_height="250dp" />
+
+    </LinearLayout>
+
+</ScrollView>

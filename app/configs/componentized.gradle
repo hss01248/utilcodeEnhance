@@ -11,7 +11,7 @@ rootProject.buildscript {
 }
 
 gradle.addProjectEvaluationListener(new ProjectEvaluationListener() {
-    @Override
+    //@Override
     void beforeEvaluate(Project project) {
 
     }
@@ -36,6 +36,8 @@ gradle.addProjectEvaluationListener(new ProjectEvaluationListener() {
                 //额外功能: application oncreate的有向无环图启动
                 //https://github.com/aiceking/AppStartFaster
                 api "com.github.hss01248.AppStartUp:startup-tasks:1.1.0"
+                implementation 'androidx.multidex:multidex:2.0.1'
+                implementation 'androidx.appcompat:appcompat:1.2.0'
             }
         }else if (project.plugins.findPlugin('com.android.library') != null){
             if(project.getName().startsWith("module")){
@@ -45,6 +47,9 @@ gradle.addProjectEvaluationListener(new ProjectEvaluationListener() {
                 viewBinding {
                     enabled = true
                 }
+            }
+            project.dependencies {
+                implementation 'androidx.appcompat:appcompat:1.2.0'
             }
         }
     }

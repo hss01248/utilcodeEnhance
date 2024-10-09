@@ -1,10 +1,10 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    apply from: 'https://raw.githubusercontent.com/hss01248/flipperUtil/gradle7_5/remote3.gradle'
+   // apply from: 'https://raw.githubusercontent.com/hss01248/flipperUtil/gradle7_5/remote3.gradle'
     apply from: 'https://raw.githubusercontent.com/hss01248/flipperUtil/dev/deps/depsLastestChecker.gradle'
     apply from: 'https://raw.githubusercontent.com/hss01248/flipperUtil/dev/z_config/git_branch_info.gradle'
     apply from: 'https://raw.githubusercontent.com/hss01248/flipperUtil/gradle7_5/z_config/pack.gradle?a=3'
-    apply from: 'https://raw.githubusercontent.com/hss01248/flipperUtil/gradle7_5/deps/uploadAllByMavenPublish.gradle?a=3'
+    //apply from: 'https://raw.githubusercontent.com/hss01248/flipperUtil/gradle7_5/deps/uploadAllByMavenPublish.gradle?a=3'
     apply from: "app/configs/componentized.gradle"
     apply from: "app/configs/apk_shrink.gradle"
     //apply from: 'https://raw.githubusercontent.com/skyNet2017/AppUpdate/master/uploadToPyger.gradle'
@@ -27,6 +27,15 @@ buildscript {
 
     }
 
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        google()
+        maven { url 'https://jitpack.io' }
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url 'https://nexus.hss01248.tech/repository/maven-releases/' }
+    }
+
 
     dependencies {
         classpath "com.android.tools.build:gradle:7.4.2"
@@ -40,16 +49,14 @@ buildscript {
 }
 allprojects {
     repositories {
-        maven { url 'https://github.com/link-u/AndroidGlideAvifDecoder/raw/master/repository' }
+       // maven { url 'https://github.com/link-u/AndroidGlideAvifDecoder/raw/master/repository' }
 
-        maven { url 'https://nexus.hss01248.tech/repository/maven-releases/' }
         mavenLocal()
         mavenCentral()
         google()
-        maven {
-            url 'https://maven.aliyun.com/repository/jcenter'
-        }
-        //maven { url 'https://cdn.jsdelivr.net/gh/link-u/AndroidGlideAvifDecoder@master/repository' }
+        maven { url 'https://jitpack.io' }
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url 'https://nexus.hss01248.tech/repository/maven-releases/' }
     }
 
    // maven {

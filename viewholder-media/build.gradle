@@ -37,9 +37,9 @@ dependencies {
     api project(':viewholder')
     api project(':viewState')
     api project(':iwidget')
-    api "com.github.hss01248.ImageLoader:glidev4:${imageLoaderVersion}"
-    api "com.github.hss01248.ImageLoader:fileOperation:${imageLoaderVersion}"
-    api "com.github.hss01248.ImageLoader:bigimageviewpager:${imageLoaderVersion}"
-    //api "com.github.hss01248.ImageLoader:localvideoplayer:3.8.5.01"
+    api project(":glidev4")
+    api project(":fileOperation")
+    api project(":bigimageviewpager")
+    //api project(":localvideoplayer:3.8.5.01"
     api 'com.github.fondesa:recycler-view-divider:3.5.0'
 }
