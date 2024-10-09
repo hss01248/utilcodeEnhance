@@ -1,0 +1,56 @@
+buildscript{
+
+     repositories {
+        maven {//mavenCentral()
+             url  'https://repo.maven.apache.org/maven2/'
+        }
+        maven {
+             url  'https://artifact.bytedance.com/repository/byteX/'
+        }
+        mavenLocal()
+        maven {//google()
+             url  'https://dl.google.com/dl/android/maven2/'
+        }
+        maven {
+             url  'https://jitpack.io'
+        }
+        maven {
+             url  'https://maven.aliyun.com/repository/jcenter'
+        }
+        maven {
+             url  'https://nexus.hss01248.tech/repository/maven-releases/'
+        }
+}
+
+//list all plugin classPath:
+dependencies {
+     classpath "com.alibaba:arouter-register:1.0.2"
+     classpath "com.android.tools.build:gradle:7.4.2"
+     classpath "com.bytedance.android.byteX:base-plugin:0.3.0"
+     classpath "com.bytedance.android.byteX:shrink-r-plugin:0.3.0"
+     classpath "com.tencent.bugly:symtabfileuploader:2.2.1"
+     classpath "com.tencent.mm:AndResGuard-gradle-plugin:1.2.21"
+     classpath "io.github.duking666:ImgCompressPlugin:1.2.1"
+     classpath "org.greenrobot:greendao-gradle-plugin:3.3.0"
+     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
+  }
+}
+
+
+//当前工程应用的插件信息:
+// [class:class org.gradle.api.plugins.HelpTasksPlugin]
+// [class:class org.gradle.buildinit.plugins.BuildInitPlugin]
+// [class:class org.gradle.buildinit.plugins.WrapperPlugin]
+// [class:class com.android.build.gradle.internal.plugins.VersionCheckPlugin]
+// [class:class org.gradle.language.base.plugins.LifecycleBasePlugin]
+// [class:class org.gradle.api.plugins.BasePlugin]
+// [class:class org.gradle.api.plugins.JvmEcosystemPlugin]
+// [class:class org.gradle.api.plugins.ReportingBasePlugin]
+// [class:class org.gradle.api.plugins.JvmToolchainsPlugin]
+// [class:class org.gradle.api.plugins.JavaBasePlugin$Inject, javaToolchainQueryService:org.gradle.jvm.toolchain.internal.JavaToolchainQueryService@395d3f5c, taskThatOwnsThisObject:null, modelIdentityDisplayName:null]
+// [class:class com.android.build.gradle.api.AndroidBasePlugin]
+// [extension:extension 'android', projectServices:com.android.build.gradle.internal.services.ProjectServices@1d89ba4f, projectType:0, versionedSdkLoaderService:com.android.build.gradle.internal.services.VersionedSdkLoaderService@275f5010, componentFactory:org.gradle.api.plugins.internal.DefaultSoftwareComponentFactory@2ebf54ef, class:class com.android.build.gradle.internal.plugins.AppPlugin, dslServices:com.android.build.gradle.internal.services.DslServicesImpl@2eea1c09, syncIssueReporter:com.android.build.gradle.internal.errors.SyncIssueReporterImpl@7e619059, packagePublished:false, analyticsPluginType:APPLICATION, configuratorService:com.android.build.gradle.internal.profile.AnalyticsConfiguratorService$Inject@23639055, projectTypeV2:APPLICATION, extraModelInfo:com.android.build.gradle.internal.ExtraModelInfo@77afb0fa, variantInputModel:com.android.build.gradle.internal.variant.LegacyVariantInputManager@95be052, variantManager:com.android.build.gradle.internal.VariantManager@7bca4a78, registry:org.gradle.tooling.provider.model.internal.DefaultToolingModelBuilderRegistry@44948c6c]
+// [extension:extension 'android', class:class com.android.build.gradle.AppPlugin]
+// [class:class com.dorongold.gradle.tasktree.TaskTreePlugin]
+// [class:class com.alibaba.android.arouter.register.launch.PluginLaunch]
+// [class:class com.kingkingdu.ImgCompressPlugin]

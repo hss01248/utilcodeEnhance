@@ -118,29 +118,9 @@ dependencies {
 
 }
 
-/*apply plugin: 'bugly'
-
-bugly {
-    debug = true
-    appId = '7ac352d904' // 注册时分配的App ID
-    appKey = '4f7a08bf-1fa1-453f-870d-da59f0131c02' // 注册时分配的App Key
-}*/
-
-configurations.all {
-
-    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-        def requested = details.requested
-        if (requested.group == 'com.android.support') {
-            if (!requested.name.startsWith("multidex")) {
-                details.useVersion '28.0.0' //这里改为你项目使用的版本即可
-            }
-        }
-    }
-
-}
-
 
 configurations {
+    all*.exclude group: 'com.github.hss01248.utilcodeEnhance'
     all*.exclude group: 'com.github.hss01248',module: 'Toasty'
     //api('com.github.hss01248:Toasty:2.0.4') {
 }
