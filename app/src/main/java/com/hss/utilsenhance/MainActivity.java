@@ -1284,7 +1284,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onNext(Boolean aBoolean) {
-                FileTreeViewHolder.viewDirInActivity(Environment.getExternalStorageDirectory().getAbsolutePath());
+                FileTreeViewHolder.viewExternalStorage();
             }
 
             @Override
@@ -1297,6 +1297,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        FileTreeViewHolder.viewAppDir();
 
 
        /* Dialog dialog1 = new Dialog(this);

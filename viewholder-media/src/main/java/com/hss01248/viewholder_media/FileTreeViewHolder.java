@@ -1,6 +1,7 @@
 package com.hss01248.viewholder_media;
 
 import android.content.Context;
+import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -10,6 +11,7 @@ import androidx.lifecycle.LifecycleOwner;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ThreadUtils;
+import com.blankj.utilcode.util.Utils;
 import com.hss.utils.enhance.viewholder.ContainerActivity2;
 import com.hss.utils.enhance.viewholder.mvvm.BaseViewHolder;
 import com.hss.utils.enhance.viewholder.mvvm.ContainerViewHolderWithTitleBar;
@@ -42,6 +44,37 @@ public class FileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBinding,Str
     MediaListViewHolder listViewHolder;
     DisplayAndFilterInfo filterInfo = new DisplayAndFilterInfo();
     Map<String,List<String>> cache = new TreeMap<>();
+
+
+    public static void viewExternalStorage(){
+        viewDirInActivity(Environment.getExternalStorageDirectory().getAbsolutePath());
+    }
+
+    public static void viewAppDir(){
+        ContainerActivity2.start(new Consumer<Pair<ContainerActivity2, ContainerViewHolderWithTitleBar>>() {
+            @Override
+            public void accept(Pair<ContainerActivity2, ContainerViewHolderWithTitleBar> pair) throws Exception {
+                MediaListViewHolder listViewHolder1 = new MediaListViewHolder(pair.first);
+                List<String> dirs = new ArrayList<>();
+                dirs.add(Utils.getApp().getFilesDir().getParentFile().getAbsolutePath());
+               // dirs.add(Utils.getApp().getCacheDir().getAbsolutePath());
+                //dirs.add(Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_DCIM).getParentFile().getAbsolutePath());
+                dirs.add(Utils.getApp().getExternalCacheDir().getParentFile().getAbsolutePath());
+                listViewHolder1.init(dirs);
+                pair.second.getBinding().realTitleBar.setTitle("应用私有目录,前1个为内部,后1个为外部");
+                pair.second.getBinding().rlContainer.addView(listViewHolder1.getRootView());
+
+                listViewHolder1.setOnItemClicked(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) throws Exception {
+                     viewDirInActivity(s);
+                    }
+                });
+            }
+        });
+
+
+    }
 
 
     public static void viewDirInActivity(String dir){
