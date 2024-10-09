@@ -9,7 +9,6 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.multidex.MultiDexApplication;
 
-import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.Utils;
 import com.elvishew.xlog.XLog;
 import com.hss.downloader.DownloadList;
@@ -18,9 +17,6 @@ import com.hss01248.basewebview.BaseWebviewActivity;
 import com.hss01248.basewebview.WebConfigger;
 import com.hss01248.basewebview.WebviewInit;
 import com.hss01248.dialog.StyledDialog;
-import com.hss01248.dokit.IDokitConfig;
-import com.hss01248.dokit.MyDokit;
-import com.hss01248.flipper.DBAspect;
 import com.hss01248.glidev4.Glide4Loader;
 import com.hss01248.image.ImageLoader;
 import com.hss01248.image.config.GlobalConfig;
@@ -31,13 +27,11 @@ import com.hss01248.imagelist.album.ImageListView;
 import com.hss01248.imagelist.album.ImageMediaCenterUtil;
 import com.hss01248.webviewspider.IShowUrls;
 import com.hss01248.webviewspider.SpiderWebviewActivity;
-import com.liulishuo.filedownloader.FileDownloader;
 
 import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-import es.dmoral.toasty.MyToast;
 
 /**
  * Created by Administrator on 2017/3/15 0015.
@@ -48,7 +42,7 @@ public class BaseApp extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        FileDownloader.setupOnApplicationOnCreate(this);
+        //FileDownloader.setupOnApplicationOnCreate(this);
         /*StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                 .detectAll()
                 .penaltyLog()
@@ -63,7 +57,7 @@ public class BaseApp extends MultiDexApplication {
 
         //Glance.INSTANCE.initialize(new MyDBContext(this));
 
-        MyDokit.setConfig(new IDokitConfig() {
+        /*MyDokit.setConfig(new IDokitConfig() {
             @Override
             public void loadUrl(Context context, String url) {
                 BaseWebviewActivity.start(ActivityUtils.getTopActivity(),url);
@@ -75,7 +69,7 @@ public class BaseApp extends MultiDexApplication {
                     //XReporter.reportException((Throwable) o);
                 }
             }
-        });
+        });*/
         WebConfigger.init(new WebviewInit() {
             @Override
             public Class html5ActivityClass() {
@@ -85,7 +79,7 @@ public class BaseApp extends MultiDexApplication {
         });
 
 
-        DBAspect.addDB(getFile("imgdownload.db"));
+        //DBAspect.addDB(getFile("imgdownload.db"));
         //XReporter.init(this,"7ac352d904",true);
         //4f7a08bf-1fa1-453f-870d-da59f0131c02
         //UmengUtil.init(this,"6163f5bbac9567566e91bb94","bugly",1,"", BuildConfig.DEBUG);
@@ -191,7 +185,7 @@ public class BaseApp extends MultiDexApplication {
         // GlobalConfig.errorResId = R.drawable.im_item_list_opt_error;
         //BigImageViewer.initialize(GlideBigLoader.with(this));
         //GlobalConfig.setBigImageDark(false);
-        MyToast.init(this, true, true);
+        //MyToast.init(this, true, true);
 
         // PhotoUtil.init(getApplicationContext(),new GlideIniter());//第二个参数根据具体依赖库而定
         StyledDialog.init(this);

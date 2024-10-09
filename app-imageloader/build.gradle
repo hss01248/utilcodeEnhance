@@ -13,6 +13,14 @@ android {
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         multiDexEnabled true
     }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.fork = true
+        options.forkOptions.jvmArgs += [
+                '--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED',
+                '--add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED',
+                '--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED']
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -58,7 +66,7 @@ dependencies {
   //  compile project(':glide')
     //compile project(':memory')
     api project(':imagelist')
-    api project(':imagelist')
+    //api project(':imagelist')
     api project(':compressor')
     //compile project(':picasso')
     api project(':glidev4')
@@ -67,9 +75,7 @@ dependencies {
     api 'com.github.hss01248:SuperAdapter:2.0.2'
 
     api 'com.blankj:utilcodex:1.30.0'
-    api('com.github.hss01248:Toasty:2.0.4') {
-        exclude group: 'com.android.support'
-    }
+    api project(path: ':toast')
     api 'com.facebook.fresco:fresco:1.10.0'
     /* compile'com.github.hss01248:PhotoOut:1.0.3'
      compile'com.github.hss01248.PhotoPicker:glide:1.0.8'
@@ -135,5 +141,6 @@ configurations.all {
 
 
 configurations {
-    //all*.exclude group: 'com.github.hss01248.ImageLoader'
+    all*.exclude group: 'com.github.hss01248',module: 'Toasty'
+    //api('com.github.hss01248:Toasty:2.0.4') {
 }
