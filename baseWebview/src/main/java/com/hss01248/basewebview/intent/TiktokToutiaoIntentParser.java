@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ReflectUtils;
 import com.hss01248.utils.ext.intent.IParseIntent;
@@ -29,7 +28,7 @@ public class TiktokToutiaoIntentParser implements IParseIntent {
         }
         String text = kdescription.toString();
         if(!text.contains("https://m.toutiao.com/") && !text.contains("https://www.iesdouyin.com/")){
-            LogUtils.w("有Kdescription,但不包含https://m.toutiao.com/或者www.iesdouyin.com",text);
+            LogUtils.d("有Kdescription,但不包含https://m.toutiao.com/或者www.iesdouyin.com",text);
             return false;
         }
         String url = "";

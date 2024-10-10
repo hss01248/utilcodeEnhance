@@ -16,7 +16,7 @@ public abstract class MoreSimpleCallback  extends SimpleCallback {
     public void onClickOutside(BasePopupView popupView) {
         super.onClickOutside(popupView);
         onCancel(popupView);
-        LogUtils.w("onClickOutside");
+        LogUtils.i("onClickOutside");
     }
 
     @Override

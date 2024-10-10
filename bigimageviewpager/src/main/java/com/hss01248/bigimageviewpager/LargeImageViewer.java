@@ -24,6 +24,7 @@ import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.SizeUtils;
 import com.hss.utils.enhance.viewholder.ContainerActivity2;
 import com.hss.utils.enhance.viewholder.mvvm.ContainerViewHolderWithTitleBar;
+import com.hss01248.bigimageviewpager.rightmenu.DefaultOnRightMenuClickedListener;
 import com.hss01248.fullscreendialog.FullScreenDialogUtil;
 
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class LargeImageViewer {
         return onRightMenuClickedListener;
     }
 
-    static OnRightMenuClickedListener onRightMenuClickedListener;
+    static OnRightMenuClickedListener onRightMenuClickedListener = new DefaultOnRightMenuClickedListener();
 
     public static void fadeToGone(View view, long duration){
         // 创建alpha动画，从1.0（完全不透明）到0.0（完全透明）

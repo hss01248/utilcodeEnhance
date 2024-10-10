@@ -69,7 +69,7 @@ public class PkgListFetcher {
         if(activity instanceof FragmentActivity){
             FragmentActivity activity1 = (FragmentActivity) activity;
             List<Fragment> fragments = activity1.getSupportFragmentManager().getFragments();
-            LogUtils.i(fragments);
+            //LogUtils.i(fragments);
             for (Fragment fragment : fragments) {
                 if(fragment.isAdded()){
                     if(fragment instanceof InAppResultFragment){

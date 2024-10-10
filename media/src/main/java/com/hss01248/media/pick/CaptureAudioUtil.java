@@ -59,7 +59,7 @@ public class CaptureAudioUtil {
                                             return;
                                         }
                                         if(resultCode != Activity.RESULT_OK){
-                                            LogUtils.w("result code is not RESULT_OK:"+resultCode);
+                                            LogUtils.i("result code is not RESULT_OK:"+resultCode);
                                         }
                                         LogUtils.i(data);
                                         if(data == null || data.getData() == null){

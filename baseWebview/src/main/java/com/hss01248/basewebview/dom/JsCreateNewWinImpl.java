@@ -140,7 +140,7 @@ public class JsCreateNewWinImpl {
 
                             //相当于load url
                             WebView  newWebView = quickWebview.getWebView();
-                            LogUtils.w("webdebug", "onCreateWindow:isDialog:" + isDialog +
+                            LogUtils.d("webdebug", "onCreateWindow:isDialog:" + isDialog +
                                     ",isUserGesture:" + isUserGesture + ",msg:" + resultMsg + "\n chromeclient:" + this+","+newWebView);
                             WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
                             transport.setWebView(newWebView);

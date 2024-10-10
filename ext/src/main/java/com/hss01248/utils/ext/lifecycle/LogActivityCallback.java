@@ -54,14 +54,14 @@ public class LogActivityCallback implements Application.ActivityLifecycleCallbac
                         }
                     }
                     if(activity.getIntent().getSourceBounds() != null){
-                        LogUtils.w("start from launcher",activity.getIntent().getSourceBounds());
+                        LogUtils.i("start from launcher",activity.getIntent().getSourceBounds());
                     }
                     if(!TextUtils.isEmpty(activity.getCallingPackage())
                     ){//!activity.getCallingPackage().equals(AppUtils.getAppPackageName())
-                        LogUtils.w("activity.getCallingPackage()",activity.getCallingPackage());
+                        LogUtils.i("activity.getCallingPackage()",activity.getCallingPackage());
                     }
                     if(activity.getCallingActivity() != null){
-                        LogUtils.w("activity.getCallingActivity()",activity.getCallingActivity());
+                        LogUtils.i("activity.getCallingActivity()",activity.getCallingActivity());
                     }
                 }else {
                     if(savedInstanceState != null){

@@ -47,7 +47,7 @@ public class ShowNameFragmentCallback extends FragmentManager.FragmentLifecycleC
             }
 
         }else {
-            LogUtils.w("not view group, not add");
+            LogUtils.i("not view group, not add");
         }
         super.onFragmentViewCreated(fm, f, v, savedInstanceState);
     }

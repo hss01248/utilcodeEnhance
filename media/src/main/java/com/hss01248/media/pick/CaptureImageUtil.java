@@ -104,7 +104,7 @@ public class CaptureImageUtil {
                     return;
                 }
                 if(resultCode != Activity.RESULT_OK){
-                    LogUtils.w("result code is not RESULT_OK:"+resultCode);
+                    LogUtils.i("result code is not RESULT_OK:"+resultCode);
                 }
                 if(file.exists() && file.length()> 0){
                     MediaStoreRefresher.refreshMediaCenter(Utils.getApp(),path);

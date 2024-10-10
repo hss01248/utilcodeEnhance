@@ -33,6 +33,14 @@ public class ContainerViewHolderWithTitleBar extends BaseViewHolder<ActivityComm
 
     }
 
+    public void setContentView(View view){
+        binding.rlContainer.addView(view);
+    }
+
+    public void setContentView(BaseViewHolder holder){
+        binding.rlContainer.addView(holder.rootView);
+    }
+
     public boolean useInDialog;
     public boolean statusBarTransplant;
 
@@ -40,6 +48,14 @@ public class ContainerViewHolderWithTitleBar extends BaseViewHolder<ActivityComm
         binding.llTitlebar.setVisibility(View.VISIBLE);
         binding.llTitlebar.setBackgroundColor(Color.WHITE);
         setStatusBarFontBlack(true);
+    }
+
+    public void setTitle(CharSequence title){
+        binding.realTitleBar.setTitle(title);
+    }
+
+    public void setTitle(int resId){
+        binding.realTitleBar.setTitle(resId);
     }
 
     public  void setStatusBarFontBlack(boolean black){

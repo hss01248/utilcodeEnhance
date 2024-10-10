@@ -881,7 +881,7 @@ public class MainActivity extends AppCompatActivity {
                             if(data !=null && data.getData() != null){
                                 path = ContentUriUtil.getRealPath(data.getData());
                             }
-                            LogUtils.w(resultCode,data,path,data.getExtras(),data.getData(),data.getClipData());
+                            LogUtils.i(resultCode,data,path,data.getExtras(),data.getData(),data.getClipData());
                             ClipData clipData = data.getClipData();
                             int itemCount = clipData.getItemCount();
                             for (int i = 0; i < itemCount; i++) {
