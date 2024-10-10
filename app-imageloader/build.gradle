@@ -75,7 +75,7 @@ dependencies {
     api 'com.github.hss01248:SuperAdapter:2.0.2'
 
     api 'com.blankj:utilcodex:1.30.0'
-    api project(path: ':toast')
+    //api project(path: ':toast')
     api 'com.facebook.fresco:fresco:1.10.0'
     /* compile'com.github.hss01248:PhotoOut:1.0.3'
      compile'com.github.hss01248.PhotoPicker:glide:1.0.8'
@@ -121,6 +121,7 @@ dependencies {
 
 configurations {
     all*.exclude group: 'com.github.hss01248.utilcodeEnhance'
+    all*.exclude group: 'com.github.hss01248.ImageLoader'
     all*.exclude group: 'com.github.hss01248',module: 'Toasty'
     //api('com.github.hss01248:Toasty:2.0.4') {
 }
