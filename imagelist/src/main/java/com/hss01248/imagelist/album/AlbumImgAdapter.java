@@ -1,11 +1,13 @@
 package com.hss01248.imagelist.album;
 
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.blankj.utilcode.util.SPStaticUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.ThreadUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -15,6 +17,7 @@ import com.hss01248.image.ImageLoader;
 import com.hss01248.image.MyUtil;
 import com.hss01248.image.config.ScaleMode;
 import com.hss01248.imagelist.R;
+import com.hss01248.motion_photos.MotionPhotoUtil;
 
 import java.io.File;
 import java.util.List;
@@ -66,11 +69,8 @@ public class AlbumImgAdapter extends BaseQuickAdapter<Image, BaseViewHolder> imp
             helper.setVisible(R.id.iv_video_type,true);
         }else {
             helper.setGone(R.id.iv_video_type,false);
+            showLivePhotoIcon(helper,item);
         }
-
-
-
-
         ImageLoader.with(helper.itemView.getContext())
                 .load(item.path)
                 //.loading(R.drawable.iv_loading_trans)
@@ -78,6 +78,11 @@ public class AlbumImgAdapter extends BaseQuickAdapter<Image, BaseViewHolder> imp
                 .scale(ScaleMode.CENTER_CROP)
                 .error(R.drawable.im_item_list_opt_error)
                 .into(helper.getView(R.id.item_iv));
+
+        boolean hiddeName = SPStaticUtils.getBoolean("album_hide_file_name",true);
+        boolean hiddeSize = SPStaticUtils.getBoolean("album_hide_file_size",false);
+        View view = helper.getView(R.id.tv_info);
+        view.setVisibility(hiddeSize ? View.GONE: View.VISIBLE);
         if (item.width != 0) {
             String text = item.width + "x" + item.height + "," + MyUtil.formatFileSize(item.fileSize);
            /* if(item.oritation ==0){
@@ -99,7 +104,7 @@ public class AlbumImgAdapter extends BaseQuickAdapter<Image, BaseViewHolder> imp
                 }
 
             }*/
-            helper.setText(R.id.tv_info, text+"\n"+name);
+            helper.setText(R.id.tv_info, text+  (hiddeName ? "" : "\n"+name));
         } else {
            ThreadUtils.executeByIo(new ThreadUtils.Task<Object>() {
                @Override
@@ -112,7 +117,10 @@ public class AlbumImgAdapter extends BaseQuickAdapter<Image, BaseViewHolder> imp
 
                @Override
                public void onSuccess(Object result) {
-                   helper.setText(R.id.tv_info, item.width + "x" + item.height + "," + MyUtil.formatFileSize(item.fileSize));
+                   if(item == helper.getView(R.id.item_iv).getTag(R.id.item_iv)){
+                       helper.setText(R.id.tv_info, item.width + "x" + item.height + "," + MyUtil.formatFileSize(item.fileSize));
+                   }
+
                }
 
                @Override
@@ -139,6 +147,27 @@ public class AlbumImgAdapter extends BaseQuickAdapter<Image, BaseViewHolder> imp
 
 
 
+    }
+
+    private void showLivePhotoIcon(BaseViewHolder helper, Image item) {
+        ThreadUtils.executeByIo(new ThreadUtils.SimpleTask<Boolean>() {
+            @Override
+            public Boolean doInBackground() throws Throwable {
+                return MotionPhotoUtil.isMotionImage(item.path,false);
+            }
+
+            @Override
+            public void onSuccess(Boolean result) {
+                if(item == helper.getView(R.id.item_iv).getTag(R.id.item_iv)){
+                    if(result){
+                        helper.setVisible(R.id.iv_live_photo_type,true);
+                    }else {
+                        helper.setGone(R.id.iv_live_photo_type,false);
+                    }
+                }
+
+            }
+        });
     }
 
 

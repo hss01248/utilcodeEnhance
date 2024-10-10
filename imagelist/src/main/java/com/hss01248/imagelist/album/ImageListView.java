@@ -30,6 +30,7 @@ import com.blankj.utilcode.util.ConvertUtils;
 import com.blankj.utilcode.util.DeviceUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.PermissionUtils;
+import com.blankj.utilcode.util.SPStaticUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.SizeUtils;
 import com.blankj.utilcode.util.ThreadUtils;
@@ -133,7 +134,14 @@ public class ImageListView extends FrameLayout {
                 if (!TextUtils.isEmpty(dir)) {
 
                 }
-                String[] strings0 = new String[]{"排序", "压缩", "过滤", "删除当前所有文件"};
+                boolean hiddeName = SPStaticUtils.getBoolean("album_hide_file_name",true);
+                String hide = hiddeName ? "显示文件名" : "隐藏文件名";
+
+                boolean hiddeSize = SPStaticUtils.getBoolean("album_hide_file_size",false);
+                String hideSize = hiddeSize ? "显示文件尺寸" : "隐藏文件尺寸";
+
+
+                String[] strings0 = new String[]{"排序", "压缩", "过滤", "删除当前所有文件",hide,hideSize};
 
                 new AlertDialog.Builder(v.getContext())
                         .setItems(strings0, new DialogInterface.OnClickListener() {
@@ -148,6 +156,10 @@ public class ImageListView extends FrameLayout {
                                     filterDir(dir);
                                 } else if (which == 3) {
                                     deleteAll();
+                                }else if (which == 4) {
+                                    changeFileNameShow();
+                                }else if (which == 5) {
+                                    changeFileSizeShow();
                                 }
 
                             }
@@ -161,6 +173,18 @@ public class ImageListView extends FrameLayout {
 
             }
         });
+    }
+
+    private void changeFileSizeShow() {
+        boolean hiddeName = SPStaticUtils.getBoolean("album_hide_file_size",false);
+        SPStaticUtils.put("album_hide_file_size",!hiddeName);
+        adapter.notifyDataSetChanged();
+    }
+
+    private void changeFileNameShow() {
+        boolean hiddeName = SPStaticUtils.getBoolean("album_hide_file_name",true);
+        SPStaticUtils.put("album_hide_file_name",!hiddeName);
+        adapter.notifyDataSetChanged();
     }
 
     private void deleteAll() {
