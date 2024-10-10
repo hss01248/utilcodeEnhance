@@ -1,12 +1,15 @@
 buildscript{
 
      repositories {
+        maven {//mavenCentral()
+             url  'https://repo.maven.apache.org/maven2/'
+        }
+        maven {
+             url  'https://artifact.bytedance.com/repository/byteX/'
+        }
         mavenLocal()
         maven {//google()
              url  'https://dl.google.com/dl/android/maven2/'
-        }
-        maven {//mavenCentral()
-             url  'https://repo.maven.apache.org/maven2/'
         }
         maven {
              url  'https://jitpack.io'
@@ -15,22 +18,19 @@ buildscript{
              url  'https://maven.aliyun.com/repository/jcenter'
         }
         maven {
-             url  'https://artifact.bytedance.com/repository/byteX/'
+             url  'https://nexus.hss01248.tech/repository/maven-releases/'
         }
 }
 
 //list all plugin classPath:
 dependencies {
      classpath "com.alibaba:arouter-register:1.0.2"
-     classpath "com.android.tools.build:gradle:7.1.2"
+     classpath "com.android.tools.build:gradle:7.4.2"
      classpath "com.bytedance.android.byteX:base-plugin:0.3.0"
      classpath "com.bytedance.android.byteX:shrink-r-plugin:0.3.0"
-     classpath "com.didiglobal.booster:booster-gradle-plugin:4.16.2"
      classpath "com.tencent.bugly:symtabfileuploader:2.2.1"
      classpath "com.tencent.mm:AndResGuard-gradle-plugin:1.2.21"
-     classpath "io.github.didi.dokit:dokitx-plugin:3.7.11"
      classpath "io.github.duking666:ImgCompressPlugin:1.2.1"
-     classpath "io.github.wurensen:gradle-android-plugin-aspectjx:3.3.2"
      classpath "org.greenrobot:greendao-gradle-plugin:3.3.0"
      classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
   }
@@ -46,14 +46,11 @@ dependencies {
 // [class:class org.gradle.api.plugins.BasePlugin]
 // [class:class org.gradle.api.plugins.JvmEcosystemPlugin]
 // [class:class org.gradle.api.plugins.ReportingBasePlugin]
-// [class:class org.gradle.api.plugins.JavaBasePlugin$Inject, javaToolchainQueryService:org.gradle.jvm.toolchain.internal.JavaToolchainQueryService@49abe48c, taskThatOwnsThisObject:null, modelIdentityDisplayName:null]
+// [class:class org.gradle.api.plugins.JvmToolchainsPlugin]
+// [class:class org.gradle.api.plugins.JavaBasePlugin$Inject, javaToolchainQueryService:org.gradle.jvm.toolchain.internal.JavaToolchainQueryService@6e4c7e2a, taskThatOwnsThisObject:null, modelIdentityDisplayName:null]
 // [class:class com.android.build.gradle.api.AndroidBasePlugin]
-// [extension:extension 'android', projectType:0, class:class com.android.build.gradle.internal.plugins.AppPlugin, packagePublished:false, analyticsPluginType:APPLICATION, projectTypeV2:APPLICATION, variantInputModel:com.android.build.gradle.internal.variant.LegacyVariantInputManager@6f1723b4, variantManager:com.android.build.gradle.internal.VariantManager@7f69dcd3]
+// [extension:extension 'android', projectServices:com.android.build.gradle.internal.services.ProjectServices@59cc1ff0, projectType:0, versionedSdkLoaderService:com.android.build.gradle.internal.services.VersionedSdkLoaderService@6561bf71, componentFactory:org.gradle.api.plugins.internal.DefaultSoftwareComponentFactory@5555699c, class:class com.android.build.gradle.internal.plugins.AppPlugin, dslServices:com.android.build.gradle.internal.services.DslServicesImpl@29e5fc6e, syncIssueReporter:com.android.build.gradle.internal.errors.SyncIssueReporterImpl@24557a56, packagePublished:false, analyticsPluginType:APPLICATION, configuratorService:com.android.build.gradle.internal.profile.AnalyticsConfiguratorService$Inject@1d5fc2b3, projectTypeV2:APPLICATION, extraModelInfo:com.android.build.gradle.internal.ExtraModelInfo@75ad7c5e, variantInputModel:com.android.build.gradle.internal.variant.LegacyVariantInputManager@732de809, variantManager:com.android.build.gradle.internal.VariantManager@7ca5abf0, registry:org.gradle.tooling.provider.model.internal.DefaultToolingModelBuilderRegistry@1f8cb48d]
 // [extension:extension 'android', class:class com.android.build.gradle.AppPlugin]
-// [class:class com.google.gradle.osdetector.OsDetectorPlugin]
-// [class:class com.tencent.gradle.AndResGuardPlugin]
-// [class:class com.hujiang.gradle.plugin.android.aspectjx.AJXPlugin]
-// [class:class com.didichuxing.doraemonkit.plugin.DoKitPlugin]
 // [class:class com.dorongold.gradle.tasktree.TaskTreePlugin]
 // [class:class com.alibaba.android.arouter.register.launch.PluginLaunch]
 // [class:class com.kingkingdu.ImgCompressPlugin]
