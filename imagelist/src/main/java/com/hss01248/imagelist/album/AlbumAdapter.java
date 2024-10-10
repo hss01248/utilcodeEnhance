@@ -24,6 +24,11 @@ import java.util.List;
  * desription:
  */
 public class AlbumAdapter extends BaseQuickAdapter<Album, BaseViewHolder> implements SectionTitleProvider {
+    public void setVideo(boolean video) {
+        isVideo = video;
+    }
+
+    boolean isVideo;
     public AlbumAdapter(int layoutResId, @Nullable List<Album> data) {
         super(layoutResId, data);
     }
@@ -53,6 +58,12 @@ public class AlbumAdapter extends BaseQuickAdapter<Album, BaseViewHolder> implem
                 .error(R.drawable.im_item_list_opt_error)
                 .into(imageView);
         helper.setText(R.id.tv_info, item.name);
+
+        if(item.isVideo){
+            helper.setVisible(R.id.iv_video_type,true);
+        }else {
+            helper.setGone(R.id.iv_video_type,false);
+        }
         helper.getConvertView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,7 +72,7 @@ public class AlbumAdapter extends BaseQuickAdapter<Album, BaseViewHolder> implem
                     public View init(Activity activity) {
                         ImageListView listView = new ImageListView(activity);
                         //ImageMediaCenterUtil.showViewAsDialog(listView);
-                        listView.showImagesInAlbum(item);
+                        listView.showImagesInAlbum(item,isVideo);
                         return listView;
                     }
                 });

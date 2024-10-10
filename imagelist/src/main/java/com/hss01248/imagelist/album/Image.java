@@ -1,5 +1,6 @@
 package com.hss01248.imagelist.album;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -20,6 +21,13 @@ public class Image implements Parcelable {
     public int oritation;
     public String mimeType;
     public boolean isDir;
+
+    public Image setUri(Uri uri) {
+        this.uri = uri;
+        return this;
+    }
+
+    public Uri uri;
 
     public Image(long id, String name, String path, long fileSize, long addDate,
                  long modifiedTime, long width, long height, String mimeType) {

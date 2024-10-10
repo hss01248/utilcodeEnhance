@@ -11,6 +11,48 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <TextView
+            android:layout_margin="10dp"
+            android:textSize="25sp"
+            android:text="media相关"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <com.google.android.flexbox.FlexboxLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal"
+            app:alignItems="flex_start"
+            app:justifyContent="space_around"
+            app:flexDirection="row"
+            app:flexWrap="wrap" >
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="查看相册图片-media store"
+                android:onClick="viewImagesByMediaStore"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="查看手机视频-media store"
+                android:onClick="viewVideoByMediaStore"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </com.google.android.flexbox.FlexboxLayout>
+
+
+        <TextView
+            android:layout_margin="10dp"
+            android:textSize="25sp"
+            android:text="基础工具相关"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
         <com.google.android.flexbox.FlexboxLayout
             android:id="@+id/flex_titles"
             android:layout_width="match_parent"
@@ -451,6 +493,9 @@
         <TextView
             android:layout_margin="10dp"
             android:text="下方为dialog demo"
+            android:textSize="25sp"
+            android:textColor="#333333"
+            android:textStyle="bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
         <com.google.android.flexbox.FlexboxLayout

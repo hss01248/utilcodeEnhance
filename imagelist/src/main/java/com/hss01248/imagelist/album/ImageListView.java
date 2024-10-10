@@ -41,6 +41,7 @@ import com.hss.downloader.DownloadUrls;
 import com.hss.downloader.MyDownloader;
 
 import com.hss01248.bigimageviewpager.LargeImageViewer;
+import com.hss01248.fileoperation.FileOpenUtil;
 import com.hss01248.imagelist.NormalCallback;
 import com.hss01248.imagelist.R;
 
@@ -633,10 +634,10 @@ public class ImageListView extends FrameLayout {
 
     }
 
-    public void showImagesInAlbum(Album album) {
+    public void showImagesInAlbum(Album album,boolean isVideo) {
         titleBar.setVisibility(VISIBLE);
         List<Image> cachedImages = new ArrayList<>();
-        ImageMediaCenterUtil.listImagesByAlbumName(getContext(), album.id, new NormalCallback<List<Image>>() {
+        ImageMediaCenterUtil.listImagesByAlbumName(getContext(), album.id,isVideo, new NormalCallback<List<Image>>() {
             @Override
             public void onSuccess(final List<Image> images, Object extra) {
                 LogUtils.d("onsuccess:" + images.size());
@@ -692,17 +693,23 @@ public class ImageListView extends FrameLayout {
                 for (Image image : images2) {
                     paths.add(image.path);
                 }
-                ImageMediaCenterUtil.showBigImag(getContext(), paths, position);
+                FileOpenUtil.open(paths.get(position),paths);
+                /*if(images2.get(0).path.endsWith(".mp4")){
+                    ImageMediaCenterUtil.showBigImag(getContext(), paths, position);
+                }else{
+                    FileOpenUtil.open(paths.get(position),paths);
+                }*/
+
             }
         });
     }
 
-    public void showAllAlbums() {
+    public void showAllAlbums(boolean isVideo) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             MyPermissions.request(new PermissionUtils.FullCallback() {
                 @Override
                 public void onGranted(@NonNull List<String> granted) {
-                    loadAlbumsAfterPermission();
+                    loadAlbumsAfterPermission(isVideo);
                 }
 
                 @Override
@@ -715,7 +722,7 @@ public class ImageListView extends FrameLayout {
             MyPermissions.request(new PermissionUtils.FullCallback() {
                 @Override
                 public void onGranted(@NonNull List<String> granted) {
-                    loadAlbumsAfterPermission();
+                    loadAlbumsAfterPermission(isVideo);
                 }
 
                 @Override
@@ -728,8 +735,8 @@ public class ImageListView extends FrameLayout {
 
     }
 
-    private void loadAlbumsAfterPermission() {
-        ImageMediaCenterUtil.getAlbums(getContext(), new NormalCallback<List<Album>>() {
+    private void loadAlbumsAfterPermission(boolean isVideo) {
+        ImageMediaCenterUtil.getAlbums(getContext(),isVideo, new NormalCallback<List<Album>>() {
             @Override
             public void onSuccess(final List<Album> albums, Object extra) {
                 if(albums == null || albums.isEmpty()){
@@ -739,6 +746,7 @@ public class ImageListView extends FrameLayout {
                 //recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
                 recyclerView.setLayoutManager(new GridLayoutManager(getContext(), count()));
                 AlbumAdapter imgItemAdapter = new AlbumAdapter(R.layout.imglist_item_iv, albums);
+                imgItemAdapter.setVideo(isVideo);
                 recyclerView.setAdapter(imgItemAdapter);
                 setDivider(recyclerView);
                 imgItemAdapter.notifyDataSetChanged();

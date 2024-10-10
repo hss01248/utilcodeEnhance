@@ -85,7 +85,7 @@ dependencies {
 
     // For App Authentication API testing
     androidTestImplementation "androidx.security:security-app-authenticator:1.0.0-alpha01"
-
+    api "com.github.hss01248.media:localvideoplayer:1.0.0"
     // lifecycle注解处理器
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:2.2.0"
     //implementation 'com.github.gzu-liyujiang.AndroidPicker:FilePicker:4.1.2'

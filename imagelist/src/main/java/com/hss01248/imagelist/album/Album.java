@@ -10,6 +10,13 @@ public class Album {
     public int count;
     public long fileSize;
 
+    public Album setVideo(boolean video) {
+        isVideo = video;
+        return this;
+    }
+
+    boolean isVideo;
+
     public Album(String name, String cover, long id) {
         this.name = name;
         this.cover = cover;

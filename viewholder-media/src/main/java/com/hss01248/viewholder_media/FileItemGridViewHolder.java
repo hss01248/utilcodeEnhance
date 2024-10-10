@@ -60,22 +60,28 @@ public class FileItemGridViewHolder extends MyRecyclerViewHolder<LayoutFileItemG
 
     @Override
     public void assignDatasAndEvents(String data) {
-        ViewGroup.LayoutParams layoutParams = binding.iv.getLayoutParams();
+        ViewGroup.LayoutParams layoutParams = binding.rlContent.getLayoutParams();
         layoutParams.width = width;
         layoutParams.height = width;
-        binding.iv.setLayoutParams(layoutParams);
+        binding.rlContent.setLayoutParams(layoutParams);
 
 
         showInfo(data, itemView.getContext(), itemView,
                 binding.tv,
-                binding.iv, onItemClicked,filterInfo.showFileName);
+                binding.iv, onItemClicked,filterInfo.showFileName,binding.ivType);
     }
 
     public static void showInfo(String data, Context context,
                                 View rootView,
                                 TextView textView,
-                                ImageView iv, Consumer<String> onItemClicked,boolean showFileName) {
+                                ImageView iv,
+                                Consumer<String> onItemClicked,
+                                boolean showFileName,
+                                ImageView ivType) {
         File file = new File(data);
+        String name = file.getName().toLowerCase();
+        boolean isVideo = name.endsWith(".mp4") || name.endsWith(".mkv");
+        ivType.setVisibility(isVideo?View.VISIBLE:View.GONE);
         if (file.isDirectory()) {
             ImageLoader.with(context)
                     .res(R.drawable.icon_folder)
@@ -83,17 +89,14 @@ public class FileItemGridViewHolder extends MyRecyclerViewHolder<LayoutFileItemG
                     .into(iv);
             textView.setVisibility(View.VISIBLE);
         } else {
-            if (file.getName().endsWith(".jpg") ||
-                    file.getName().endsWith(".jpeg") ||
-                    file.getName().endsWith(".JPG") ||
-                    file.getName().endsWith(".png") ||
-                    file.getName().endsWith(".avif") ||
-                    file.getName().endsWith(".gif") ||
-                    file.getName().endsWith(".webp") ||
-                    file.getName().endsWith(".MP4") ||
-                    file.getName().endsWith(".mkv") ||
-                    file.getName().endsWith(".mp4")) {
-                //todo ulr
+            if (name.endsWith(".jpg") ||
+                    name.endsWith(".jpeg") ||
+                    name.endsWith(".png") ||
+                    name.endsWith(".avif") ||
+                    name.endsWith(".gif") ||
+                    name.endsWith(".webp") ||
+                    name.endsWith(".mkv") ||
+                    name.endsWith(".mp4")) {
                 ImageLoader.with(context)
                         .file(data)
                         .defaultErrorRes(true)
@@ -112,7 +115,6 @@ public class FileItemGridViewHolder extends MyRecyclerViewHolder<LayoutFileItemG
                 textView.setVisibility(View.VISIBLE);
             }
         }
-        String name = data.substring(data.lastIndexOf("/") + 1);
         textView.setText(name);
 
 

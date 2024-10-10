@@ -69,6 +69,7 @@ import com.hss01248.cipher.file.EncryptedUtil;
 import com.hss01248.cipher.sp.EnSpUtil;
 import com.hss01248.fullscreendialog.FullScreenDialogUtil;
 import com.hss01248.image.dataforphotoselet.ImgDataSeletor;
+import com.hss01248.imagelist.album.ImageMediaCenterUtil;
 import com.hss01248.iwidget.BaseDialogListener;
 import com.hss01248.iwidget.msg.AlertDialogImplByDialogUtil;
 import com.hss01248.iwidget.msg.AlertDialogImplByMmDialog;
@@ -1540,5 +1541,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void testInstrumentation(View view) {
         SentryUtil.testInstrumentation();
+    }
+
+    public void viewImagesByMediaStore(View view) {
+        ImageMediaCenterUtil.showAlbums(false);
+    }
+
+    public void viewVideoByMediaStore(View view) {
+        ImageMediaCenterUtil.showAlbums(true);
     }
 }

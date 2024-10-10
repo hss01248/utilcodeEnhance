@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
                 pid=31500, uid=10576 requires android.permission.READ_EXTERNAL_STORAGE, or grantUriPermission()*/
 
 
-                ImageMediaCenterUtil.showAlbums();
+                ImageMediaCenterUtil.showAlbums(false);
 
 
             }

@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void viewAlbum(View view) {
 
-        ImageMediaCenterUtil.showAlbums();
+        ImageMediaCenterUtil.showAlbums(false);
 
 
     }

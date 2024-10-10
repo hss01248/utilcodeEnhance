@@ -62,6 +62,11 @@ public class AlbumImgAdapter extends BaseQuickAdapter<Image, BaseViewHolder> imp
 
         }
         helper.setText(R.id.tv_info, name);
+        if(item.path.endsWith(".mp4")){
+            helper.setVisible(R.id.iv_video_type,true);
+        }else {
+            helper.setGone(R.id.iv_video_type,false);
+        }
 
 
 

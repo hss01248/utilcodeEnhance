@@ -1,8 +1,10 @@
 package com.hss01248.imagelist.album;
 
 import android.app.Activity;
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Process;
@@ -16,7 +18,6 @@ import androidx.core.util.Pair;
 import androidx.viewpager.widget.ViewPager;
 
 import com.blankj.utilcode.util.ActivityUtils;
-import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.hss.utils.enhance.viewholder.ContainerActivity2;
 import com.hss.utils.enhance.viewholder.mvvm.ContainerViewHolderWithTitleBar;
@@ -43,34 +44,52 @@ import io.reactivex.functions.Consumer;
 public class ImageMediaCenterUtil {
 
 
-    public static void showAlbums(){
+    public static void showAlbums(boolean isVideo){
         ContainerActivity2.start(new Consumer<Pair<ContainerActivity2, ContainerViewHolderWithTitleBar>>() {
             @Override
             public void accept(Pair<ContainerActivity2, ContainerViewHolderWithTitleBar> pair) throws Exception {
                 ImageListView view1 =  new ImageListView(pair.first);
                 pair.second.getBinding().rlContainer.addView(view1);
                 pair.second.getBinding().realTitleBar.setVisibility(ScreenUtils.isLandscape() ? View.GONE:View.VISIBLE);
-                view1.showAllAlbums();
+                view1.showAllAlbums(isVideo);
             }
         });
     }
 
-     static void getAlbums(final Context context, final NormalCallback<List<Album>> callback) {
+
+    static void getAlbums(final Context context, final NormalCallback<List<Album>> callback) {
+        getAlbums(context,false,callback);
+    }
+
+     static void getAlbums(final Context context,boolean isVideo, final NormalCallback<List<Album>> callback) {
 
         final Handler mainHandler = new Handler(Looper.getMainLooper());
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 String[] projection = new String[]{
+                        MediaStore.Images.Media._ID,
                         MediaStore.Images.Media.BUCKET_ID,
                         MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
                         MediaStore.Images.Media.DATA};
+                if(isVideo){
+                    projection = new String[]{
+                            MediaStore.Video.Media._ID,
+                            MediaStore.Video.Media.BUCKET_ID,
+                            MediaStore.Video.Media.BUCKET_DISPLAY_NAME,
+                            MediaStore.Video.Media.DATA};
+                }
 
                 android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
 
 
+                Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                if(isVideo){
+                    uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                }
+
                 Cursor cursor = context.getApplicationContext().getContentResolver()
-                        .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection,
+                        .query(uri, projection,
                                 null, null, MediaStore.Images.Media.DATE_ADDED);
                 if (cursor == null) {
                     mainHandler.post(new Runnable() {
@@ -90,12 +109,13 @@ public class ImageMediaCenterUtil {
                         if (Thread.interrupted()) {
                             return;
                         }
-
-                        long albumId = cursor.getLong(cursor.getColumnIndex(projection[0]));
-                        String album = cursor.getString(cursor.getColumnIndex(projection[1]));
-                        String image = cursor.getString(cursor.getColumnIndex(projection[2]));
+                        long id = cursor.getLong(cursor.getColumnIndex(projection[0]));
+                        long albumId = cursor.getLong(cursor.getColumnIndex(projection[1]));
+                        String album = cursor.getString(cursor.getColumnIndex(projection[2]));
+                        String image = cursor.getString(cursor.getColumnIndex(projection[3]));
                         //int size = cursor.getInt(cursor.getColumnIndex(COLUMN_COUNT));
-
+// 根据ID获取图片的URI
+                        Uri imageUri = ContentUris.withAppendedId(uri, id);
                         if (!albumSet.contains(albumId)) {
                         /*
                         It may happen that some image file paths are still present in cache,
@@ -106,7 +126,7 @@ public class ImageMediaCenterUtil {
                             file = new File(image);
                             Log.d("ImageMediaCenterUtil", file.getAbsolutePath());
                             if (file.exists()) {
-                                Album album1 = new Album(album, image, albumId);
+                                Album album1 = new Album(album, image, albumId).setVideo(isVideo);
                                 albums.add(album1);
                                 albumSet.add(albumId);
 
@@ -151,7 +171,10 @@ public class ImageMediaCenterUtil {
         thread.start();
     }
 
-    public static void listImagesByAlbumName(final Context context, final long albumId, final NormalCallback<List<Image>> callback) {
+    public static void listImagesByAlbumName(final Context context,
+                                             final long albumId,
+                                             boolean isVideo,
+                                             final NormalCallback<List<Image>> callback) {
         final Handler mainHandler = new Handler(Looper.getMainLooper());
         Runnable runnable = new Runnable() {
             @Override
@@ -166,9 +189,24 @@ public class ImageMediaCenterUtil {
                         MediaStore.Images.Media.HEIGHT,
                         MediaStore.Images.Media.MIME_TYPE};
 
-                android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
+                if(isVideo){
+                    projection = new String[]{MediaStore.Video.Media._ID,
+                            MediaStore.Video.Media.DISPLAY_NAME,
+                            MediaStore.Video.Media.DATA,
+                            MediaStore.Video.Media.SIZE,
+                            MediaStore.Video.Media.DATE_ADDED,
+                            MediaStore.Video.Media.DATE_MODIFIED,
+                            MediaStore.Video.Media.WIDTH,
+                            MediaStore.Video.Media.HEIGHT,
+                            MediaStore.Video.Media.MIME_TYPE};
+                }
 
-                Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection,
+                android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
+                Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                if(isVideo){
+                    uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                }
+                Cursor cursor = context.getContentResolver().query(uri, projection,
                         MediaStore.Images.Media.BUCKET_ID + " =?", new String[]{albumId + ""}, MediaStore.Images.Media.DATE_ADDED);
                 if (cursor == null) {
                     mainHandler.post(new Runnable() {
@@ -199,12 +237,15 @@ public class ImageMediaCenterUtil {
                         // String name = cursor.getString(cursor.getColumnIndex(projection[1]));
                         String path = cursor.getString(cursor.getColumnIndex(projection[2]));
 
-
                         File file = new File(path);
                         Log.i("path", path);
                         if (file.exists()) {
+
+
+                            long id = cursor.getLong(cursor.getColumnIndex(projection[0]));
+                            Uri imageUri = ContentUris.withAppendedId(uri, id);
                             images.add(new Image(
-                                    cursor.getLong(cursor.getColumnIndex(projection[0])),//_ID
+                                    id,//_ID
                                     cursor.getString(cursor.getColumnIndex(projection[1])),//DISPLAY_NAME
                                     path,//DATA
                                     cursor.getLong(cursor.getColumnIndex(projection[3])),//SIZE
@@ -213,9 +254,7 @@ public class ImageMediaCenterUtil {
                                     cursor.getLong(cursor.getColumnIndex(projection[6])),//WIDTH
                                     cursor.getLong(cursor.getColumnIndex(projection[6])),//HEIGHT
                                     cursor.getString(cursor.getColumnIndex(projection[7]))//MIME_TYPE
-
-
-                            ));
+                            ).setUri(imageUri));
                         }
                         count++;
                         //加速
@@ -375,6 +414,7 @@ public class ImageMediaCenterUtil {
 
 
     }
+
 
 
 }
