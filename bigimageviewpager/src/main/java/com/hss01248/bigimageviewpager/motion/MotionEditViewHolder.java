@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.ThreadUtils;
+import com.blankj.utilcode.util.Utils;
 import com.hss.utils.enhance.viewholder.ContainerActivity2;
 import com.hss.utils.enhance.viewholder.MyRecyclerViewAdapter;
 import com.hss.utils.enhance.viewholder.MyRecyclerViewHolder;
@@ -19,6 +20,7 @@ import com.hss01248.bigimageviewpager.databinding.MotionPhotoEditBinding;
 import com.hss01248.bigimageviewpager.databinding.MotionPhotoVideoFrameBinding;
 import com.hss01248.motion_photos.MotionPhotoUtil;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,18 +60,18 @@ public class MotionEditViewHolder extends BaseViewHolder<MotionPhotoEditBinding,
     }
 
     private void showKeyFrames(String path) {
-        ThreadUtils.executeByIo(new ThreadUtils.SimpleTask<List<byte[]>>() {
+        ThreadUtils.executeByIo(new ThreadUtils.SimpleTask<List<File>>() {
             @Override
-            public List<byte[]> doInBackground() throws Throwable {
+            public List<File> doInBackground() throws Throwable {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     String motionVideoPath = MotionPhotoUtil.getMotionVideoPath(path);
-                    return MotionVideoUtil.extratFrames(motionVideoPath);
+                    return KeyFrameExtractor.extractKeyFrames(Utils.getApp(),motionVideoPath);
                 }
                 return new ArrayList<>();
             }
 
             @Override
-            public void onSuccess(List<byte[]> result) {
+            public void onSuccess(List<File> result) {
 
                 binding.rvImages.setLayoutManager(
                         new LinearLayoutManager(getRootView().getContext(), RecyclerView.HORIZONTAL,false));
