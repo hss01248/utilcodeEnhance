@@ -1,0 +1,48 @@
+plugins {
+    id 'com.android.library'
+}
+
+android {
+
+    namespace "com.hss01248.video_trimmer"
+    compileSdk 34
+
+    defaultConfig {
+        minSdk 21
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+    dataBinding {
+        enabled = true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.2.0'
+
+    implementation 'androidx.recyclerview:recyclerview:1.2.0'
+    implementation 'com.github.iknow4:android-utils-sdk:1.1.2'
+    //implementation 'nl.bravobit:android-ffmpeg:1.1.7'
+    //implementation 'nl.bravobit:android-ffmpeg:1.1.7'
+    implementation 'com.github.yangfeng1994:FFmpeg-Android:v2.0.1'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.2'
+    //implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.5@aar'
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    //implementation "androidx.core:core-ktx:1.13.1"
+    //implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+}

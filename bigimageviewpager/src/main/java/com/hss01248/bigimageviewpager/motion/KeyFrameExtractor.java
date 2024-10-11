@@ -8,12 +8,14 @@ import android.media.ImageReader;
 import android.media.MediaCodec;
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
+import android.media.MediaMetadataRetriever;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
 import com.blankj.utilcode.util.LogUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -186,5 +188,37 @@ public class KeyFrameExtractor {
         return bytes;
     }
 
+    public static List<byte[]> extractFrames2(String motionVideoPath, int totalThumbsCount) throws Exception{
+        List<byte[]> bytes = new ArrayList<>();
+        MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
+        mediaMetadataRetriever.setDataSource(motionVideoPath);
+        long duration = Long.parseLong(mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
+        // Retrieve media data use microsecond
+        long interval = duration / (totalThumbsCount - 1);
+        for (long i = 0; i < totalThumbsCount; ++i) {
+            long frameTime =  interval * i;
+            Bitmap bitmap = mediaMetadataRetriever.getFrameAtTime(frameTime*1000 , MediaMetadataRetriever.OPTION_NEXT_SYNC);
+            //OPTION_CLOSEST：获取最接近指定时间点的帧，无论该帧是否为关键帧。这是默认选项。
+            //MediaMetadataRetriever.OPTION_CLOSEST_SYNC 最近的关键帧
+            //OPTION_PREVIOUS_SYNC：从指定时间点开始，获取上一个关键帧
+            //OPTION_NEXT_SYNC：从指定时间点开始，获取下一个关键帧。
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG,95,out);
+            bitmap.recycle();
+            byte[] imageBytes = out.toByteArray();
+            if(bytes.isEmpty()){
+                bytes.add(imageBytes);
+            }else {
+                if(bytes.get(bytes.size()-1).length != imageBytes.length){
+                    bytes.add(imageBytes);
+                }else {
+                    LogUtils.d("同一个关键帧: "+i);
+                }
+            }
+            out.close();
+        }
+        mediaMetadataRetriever.release();
+        return bytes;
+    }
 }
 

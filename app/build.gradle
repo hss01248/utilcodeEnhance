@@ -35,6 +35,8 @@ android {
     }
     packagingOptions {
         pickFirst '**/libc++_shared.so'
+        pickFirst '**/libavcodec.so'
+        //jni/arm64-v8a/libavcodec.so
         pickFirst '**/META-INF/DEPENDENCIES'
     }
 }

@@ -64,7 +64,7 @@ public class MotionEditViewHolder extends BaseViewHolder<MotionPhotoEditBinding,
             public List<byte[]> doInBackground() throws Throwable {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     String motionVideoPath = MotionPhotoUtil.getMotionVideoPath(path);
-                    return KeyFrameExtractor.extractFrames(motionVideoPath);
+                    return KeyFrameExtractor.extractFrames2(motionVideoPath,15);
                 }
                 return new ArrayList<>();
             }
