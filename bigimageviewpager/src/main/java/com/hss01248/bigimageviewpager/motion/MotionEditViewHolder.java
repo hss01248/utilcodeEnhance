@@ -1,7 +1,6 @@
 package com.hss01248.bigimageviewpager.motion;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 import android.view.View;
 
@@ -11,20 +10,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.blankj.utilcode.util.ActivityUtils;
-import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ReflectUtils;
 import com.blankj.utilcode.util.ThreadUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.hss.utils.base.api.MyCommonCallback3;
 import com.hss.utils.enhance.viewholder.ContainerActivity2;
 import com.hss.utils.enhance.viewholder.MyRecyclerViewAdapter;
 import com.hss.utils.enhance.viewholder.MyRecyclerViewHolder;
 import com.hss.utils.enhance.viewholder.mvvm.BaseViewHolder;
 import com.hss.utils.enhance.viewholder.mvvm.ContainerViewHolderWithTitleBar;
-import com.hss01248.activityresult.TheActivityListener;
 import com.hss01248.bigimageviewpager.databinding.MotionPhotoEditBinding;
 import com.hss01248.bigimageviewpager.databinding.MotionPhotoVideoFrameBinding;
 import com.hss01248.motion_photos.MotionPhotoUtil;
-import com.iknow.android.features.trim.VideoTrimmerActivity;
+import com.iknow.android.features.trim.VideoTrimmerUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +62,16 @@ public class MotionEditViewHolder extends BaseViewHolder<MotionPhotoEditBinding,
             @Override
             public void onClick(View view) {
                 String motionVideoPath = MotionPhotoUtil.getMotionVideoPath(bean);
-                VideoTrimmerActivity.start(motionVideoPath,new TheActivityListener<VideoTrimmerActivity>(){
+
+
+                VideoTrimmerUtil.trimLast(motionVideoPath, 300, new MyCommonCallback3<String>() {
+                    @Override
+                    public void onSuccess(String s) { ToastUtils.showShort(s);
+                        ReflectUtils.reflect("com.hss01248.fileoperation.FileOpenUtil")
+                                .method("open",s,null);
+                    }
+                });
+                /*VideoTrimmerActivity.start(motionVideoPath,new TheActivityListener<VideoTrimmerActivity>(){
 
                     @Override
                     protected void onResultOK(Intent data) {
@@ -75,7 +82,7 @@ public class MotionEditViewHolder extends BaseViewHolder<MotionPhotoEditBinding,
                                 .method("open",data.getStringExtra("path"),null);
 
                     }
-                });
+                });*/
 
             }
         });

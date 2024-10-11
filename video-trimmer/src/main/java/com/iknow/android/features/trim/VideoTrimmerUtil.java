@@ -17,6 +17,7 @@ import com.iknow.android.interfaces.VideoTrimListener;
 import com.mobile.ffmpeg.util.FFmpegAsyncUtils;
 import com.mobile.ffmpeg.util.FFmpegExecuteCallback;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -42,6 +43,55 @@ public class VideoTrimmerUtil {
   public static final int THUMB_WIDTH = (SCREEN_WIDTH_FULL - RECYCLER_VIEW_PADDING * 2) / VIDEO_MAX_TIME;
   private static final int THUMB_HEIGHT = SizeUtils.dp2px(50);
 
+
+  public static void trimLast(String path, long reduceLastInMills,MyCommonCallback3<String> callback3){
+    MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+    retriever.setDataSource(path);
+    long mills = Long.parseLong(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
+    mills = mills - reduceLastInMills;
+    //ffmpeg -i input.mp4 -t 00:02:29.500 -c copy output.mp4
+    String  time = convertSecondsToTime2(mills);
+    File file =  new File(path);
+    File file1 = new File(file.getParentFile(),"sub-"+file.getName());
+    String cmd = "-i " + path + " -t "+time+" -c copy "+file1.getAbsolutePath();
+   String[] command = cmd.split(" ");
+
+    FFmpegAsyncUtils asyncTask =new FFmpegAsyncUtils();
+
+    asyncTask.setCallback(new FFmpegExecuteCallback() {
+
+      @Override
+      public void onFFmpegStart() {
+
+      }
+
+      @Override
+      public void onFFmpegSucceed( String executeOutput) {
+        callback3.onSuccess(file1.getAbsolutePath());
+
+      }
+
+      @Override
+      public void onFFmpegFailed(@Nullable String executeOutput) {
+        //ToastUtil.show(context.getApplicationContext(), executeOutput);
+        callback3.onError(executeOutput+"");
+      }
+
+      @Override
+      public void onFFmpegProgress(@Nullable Integer progress) {
+// fload mprogress = progress/执行视频文件或语音文件时长
+      }
+
+      @Override
+      public void onFFmpegCancel() {
+
+      }
+    });
+    asyncTask.execute(command);
+
+
+  }
+
   public static void trim(Context context, String inputFile, String outputFile, long startMs, long endMs, final VideoTrimListener callback) {
     final String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
     final String outputName = "trimmedVideo_" + timeStamp + ".mp4";
@@ -49,6 +99,10 @@ public class VideoTrimmerUtil {
 
     String start = convertSecondsToTime(startMs / 1000);
     String duration = convertSecondsToTime((endMs - startMs) / 1000);
+
+    //ffmpeg -i input.mp4 -t 00:02:29.500 -c copy output.mp4
+
+
     //String start = String.valueOf(startMs);
     //String duration = String.valueOf(endMs - startMs);
 
@@ -182,11 +236,39 @@ public class VideoTrimmerUtil {
     return timeStr;
   }
 
+  public static String convertSecondsToTime2(long mills) {
+    String timeStr;
+    int hour;
+    int minute;
+    int second;
+    if (mills <= 0) {
+      return "00:00:000";
+    } else {
+      if (mills < 1000) {
+        return "00:00:" + unitFormat2((int) mills);
+      }
+      int mil = (int) (mills % 1000);
+      long se =  (mills / 1000);
+      return convertSecondsToTime(se) + ":" + unitFormat2(mil);
+    }
+  }
+
   private static String unitFormat(int i) {
     String retStr;
     if (i >= 0 && i < 10) {
       retStr = "0" + i;
     } else {
+      retStr = "" + i;
+    }
+    return retStr;
+  }
+  private static String unitFormat2(int i) {
+    String retStr ;
+    if (i >= 0 && i < 10) {
+      retStr = "00" + i;
+    } else if(i > 10 && i < 100){
+      retStr = "0" + i;
+    }else {
       retStr = "" + i;
     }
     return retStr;
