@@ -109,6 +109,8 @@ public class MotionVideoUtil {
 
 // 从ByteBuffer中获取YUV格式的图像数据
         byte[] yuvData = new byte[buffer.remaining()];
+
+        //IllegalStateException: buffer is inaccessible
         buffer.get(yuvData);
 
 // 创建一个YuvImage对象

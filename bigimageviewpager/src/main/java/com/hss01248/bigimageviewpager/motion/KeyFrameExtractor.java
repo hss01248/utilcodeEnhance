@@ -153,7 +153,10 @@ public class KeyFrameExtractor {
                     ByteBuffer outputBuffer = outputBuffers[outputBufferIndex];
                     // Process the frame here (for example, convert to a Bitmap)
                     byte[] bytett = processFrame(outputBuffer, bufferInfo, format);
-                    bytes.add(bytett);
+                    if(bytett.length >0){
+                        bytes.add(bytett);
+                    }
+
                     codec.releaseOutputBuffer(outputBufferIndex, false);
                 }
             }
@@ -173,7 +176,12 @@ public class KeyFrameExtractor {
         // Conversion and processing logic goes here
         byte[] bytes = new byte[0];
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-            bytes = MotionVideoUtil.transToBitmap( format,outputBuffer);
+            try {
+                bytes = MotionVideoUtil.transToBitmap( format,outputBuffer);
+            }catch (Throwable throwable){
+                LogUtils.w(throwable);
+            }
+
         }
         return bytes;
     }
