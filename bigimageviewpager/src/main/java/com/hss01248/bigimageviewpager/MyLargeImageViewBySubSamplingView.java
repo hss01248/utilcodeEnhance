@@ -272,7 +272,7 @@ public class MyLargeImageViewBySubSamplingView extends FrameLayout {
             loadUrl(uri,loadMotionVideo);
             return;
         }
-        if (uri.startsWith("/storage/")) {
+        if (uri.startsWith("/storage/") || uri.startsWith("/data/user/0/")) {
             loadFile(uri, false,loadMotionVideo);
             return;
         }
@@ -284,6 +284,7 @@ public class MyLargeImageViewBySubSamplingView extends FrameLayout {
             loadLocal(uri, false,loadMotionVideo);
             return;
         }
+        LogUtils.w("非法路径: "+uri);
     }
 
     public LargeImageInfo getInfo(){

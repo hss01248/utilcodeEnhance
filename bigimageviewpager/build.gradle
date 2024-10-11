@@ -96,4 +96,5 @@ dependencies {
     api project(':motion-photos-android')
     //api 'com.qcloud.cos:avif:1.1.1'
     implementation 'com.googlecode.mp4parser:isoparser:1.1.22'
+    implementation 'com.github.iammert:Frames:0.3'
 }

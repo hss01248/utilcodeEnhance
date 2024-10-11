@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.ThreadUtils;
-import com.blankj.utilcode.util.Utils;
 import com.hss.utils.enhance.viewholder.ContainerActivity2;
 import com.hss.utils.enhance.viewholder.MyRecyclerViewAdapter;
 import com.hss.utils.enhance.viewholder.MyRecyclerViewHolder;
@@ -20,7 +19,6 @@ import com.hss01248.bigimageviewpager.databinding.MotionPhotoEditBinding;
 import com.hss01248.bigimageviewpager.databinding.MotionPhotoVideoFrameBinding;
 import com.hss01248.motion_photos.MotionPhotoUtil;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,19 +57,20 @@ public class MotionEditViewHolder extends BaseViewHolder<MotionPhotoEditBinding,
 
     }
 
+
     private void showKeyFrames(String path) {
-        ThreadUtils.executeByIo(new ThreadUtils.SimpleTask<List<File>>() {
+        ThreadUtils.executeByIo(new ThreadUtils.SimpleTask<List<byte[]>>() {
             @Override
-            public List<File> doInBackground() throws Throwable {
+            public List<byte[]> doInBackground() throws Throwable {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     String motionVideoPath = MotionPhotoUtil.getMotionVideoPath(path);
-                    return KeyFrameExtractor.extractKeyFrames(Utils.getApp(),motionVideoPath);
+                    return KeyFrameExtractor.extractFrames(motionVideoPath);
                 }
                 return new ArrayList<>();
             }
 
             @Override
-            public void onSuccess(List<File> result) {
+            public void onSuccess(List<byte[]> result) {
 
                 binding.rvImages.setLayoutManager(
                         new LinearLayoutManager(getRootView().getContext(), RecyclerView.HORIZONTAL,false));
@@ -79,11 +78,16 @@ public class MotionEditViewHolder extends BaseViewHolder<MotionPhotoEditBinding,
                     @Override
                     protected MyRecyclerViewHolder generateNewViewHolder(int viewType) {
                         MotionPhotoVideoFrameBinding binding1 = MotionPhotoVideoFrameBinding.inflate(ActivityUtils.getTopActivity().getLayoutInflater());
-                        return new VideoKeyFrameHolder(binding1.getRoot()).setBinding(binding1);
+                        return new VideoKeyFrameHolder(binding1.getRoot())
+                                .setParentBinding(binding)
+                                .setImageName(path)
+                                .setBinding(binding1);
                     }
                 };
                 binding.rvImages.setAdapter(adapter);
                 adapter.refresh(result);
+
+
 
             }
         });

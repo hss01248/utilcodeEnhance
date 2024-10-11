@@ -63,9 +63,11 @@ public class KeyFrameExtractor {
                     isEOS = true;
                 } else {
                     boolean isKeyFrame = (extractor.getSampleFlags() & MediaExtractor.SAMPLE_FLAG_SYNC) != 0;
+                    LogUtils.d("isKeyFrame: "+isKeyFrame,"inIndex:"+inIndex,"sampleSize:"+sampleSize);
                     if (isKeyFrame) {
                         codec.queueInputBuffer(inIndex, 0, sampleSize, extractor.getSampleTime(), 0);
                         int outIndex = codec.dequeueOutputBuffer(bufferInfo, timeoutUs);
+                        LogUtils.d("--->isKeyFrame: "+isKeyFrame,"inIndex:"+inIndex,"sampleSize:"+sampleSize,"outIndex:"+outIndex);
                         if (outIndex >= 0) {
                             Image image = imageReader.acquireNextImage();
                             ByteBuffer outputBuffer = image.getPlanes()[0].getBuffer();
@@ -106,6 +108,74 @@ public class KeyFrameExtractor {
         out.flush();
         out.close();
         bitmap.recycle();
+    }
+
+
+
+
+
+    public static List<byte[]> extractFrames(String videoPath) {
+        MediaExtractor extractor = new MediaExtractor();
+        MediaCodec codec = null;
+        List<byte[]> bytes = new ArrayList<>();
+        try {
+            extractor.setDataSource(videoPath);
+            MediaFormat format = extractor.getTrackFormat(0);
+            extractor.selectTrack(0);
+
+             codec = MediaCodec.createDecoderByType(format.getString(MediaFormat.KEY_MIME));
+            codec.configure(format, null, null, 0);
+            codec.start();
+
+            ByteBuffer[] inputBuffers = codec.getInputBuffers();
+            ByteBuffer[] outputBuffers = codec.getOutputBuffers();
+
+            boolean isEOS = false;
+            while (!isEOS) {
+                int inputBufferIndex = codec.dequeueInputBuffer(10000);
+                if (inputBufferIndex >= 0) {
+                    // Read data from extractor and feed it to decoder
+                    int sampleSize = extractor.readSampleData(inputBuffers[inputBufferIndex], 0);
+                    long presentationTimeUs = extractor.getSampleTime();
+                    if (sampleSize < 0) {
+                        codec.queueInputBuffer(inputBufferIndex, 0, 0, 0, MediaCodec.BUFFER_FLAG_END_OF_STREAM);
+                        isEOS = true;
+                    } else {
+                        codec.queueInputBuffer(inputBufferIndex, 0, sampleSize, presentationTimeUs, 0);
+                        extractor.advance();
+                    }
+                }
+
+                // Dequeue the output buffer and process the frame
+                MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
+                int outputBufferIndex = codec.dequeueOutputBuffer(bufferInfo, 10000);
+                if (outputBufferIndex >= 0) {
+                    ByteBuffer outputBuffer = outputBuffers[outputBufferIndex];
+                    // Process the frame here (for example, convert to a Bitmap)
+                    byte[] bytett = processFrame(outputBuffer, bufferInfo, format);
+                    bytes.add(bytett);
+                    codec.releaseOutputBuffer(outputBufferIndex, false);
+                }
+            }
+            return bytes;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            extractor.release();
+            codec.stop();
+            codec.release();
+        }
+    }
+
+   // @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private  static byte[] processFrame(ByteBuffer outputBuffer, MediaCodec.BufferInfo bufferInfo,MediaFormat format) {
+        // Conversion and processing logic goes here
+        byte[] bytes = new byte[0];
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+            bytes = MotionVideoUtil.transToBitmap( format,outputBuffer);
+        }
+        return bytes;
     }
 
 }

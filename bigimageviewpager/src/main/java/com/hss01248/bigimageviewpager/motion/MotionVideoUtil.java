@@ -102,7 +102,7 @@ public class MotionVideoUtil {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    private  static  byte[] transToBitmap(MediaFormat format,ByteBuffer buffer) {
+      static  byte[] transToBitmap(MediaFormat format,ByteBuffer buffer) {
         // 获取视频的宽度和高度
         int width = format.getInteger(MediaFormat.KEY_WIDTH);
         int height = format.getInteger(MediaFormat.KEY_HEIGHT);
