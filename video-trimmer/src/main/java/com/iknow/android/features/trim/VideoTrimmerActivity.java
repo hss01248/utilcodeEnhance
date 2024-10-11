@@ -4,10 +4,10 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.FragmentActivity;
 
+import com.blankj.utilcode.util.ActivityUtils;
+import com.hss01248.activityresult.StartActivityUtil;
+import com.hss01248.activityresult.TheActivityListener;
 import com.hss01248.video_trimmer.R;
 import com.hss01248.video_trimmer.databinding.ActivityVideoTrimBinding;
 import com.iknow.android.features.common.ui.BaseActivity;
@@ -27,18 +27,20 @@ public class VideoTrimmerActivity extends BaseActivity implements VideoTrimListe
   private ActivityVideoTrimBinding mBinding;
   private ProgressDialog mProgressDialog;
 
-  public static void call(FragmentActivity from, String videoPath) {
-    if (!TextUtils.isEmpty(videoPath)) {
+  public static void start(String videoPath, TheActivityListener<VideoTrimmerActivity> callback) {
+
       Bundle bundle = new Bundle();
       bundle.putString(VIDEO_PATH_KEY, videoPath);
-      Intent intent = new Intent(from, VideoTrimmerActivity.class);
+      Intent intent = new Intent(ActivityUtils.getTopActivity(), VideoTrimmerActivity.class);
       intent.putExtras(bundle);
-      from.startActivityForResult(intent, VIDEO_TRIM_REQUEST_CODE);
-    }
+    StartActivityUtil.startActivity(ActivityUtils.getTopActivity(),VideoTrimmerActivity.class,intent,true,
+            callback);
+
   }
 
   @Override public void initUI() {
-    mBinding = DataBindingUtil.setContentView(this, R.layout.activity_video_trim);
+    mBinding = ActivityVideoTrimBinding.inflate(getLayoutInflater());
+    setContentView(mBinding.getRoot());
     Bundle bd = getIntent().getExtras();
     String path = "";
     if (bd != null) path = bd.getString(VIDEO_PATH_KEY);
@@ -68,6 +70,9 @@ public class VideoTrimmerActivity extends BaseActivity implements VideoTrimListe
   @Override public void onFinishTrim(String in) {
     if (mProgressDialog.isShowing()) mProgressDialog.dismiss();
     ToastUtil.longShow(this, getString(R.string.trimmed_done));
+    Intent intent =new Intent();
+    intent.putExtra("path",in);
+    setResult(RESULT_OK,intent);
     finish();
     //TODO: please handle your trimmed video url here!!!
     //String out = StorageUtil.getCacheDir() + File.separator + COMPRESSED_VIDEO_FILE_NAME;

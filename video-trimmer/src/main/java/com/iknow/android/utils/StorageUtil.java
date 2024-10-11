@@ -6,11 +6,11 @@ import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.blankj.utilcode.util.Utils;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
-
-import iknow.android.utils.BaseUtils;
 
 /**
  * author : J.Chou
@@ -33,14 +33,14 @@ public class StorageUtil {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
           sDataDir = Environment.getExternalStorageDirectory().getPath() + APP_DATA_PATH;
           if (TextUtils.isEmpty(sDataDir)) {
-            sDataDir = BaseUtils.getContext().getFilesDir().getAbsolutePath();
+            sDataDir = Utils.getApp().getFilesDir().getAbsolutePath();
           }
         } else {
-          sDataDir = BaseUtils.getContext().getFilesDir().getAbsolutePath();
+          sDataDir = Utils.getApp().getFilesDir().getAbsolutePath();
         }
       } catch (Throwable e) {
         e.printStackTrace();
-        sDataDir = BaseUtils.getContext().getFilesDir().getAbsolutePath();
+        sDataDir = Utils.getApp().getFilesDir().getAbsolutePath();
       }
       File file = new File(sDataDir);
       if (!file.exists()) {//判断文件目录是否存在
@@ -53,7 +53,7 @@ public class StorageUtil {
   public static String getCacheDir() {
     if (TextUtils.isEmpty(sCacheDir)) {
       File file = null;
-      Context context = BaseUtils.getContext();
+      Context context = Utils.getApp();
       try {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
           file = context.getExternalCacheDir();

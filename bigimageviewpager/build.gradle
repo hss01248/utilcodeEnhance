@@ -93,7 +93,7 @@ dependencies {
     api 'com.github.warkiz.widget:indicatorseekbar:2.1.2'
 
     api project(':glide-aop')
-    //api project(':video-trimmer')
+    api project(':video-trimmer')
     api project(':motion-photos-android')
     //api 'com.qcloud.cos:avif:1.1.1'
     implementation 'com.googlecode.mp4parser:isoparser:1.1.22'

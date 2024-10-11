@@ -7,7 +7,12 @@ import android.net.Uri;
 import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
+import androidx.core.util.Pair;
 
+import com.blankj.utilcode.util.ScreenUtils;
+import com.blankj.utilcode.util.SizeUtils;
+import com.blankj.utilcode.util.ThreadUtils;
+import com.hss.utils.base.api.MyCommonCallback3;
 import com.iknow.android.interfaces.VideoTrimListener;
 import com.mobile.ffmpeg.util.FFmpegAsyncUtils;
 import com.mobile.ffmpeg.util.FFmpegExecuteCallback;
@@ -15,11 +20,6 @@ import com.mobile.ffmpeg.util.FFmpegExecuteCallback;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
-import iknow.android.utils.DeviceUtil;
-import iknow.android.utils.UnitConverter;
-import iknow.android.utils.callback.SingleCallback;
-import iknow.android.utils.thread.BackgroundExecutor;
 
 
 /**
@@ -31,16 +31,16 @@ import iknow.android.utils.thread.BackgroundExecutor;
 public class VideoTrimmerUtil {
 
   private static final String TAG = VideoTrimmerUtil.class.getSimpleName();
-  public static final long MIN_SHOOT_DURATION = 1000L;// 最小剪辑时间3s
+  public static final long MIN_SHOOT_DURATION = 1000L;// 最小剪辑时间1s
   public static final int VIDEO_MAX_TIME = 10;// 10秒
-  public static final long MAX_SHOOT_DURATION = VIDEO_MAX_TIME * 1000L;//视频最多剪切多长时间10s
+  public static final long MAX_SHOOT_DURATION = VIDEO_MAX_TIME * 3000L;//视频最多剪切多长时间10s
 
   public static final int MAX_COUNT_RANGE = 10;  //seekBar的区域内一共有多少张图片
-  private static final int SCREEN_WIDTH_FULL = DeviceUtil.getDeviceWidth();
-  public static final int RECYCLER_VIEW_PADDING = UnitConverter.dpToPx(35);
+  private static final int SCREEN_WIDTH_FULL = ScreenUtils.getScreenWidth();
+  public static final int RECYCLER_VIEW_PADDING = SizeUtils.dp2px(35);
   public static final int VIDEO_FRAMES_WIDTH = SCREEN_WIDTH_FULL - RECYCLER_VIEW_PADDING * 2;
   public static final int THUMB_WIDTH = (SCREEN_WIDTH_FULL - RECYCLER_VIEW_PADDING * 2) / VIDEO_MAX_TIME;
-  private static final int THUMB_HEIGHT = UnitConverter.dpToPx(50);
+  private static final int THUMB_HEIGHT = SizeUtils.dp2px(50);
 
   public static void trim(Context context, String inputFile, String outputFile, long startMs, long endMs, final VideoTrimListener callback) {
     final String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
@@ -111,29 +111,39 @@ public class VideoTrimmerUtil {
   }
 
   public static void shootVideoThumbInBackground(final Context context, final Uri videoUri, final int totalThumbsCount, final long startPosition,
-      final long endPosition, final SingleCallback<Bitmap, Integer> callback) {
-    BackgroundExecutor.execute(new BackgroundExecutor.Task("", 0L, "") {
-      @Override public void execute() {
-        try {
-          MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
-          mediaMetadataRetriever.setDataSource(context, videoUri);
-          // Retrieve media data use microsecond
-          long interval = (endPosition - startPosition) / (totalThumbsCount - 1);
-          for (long i = 0; i < totalThumbsCount; ++i) {
-            long frameTime = startPosition + interval * i;
-            Bitmap bitmap = mediaMetadataRetriever.getFrameAtTime(frameTime * 1000, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
-            if(bitmap == null) continue;
-            try {
-              bitmap = Bitmap.createScaledBitmap(bitmap, THUMB_WIDTH, THUMB_HEIGHT, false);
-            } catch (final Throwable t) {
-              t.printStackTrace();
-            }
-            callback.onSingleCallback(bitmap, (int) interval);
+      final long endPosition, final MyCommonCallback3<Pair<Bitmap, Integer>> callback) {
+
+    ThreadUtils.executeByIo(new ThreadUtils.SimpleTask<Pair<Bitmap,Integer>>() {
+      @Override
+      public Pair<Bitmap, Integer> doInBackground() throws Throwable {
+        MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
+        mediaMetadataRetriever.setDataSource(context, videoUri);
+        // Retrieve media data use microsecond
+        long interval = (endPosition - startPosition) / (totalThumbsCount - 1);
+        for (long i = 0; i < totalThumbsCount; ++i) {
+          long frameTime = startPosition + interval * i;
+          Bitmap bitmap = mediaMetadataRetriever.getFrameAtTime(frameTime * 1000, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
+          if(bitmap == null) continue;
+          try {
+            bitmap = Bitmap.createScaledBitmap(bitmap, THUMB_WIDTH, THUMB_HEIGHT, false);
+          } catch (final Throwable t) {
+            t.printStackTrace();
           }
-          mediaMetadataRetriever.release();
-        } catch (final Throwable e) {
-          Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), e);
+          callback.onSuccess(new Pair<>(bitmap, (int) interval));
         }
+        mediaMetadataRetriever.release();
+        return new Pair<>(null,0);
+      }
+
+      @Override
+      public void onSuccess(Pair<Bitmap, Integer> result) {
+
+      }
+
+      @Override
+      public void onFail(Throwable t) {
+        super.onFail(t);
+        callback.onError(t.getMessage());
       }
     });
   }
@@ -149,7 +159,7 @@ public class VideoTrimmerUtil {
     return url;
   }
 
-  private static String convertSecondsToTime(long seconds) {
+  public static String convertSecondsToTime(long seconds) {
     String timeStr;
     int hour;
     int minute;

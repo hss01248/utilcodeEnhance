@@ -1,7 +1,14 @@
 package com.iknow.android.widget;
 
+import static com.iknow.android.features.trim.VideoTrimmerUtil.MAX_COUNT_RANGE;
+import static com.iknow.android.features.trim.VideoTrimmerUtil.MAX_SHOOT_DURATION;
+import static com.iknow.android.features.trim.VideoTrimmerUtil.RECYCLER_VIEW_PADDING;
+import static com.iknow.android.features.trim.VideoTrimmerUtil.THUMB_WIDTH;
+import static com.iknow.android.features.trim.VideoTrimmerUtil.VIDEO_FRAMES_WIDTH;
+
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
@@ -18,23 +25,19 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.core.util.Pair;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.blankj.utilcode.util.ThreadUtils;
+import com.hss.utils.base.api.MyCommonCallback3;
 import com.hss01248.video_trimmer.R;
 import com.iknow.android.features.trim.VideoTrimmerAdapter;
+import com.iknow.android.features.trim.VideoTrimmerUtil;
 import com.iknow.android.interfaces.IVideoTrimmerView;
 import com.iknow.android.interfaces.VideoTrimListener;
-import com.iknow.android.features.trim.VideoTrimmerUtil;
 import com.iknow.android.utils.StorageUtil;
-import iknow.android.utils.thread.BackgroundExecutor;
-import iknow.android.utils.thread.UiThreadExecutor;
-
-import static com.iknow.android.features.trim.VideoTrimmerUtil.MAX_COUNT_RANGE;
-import static com.iknow.android.features.trim.VideoTrimmerUtil.MAX_SHOOT_DURATION;
-import static com.iknow.android.features.trim.VideoTrimmerUtil.RECYCLER_VIEW_PADDING;
-import static com.iknow.android.features.trim.VideoTrimmerUtil.THUMB_WIDTH;
-import static com.iknow.android.features.trim.VideoTrimmerUtil.VIDEO_FRAMES_WIDTH;
 
 /**
  * Author：J.Chou
@@ -138,15 +141,19 @@ public class VideoTrimmerView extends FrameLayout implements IVideoTrimmerView {
 
   private void startShootVideoThumbs(final Context context, final Uri videoUri, int totalThumbsCount, long startPosition, long endPosition) {
     VideoTrimmerUtil.shootVideoThumbInBackground(context, videoUri, totalThumbsCount, startPosition, endPosition,
-        (bitmap, interval) -> {
-          if (bitmap != null) {
-            UiThreadExecutor.runTask("", new Runnable() {
-              @Override public void run() {
-                mVideoThumbAdapter.addBitmaps(bitmap);
+            new MyCommonCallback3<Pair<Bitmap, Integer>>() {
+              @Override
+              public void onSuccess(Pair<Bitmap, Integer> pair) {
+                if (pair.first != null) {
+                  ThreadUtils.getMainHandler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                      mVideoThumbAdapter.addBitmaps(pair.first);
+                    }
+                  });
+                }
               }
-            }, 0L);
-          }
-        });
+            });
   }
 
   private void onCancelClicked() {
@@ -394,7 +401,6 @@ public class VideoTrimmerView extends FrameLayout implements IVideoTrimmerView {
    * Cancel trim thread execut action when finish
    */
   @Override public void onDestroy() {
-    BackgroundExecutor.cancelAll("", true);
-    UiThreadExecutor.cancelAll("");
+
   }
 }

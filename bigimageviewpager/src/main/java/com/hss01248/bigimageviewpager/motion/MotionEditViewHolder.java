@@ -1,7 +1,9 @@
 package com.hss01248.bigimageviewpager.motion;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
+import android.view.View;
 
 import androidx.core.util.Pair;
 import androidx.lifecycle.LifecycleOwner;
@@ -9,15 +11,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ReflectUtils;
 import com.blankj.utilcode.util.ThreadUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.hss.utils.enhance.viewholder.ContainerActivity2;
 import com.hss.utils.enhance.viewholder.MyRecyclerViewAdapter;
 import com.hss.utils.enhance.viewholder.MyRecyclerViewHolder;
 import com.hss.utils.enhance.viewholder.mvvm.BaseViewHolder;
 import com.hss.utils.enhance.viewholder.mvvm.ContainerViewHolderWithTitleBar;
+import com.hss01248.activityresult.TheActivityListener;
 import com.hss01248.bigimageviewpager.databinding.MotionPhotoEditBinding;
 import com.hss01248.bigimageviewpager.databinding.MotionPhotoVideoFrameBinding;
 import com.hss01248.motion_photos.MotionPhotoUtil;
+import com.iknow.android.features.trim.VideoTrimmerActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +59,26 @@ public class MotionEditViewHolder extends BaseViewHolder<MotionPhotoEditBinding,
         binding.image.loadUri(bean,false);
 
         showKeyFrames(bean);
+
+        binding.btnGoEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String motionVideoPath = MotionPhotoUtil.getMotionVideoPath(bean);
+                VideoTrimmerActivity.start(motionVideoPath,new TheActivityListener<VideoTrimmerActivity>(){
+
+                    @Override
+                    protected void onResultOK(Intent data) {
+                        super.onResultOK(data);
+                        ToastUtils.showShort(data.getStringExtra("path"));
+                        LogUtils.d(data,data.getData());
+                        ReflectUtils.reflect("com.hss01248.fileoperation.FileOpenUtil")
+                                .method("open",data.getStringExtra("path"),null);
+
+                    }
+                });
+
+            }
+        });
 
 
 

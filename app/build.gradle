@@ -36,6 +36,10 @@ android {
     packagingOptions {
         pickFirst '**/libc++_shared.so'
         pickFirst '**/libavcodec.so'
+        pickFirst '**/libavformat.so'
+        pickFirst '**/libavutil.so'
+        pickFirst '**/libswscale.so'
+        //FFmpegMediaMetadataRetriever-1.0.14/jni/arm64-v8a/libavformat.so
         //jni/arm64-v8a/libavcodec.so
         pickFirst '**/META-INF/DEPENDENCIES'
     }

@@ -1,5 +1,7 @@
 package com.iknow.android.widget;
 
+import static com.iknow.android.features.trim.VideoTrimmerUtil.convertSecondsToTime;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -18,20 +20,20 @@ import android.view.ViewConfiguration;
 
 import androidx.annotation.Nullable;
 
+import com.blankj.utilcode.util.SizeUtils;
 import com.hss01248.video_trimmer.R;
 import com.iknow.android.features.trim.VideoTrimmerUtil;
 
 import java.text.DecimalFormat;
 
-import iknow.android.utils.DateUtil;
-import iknow.android.utils.UnitConverter;
+
 
 public class RangeSeekBarView extends View {
   private static final String TAG = RangeSeekBarView.class.getSimpleName();
   public static final int INVALID_POINTER_ID = 255;
   public static final int ACTION_POINTER_INDEX_MASK = 0x0000ff00, ACTION_POINTER_INDEX_SHIFT = 8;
-  private static final int TextPositionY = UnitConverter.dpToPx(7);
-  private static final int paddingTop = UnitConverter.dpToPx(10);
+  private static final int TextPositionY = SizeUtils.dp2px(7);
+  private static final int paddingTop = SizeUtils.dp2px(10);
   private int mActivePointerId = INVALID_POINTER_ID;
 
   private long mMinShootTime = VideoTrimmerUtil.MIN_SHOOT_DURATION;
@@ -96,8 +98,8 @@ public class RangeSeekBarView extends View {
 
     int width = thumbImageLeft.getWidth();
     int height = thumbImageLeft.getHeight();
-    int newWidth = UnitConverter.dpToPx(11);
-    int newHeight = UnitConverter.dpToPx(55);
+    int newWidth = SizeUtils.dp2px(11);
+    int newHeight = SizeUtils.dp2px(55);
     float scaleWidth = newWidth * 1.0f / width;
     float scaleHeight = newHeight * 1.0f / height;
     Matrix matrix = new Matrix();
@@ -154,8 +156,8 @@ public class RangeSeekBarView extends View {
     canvas.drawRect(leftRect, mShadow);
     canvas.drawRect(rightRect, mShadow);
 
-    canvas.drawRect(rangeL, thumbPaddingTop + paddingTop, rangeR, thumbPaddingTop + UnitConverter.dpToPx(2) + paddingTop, rectPaint);
-    canvas.drawRect(rangeL, getHeight() - UnitConverter.dpToPx(2), rangeR, getHeight(), rectPaint);
+    canvas.drawRect(rangeL, thumbPaddingTop + paddingTop, rangeR, thumbPaddingTop + SizeUtils.dp2px(2) + paddingTop, rectPaint);
+    canvas.drawRect(rangeL, getHeight() - SizeUtils.dp2px(2), rangeR, getHeight(), rectPaint);
 
     drawThumb(normalizedToScreen(normalizedMinValue), false, canvas, true);
     drawThumb(normalizedToScreen(normalizedMaxValue), false, canvas, false);
@@ -168,8 +170,10 @@ public class RangeSeekBarView extends View {
   }
 
   private void drawVideoTrimTimeText(Canvas canvas) {
-    String leftThumbsTime = DateUtil.convertSecondsToTime(mStartPosition);
-    String rightThumbsTime = DateUtil.convertSecondsToTime(mEndPosition);
+    //09:90
+
+    String leftThumbsTime = convertSecondsToTime(mStartPosition);
+    String rightThumbsTime = convertSecondsToTime(mEndPosition);
     canvas.drawText(leftThumbsTime, normalizedToScreen(normalizedMinValue), TextPositionY, mVideoTrimTimePaintL);
     canvas.drawText(rightThumbsTime, normalizedToScreen(normalizedMaxValue), TextPositionY, mVideoTrimTimePaintR);
   }

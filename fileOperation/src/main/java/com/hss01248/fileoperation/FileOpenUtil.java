@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
 
+import androidx.annotation.Keep;
 import androidx.annotation.Nullable;
 
 import com.blankj.utilcode.util.ActivityUtils;
@@ -26,6 +27,7 @@ import java.util.List;
  * @Date 23/02/2022 11:47
  * @Version 1.0
  */
+@Keep
 public class FileOpenUtil {
 
 

@@ -9,16 +9,18 @@
         android:layout_weight="1"
         android:layout_height="0dp"/>
     <TextView
-        android:text="关键帧-替换主图"
+        android:text="关键帧-替换主图?"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_images"
         android:layout_width="match_parent"
         android:layout_height="50dp"/>
-    <TextView
+    <Button
+        android:id="@+id/btn_go_edit"
         android:text="视频裁剪"
-        android:layout_width="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
 
