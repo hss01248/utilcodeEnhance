@@ -237,7 +237,7 @@ public class VideoTrimmerView extends FrameLayout implements IVideoTrimmerView {
 
   private void onSaveClicked() {
     if (mRightProgressPos - mLeftProgressPos < VideoTrimmerUtil.MIN_SHOOT_DURATION) {
-      Toast.makeText(mContext, "视频长不足3秒,无法上传", Toast.LENGTH_SHORT).show();
+      Toast.makeText(mContext, "视频长不足1秒,无法上传", Toast.LENGTH_SHORT).show();
     } else {
       mVideoView.pause();
       VideoTrimmerUtil.trim(mContext,

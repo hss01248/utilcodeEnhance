@@ -24,7 +24,8 @@ public class DefaultOnRightMenuClickedListener implements OnRightMenuClickedList
         CharSequence[] choices = new CharSequence[]{
                 "分享",
                 "元数据",
-                "编辑"
+                "motion编辑-更换主图",
+                "motion编辑-裁剪视频",
         };
         builder.setSingleChoiceItems(choices, 0, new DialogInterface.OnClickListener() {
             @Override

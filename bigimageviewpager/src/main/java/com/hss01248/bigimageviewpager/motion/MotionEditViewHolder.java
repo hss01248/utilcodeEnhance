@@ -1,6 +1,7 @@
 package com.hss01248.bigimageviewpager.motion;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.view.View;
 
@@ -10,20 +11,26 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.blankj.utilcode.util.ActivityUtils;
-import com.blankj.utilcode.util.ReflectUtils;
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ThreadUtils;
 import com.blankj.utilcode.util.ToastUtils;
-import com.hss.utils.base.api.MyCommonCallback3;
+import com.hss.utils.enhance.api.MyCommonCallback;
 import com.hss.utils.enhance.viewholder.ContainerActivity2;
 import com.hss.utils.enhance.viewholder.MyRecyclerViewAdapter;
 import com.hss.utils.enhance.viewholder.MyRecyclerViewHolder;
 import com.hss.utils.enhance.viewholder.mvvm.BaseViewHolder;
 import com.hss.utils.enhance.viewholder.mvvm.ContainerViewHolderWithTitleBar;
+import com.hss01248.activityresult.TheActivityListener;
+import com.hss01248.bigimageviewpager.LargeImageViewer;
 import com.hss01248.bigimageviewpager.databinding.MotionPhotoEditBinding;
 import com.hss01248.bigimageviewpager.databinding.MotionPhotoVideoFrameBinding;
+import com.hss01248.fullscreendialog.FullScreenDialogUtil;
+import com.hss01248.media.metadata.MetaDataUtil;
 import com.hss01248.motion_photos.MotionPhotoUtil;
-import com.iknow.android.features.trim.VideoTrimmerUtil;
+import com.hss01248.motion_photos_android.AndroidMotionImpl;
+import com.iknow.android.features.trim.VideoTrimmerActivity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,25 +71,25 @@ public class MotionEditViewHolder extends BaseViewHolder<MotionPhotoEditBinding,
                 String motionVideoPath = MotionPhotoUtil.getMotionVideoPath(bean);
 
 
-                VideoTrimmerUtil.trimLast(motionVideoPath, 300, new MyCommonCallback3<String>() {
+                /*VideoTrimmerUtil.trimLast(motionVideoPath, 500, new MyCommonCallback3<String>() {
                     @Override
                     public void onSuccess(String s) { ToastUtils.showShort(s);
                         ReflectUtils.reflect("com.hss01248.fileoperation.FileOpenUtil")
                                 .method("open",s,null);
                     }
-                });
-                /*VideoTrimmerActivity.start(motionVideoPath,new TheActivityListener<VideoTrimmerActivity>(){
+                });*/
+                VideoTrimmerActivity.start(motionVideoPath,new TheActivityListener<VideoTrimmerActivity>(){
 
                     @Override
                     protected void onResultOK(Intent data) {
                         super.onResultOK(data);
+                        String path = data.getStringExtra("path");
                         ToastUtils.showShort(data.getStringExtra("path"));
                         LogUtils.d(data,data.getData());
-                        ReflectUtils.reflect("com.hss01248.fileoperation.FileOpenUtil")
-                                .method("open",data.getStringExtra("path"),null);
-
+                        //ReflectUtils.reflect("com.hss01248.fileoperation.FileOpenUtil").method("open",data.getStringExtra("path"),null);
+                        changeVideo(bean,path);
                     }
-                });*/
+                });
 
             }
         });
@@ -91,14 +98,65 @@ public class MotionEditViewHolder extends BaseViewHolder<MotionPhotoEditBinding,
 
     }
 
+    private void changeVideo(String imageFilePath, String videoPath) {
+        ThreadUtils.executeByIo(new ThreadUtils.SimpleTask<File>() {
+            @Override
+            public File doInBackground() throws Throwable {
+                return AndroidMotionImpl.replaceVideoFile(imageFilePath,videoPath);
+            }
 
+            @Override
+            public void onSuccess(File result) {
+                LargeImageViewer.showOne(result.getAbsolutePath());
+                LogUtils.i("result image: "+result.getAbsolutePath(),
+                        "length:"+result.length(),"isMotion:"+MotionPhotoUtil.isMotionImage(result.getAbsolutePath(),false));
+                FullScreenDialogUtil.showMap("exif", MetaDataUtil.getMetaData(result.getAbsolutePath()));
+
+                binding.image.loadUri(result.getAbsolutePath(),true);
+                showKeyFrames(result.getAbsolutePath());
+            }
+        });
+
+    }
+
+    MyRecyclerViewAdapter adapter;
     private void showKeyFrames(String path) {
+        if(adapter == null){
+            binding.rvImages.setLayoutManager(
+                    new LinearLayoutManager(getRootView().getContext(), RecyclerView.HORIZONTAL,false));
+            adapter = new MyRecyclerViewAdapter() {
+                @Override
+                protected MyRecyclerViewHolder generateNewViewHolder(int viewType) {
+                    MotionPhotoVideoFrameBinding binding1 = MotionPhotoVideoFrameBinding.inflate(ActivityUtils.getTopActivity().getLayoutInflater());
+                    return new VideoKeyFrameHolder(binding1.getRoot())
+                            .setParentBinding(binding)
+                            .setImageName(path)
+                            .setBinding(binding1);
+                }
+            };
+            binding.rvImages.setAdapter(adapter);
+        }else {
+            adapter.clear();
+        }
+
         ThreadUtils.executeByIo(new ThreadUtils.SimpleTask<List<byte[]>>() {
             @Override
             public List<byte[]> doInBackground() throws Throwable {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     String motionVideoPath = MotionPhotoUtil.getMotionVideoPath(path);
-                    return KeyFrameExtractor.extractFrames2(motionVideoPath,15);
+                    return KeyFrameExtractor.extractFrames2(motionVideoPath, 15,
+                            new MyCommonCallback<byte[]>() {
+                        @Override
+                        public void onSuccess(byte[] bytes) {
+                            ThreadUtils.getMainHandler().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    adapter.add(bytes);
+                                }
+                            });
+
+                        }
+                    });
                 }
                 return new ArrayList<>();
             }
@@ -106,22 +164,7 @@ public class MotionEditViewHolder extends BaseViewHolder<MotionPhotoEditBinding,
             @Override
             public void onSuccess(List<byte[]> result) {
 
-                binding.rvImages.setLayoutManager(
-                        new LinearLayoutManager(getRootView().getContext(), RecyclerView.HORIZONTAL,false));
-                MyRecyclerViewAdapter adapter = new MyRecyclerViewAdapter() {
-                    @Override
-                    protected MyRecyclerViewHolder generateNewViewHolder(int viewType) {
-                        MotionPhotoVideoFrameBinding binding1 = MotionPhotoVideoFrameBinding.inflate(ActivityUtils.getTopActivity().getLayoutInflater());
-                        return new VideoKeyFrameHolder(binding1.getRoot())
-                                .setParentBinding(binding)
-                                .setImageName(path)
-                                .setBinding(binding1);
-                    }
-                };
-                binding.rvImages.setAdapter(adapter);
                 adapter.refresh(result);
-
-
 
             }
         });

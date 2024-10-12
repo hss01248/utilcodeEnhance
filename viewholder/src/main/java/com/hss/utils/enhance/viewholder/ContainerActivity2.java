@@ -34,7 +34,7 @@ public class ContainerActivity2 extends AppCompatActivity {
     public static void start(Consumer<Pair<ContainerActivity2, ContainerViewHolderWithTitleBar>> onActivityCreate){
         Intent intent = new Intent(ActivityUtils.getTopActivity(),ContainerActivity2.class);
         String hashCode = onActivityCreate.toString();
-        LogUtils.i("onActivityCreate.toString(): "+hashCode);
+       // LogUtils.i("onActivityCreate.toString(): "+hashCode);
         intent.putExtra("onActivityCreateHashCode",hashCode);
         ContainerActivity2.onActivityCreateMap.put(hashCode,onActivityCreate);
         ActivityUtils.getTopActivity().startActivity(intent);

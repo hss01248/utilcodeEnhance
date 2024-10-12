@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.SizeUtils;
 import com.blankj.utilcode.util.ThreadUtils;
@@ -32,11 +33,11 @@ import java.util.Locale;
 public class VideoTrimmerUtil {
 
   private static final String TAG = VideoTrimmerUtil.class.getSimpleName();
-  public static final long MIN_SHOOT_DURATION = 1000L;// 最小剪辑时间1s
+  public static final long MIN_SHOOT_DURATION = 500L;// 最小剪辑时间500ms
   public static final int VIDEO_MAX_TIME = 10;// 10秒
   public static final long MAX_SHOOT_DURATION = VIDEO_MAX_TIME * 3000L;//视频最多剪切多长时间10s
 
-  public static final int MAX_COUNT_RANGE = 10;  //seekBar的区域内一共有多少张图片
+  public static final int MAX_COUNT_RANGE = 15;  //seekBar的区域内一共有多少张图片
   private static final int SCREEN_WIDTH_FULL = ScreenUtils.getScreenWidth();
   public static final int RECYCLER_VIEW_PADDING = SizeUtils.dp2px(35);
   public static final int VIDEO_FRAMES_WIDTH = SCREEN_WIDTH_FULL - RECYCLER_VIEW_PADDING * 2;
@@ -50,10 +51,10 @@ public class VideoTrimmerUtil {
     long mills = Long.parseLong(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
     mills = mills - reduceLastInMills;
     //ffmpeg -i input.mp4 -t 00:02:29.500 -c copy output.mp4
-    String  time = convertSecondsToTime2(mills);
+    //String  time = convertSecondsToTime2(mills);
     File file =  new File(path);
     File file1 = new File(file.getParentFile(),"sub-"+file.getName());
-    String cmd = "-i " + path + " -t "+time+" -c copy "+file1.getAbsolutePath();
+    String cmd = "-i " + path + " -t "+mills+" -c copy "+file1.getAbsolutePath();
    String[] command = cmd.split(" ");
 
     FFmpegAsyncUtils asyncTask =new FFmpegAsyncUtils();
@@ -97,8 +98,9 @@ public class VideoTrimmerUtil {
     final String outputName = "trimmedVideo_" + timeStamp + ".mp4";
     outputFile = outputFile + "/" + outputName;
 
-    String start = convertSecondsToTime(startMs / 1000);
-    String duration = convertSecondsToTime((endMs - startMs) / 1000);
+    float start = startMs / 1000f;
+    float duration = (endMs - startMs) / 1000f;
+            //convertSecondsToTime((endMs - startMs) / 1000);
 
     //ffmpeg -i input.mp4 -t 00:02:29.500 -c copy output.mp4
 
@@ -123,6 +125,8 @@ public class VideoTrimmerUtil {
     //String cmd = "-ss " + start + " -i " + inputFile + " -ss " + start + " -t " + duration + " -vcodec copy " + outputFile;
     //{"ffmpeg", "-ss", "" + startTime, "-y", "-i", inputFile, "-t", "" + induration, "-vcodec", "mpeg4", "-b:v", "2097152", "-b:a", "48000", "-ac", "2", "-ar", "22050", outputFile}
     //String cmd = "-ss " + start + " -y " + "-i " + inputFile + " -t " + duration + " -vcodec " + "mpeg4 " + "-b:v " + "2097152 " + "-b:a " + "48000 " + "-ac " + "2 " + "-ar " + "22050 "+ outputFile;
+
+    LogUtils.d("cmd list: "+cmd);
     String[] command = cmd.split(" ");
     try {
       final String tempOutFile = outputFile;
@@ -176,7 +180,7 @@ public class VideoTrimmerUtil {
         long interval = (endPosition - startPosition) / (totalThumbsCount - 1);
         for (long i = 0; i < totalThumbsCount; ++i) {
           long frameTime = startPosition + interval * i;
-          Bitmap bitmap = mediaMetadataRetriever.getFrameAtTime(frameTime * 1000, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
+          Bitmap bitmap = mediaMetadataRetriever.getFrameAtTime(frameTime * 1000, MediaMetadataRetriever.OPTION_CLOSEST);
           if(bitmap == null) continue;
           try {
             bitmap = Bitmap.createScaledBitmap(bitmap, THUMB_WIDTH, THUMB_HEIGHT, false);

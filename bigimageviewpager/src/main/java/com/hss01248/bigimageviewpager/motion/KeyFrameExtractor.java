@@ -14,6 +14,7 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.hss.utils.enhance.api.MyCommonCallback;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -188,7 +189,7 @@ public class KeyFrameExtractor {
         return bytes;
     }
 
-    public static List<byte[]> extractFrames2(String motionVideoPath, int totalThumbsCount) throws Exception{
+    public static List<byte[]> extractFrames2(String motionVideoPath, int totalThumbsCount, MyCommonCallback<byte[]> eachCallback) throws Exception{
         List<byte[]> bytes = new ArrayList<>();
         MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
         mediaMetadataRetriever.setDataSource(motionVideoPath);
@@ -197,7 +198,10 @@ public class KeyFrameExtractor {
         long interval = duration / (totalThumbsCount - 1);
         for (long i = 0; i < totalThumbsCount; ++i) {
             long frameTime =  interval * i;
-            Bitmap bitmap = mediaMetadataRetriever.getFrameAtTime(frameTime*1000 , MediaMetadataRetriever.OPTION_NEXT_SYNC);
+            Bitmap bitmap = mediaMetadataRetriever.getFrameAtTime(frameTime*1000 , MediaMetadataRetriever.OPTION_CLOSEST);
+            if(bitmap ==null){
+                continue;
+            }
             //OPTION_CLOSEST：获取最接近指定时间点的帧，无论该帧是否为关键帧。这是默认选项。
             //MediaMetadataRetriever.OPTION_CLOSEST_SYNC 最近的关键帧
             //OPTION_PREVIOUS_SYNC：从指定时间点开始，获取上一个关键帧
@@ -208,9 +212,11 @@ public class KeyFrameExtractor {
             byte[] imageBytes = out.toByteArray();
             if(bytes.isEmpty()){
                 bytes.add(imageBytes);
+                eachCallback.onSuccess(imageBytes);
             }else {
                 if(bytes.get(bytes.size()-1).length != imageBytes.length){
                     bytes.add(imageBytes);
+                    eachCallback.onSuccess(imageBytes);
                 }else {
                     LogUtils.d("同一个关键帧: "+i);
                 }

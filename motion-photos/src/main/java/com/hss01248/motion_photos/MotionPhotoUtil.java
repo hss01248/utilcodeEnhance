@@ -21,6 +21,8 @@ public class MotionPhotoUtil {
 
     static IMotion motion = new JavaMotion();
 
+    public static final String customExifKey = "motionVideoLength";
+
     public static void main(String[] args) {
         String xiaomi = "/Users/hss/Documents/live_photos/IMG_3919.heic";
         String google = "/Users/hss/Documents/PXL_20240918_013738178.MP.jpg";

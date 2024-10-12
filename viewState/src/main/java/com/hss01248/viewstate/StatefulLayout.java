@@ -19,7 +19,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ThreadUtils;
 
 import java.lang.annotation.Retention;
@@ -199,7 +198,7 @@ public class StatefulLayout extends FrameLayout implements IViewState{
         }
 
 
-        LogUtils.d("content view : ",contentView);
+       // LogUtils.d("content view : ",contentView);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -230,7 +229,7 @@ public class StatefulLayout extends FrameLayout implements IViewState{
             viewGroup = getChildAt(0);
             subViews.put(state,viewGroup);
         }
-        LogUtils.d("state:"+state+",vg:"+viewGroup);
+       // LogUtils.d("state:"+state+",vg:"+viewGroup);
         for (Integer integer : subViews.keySet()) {
             if(integer == state){
                 subViews.get(integer).setVisibility(VISIBLE);

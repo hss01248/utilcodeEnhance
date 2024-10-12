@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="MissingTranslation">
-    <string name="app_name">Video Trim</string>
+
     <string name="trimmed_done">video trim completed！</string>
     <string name="trimming">trimming video...</string>
     <string name="compressing">compressing video...</string>

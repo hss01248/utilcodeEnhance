@@ -26,6 +26,7 @@ import androidx.media3.ui.PlayerView;
 
 import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ThreadUtils;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.davemorrissey.labs.subscaleview.decoder.SkiaImageDecoder;
@@ -420,7 +421,13 @@ public class MyLargeImageViewBySubSamplingView extends FrameLayout {
             public void onPlayerError(PlaybackException error) {
                 Player.Listener.super.onPlayerError(error);
                 LogUtils.w(error);
-                loadLocal(uri,false,false);
+                ThreadUtils.getMainHandler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        loadLocal(uri,false,false);
+                    }
+                });
+
             }
         };
         player.addListener(listener);
