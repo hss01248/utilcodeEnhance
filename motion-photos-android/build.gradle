@@ -37,6 +37,7 @@ dependencies {
     api "androidx.startup:startup-runtime:1.1.0"
 
     api "com.github.skyNet2017.PictureSelector:videocompressbase:3.0.0"
+    api 'org.apache.commons:commons-imaging:1.0-alpha3'
     // api "com.github.skyNet2017.PictureSelector:videocompress_ffmpeg:3.0.0"
     //implementation 'com.github.yellowcath:VideoProcessor:2.4.2'
 

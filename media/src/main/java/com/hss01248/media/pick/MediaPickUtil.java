@@ -22,7 +22,7 @@ import com.blankj.utilcode.util.Utils;
 import com.hss.utils.enhance.api.MyCommonCallback;
 import com.hss01248.activityresult.StartActivityUtil;
 import com.hss01248.activityresult.TheActivityListener;
-import com.hss01248.media.uri.ContentUriUtil;
+import com.hss.utils.enhance.ContentUriUtil;
 
 import java.io.File;
 import java.io.FileInputStream;

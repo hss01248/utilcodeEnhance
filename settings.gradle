@@ -68,4 +68,4 @@ include ':motion-photos'
 include ':motion-photos-android'
 
 
-
+include ':app-motion-photo'

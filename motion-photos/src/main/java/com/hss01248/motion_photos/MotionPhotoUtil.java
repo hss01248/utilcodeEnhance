@@ -63,10 +63,10 @@ public class MotionPhotoUtil {
         }
         String videoPath = motion.mp4CacheFile(fileOrUriPath);
         File video = new File(videoPath);
-        if (video.exists() && video.length() > 500) {
+        /*if (video.exists() && video.length() > 500) {
             System.out.println("video 文件已经存在: " + videoPath);
             return true;
-        }
+        }*/
         try {
             long wholeFileLength = motion.length(fileOrUriPath);
             String xmp = motion.readXmp(fileOrUriPath);

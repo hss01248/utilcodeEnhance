@@ -96,10 +96,7 @@ public class AndroidMotionImpl implements IMotion {
 
     @Override
     public String mp4CacheFile(String path) {
-       File dir = new File(Utils.getApp().getExternalCacheDir(),"motion-videos") ;
-       if(!dir.exists()){
-           dir.mkdirs();
-       }
+       File dir = motionVideoCacheDir() ;
        File file = new File(path);
        File file2 = new File(dir,file.getName()+".mp4");
         return file2.getAbsolutePath();
@@ -198,13 +195,35 @@ public class AndroidMotionImpl implements IMotion {
 
     }
 
-    public static File replaceVideoFile(String imagePath,String newVideoPath) throws Exception{
-        File imageFile = new File(imagePath);
-        //复制文件到私有目录,便于操作:
-        File dir = new File(Utils.getApp().getExternalCacheDir(),"motion-videos") ;
+    public static File motionCacheDir(){
+        File dir = new File(Utils.getApp().getExternalCacheDir(),"motion") ;
         if(!dir.exists()){
             dir.mkdirs();
         }
+        return dir;
+    }
+
+    public static File motionVideoCacheDir(){
+        File dir = new File(motionCacheDir(),"videos") ;
+        if(!dir.exists()){
+            dir.mkdirs();
+        }
+        return dir;
+    }
+
+    public static File motionImageCacheDir(){
+        File dir = new File(motionCacheDir(),"images") ;
+        if(!dir.exists()){
+            dir.mkdirs();
+        }
+        return dir;
+    }
+
+    public static File replaceVideoFile(String imagePath,String newVideoPath) throws Exception{
+        File imageFile = new File(imagePath);
+        //复制文件到私有目录,便于操作:
+        File dir = motionVideoCacheDir() ;
+
         File imageFileTmp = new File(dir,imageFile.getName());
         boolean copy = FileUtils.copy(imageFile, imageFileTmp, new FileUtils.OnReplaceListener() {
             @Override

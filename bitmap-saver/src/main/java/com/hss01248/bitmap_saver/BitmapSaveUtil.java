@@ -11,6 +11,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.exifinterface.media.ExifInterface;
 
 import com.blankj.utilcode.util.ActivityUtils;
@@ -109,32 +110,9 @@ public class BitmapSaveUtil {
 
         if(DirConfigInfo.loadConfigInfo().hiddenType ==0){
             //将文件写到mediastore
-            String path = Environment.DIRECTORY_PICTURES+"/quick_screen_shot" ;
+            String albumRelativePath = Environment.DIRECTORY_PICTURES+"/quick_screen_shot" ;
             //未开启分区存储前,需要写存储的权限:
-            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.Q
-                    || (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q
-                        && Environment.isExternalStorageLegacy())){
-                toMediaStore(bitmap, finalFile, path);
-            }else {
-                File finalFile1 = finalFile;
-                MyPermissions.requestByMostEffort(false, true,
-                        new PermissionUtils.FullCallback() {
-                            @Override
-                            public void onGranted(@NonNull List<String> granted) {
-                                try {
-                                    toMediaStore(bitmap, finalFile1, path);
-                                } catch (Exception e) {
-                                    LogUtils.w(e);
-                                    MyToast.error(e.getMessage());
-                                }
-                            }
-
-                            @Override
-                            public void onDenied(@NonNull List<String> deniedForever, @NonNull List<String> denied) {
-
-                            }
-                        },Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE);
-            }
+            writeImageToMediaStore(bitmap, finalFile, albumRelativePath);
 
         }else {
             File myFile = new File(DirConfigInfo.filePath());
@@ -167,12 +145,41 @@ public class BitmapSaveUtil {
         }
     }
 
+    public static void writeImageToMediaStore(@Nullable Bitmap bitmap, File finalFile, String albumRelativePath) throws Exception {
+        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.Q
+                || (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q
+                    && Environment.isExternalStorageLegacy())){
+            toMediaStore(bitmap, finalFile, albumRelativePath);
+        }else {
+            File finalFile1 = finalFile;
+            MyPermissions.requestByMostEffort(false, true,
+                    new PermissionUtils.FullCallback() {
+                        @Override
+                        public void onGranted(@NonNull List<String> granted) {
+                            try {
+                                toMediaStore(bitmap, finalFile1, albumRelativePath);
+                            } catch (Exception e) {
+                                LogUtils.w(e);
+                                MyToast.error(e.getMessage());
+                            }
+                        }
+
+                        @Override
+                        public void onDenied(@NonNull List<String> deniedForever, @NonNull List<String> denied) {
+
+                        }
+                    },Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
+    }
+
     private static void toMediaStore(Bitmap bitmap, File finalFile, String path) throws Exception {
         writeToMediaStore(finalFile, path);
         File myFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+ path +"/"+ finalFile.getName());
         if(myFile.exists() && myFile.length() >0){
             LogUtils.i("文件成功另存到mediastore:",myFile.getAbsolutePath());
-            notifyListeners(myFile, bitmap.getWidth(), bitmap.getHeight());
+            if(bitmap !=null){
+                notifyListeners(myFile, bitmap.getWidth(), bitmap.getHeight());
+            }
             finalFile.delete();
         }else{
             LogUtils.w("文件另存到mediastore 失败:",myFile.getAbsolutePath());
@@ -203,7 +210,7 @@ public class BitmapSaveUtil {
         }
     }
 
-    private static void writeToMediaStore(File srcFile,String path) throws Exception{
+    private static void writeToMediaStore(File srcFile,String albumRelativePath) throws Exception{
 
         // 根据文件类型设置
         //contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, path);
@@ -216,7 +223,7 @@ public class BitmapSaveUtil {
             contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, srcFile.getName());
             contentValues.put(MediaStore.MediaColumns.MIME_TYPE,
                     srcFile.getName().endsWith(".jpg")?"image/jpeg":"image/png");
-            contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, path);
+            contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, albumRelativePath);
             Uri uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
             LogUtils.i("uri :",uri);
             if (uri != null) {
@@ -238,7 +245,8 @@ public class BitmapSaveUtil {
         } else {
             //Failed to create new MediaStore record: /storage/emulated/0/Android/data/com.hss.utilsenhance/files/Pictures/screenshot2/2024-07-09_14-50-59.jpg
 
-            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+path+"/"+srcFile.getName());
+            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
+                    +"/"+albumRelativePath+"/"+srcFile.getName());
             LogUtils.i("file path: "+file.getAbsolutePath());
             File parentFile = file.getParentFile();
             if(parentFile.exists()){

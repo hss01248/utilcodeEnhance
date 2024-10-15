@@ -9,7 +9,7 @@
         android:layout_weight="1"
         android:layout_height="0dp"/>
     <TextView
-        android:text="关键帧-替换主图?"
+        android:text="关键帧-替换主图"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     <androidx.recyclerview.widget.RecyclerView
@@ -17,8 +17,32 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"/>
     <Button
-        android:id="@+id/btn_go_edit"
+        android:id="@+id/btn_meta_info"
+        android:text="元数据"
+        android:layout_margin="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/btn_video_cut"
         android:text="视频裁剪"
+        android:layout_margin="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/btn_remove_video"
+        android:text="移除视频,转变为普通图片"
+        android:layout_margin="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/btn_compress"
+        android:text="压缩图片和视频"
+        android:layout_margin="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/btn_extract_video"
+        android:text="提取视频"
         android:layout_margin="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

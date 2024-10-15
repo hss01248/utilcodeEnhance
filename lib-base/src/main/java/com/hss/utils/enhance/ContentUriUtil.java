@@ -1,4 +1,4 @@
-package com.hss01248.media.uri;
+package com.hss.utils.enhance;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
@@ -26,6 +26,14 @@ import java.util.TreeMap;
  */
 @Keep
 public class ContentUriUtil {
+
+    public static String getName(Uri uri){
+        String name =  queryMediaStore(uri).get(MediaStore.Files.FileColumns.DISPLAY_NAME)+"";
+        if(name.equals("null") || name.equals("")){
+            return "";
+        }
+        return name;
+    }
 
     public static Map<String, Object> queryMediaStore(Uri uri) {
         if (uri == null) {

@@ -86,7 +86,7 @@ import com.hss01248.media.pick.CaptureVideoUtil;
 import com.hss01248.media.pick.MediaPickOrCaptureUtil;
 import com.hss01248.media.pick.MediaPickUtil;
 import com.hss01248.media.pick.SafUtil;
-import com.hss01248.media.uri.ContentUriUtil;
+import com.hss.utils.enhance.ContentUriUtil;
 import com.hss01248.openuri2.OpenUri2;
 import com.hss01248.permission.MyPermissions;
 import com.hss01248.qrscan.ScanCodeActivity;
