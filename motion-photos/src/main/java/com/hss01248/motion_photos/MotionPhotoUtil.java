@@ -159,7 +159,8 @@ public class MotionPhotoUtil {
                 out.createNewFile();
             }
             // 打开 Motion Photo 文件
-            raf = new RandomAccessFile(new File(inputFile), "r");
+            File input = motion.readableFilePath(inputFile);
+            raf = new RandomAccessFile(input, "r");
             rafOutput = new RandomAccessFile(out, "rw");
 
             // 定位到指定字节位置开始读取

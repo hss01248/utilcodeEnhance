@@ -28,8 +28,10 @@ import com.blankj.utilcode.util.Utils;
 import com.hjq.permissions.OnPermissionCallback;
 import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
+import com.hss.utils.enhance.ContentUriUtil;
 import com.hss01248.activityresult.ActivityResultListener;
 import com.hss01248.activityresult.StartActivityUtil;
+import com.hss01248.permission.MyPermissions;
 import com.hss01248.permission.ext.IExtPermissionCallback;
 import com.hss01248.permission.ext.MyPermissionsExt;
 import com.hss01248.permission.ext.permissions.ManageMediaPermission;
@@ -120,6 +122,11 @@ public class FileDeleteUtil {
             callBack.onNext(true);
             return;
         }
+        if(path.startsWith("content://")){
+            path = ContentUriUtil.getRealPath(Uri.parse(path));
+        }
+
+
         File file = new File(path);
         if(!file.exists()){
             LogUtils.d("file not exist",path);
@@ -139,17 +146,18 @@ public class FileDeleteUtil {
             return;
         }
 
-        if(!file.canWrite()){
-            //申请权限的模块
-            if(!canHaveUI){
-                callBack.onError(new Exception("no permission"));
-                return;
-            }
-            askWritePermission(path, canHaveUI, callBack);
-            return;
-        }
+
         //有权限时,Android10以下,还是直接使用File api:
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.Q){
+            if(!file.canWrite()){
+                //申请权限的模块
+                if(!canHaveUI){
+                    callBack.onError(new Exception("no permission"));
+                    return;
+                }
+                askWritePermission(path, canHaveUI, callBack);
+                return;
+            }
             //
             boolean isSuccess = new File(path).delete();
             if (isSuccess) {
@@ -180,11 +188,32 @@ public class FileDeleteUtil {
                 uris.add(uri);
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                deleteByMediaDeleteReqeust(callBack, uris);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    MyPermissions.requestByMostEffort(false, true, new PermissionUtils.FullCallback() {
+                        @Override
+                        public void onGranted(@NonNull List<String> granted) {
+                            try {
+                                deleteByMediaDeleteReqeust(callBack, uris);
+                            } catch (IntentSender.SendIntentException e) {
+                               callBack.onError(e);
+                            }
+                        }
+
+                        @Override
+                        public void onDenied(@NonNull List<String> deniedForever, @NonNull List<String> denied) {
+                            callBack.onError(new Throwable("no read_media_images permission"));
+
+                        }
+                    },Manifest.permission.READ_MEDIA_IMAGES,Manifest.permission.READ_MEDIA_VIDEO);
+                }else {
+                    deleteByMediaDeleteReqeust(callBack, uris);
+                }
+
                 return;
             }
         } catch (Exception e) {
             LogUtils.w(path,e);
+            callBack.onError(e);
         }
 
 

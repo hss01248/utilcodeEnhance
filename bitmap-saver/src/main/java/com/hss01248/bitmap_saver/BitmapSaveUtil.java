@@ -2,7 +2,6 @@ package com.hss01248.bitmap_saver;
 
 import android.Manifest;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 
@@ -141,10 +140,11 @@ public class BitmapSaveUtil {
 
     public static void writeImageToMediaStore(@Nullable Bitmap bitmap, File finalFile, String albumRelativePath) throws Exception {
 
-        MediaStoreUtil.writeMediaToMediaStore(finalFile, albumRelativePath, new MyCommonCallback3<Uri>() {
+        MediaStoreUtil.writeMediaToMediaStore(finalFile, albumRelativePath, new MyCommonCallback3<String>() {
             @Override
-            public void onSuccess(Uri uri) {
-                File myFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+ albumRelativePath +"/"+ finalFile.getName());
+            public void onSuccess(String uri) {
+                File myFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
+                        +"/"+ albumRelativePath +"/"+ finalFile.getName());
                 if(myFile.exists() && myFile.length() >0){
                     LogUtils.i("文件成功另存到mediastore:",myFile.getAbsolutePath());
                     if(bitmap !=null){

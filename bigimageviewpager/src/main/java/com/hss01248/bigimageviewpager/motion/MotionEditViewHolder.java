@@ -2,11 +2,7 @@ package com.hss01248.bigimageviewpager.motion;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.text.TextUtils;
 import android.view.View;
 
 import androidx.core.util.Pair;
@@ -15,12 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.blankj.utilcode.util.ActivityUtils;
-import com.blankj.utilcode.util.FileIOUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ThreadUtils;
 import com.blankj.utilcode.util.ToastUtils;
-import com.blankj.utilcode.util.Utils;
-import com.hss.utils.enhance.ContentUriUtil;
 import com.hss.utils.enhance.api.MyCommonCallback;
 import com.hss.utils.enhance.viewholder.ContainerActivity2;
 import com.hss.utils.enhance.viewholder.MyRecyclerViewAdapter;
@@ -28,22 +21,17 @@ import com.hss.utils.enhance.viewholder.MyRecyclerViewHolder;
 import com.hss.utils.enhance.viewholder.mvvm.BaseViewHolder;
 import com.hss.utils.enhance.viewholder.mvvm.ContainerViewHolderWithTitleBar;
 import com.hss01248.activityresult.TheActivityListener;
-import com.hss01248.bigimageviewpager.LargeImageViewer;
 import com.hss01248.bigimageviewpager.databinding.MotionPhotoEditBinding;
 import com.hss01248.bigimageviewpager.databinding.MotionPhotoVideoFrameBinding;
-import com.hss01248.fullscreendialog.FullScreenDialogUtil;
-import com.hss01248.media.metadata.MetaDataUtil;
 import com.hss01248.motion_photos.MotionPhotoUtil;
 import com.hss01248.motion_photos_android.AndroidMotionImpl;
 import com.hss01248.motion_photos_android.AndroidMotionUtil;
+import com.hss01248.motion_photos_android.SaveCallback;
 import com.iknow.android.features.trim.VideoTrimmerActivity;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import io.reactivex.functions.Consumer;
 
@@ -68,14 +56,17 @@ public class MotionEditViewHolder extends BaseViewHolder<MotionPhotoEditBinding,
     }
 
     String relativePath;
+    String fileName;
+    String originalPathOrUri;
     public MotionEditViewHolder(Context context) {
         super(context);
     }
 
     @Override
     protected void initDataAndEventInternal(LifecycleOwner lifecycleOwner, String bean) {
+        originalPathOrUri = bean;
         //将content://的拷贝一份到应用私有目录:
-        String realFilePath = copyUriToCacheDir(bean);
+        String realFilePath = AndroidMotionUtil.copyUriToCacheDir(bean,true);
         initInfo = realFilePath;
 
 
@@ -107,66 +98,34 @@ public class MotionEditViewHolder extends BaseViewHolder<MotionPhotoEditBinding,
         binding.btnMetaInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AndroidMotionUtil.metaInfo(initInfo);
+                AndroidMotionUtil.metaInfo(originalPathOrUri);
             }
         });
 
         binding.btnRemoveVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String s = AndroidMotionUtil.removeVideo(initInfo);
-                LargeImageViewer.showOne(s);
+                AndroidMotionUtil.removeVideo(originalPathOrUri);
+
             }
         });
 
         binding.btnCompress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AndroidMotionUtil.forceCompressMotionPhoto(initInfo);
+                AndroidMotionUtil.forceCompressMotionPhoto(originalPathOrUri);
             }
         });
 
         binding.btnExtractVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AndroidMotionUtil.extractVideo(initInfo,relativePath);
+                AndroidMotionUtil.extractVideo(originalPathOrUri);
             }
         });
-
-
-
     }
 
-    private  String copyUriToCacheDir(String bean)  {
-        if(bean.startsWith("content://")){
 
-            Map<String, Object> meta =  ContentUriUtil.queryMediaStore(Uri.parse(bean));
-
-            String name = (String) meta.get(MediaStore.MediaColumns.DISPLAY_NAME);
-            if(TextUtils.isEmpty(name)){
-                name = System.currentTimeMillis()+".jpg";
-            }
-            relativePath = meta.get(MediaStore.MediaColumns.RELATIVE_PATH)+"";
-            if(relativePath .equals("null") || relativePath.equals("")){
-                relativePath = meta.get(MediaStore.MediaColumns.DATA)+"";
-                relativePath = relativePath.substring(Environment.getExternalStorageDirectory().getAbsolutePath().length()+1);
-                relativePath = relativePath.substring(0,relativePath.lastIndexOf("/"));
-            }
-
-            File file = new File(AndroidMotionImpl.motionImageCacheDir(),name);
-            InputStream stream = null;
-            try {
-                stream = Utils.getApp().getContentResolver().openInputStream(Uri.parse(bean));
-                boolean b = FileIOUtils.writeFileFromIS(file, stream, false);
-                if(b && file.exists() && file.length() >0){
-                    return file.getAbsolutePath();
-                }
-            } catch (FileNotFoundException e) {
-                LogUtils.w(e);
-            }
-        }
-        return bean;
-    }
 
     private void changeVideo(String imageFilePath, String videoPath) {
         ThreadUtils.executeByIo(new ThreadUtils.SimpleTask<File>() {
@@ -177,13 +136,17 @@ public class MotionEditViewHolder extends BaseViewHolder<MotionPhotoEditBinding,
 
             @Override
             public void onSuccess(File result) {
-                LargeImageViewer.showOne(result.getAbsolutePath());
-                LogUtils.i("result image: "+result.getAbsolutePath(),
-                        "length:"+result.length(),"isMotion:"+MotionPhotoUtil.isMotionImage(result.getAbsolutePath(),false));
-                FullScreenDialogUtil.showMap("exif", MetaDataUtil.getMetaData(result.getAbsolutePath()));
-
                 binding.image.loadUri(result.getAbsolutePath(),true);
                 showKeyFrames(result.getAbsolutePath());
+                //选项: 替换原文件或者保存为新文件:
+                AndroidMotionUtil.saveAsNewFileOrReplaceOriginalFile(originalPathOrUri,result.getAbsolutePath(),"",new SaveCallback());
+
+
+                LogUtils.i("result image: "+result.getAbsolutePath(),
+                        "length:"+result.length(),"isMotion:"+MotionPhotoUtil.isMotionImage(result.getAbsolutePath(),false));
+               // FullScreenDialogUtil.showMap("exif", MetaDataUtil.getMetaData(result.getAbsolutePath()));
+
+
             }
         });
 

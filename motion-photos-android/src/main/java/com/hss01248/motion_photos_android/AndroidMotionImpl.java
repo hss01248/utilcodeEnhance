@@ -9,6 +9,8 @@ import com.blankj.utilcode.util.FileIOUtils;
 import com.blankj.utilcode.util.FileUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
+import com.hss.utils.enhance.ContentUriUtil;
+import com.hss01248.motion_photos.ExifUtils;
 import com.hss01248.motion_photos.IMotion;
 import com.hss01248.motion_photos.MotionPhotoUtil;
 import com.hss01248.videocompress.CompressType;
@@ -97,8 +99,14 @@ public class AndroidMotionImpl implements IMotion {
     @Override
     public String mp4CacheFile(String path) {
        File dir = motionVideoCacheDir() ;
-       File file = new File(path);
-       File file2 = new File(dir,file.getName()+".mp4");
+       String name = "";
+       if(path.startsWith("content://")){
+           name = ContentUriUtil.getName(Uri.parse(path));
+       }else {
+           name = new File(path).getName();
+       }
+
+       File file2 = new File(dir,name+".mp4");
         return file2.getAbsolutePath();
     }
 
@@ -158,9 +166,14 @@ public class AndroidMotionImpl implements IMotion {
         }
     }
 
+    @Override
+    public File readableFilePath(String inputFile) {
+        return new File(AndroidMotionUtil.copyUriToCacheDir(inputFile,false));
+    }
+
     public static File compressMp4File(String fileOrUriPath){
 
-        File dir = new File(Utils.getApp().getExternalCacheDir(),"motion-videos") ;
+        File dir = motionVideoCacheDir();
         File file = new File(fileOrUriPath);
         final File[] file2 = {new File(dir, "out-" + file.getName())};
 
@@ -250,11 +263,13 @@ public class AndroidMotionImpl implements IMotion {
                 LogUtils.i("xmp before",xmp);
                 xmp = xmp.replace(originalMp4File.length()+"",length+"");
                 LogUtils.i("xmp after",xmp);
-                exifInterface1.setAttribute(ExifInterface.TAG_XMP,xmp);
-                exifInterface1.setAttribute(MotionPhotoUtil.customExifKey,length+"");
+
+                ExifUtils.writeXmp(imageFileTmp.getAbsolutePath(),xmp);
+               // exifInterface1.setAttribute(ExifInterface.TAG_XMP,xmp);
+                //exifInterface1.setAttribute(MotionPhotoUtil.customExifKey,length+"");
                 //写exif, 需要写文件权限,一般没有
                 //如果文件被其他应用或进程锁定，ExifInterface 可能无法写入文件。确保文件没有被其他进程使用
-                exifInterface1.saveAttributes();
+                //exifInterface1.saveAttributes();
 
             }
 

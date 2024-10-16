@@ -1,5 +1,6 @@
 package com.hss01248.motion_photos;
 
+import java.io.File;
 import java.util.Map;
 
 /**
@@ -19,4 +20,6 @@ public interface IMotion {
     Map<String,Object> metaOfImage(String fileOrUriPath);
 
     Map<String,Object> metaOfVideo(String fileOrUriPath);
+
+    File readableFilePath(String inputFile);
 }

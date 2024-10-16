@@ -1,0 +1,2 @@
+-keep class com.hss01248.img.compressor.** { *; }
+-keepclassmembers class com.hss01248.img.compressor.** { *; }

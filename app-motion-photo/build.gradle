@@ -47,6 +47,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
     implementation project(path: ':media')
     implementation project(path: ':viewholder-media')
+    api project(":compressor")
 }
 
 configurations {

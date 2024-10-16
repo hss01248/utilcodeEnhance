@@ -230,9 +230,9 @@ public class ScreenSnapShotUtil {
         file.createNewFile();
         FileOutputStream inputStream = new FileOutputStream(file);
         image.compress(Bitmap.CompressFormat.JPEG,85,inputStream);
-        MediaStoreUtil.writeMediaToMediaStore(file, realPath, new MyCommonCallback3<Uri>() {
+        MediaStoreUtil.writeMediaToMediaStore(file, realPath, new MyCommonCallback3<String>() {
             @Override
-            public void onSuccess(Uri uri) {
+            public void onSuccess(String uri) {
                 callback.onSuccess(uri.toString());
 
             }

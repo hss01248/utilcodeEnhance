@@ -14,6 +14,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 
+import androidx.annotation.Keep;
 import androidx.exifinterface.media.ExifInterface;
 
 import com.blankj.utilcode.util.ActivityUtils;
@@ -27,6 +28,7 @@ import com.hss01248.fileoperation.FileDeleteUtil;
 import com.hss01248.media.metadata.ExifUtil;
 import com.hss01248.media.metadata.FileTypeUtil;
 import com.hss01248.media.metadata.quality.Magick;
+import com.hss01248.motion_photos.ExifUtils;
 import com.hss01248.motion_photos.MotionPhotoUtil;
 import com.hss01248.motion_photos_android.AndroidMotionImpl;
 
@@ -48,6 +50,7 @@ import io.reactivex.disposables.Disposable;
  * 默认不使用avif.
  * 可以配置使用avif
  */
+@Keep
 public class ImageCompressor {
 
     public static int targetJpgQuality = 85;
@@ -557,9 +560,10 @@ public class ImageCompressor {
                                 LogUtils.i("xmp before",xmp);
                                 xmp = xmp.replace(originalMp4File.length()+"",length+"");
                                 LogUtils.i("xmp after",xmp);
-                                exifInterface1.setAttribute(ExifInterface.TAG_XMP,xmp);
+                                //exifInterface1.setAttribute(ExifInterface.TAG_XMP,xmp);
                                 //写exif
-                                exifInterface1.saveAttributes();
+                               // exifInterface1.saveAttributes();
+                                ExifUtils.writeXmp(outPath,xmp);
                             }
 
                             //合并文件:

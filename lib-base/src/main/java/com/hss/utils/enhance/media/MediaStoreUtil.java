@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
 
 import androidx.annotation.NonNull;
@@ -29,17 +30,28 @@ import java.util.List;
 
 public class MediaStoreUtil {
 
+
+    public static void writeMediaToMediaStore(File finalFile,
+                                              String albumRelativePath,
+                                              MyCommonCallback3<String> callback){
+        writeMediaToMediaStore(finalFile,albumRelativePath,"",callback);
+
+    }
+
     /**
      *
      * @param finalFile
      * @param albumRelativePath  allowed directories are [DCIM, Movies, Pictures]
      * @param callback
      */
-    public static void writeMediaToMediaStore(File finalFile, String albumRelativePath, MyCommonCallback3<Uri> callback) {
+    public static void writeMediaToMediaStore(File finalFile,
+                                              String albumRelativePath,
+                                              String newFileName,
+                                              MyCommonCallback3<String> callback) {
         if(Build.VERSION.SDK_INT > Build.VERSION_CODES.Q
                 || (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q
                 && !Environment.isExternalStorageLegacy())){
-            writeToMediaStore( finalFile, albumRelativePath,callback);
+            writeToMediaStore( finalFile, albumRelativePath,newFileName,callback);
         }else {
             File finalFile1 = finalFile;
             MyPermissions.requestByMostEffort(false, true,
@@ -47,7 +59,7 @@ public class MediaStoreUtil {
                         @Override
                         public void onGranted(@NonNull List<String> granted) {
                             try {
-                                writeToMediaStore( finalFile1, albumRelativePath,callback);
+                                writeToMediaStore( finalFile1, albumRelativePath,newFileName,callback);
                             } catch (Exception e) {
                                 LogUtils.w(e);
                                 callback.onError(e);
@@ -75,9 +87,12 @@ public class MediaStoreUtil {
     );
 }*/
 
-    private static void writeToMediaStore(File srcFile,String albumRelativePath, MyCommonCallback3<Uri> callback) {
-        LogUtils.d("file: "+srcFile.getAbsolutePath());
+    private static void writeToMediaStore(File srcFile,String albumRelativePath, String newFileName,MyCommonCallback3<String> callback) {
 
+        if(TextUtils.isEmpty(newFileName)){
+            newFileName = srcFile.getName();
+        }
+        LogUtils.d("file: "+srcFile.getAbsolutePath(),albumRelativePath,newFileName);
         // 根据文件类型设置
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             // 获得ContentResolver对象
@@ -91,9 +106,43 @@ public class MediaStoreUtil {
                 mimeType = "image/jpeg";
             }
             ContentValues contentValues = new ContentValues();
-            contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, srcFile.getName());
+
+            //判断是否已经存在,如果存在?
+
+
+            contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, newFileName);
             contentValues.put(MediaStore.MediaColumns.MIME_TYPE, mimeType);
 
+
+            //权限: 没有任何权限时,只有dcim,picture,movies这三个可写
+            if(albumRelativePath.startsWith(Environment.DIRECTORY_MOVIES)
+            || albumRelativePath.startsWith(Environment.DIRECTORY_DCIM)
+             || albumRelativePath.startsWith(Environment.DIRECTORY_DOWNLOADS)
+            ||albumRelativePath.startsWith(Environment.DIRECTORY_PICTURES)){
+
+            }else {
+                File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+albumRelativePath,newFileName);
+                boolean canWrite = false;
+                if(file.exists()){
+                    canWrite = file.canWrite();
+                }else {
+                    try {
+                        file.createNewFile();
+                        canWrite = true;
+                    } catch (IOException e) {
+                       canWrite = false;
+                    }
+                }
+                if(!canWrite){
+                    if(mimeType.startsWith("image")){
+                        albumRelativePath = Environment.DIRECTORY_DCIM+"/"+albumRelativePath;
+                    }else if(mimeType.startsWith("video")){
+                        albumRelativePath = Environment.DIRECTORY_MOVIES+"/"+albumRelativePath;
+                    }else {
+                        albumRelativePath = Environment.DIRECTORY_DOWNLOADS+"/"+albumRelativePath;
+                    }
+                }
+            }
             contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, albumRelativePath);
             //contentValues.put(MediaStore.MediaColumns.DATA, albumRelativePath);
 
@@ -132,7 +181,7 @@ public class MediaStoreUtil {
                             inputStream.close();
                             outputStream.close();
                             Utils.getApp().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
-                            callback.onSuccess(uri);
+                            callback.onSuccess(uri.toString());
 
                         } catch (IOException e) {
                             LogUtils.w(e,srcFile.getAbsolutePath());
@@ -161,7 +210,7 @@ public class MediaStoreUtil {
             //Failed to create new MediaStore record: /storage/emulated/0/Android/data/com.hss.utilsenhance/files/Pictures/screenshot2/2024-07-09_14-50-59.jpg
 
             File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
-                    +"/"+albumRelativePath+"/"+srcFile.getName());
+                    +"/"+albumRelativePath+"/"+newFileName);
             LogUtils.i("file path: "+file.getAbsolutePath());
             File parentFile = file.getParentFile();
             if(parentFile.exists()){
@@ -178,7 +227,7 @@ public class MediaStoreUtil {
             LogUtils.i("file copy success: "+copy);
             if(copy && file.exists() && file.length() > 0){
                 //然后通知mediastore扫描.
-                callback.onSuccess(Uri.fromFile(file));
+                callback.onSuccess(file.getAbsolutePath());
                 Utils.getApp().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
             }else {
                 callback.onError("copy file failed");

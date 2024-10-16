@@ -99,4 +99,9 @@ public class JavaMotion implements IMotion{
     public Map<String, Object> metaOfVideo(String fileOrUriPath) {
         return metaOfImage(fileOrUriPath);
     }
+
+    @Override
+    public File readableFilePath(String inputFile) {
+        return new File(inputFile);
+    }
 }
