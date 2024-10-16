@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -41,6 +43,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.functions.Consumer;
 
@@ -63,6 +66,8 @@ public class MotionEditViewHolder extends BaseViewHolder<MotionPhotoEditBinding,
             }
         });
     }
+
+    String relativePath;
     public MotionEditViewHolder(Context context) {
         super(context);
     }
@@ -124,7 +129,7 @@ public class MotionEditViewHolder extends BaseViewHolder<MotionPhotoEditBinding,
         binding.btnExtractVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AndroidMotionUtil.extractVideo(initInfo);
+                AndroidMotionUtil.extractVideo(initInfo,relativePath);
             }
         });
 
@@ -134,9 +139,18 @@ public class MotionEditViewHolder extends BaseViewHolder<MotionPhotoEditBinding,
 
     private  String copyUriToCacheDir(String bean)  {
         if(bean.startsWith("content://")){
-            String name = ContentUriUtil.getName(Uri.parse(bean));
+
+            Map<String, Object> meta =  ContentUriUtil.queryMediaStore(Uri.parse(bean));
+
+            String name = (String) meta.get(MediaStore.MediaColumns.DISPLAY_NAME);
             if(TextUtils.isEmpty(name)){
                 name = System.currentTimeMillis()+".jpg";
+            }
+            relativePath = meta.get(MediaStore.MediaColumns.RELATIVE_PATH)+"";
+            if(relativePath .equals("null") || relativePath.equals("")){
+                relativePath = meta.get(MediaStore.MediaColumns.DATA)+"";
+                relativePath = relativePath.substring(Environment.getExternalStorageDirectory().getAbsolutePath().length()+1);
+                relativePath = relativePath.substring(0,relativePath.lastIndexOf("/"));
             }
 
             File file = new File(AndroidMotionImpl.motionImageCacheDir(),name);

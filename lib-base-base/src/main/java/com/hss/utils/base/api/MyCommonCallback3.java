@@ -12,7 +12,15 @@ public interface MyCommonCallback3<T> {
         onError("-1",msg,null);
     }
 
-   default void onError(String code, String msg,@Nullable Throwable throwable){
+    default void onError(String code, String msg,@Nullable Throwable throwable){
        LogUtils.w(code,msg,throwable);
    }
+
+    default void onError( Throwable e){
+        if(e ==null){
+            onError("unknown error");
+            return;
+        }
+        onError(e.getClass().getSimpleName(),e.getMessage(),e);
+    }
 }

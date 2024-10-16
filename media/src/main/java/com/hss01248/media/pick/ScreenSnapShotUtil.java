@@ -3,8 +3,6 @@ package com.hss01248.media.pick;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -12,15 +10,14 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ScrollView;
 
 import androidx.annotation.ColorRes;
+import androidx.annotation.Nullable;
 
 import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.AppUtils;
@@ -28,14 +25,14 @@ import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
+import com.hss.utils.base.api.MyCommonCallback3;
 import com.hss.utils.enhance.R;
 import com.hss.utils.enhance.api.MyCommonCallback;
-
+import com.hss.utils.enhance.media.MediaStoreUtil;
+import com.hss01248.toast.MyToast;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -110,41 +107,12 @@ public class ScreenSnapShotUtil {
 
     public static void saveBitmap(Bitmap bmp,  boolean showToast, MyCommonCallback<String> callback) {
 
-        File dir = getAlbumDir(Utils.getApp());
-       // bmp = mixTransInPng(bmp);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        try {
             saveImageToGallery2(Utils.getApp(),bmp,showToast,callback);
-            //view.destroyDrawingCache();
-            return;
-        }
-        if (!dir.exists()) {
-            boolean mk = dir.mkdirs();
-            if (!mk) {
-                if(showToast)
-                    ToastUtils.showLong(getString2(R.string.deliver_error_save_failed,Utils.getApp()));
-                if(callback != null){
-                    callback.onError("-1","cannot create dir",null);
-                }
+        } catch (Throwable e) {
+            if(showToast){
+                MyToast.error(e.getMessage());
             }
-        }
-        File file = new File(dir, AppUtils.getAppName()+"_"+System.currentTimeMillis() + "-screenshot.png");
-        boolean saved = saveBitmapToFile(file.getAbsolutePath(), bmp,80, Bitmap.CompressFormat.PNG);
-        if (!saved) {
-            if(showToast)
-                ToastUtils.showLong(getString2(R.string.deliver_error_save_failed,Utils.getApp()));
-            if(callback != null){
-                callback.onError("-1","save image failed",null);
-            }
-            return;
-        }
-        //view.destroyDrawingCache();
-        //立刻通知系统
-        MediaStoreRefresher.refreshMediaCenter(Utils.getApp(), file.getAbsolutePath());
-        bmp.recycle();
-        if(showToast)
-            ToastUtils.showLong(getString2(R.string.saved_success,Utils.getApp()));
-        if(callback != null){
-            callback.onSuccess(file.getAbsolutePath());
         }
     }
 
@@ -247,65 +215,37 @@ public class ScreenSnapShotUtil {
      * @param context
      * @param image
      */
-    private static void saveImageToGallery2(Context context, Bitmap image,boolean showToast, MyCommonCallback<String> callback){
+    private static void saveImageToGallery2(Context context, Bitmap image,boolean showToast, MyCommonCallback<String> callback) throws Throwable{
+
+
+
+
+
         Long mImageTime = System.currentTimeMillis();
         String imageDate = new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date(mImageTime));
-        String SCREENSHOT_FILE_NAME_TEMPLATE = AppUtils.getAppName()+ "_%s.jpg";//图片名称
-        String mImageFileName = String.format(SCREENSHOT_FILE_NAME_TEMPLATE, imageDate);
+        String mImageFileName = AppUtils.getAppName().toLowerCase()+"-"+imageDate+ ".jpg";//图片名称
+        String realPath = Environment.DIRECTORY_PICTURES + File.separator + "Screenshots";
 
-        final ContentValues values = new ContentValues();
-        //values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + File.separator + AppUtils.getAppName()); //Environment.DIRECTORY_SCREENSHOTS:截图,图库中显示的文件夹名。"dh"
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + File.separator + AppUtils.getAppName());
-        } else {
-            values.put(
-                    MediaStore.MediaColumns.DATA,
-                    Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+Environment.DIRECTORY_PICTURES + File.separator + AppUtils.getAppName()
-            );
-        }
-        //DIRECTORY_SCREENSHOTS--> 不允许操作
-        values.put(MediaStore.MediaColumns.DISPLAY_NAME, mImageFileName);
-        values.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
-        values.put(MediaStore.MediaColumns.DATE_ADDED, mImageTime / 1000);
-        values.put(MediaStore.MediaColumns.DATE_MODIFIED, mImageTime / 1000);
-        values.put(MediaStore.MediaColumns.DATE_EXPIRES, (mImageTime + DateUtils.DAY_IN_MILLIS) / 1000);
-        values.put(MediaStore.MediaColumns.IS_PENDING, 1);
+        File file = new File(Utils.getApp().getExternalCacheDir(),mImageFileName);
+        file.createNewFile();
+        FileOutputStream inputStream = new FileOutputStream(file);
+        image.compress(Bitmap.CompressFormat.JPEG,85,inputStream);
+        MediaStoreUtil.writeMediaToMediaStore(file, realPath, new MyCommonCallback3<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                callback.onSuccess(uri.toString());
 
-        ContentResolver resolver = context.getContentResolver();
-        //requires android.permission.WRITE_EXTERNAL_STORAGE
-         Uri uri = null;
-        try {
-             uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-            // First, write the actual data for our screenshot
-            try (OutputStream out = resolver.openOutputStream(uri)) {
-                if (!image.compress(Bitmap.CompressFormat.JPEG, 80, out)) {
-                    throw new IOException("Failed to compress");
+            }
+
+            @Override
+            public void onError(String code, String msg, @Nullable Throwable throwable) {
+                MyCommonCallback3.super.onError(code, msg, throwable);
+                callback.onError(code, msg, throwable);
+                if(showToast){
+                    MyToast.error(msg);
                 }
             }
-            // Everything went well above, publish it!
-            values.clear();
-            values.put(MediaStore.MediaColumns.IS_PENDING, 0);
-            values.putNull(MediaStore.MediaColumns.DATE_EXPIRES);
-            resolver.update(uri, values, null, null);
-            if(showToast){
-                ToastUtils.showLong(getString2(R.string.saved_success,context));
-            }
-            if(callback != null){
-                callback.onSuccess(uri.toString());
-            }
-        }catch (Throwable e){
-            if(showToast){
-                ToastUtils.showLong(getString2(R.string.deliver_error_save_failed,context)+":\n"+e.getMessage());
-            }
-            if(callback != null){
-                callback.onError("Java Exception",e.getMessage(),e);
-            }
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && uri != null) {
-                resolver.delete(uri, null);
-            }
-            LogUtils.w(e);
-        }
+        });
     }
 
 
