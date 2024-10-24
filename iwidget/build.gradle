@@ -33,9 +33,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
-    api ('com.github.li-xiaojun:XPopup:2.9.15'){
-        exclude group: "com.davemorrissey.labs", module: "subsampling-scale-image-view-androidx"
-    }
+    api 'com.github.li-xiaojun:XPopup:2.9.15'
     api 'com.blankj:utilcodex:1.30.0'//基底
     api "com.github.kongzue.DialogX:DialogX:0.0.46"  //使用其中的popMenu
     //msg dialog或alert dialog

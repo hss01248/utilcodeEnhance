@@ -35,9 +35,7 @@ dependencies {
     api project(path: ':lib-base')
     api project(path: ':iwidget')
     api 'androidx.documentfile:documentfile:1.0.1'
-    api ('com.github.li-xiaojun:XPopup:2.9.15'){
-        exclude group: "com.davemorrissey.labs", module: "subsampling-scale-image-view-androidx"
-    }
+    api 'com.github.li-xiaojun:XPopup:2.9.15'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     api 'com.github.skyNet2017.Luban:luban:3.2.7'
 }

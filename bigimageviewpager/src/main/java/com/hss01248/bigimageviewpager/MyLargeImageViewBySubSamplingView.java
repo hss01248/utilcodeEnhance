@@ -18,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.exifinterface.media.ExifInterface;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.PlaybackException;
 import androidx.media3.common.Player;
@@ -44,6 +45,7 @@ import com.tencent.qcloud.image.avif.subsampling.AvifSubsamplingImageDecoder;
 import com.tencent.qcloud.image.avif.subsampling.AvifSubsamplingImageRegionDecoder;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
 public class MyLargeImageViewBySubSamplingView extends FrameLayout {
@@ -375,6 +377,19 @@ public class MyLargeImageViewBySubSamplingView extends FrameLayout {
             jpgView.setRegionDecoderClass(SkiaImageRegionDecoder.class);
             if(isPanoramaImage(tmpOriginalFile.getAbsolutePath())){
                 largeImgBinding.ivGo360.setVisibility(VISIBLE);
+            }
+            try {
+                ExifInterface exifInterface = new ExifInterface(tmpOriginalFile.getAbsolutePath());
+                String attribute = exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION)+"";
+                if(attribute.equals(ExifInterface.ORIENTATION_ROTATE_90+"")){
+                    jpgView.setOrientation(SubsamplingScaleImageView.ORIENTATION_90);
+                }else if(attribute.equals(ExifInterface.ORIENTATION_ROTATE_180+"")){
+                    jpgView.setOrientation(SubsamplingScaleImageView.ORIENTATION_180);
+                }else if(attribute.equals(ExifInterface.ORIENTATION_ROTATE_270+"")){
+                    jpgView.setOrientation(SubsamplingScaleImageView.ORIENTATION_270);
+                }
+            } catch (IOException e) {
+                LogUtils.w(e);
             }
             jpgView.setImage(ImageSource.uri(Uri.fromFile(tmpOriginalFile)));
         }

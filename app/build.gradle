@@ -112,6 +112,8 @@ configurations {
     //api project(":glidev4")
     all*.exclude group: 'org.jetbrains', module: 'annotations-java5'
     all*.exclude group: 'com.github.simplepeng.SpiderMan', module: 'spiderman'
+    all*.exclude group: 'com.davemorrissey.labs', module: 'subsampling-scale-image-view'
+    //api('com.davemorrissey.labs:subsampling-scale-image-view:3.10.0')
     //     implementation "com.github.simplepeng.SpiderMan:spiderman:v1.1.8"
     //url connection代理到okhttp会导致神策的请求无返回
     // all*.exclude group: 'com.github.hss01248.flipperUtil', module:'network-hooks-chucker'

@@ -17,6 +17,7 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.security.identity.IdentityCredential;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.view.Gravity;
 import android.view.View;
@@ -33,6 +34,7 @@ import androidx.biometric.BiometricPrompt;
 import androidx.core.util.Pair;
 
 import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.FileIOUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.StringUtils;
@@ -58,6 +60,7 @@ import com.hss01248.activityresult.ActivityResultListener;
 import com.hss01248.activityresult.StartActivityUtil;
 import com.hss01248.activityresult.TheActivityListener;
 import com.hss01248.basewebview.BaseWebviewActivity;
+import com.hss01248.bigimageviewpager.ImageCompareViewHolder;
 import com.hss01248.biometric.BiometricHelper;
 import com.hss01248.bitmap_saver.BitmapSaveUtil;
 import com.hss01248.cipher.AesCipherUtil;
@@ -70,6 +73,7 @@ import com.hss01248.cipher.sp.EnSpUtil;
 import com.hss01248.fullscreendialog.FullScreenDialogUtil;
 import com.hss01248.image.dataforphotoselet.ImgDataSeletor;
 import com.hss01248.imagelist.album.ImageMediaCenterUtil;
+import com.hss01248.img.compressor.ImageCompressor;
 import com.hss01248.iwidget.BaseDialogListener;
 import com.hss01248.iwidget.msg.AlertDialogImplByDialogUtil;
 import com.hss01248.iwidget.msg.AlertDialogImplByMmDialog;
@@ -100,6 +104,8 @@ import org.devio.takephoto.wrap.TakePhotoUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.net.URLDecoder;
 import java.security.Key;
 import java.security.KeyStore;
@@ -1549,5 +1555,52 @@ public class MainActivity extends AppCompatActivity {
 
     public void viewVideoByMediaStore(View view) {
         ImageMediaCenterUtil.showAlbums(true);
+    }
+
+    public void compressImageAndCompare(View view) {
+
+        MediaPickOrCaptureUtil.pickImageOrTakePhoto(false, new MyCommonCallback<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                String filePath = uri.getPath();
+                if(uri.getScheme().equals("content")){
+                    try {
+                        InputStream stream = Utils.getApp().getContentResolver().openInputStream(uri);
+                        File dir = new File(Utils.getApp().getExternalCacheDir(),"img");
+                        dir.mkdirs();
+                        String name = ContentUriUtil.getName(uri);
+                        if(TextUtils.isEmpty(name)){
+                            name = System.currentTimeMillis()+".jpg";
+                        }
+                        File file = new File(dir,name);
+                        if(file.exists()){
+                            file.delete();
+                        }
+                        boolean b = FileIOUtils.writeFileFromIS(file, stream);
+                        if (!b) {
+                            LogUtils.w("copy file from uri failed");
+                            MyToast.error("copy file from uri failed");
+                            return;
+                        }else {
+                            filePath = file.getAbsolutePath();
+                        }
+                    } catch (FileNotFoundException e) {
+                        LogUtils.w(e);
+                        MyToast.error(e.getMessage());
+                        return;
+                    }
+                }
+                File file = new File(filePath);
+                File compressed = new File(file.getParentFile(),"compress-"+file.getName());
+                boolean compress = ImageCompressor.compressOringinal(file.getAbsolutePath(), 85, compressed.getAbsolutePath());
+                if(!compress){
+                    MyToast.error("压缩失败或无需压缩");
+                    return;
+                }
+                ImageCompareViewHolder.start(file.getAbsolutePath(),compressed.getAbsolutePath());
+            }
+        });
+        //boolean compress = ImageCompressor.compressOringinal(file.getAbsolutePath(), quality, file2.getAbsolutePath());
+
     }
 }

@@ -27,6 +27,7 @@ public class MyLargeJpgViewBySubsumplingView extends SubsamplingScaleImageView {
 
     private void init2() {
         pfd = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG);
+        setOrientation(SubsamplingScaleImageView.ORIENTATION_USE_EXIF);
     }
 
 
@@ -36,4 +37,7 @@ public class MyLargeJpgViewBySubsumplingView extends SubsamplingScaleImageView {
         canvas.setDrawFilter(pfd);
         super.onDraw(canvas);
     }
+
+
+
 }
