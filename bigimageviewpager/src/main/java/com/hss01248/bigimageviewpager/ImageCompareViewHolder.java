@@ -8,12 +8,15 @@ import androidx.annotation.Keep;
 import androidx.core.util.Pair;
 import androidx.lifecycle.LifecycleOwner;
 
+import com.blankj.utilcode.util.ConvertUtils;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.hss.utils.enhance.viewholder.ContainerActivity2;
 import com.hss.utils.enhance.viewholder.mvvm.BaseViewHolder;
 import com.hss.utils.enhance.viewholder.mvvm.ContainerViewHolderWithTitleBar;
 import com.hss01248.bigimageviewpager.databinding.ImageComprareBinding;
 import com.hss01248.fullscreendialog.FullScreenDialogUtil;
+
+import java.io.File;
 
 import io.reactivex.functions.Consumer;
 
@@ -47,7 +50,7 @@ public class ImageCompareViewHolder extends BaseViewHolder<ImageComprareBinding,
         binding.largeBottom.loadUri(pair.second,false);
 
         String topInfo = binding.largeTop.getInfoStr();
-        binding.tvTop.setText(pair.first);
+        binding.tvTop.setText(pair.first+", "+ ConvertUtils.byte2FitMemorySize(new File(pair.first).length(),2));
         binding.tvTop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,7 +59,7 @@ public class ImageCompareViewHolder extends BaseViewHolder<ImageComprareBinding,
         });
 
         String bottomInfo = binding.largeBottom.getInfoStr();
-        binding.tvBottom.setText(pair.second);
+        binding.tvBottom.setText(pair.second+", "+ ConvertUtils.byte2FitMemorySize(new File(pair.second).length(),2));
         binding.tvBottom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
