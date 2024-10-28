@@ -23,7 +23,7 @@ import com.hss.utils.enhance.viewholder.mvvm.ContainerViewHolderWithTitleBar;
 import com.hss01248.activityresult.TheActivityListener;
 import com.hss01248.bigimageviewpager.databinding.MotionPhotoEditBinding;
 import com.hss01248.bigimageviewpager.databinding.MotionPhotoVideoFrameBinding;
-import com.hss01248.motion_photos.MotionPhotoUtil;
+import com.hss01248.motion_photos_android.java.MotionPhotoUtil;
 import com.hss01248.motion_photos_android.AndroidMotionImpl;
 import com.hss01248.motion_photos_android.AndroidMotionUtil;
 import com.hss01248.motion_photos_android.SaveCallback;

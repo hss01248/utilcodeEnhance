@@ -56,7 +56,7 @@ import com.hss01248.img.compressor.ImageDirCompressor;
 import com.hss01248.img.compressor.UiForDirCompress;
 import com.hss01248.media.metadata.ExifUtil;
 import com.hss01248.media.pick.MediaPickUtil;
-import com.hss01248.motion_photos.MotionPhotoUtil;
+import com.hss01248.motion_photos_android.java.MotionPhotoUtil;
 import com.hss01248.ui.pop.list.PopList;
 import com.hss01248.viewholder_media.FileTreeViewHolder;
 import com.hss01248.webviewspider.SpiderWebviewActivity;

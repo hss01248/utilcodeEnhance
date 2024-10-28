@@ -8,7 +8,7 @@ import androidx.startup.Initializer;
 import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
-import com.hss01248.motion_photos.MotionPhotoUtil;
+import com.hss01248.motion_photos_android.java.MotionPhotoUtil;
 import com.hss01248.videocompress.VideoCompressUtil;
 
 import java.util.ArrayList;

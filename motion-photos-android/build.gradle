@@ -28,7 +28,7 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.0'
-     api project(":motion-photos")
+    // api project(":motion-photos")
     api project(":lib-base")
     //api project(':fileOperation')
 
@@ -39,11 +39,15 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
     api "androidx.startup:startup-runtime:1.1.0"
 
-    api "com.github.skyNet2017.PictureSelector:videocompressbase:3.0.0"
+    api "com.github.skyNet2017.PictureSelector:videocompressbase:3.0.4"
     api 'org.apache.commons:commons-imaging:1.0-alpha3'
     // api "com.github.skyNet2017.PictureSelector:videocompress_ffmpeg:3.0.0"
     //implementation 'com.github.yellowcath:VideoProcessor:2.4.2'
 
     // https://mvnrepository.com/artifact/androidx.media3/media3-extractor
     //implementation 'androidx.media3:media3-extractor:1.4.1'
+
+    implementation 'com.google.code.gson:gson:2.8.5'
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-imaging
+    implementation 'org.apache.commons:commons-imaging:1.0-alpha3'
 }

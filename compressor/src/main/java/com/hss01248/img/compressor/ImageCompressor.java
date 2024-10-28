@@ -28,8 +28,8 @@ import com.hss01248.fileoperation.FileDeleteUtil;
 import com.hss01248.media.metadata.ExifUtil;
 import com.hss01248.media.metadata.FileTypeUtil;
 import com.hss01248.media.metadata.quality.Magick;
-import com.hss01248.motion_photos.ExifUtils;
-import com.hss01248.motion_photos.MotionPhotoUtil;
+import com.hss01248.motion_photos_android.java.ExifUtils;
+import com.hss01248.motion_photos_android.java.MotionPhotoUtil;
 import com.hss01248.motion_photos_android.AndroidMotionImpl;
 
 import java.io.File;

@@ -48,7 +48,7 @@ public class CommonFileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBindi
 
 
     public static void viewExternalStorage(){
-        viewDirInActivity(new JavaFile(Environment.getExternalStorageDirectory()));
+        viewDirInActivity(new JavaFile(Environment.getExternalStorageDirectory()).setRoot(true));
     }
 
     public static void viewAppDir(){
@@ -57,10 +57,10 @@ public class CommonFileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBindi
             public void accept(Pair<ContainerActivity2, ContainerViewHolderWithTitleBar> pair) throws Exception {
                 CommonMediaListViewHolder listViewHolder1 = new CommonMediaListViewHolder(pair.first);
                 List<AbsFile> dirs = new ArrayList<>();
-                dirs.add(new JavaFile(Utils.getApp().getFilesDir().getParentFile()));
+                dirs.add(new JavaFile(Utils.getApp().getFilesDir().getParentFile()).setRoot(true));
                // dirs.add(Utils.getApp().getCacheDir().getAbsolutePath());
                 //dirs.add(Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_DCIM).getParentFile().getAbsolutePath());
-                dirs.add(new JavaFile(Utils.getApp().getExternalCacheDir().getParentFile()));
+                dirs.add(new JavaFile(Utils.getApp().getExternalCacheDir().getParentFile()).setRoot(true));
                 listViewHolder1.init(dirs);
                 pair.second.getBinding().realTitleBar.setTitle("应用私有目录,前1个为内部,后1个为外部");
                 pair.second.getBinding().rlContainer.addView(listViewHolder1.getRootView());
@@ -262,7 +262,7 @@ public class CommonFileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBindi
 
 
     public  boolean onBackPressed(){
-        if("/storage/emulated/0".equals(currentPath)){
+        if(currentPath.isRoot()){
             return false;
         }
         AbsFile dir = currentPath.getParent();

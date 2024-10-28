@@ -19,8 +19,8 @@ import com.blankj.utilcode.util.Utils;
 import com.hss.utils.base.api.MyCommonCallback3;
 import com.hss.utils.enhance.ContentUriUtil;
 import com.hss.utils.enhance.media.MediaStoreUtil;
-import com.hss01248.motion_photos.ExifUtils;
-import com.hss01248.motion_photos.MotionPhotoUtil;
+import com.hss01248.motion_photos_android.java.ExifUtils;
+import com.hss01248.motion_photos_android.java.MotionPhotoUtil;
 import com.hss01248.toast.MyToast;
 
 import java.io.File;

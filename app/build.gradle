@@ -65,6 +65,7 @@ dependencies {
     implementation project(path: ':viewholder-media')
     implementation project(':baseWebview')
     implementation project(':bitmap-saver')
+    implementation project(':otg-usb')
     api "com.github.hss01248.flipperUtil:aop-utilcode:1.7.21-dev"
     implementation project(':sentry')
     implementation project(path: ':webviewspider')

@@ -38,7 +38,7 @@ import com.hss01248.bigimageviewpager.photoview.MyGifPhotoView;
 import com.hss01248.glide.aop.file.AddByteUtil;
 import com.hss01248.glide.aop.file.ReadFileUtil;
 import com.hss01248.media.metadata.ExifUtil;
-import com.hss01248.motion_photos.MotionPhotoUtil;
+import com.hss01248.motion_photos_android.java.MotionPhotoUtil;
 import com.hss01248.viewstate.StatefulLayout;
 import com.hss01248.viewstate.ViewStateConfig;
 import com.shizhefei.view.largeimage.factory.InputStreamBitmapDecoderFactory;

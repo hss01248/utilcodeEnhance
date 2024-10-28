@@ -18,7 +18,7 @@ import com.hss01248.image.MyUtil;
 import com.hss01248.image.config.ScaleMode;
 import com.hss01248.imagelist.R;
 import com.hss01248.imagelist.db.Image;
-import com.hss01248.motion_photos.MotionPhotoUtil;
+import com.hss01248.motion_photos_android.java.MotionPhotoUtil;
 
 import java.io.File;
 import java.util.List;

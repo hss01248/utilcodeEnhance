@@ -12,7 +12,7 @@ import java.io.OutputStream;
 public interface AbsFile {
 
 
-   // boolean isRoot();
+    boolean isRoot();
 
     boolean exists();
     AbsFile getParent();

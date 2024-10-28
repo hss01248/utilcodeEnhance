@@ -1,4 +1,4 @@
-package com.hss01248.motion_photos;
+package com.hss01248.motion_photos_android.java;
 
 
 import com.google.gson.Gson;

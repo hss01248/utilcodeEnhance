@@ -10,9 +10,9 @@ import com.blankj.utilcode.util.FileUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
 import com.hss.utils.enhance.ContentUriUtil;
-import com.hss01248.motion_photos.ExifUtils;
-import com.hss01248.motion_photos.IMotion;
-import com.hss01248.motion_photos.MotionPhotoUtil;
+import com.hss01248.motion_photos_android.java.ExifUtils;
+import com.hss01248.motion_photos_android.java.IMotion;
+import com.hss01248.motion_photos_android.java.MotionPhotoUtil;
 import com.hss01248.videocompress.CompressType;
 import com.hss01248.videocompress.VideoCompressUtil;
 import com.hss01248.videocompress.listener.ICompressListener;
@@ -178,7 +178,7 @@ public class AndroidMotionImpl implements IMotion {
         final File[] file2 = {new File(dir, "out-" + file.getName())};
 
         CountDownLatch latch = new CountDownLatch(1);
-        VideoCompressUtil.doCompress(false,fileOrUriPath, dir.getAbsolutePath(), CompressType.TYPE_UPLOAD_1080P,
+        VideoCompressUtil.doCompress(false,fileOrUriPath, dir.getAbsolutePath(), CompressType.TYPE_SDR_1080P,
                 new ICompressListener() {
                     @Override
                     public void onFinish(String outputFilePath) {

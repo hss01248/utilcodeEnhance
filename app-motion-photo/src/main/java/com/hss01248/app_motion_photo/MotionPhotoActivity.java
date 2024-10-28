@@ -11,7 +11,7 @@ import com.hss.utils.enhance.api.MyCommonCallback;
 import com.hss01248.app_motion_photo.databinding.ActivityMotionPhotoBinding;
 import com.hss01248.bigimageviewpager.motion.MotionEditViewHolder;
 import com.hss01248.media.pick.MediaPickUtil;
-import com.hss01248.motion_photos.MotionPhotoUtil;
+import com.hss01248.motion_photos_android.java.MotionPhotoUtil;
 import com.hss01248.toast.MyToast;
 
 /**

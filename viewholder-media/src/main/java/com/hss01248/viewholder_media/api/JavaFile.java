@@ -25,6 +25,18 @@ public class JavaFile implements AbsFile{
 
     protected File file;
 
+    public JavaFile setRoot(boolean root) {
+        this.root = root;
+        return this;
+    }
+
+    private boolean root;
+
+    @Override
+    public boolean isRoot() {
+        return root;
+    }
+
     @Override
     public boolean exists() {
         return file.exists();

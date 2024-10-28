@@ -96,6 +96,7 @@ import com.hss01248.permission.MyPermissions;
 import com.hss01248.qrscan.ScanCodeActivity;
 import com.hss01248.sentry.SentryUtil;
 import com.hss01248.toast.MyToast;
+import com.hss01248.usb.UsbUtil;
 import com.hss01248.viewholder_media.CommonFileTreeViewHolder;
 import com.hss01248.webviewspider.SpiderWebviewActivity;
 
@@ -1611,5 +1612,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void viewVideoByMediaStore2(View view) {
         ImageMediaCenterUtil.showPureImageOrVideos(true);
+    }
+
+    public void viewUsbFileExplorer(View view) {
+        UsbUtil.viewUsb();
+
     }
 }
