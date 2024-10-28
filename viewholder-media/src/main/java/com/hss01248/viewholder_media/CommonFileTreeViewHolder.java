@@ -133,7 +133,7 @@ public class CommonFileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBindi
                     loadDir(s);
                 }else {
 
-                    List<AbsFile> strings = cache.get(s.getFullPath());
+                    List<AbsFile> strings = cache.get(s.getAbsolutePath());
                     ////todo 罚款文件的实现
                    // FileOpenUtil.open(s.getFullPath(),strings);
                 }
@@ -275,7 +275,7 @@ public class CommonFileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBindi
 
     private void loadDir(AbsFile path) {
         currentPath = path;
-        binding.tvPath.setText(path.getFullPath());
+        binding.tvPath.setText(path.getAbsolutePath());
         stateManager.showLoading();
         AbsFile file = path;
         if(!file.exists()){
@@ -286,13 +286,13 @@ public class CommonFileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBindi
             stateManager.showError("需要文件夹,但传入的是文件:\n"+path);
             return;
         }
-        if(cache.containsKey(path.getFullPath())){
-            if(cache.get(path.getFullPath()).isEmpty()){
+        if(cache.containsKey(path.getAbsolutePath())){
+            if(cache.get(path.getAbsolutePath()).isEmpty()){
                 stateManager.showEmpty();
             }else{
                 stateManager.showContent();
             }
-            listViewHolder.init(cache.get(path.getFullPath()));
+            listViewHolder.init(cache.get(path.getAbsolutePath()));
         }
 
         ThreadUtils.executeByIo(new ThreadUtils.SimpleTask<Pair<String,List<AbsFile>>>() {
@@ -341,14 +341,14 @@ public class CommonFileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBindi
 
                     list.addAll(list1);
                 }
-                return new Pair<>(path.getFullPath(),list);
+                return new Pair<>(path.getAbsolutePath(),list);
             }
 
             @Override
             public void onSuccess(Pair<String,List<AbsFile>> result) {
                 //更新数据
                 cache.put(result.first,result.second);
-                if(!currentPath.getFullPath().equals(result.first)){
+                if(!currentPath.getAbsolutePath().equals(result.first)){
 
                     LogUtils.d("路径已经变化(现-原)",currentPath,result.first);
                     return;
@@ -358,7 +358,7 @@ public class CommonFileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBindi
                 }else{
                     stateManager.showContent();
                 }
-                listViewHolder.init(cache.get(path.getFullPath()));
+                listViewHolder.init(cache.get(path.getAbsolutePath()));
             }
 
             @Override

@@ -188,7 +188,7 @@ public class USBMTPReceiver extends BroadcastReceiver {
                 "getType",currentFs.getType(),
                 //PartitionTypes.  const val FAT32 = 2
                 "已使用容量",ConvertUtils.byte2FitMemorySize(currentFs.getOccupiedSpace()));
-
+        UsbUtil.usbIndentifed = currentFs.getVolumeLabel().trim();
         // 获取 U 盘的根目录
         UsbFile mRootFolder = currentFs.getRootDirectory();
 
@@ -200,6 +200,8 @@ public class USBMTPReceiver extends BroadcastReceiver {
         });
 
         TreeScanUtil.scan(true,new UsbFileImpl(mRootFolder));
+
+        UsbUtil.copyToMediaStore(mRootFolder);
 
 //        // 获取 U 盘的容量
 //        long capacity = currentFs.getCapacity();

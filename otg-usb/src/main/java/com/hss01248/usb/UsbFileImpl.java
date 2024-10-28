@@ -100,7 +100,7 @@ public class UsbFileImpl implements AbsFile {
     }
 
     @Override
-    public String getFullPath() {
+    public String getAbsolutePath() {
         return file.getAbsolutePath();
     }
 

@@ -50,7 +50,7 @@ public class TreeAsyncIterator<T> {
                     return 0;
                 }
                 if(callback.skipDir(dir)){
-                    LogUtils.d("跳过文件夹:"+dir.getFullPath());
+                    LogUtils.d("跳过文件夹:"+dir.getAbsolutePath());
                     return 0;
                 }
                 callback.onDirStart(dir);
@@ -99,12 +99,12 @@ public class TreeAsyncIterator<T> {
             @Override
             public void onSuccess(Integer result) {
                 cal[0]--;
-                LogUtils.v("当前文件夹遍历结束: " + cal[0] + "   ---> " + dir.getFullPath(), "文件个数:" + result, "总文件个数:" + totalFileCount);
+                LogUtils.v("当前文件夹遍历结束: " + cal[0] + "   ---> " + dir.getAbsolutePath(), "文件个数:" + result, "总文件个数:" + totalFileCount);
                 if (cal[0] == 0) {
                     callback.onFinished(totalFileCount, System.currentTimeMillis() - startTime, failedList);
                 }
                 if (cal[0] < 0) {
-                    LogUtils.w("计数出错 : " + cal[0] + " , " + dir.getFullPath());
+                    LogUtils.w("计数出错 : " + cal[0] + " , " + dir.getAbsolutePath());
                 }
             }
         });

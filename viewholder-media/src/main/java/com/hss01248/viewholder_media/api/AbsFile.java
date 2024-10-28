@@ -21,7 +21,7 @@ public interface AbsFile<T> {
 
     AbsFile[] listFiles(AbsFileFilter fileFilter);
 
-    String getFullPath();
+    String getAbsolutePath();
 
     String getName();
 

@@ -5,8 +5,19 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.usb.UsbManager;
 import android.os.Build;
+import android.os.Environment;
 
+import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
+import com.hss01248.viewholder_media.api.AbsFile;
+import com.hss01248.viewholder_media.scan.MediaScanCallback;
+import com.hss01248.viewholder_media.scan.TreeScanUtil;
+
+import java.io.File;
+import java.util.List;
+
+import me.jahnen.libaums.core.fs.UsbFile;
 
 /**
  * @Despciption todo
@@ -15,6 +26,9 @@ import com.blankj.utilcode.util.Utils;
  * @Version 1.0
  */
 public class UsbUtil {
+
+
+    public static String usbIndentifed = "";
 
     /*****
      * 动态注册USB 设备监听
@@ -55,6 +69,41 @@ public class UsbUtil {
         Intent intent=new Intent(USBMTPReceiver.READ_USB_DEVICE_PERMISSION);
         //发送标准广播
         Utils.getApp().sendBroadcast(intent);
+    }
+
+
+    public static void copyToMediaStore(UsbFile root){
+        TreeScanUtil.findAllImages(new UsbFileImpl(root), true, new MediaScanCallback() {
+            @Override
+            public void onProgress(AbsFile file, List<AbsFile> list) {
+                String usbPath = file.getAbsolutePath();
+                usbPath = usbPath.substring(0,usbPath.lastIndexOf("."));
+                String realPath = "/"+usbIndentifed+usbPath;
+                String pathOnPhone = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+                        .getAbsolutePath() +realPath;
+                //无法通过file来判断,只能通过mediastore查询:
+                File file1 = new File(pathOnPhone);
+                //todo
+                if(file1.exists() && file1.length()>0){
+                    LogUtils.d("对应文件已经存在:",file1.getAbsolutePath());
+                    ToastUtils.showShort("对应文件已经存在:"+file1.getAbsolutePath());
+                    return;
+                }
+                /*AbsMediaStoreUtil.writeMediaToMediaStore(file, realPath, file.getName(), new MyCommonCallback3<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+
+                    }
+                });*/
+
+
+            }
+
+            @Override
+            public void onFinish(List<AbsFile> files) {
+
+            }
+        });
     }
 
 

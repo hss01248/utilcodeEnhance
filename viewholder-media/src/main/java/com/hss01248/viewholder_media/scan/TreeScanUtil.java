@@ -90,6 +90,7 @@ public class TreeScanUtil {
                     @Override
                     public void accept(AbsFile s) throws Exception {
                         //viewDirInActivity(s);
+                        MyToast.show(s.getAbsolutePath());
                     }
                 });
 

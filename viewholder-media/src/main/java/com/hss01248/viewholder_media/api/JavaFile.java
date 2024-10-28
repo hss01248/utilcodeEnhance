@@ -94,7 +94,7 @@ public class JavaFile implements AbsFile<File>{
     }
 
     @Override
-    public String getFullPath() {
+    public String getAbsolutePath() {
         return file.getAbsolutePath();
     }
 
