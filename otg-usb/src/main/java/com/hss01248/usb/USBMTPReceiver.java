@@ -7,10 +7,12 @@ import android.content.Intent;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 
+import com.blankj.utilcode.util.ConvertUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ThreadUtils;
 import com.hss01248.usb.util.SmartToastUtils;
 import com.hss01248.viewholder_media.CommonFileTreeViewHolder;
+import com.hss01248.viewholder_media.scan.TreeScanUtil;
 
 import java.io.IOException;
 import java.util.List;
@@ -154,7 +156,7 @@ public class USBMTPReceiver extends BroadcastReceiver {
             device.init();
         } catch (IOException e) {
             SmartToastUtils.showShort(mContext, "device.init() error" + e.toString());
-            return;
+           // return;
         }
 
 
@@ -179,6 +181,14 @@ public class USBMTPReceiver extends BroadcastReceiver {
         Partition partition = device.getPartitions().get(0);
         // 文件系统
         FileSystem currentFs = partition.getFileSystem();
+        LogUtils.i("sd卡总容量", ConvertUtils.byte2FitMemorySize(currentFs.getCapacity()),
+                "剩余容量",ConvertUtils.byte2FitMemorySize(currentFs.getCapacity()),
+                "标识",currentFs.getVolumeLabel(),
+                "根目录",currentFs.getRootDirectory().getAbsolutePath(),
+                "getType",currentFs.getType(),
+                //PartitionTypes.  const val FAT32 = 2
+                "已使用容量",ConvertUtils.byte2FitMemorySize(currentFs.getOccupiedSpace()));
+
         // 获取 U 盘的根目录
         UsbFile mRootFolder = currentFs.getRootDirectory();
 
@@ -188,6 +198,8 @@ public class USBMTPReceiver extends BroadcastReceiver {
                 CommonFileTreeViewHolder.viewDirInActivity(new UsbFileImpl(mRootFolder));
             }
         });
+
+        TreeScanUtil.scan(true,new UsbFileImpl(mRootFolder));
 
 //        // 获取 U 盘的容量
 //        long capacity = currentFs.getCapacity();
@@ -206,7 +218,7 @@ public class USBMTPReceiver extends BroadcastReceiver {
 //        }else{
 //            SmartToastUtils.showShort(mContext,"这不是根目录");
 //        }
-        readAllPicFileFromUSBDevice(mRootFolder, currentFs);
+        //readAllPicFileFromUSBDevice(mRootFolder, currentFs);
     }
 
     private void readAllPicFileFromUSBDevice(UsbFile usbFile, FileSystem fileSystem) {

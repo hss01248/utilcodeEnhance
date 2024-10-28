@@ -73,8 +73,6 @@ public class CommonFileTreeViewHolder extends BaseViewHolder<LayoutFileTreeBindi
                 });
             }
         });
-
-
     }
 
 

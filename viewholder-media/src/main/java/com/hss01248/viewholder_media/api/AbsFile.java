@@ -9,10 +9,10 @@ import java.io.OutputStream;
  * @Date 10/28/24 10:20 AM
  * @Version 1.0
  */
-public interface AbsFile {
+public interface AbsFile<T> {
 
 
-    Object getRealFile();
+    T getRealFile();
     boolean isRoot();
 
     boolean exists();

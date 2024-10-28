@@ -3,7 +3,6 @@ package com.hss01248.usb;
 import com.blankj.utilcode.util.LogUtils;
 import com.hss01248.viewholder_media.api.AbsFile;
 import com.hss01248.viewholder_media.api.AbsFileFilter;
-import com.hss01248.viewholder_media.api.JavaFile;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -61,7 +60,7 @@ public class UsbFileImpl implements AbsFile {
             if(files ==null || files.length ==0){
                 return null;
             }
-            AbsFile[] absFiles = new JavaFile[files.length];
+            AbsFile[] absFiles = new UsbFileImpl[files.length];
             for (int i = 0; i < files.length; i++) {
                 absFiles[i] = new UsbFileImpl(files[i]);
             }

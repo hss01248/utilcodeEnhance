@@ -17,7 +17,7 @@ import java.io.OutputStream;
  * @Date 10/28/24 10:21 AM
  * @Version 1.0
  */
-public class JavaFile implements AbsFile{
+public class JavaFile implements AbsFile<File>{
 
     public JavaFile(File file) {
         this.file = file;
@@ -33,7 +33,7 @@ public class JavaFile implements AbsFile{
     private boolean root;
 
     @Override
-    public Object getRealFile() {
+    public File getRealFile() {
         return file;
     }
 

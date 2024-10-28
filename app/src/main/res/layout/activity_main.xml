@@ -60,6 +60,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <androidx.appcompat.widget.AppCompatButton
+                android:text="扫描图片视频-手机内存卡"
+                android:onClick="scanExternalMedia"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="扫描图片视频-USB"
+                android:onClick="scanUSBMedia"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
                 android:text="压缩图片并对比"
                 android:onClick="compressImageAndCompare"
                 android:textAllCaps="false"

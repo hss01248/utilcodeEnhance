@@ -58,6 +58,10 @@ public class CommonMediaListViewHolder extends BaseViewHolder<LayoutMediaListBin
     GridLayoutManager gridLayoutManager;
     LinearLayoutManager linearLayoutManager;
 
+    public MyRecyclerViewAdapter getAdapter() {
+        return adapter;
+    }
+
     @Override
     protected void initDataAndEventInternal(LifecycleOwner lifecycleOwner, List<AbsFile> bean) {
 

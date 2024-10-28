@@ -35,7 +35,21 @@ public class UsbUtil {
     }
 
 
-    //发送USB广播
+    /**
+     *                                                                                                     ├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+     *                                                                                                     │ args[0] = sd卡总容量
+     *                                                                                                     │ args[1] = 119.083GB
+     *                                                                                                     │ args[2] = 剩余容量
+     *                                                                                                     │ args[3] = 119.083GB
+     *                                                                                                     │ args[4] = 标识
+     *                                                                                                     │ args[5] = NIKON_Z30
+     *                                                                                                     │ args[6] = 根目录
+     *                                                                                                     │ args[7] = /
+     *                                                                                                     │ args[8] = getType
+     *                                                                                                     │ args[9] = 2
+     *                                                                                                     │ args[10] = 已使用容量
+     *                                                                                                     │ args[11] = 44.906MB
+     */
     public static void viewUsb() {
         //发送广播
         Intent intent=new Intent(USBMTPReceiver.READ_USB_DEVICE_PERMISSION);

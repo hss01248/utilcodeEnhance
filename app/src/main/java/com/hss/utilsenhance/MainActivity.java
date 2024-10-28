@@ -98,6 +98,7 @@ import com.hss01248.sentry.SentryUtil;
 import com.hss01248.toast.MyToast;
 import com.hss01248.usb.UsbUtil;
 import com.hss01248.viewholder_media.CommonFileTreeViewHolder;
+import com.hss01248.viewholder_media.scan.TreeScanUtil;
 import com.hss01248.webviewspider.SpiderWebviewActivity;
 
 import org.devio.takephoto.wrap.TakeOnePhotoListener;
@@ -1617,5 +1618,9 @@ public class MainActivity extends AppCompatActivity {
     public void viewUsbFileExplorer(View view) {
         UsbUtil.viewUsb();
 
+    }
+
+    public void scanExternalMedia(View view) {
+        TreeScanUtil.scanExternalStorage(true);
     }
 }
