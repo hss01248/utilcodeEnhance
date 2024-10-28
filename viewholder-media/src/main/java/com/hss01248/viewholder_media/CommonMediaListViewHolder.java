@@ -29,12 +29,12 @@ import io.reactivex.functions.Consumer;
  * @Date 5/14/24 9:29 AM
  * @Version 1.0
  */
-public class MediaListViewHolder extends BaseViewHolder<LayoutMediaListBinding, List<String>> {
-    public MediaListViewHolder(Context context) {
+public class CommonMediaListViewHolder extends BaseViewHolder<LayoutMediaListBinding, List<AbsFile>> {
+    public CommonMediaListViewHolder(Context context) {
         super(context);
     }
-    public MediaListViewHolder setOnItemClicked(Consumer<String> onItemClicked) {
-        //this.onItemClicked = onItemClicked;
+    public CommonMediaListViewHolder setOnItemClicked(Consumer<AbsFile> onItemClicked) {
+        this.onItemClicked = onItemClicked;
         return this;
     }
 
@@ -59,7 +59,7 @@ public class MediaListViewHolder extends BaseViewHolder<LayoutMediaListBinding, 
     LinearLayoutManager linearLayoutManager;
 
     @Override
-    protected void initDataAndEventInternal(LifecycleOwner lifecycleOwner, List<String> bean) {
+    protected void initDataAndEventInternal(LifecycleOwner lifecycleOwner, List<AbsFile> bean) {
 
         if(filterInfo.displayType == 0){
             if(gridLayoutManager ==null){

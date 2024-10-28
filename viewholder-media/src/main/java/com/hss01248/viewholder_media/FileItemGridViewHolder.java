@@ -16,9 +16,8 @@ import com.blankj.utilcode.util.SizeUtils;
 import com.hss.utils.enhance.viewholder.MyRecyclerViewHolder;
 import com.hss01248.image.ImageLoader;
 import com.hss01248.image.config.ScaleMode;
+import com.hss01248.viewholder_media.api.AbsFile;
 import com.hss01248.viewholder_media.databinding.LayoutFileItemGridBinding;
-
-import java.io.File;
 
 import io.reactivex.functions.Consumer;
 
@@ -29,7 +28,7 @@ import io.reactivex.functions.Consumer;
  * @Date 5/14/24 9:47 AM
  * @Version 1.0
  */
-public class FileItemGridViewHolder extends MyRecyclerViewHolder<LayoutFileItemGridBinding, String> {
+public class FileItemGridViewHolder extends MyRecyclerViewHolder<LayoutFileItemGridBinding, AbsFile> {
 
     public static final float dividerWidth = 1.0f;
 
@@ -45,7 +44,7 @@ public class FileItemGridViewHolder extends MyRecyclerViewHolder<LayoutFileItemG
         super(itemView);
     }
 
-    public FileItemGridViewHolder setOnItemClicked(Consumer<String> onItemClicked) {
+    public FileItemGridViewHolder setOnItemClicked(Consumer<AbsFile> onItemClicked) {
         this.onItemClicked = onItemClicked;
         return this;
     }
@@ -56,10 +55,10 @@ public class FileItemGridViewHolder extends MyRecyclerViewHolder<LayoutFileItemG
     }
 
     DisplayAndFilterInfo filterInfo;
-    Consumer<String> onItemClicked;
+    Consumer<AbsFile> onItemClicked;
 
     @Override
-    public void assignDatasAndEvents(String data) {
+    public void assignDatasAndEvents(AbsFile data) {
         ViewGroup.LayoutParams layoutParams = binding.rlContent.getLayoutParams();
         layoutParams.width = width;
         layoutParams.height = width;
@@ -71,14 +70,14 @@ public class FileItemGridViewHolder extends MyRecyclerViewHolder<LayoutFileItemG
                 binding.iv, onItemClicked,filterInfo.showFileName,binding.ivType);
     }
 
-    public static void showInfo(String data, Context context,
+    public static void showInfo(AbsFile data, Context context,
                                 View rootView,
                                 TextView textView,
                                 ImageView iv,
-                                Consumer<String> onItemClicked,
+                                Consumer<AbsFile> onItemClicked,
                                 boolean showFileName,
                                 ImageView ivType) {
-        File file = new File(data);
+        AbsFile file = data;
         String name = file.getName().toLowerCase();
         boolean isVideo = name.endsWith(".mp4") || name.endsWith(".mkv");
         ivType.setVisibility(isVideo?View.VISIBLE:View.GONE);
@@ -98,7 +97,7 @@ public class FileItemGridViewHolder extends MyRecyclerViewHolder<LayoutFileItemG
                     name.endsWith(".mkv") ||
                     name.endsWith(".mp4")) {
                 ImageLoader.with(context)
-                        .file(data)
+                        .file(data.getFullPath())
                         .defaultErrorRes(true)
                         .scale(ScaleMode.CENTER_CROP)
                         .into(iv);

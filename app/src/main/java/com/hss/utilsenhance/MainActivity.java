@@ -46,6 +46,7 @@ import com.google.gson.GsonBuilder;
 import com.hss.downloader.MyDownloader;
 import com.hss.utils.base.api.MyCommonCallback3;
 import com.hss.utils.enhance.BarColorUtil;
+import com.hss.utils.enhance.ContentUriUtil;
 import com.hss.utils.enhance.HomeMaintaner;
 import com.hss.utils.enhance.UrlEncodeUtil;
 import com.hss.utils.enhance.api.MyCommonCallback;
@@ -90,13 +91,12 @@ import com.hss01248.media.pick.CaptureVideoUtil;
 import com.hss01248.media.pick.MediaPickOrCaptureUtil;
 import com.hss01248.media.pick.MediaPickUtil;
 import com.hss01248.media.pick.SafUtil;
-import com.hss.utils.enhance.ContentUriUtil;
 import com.hss01248.openuri2.OpenUri2;
 import com.hss01248.permission.MyPermissions;
 import com.hss01248.qrscan.ScanCodeActivity;
 import com.hss01248.sentry.SentryUtil;
 import com.hss01248.toast.MyToast;
-import com.hss01248.viewholder_media.FileTreeViewHolder;
+import com.hss01248.viewholder_media.CommonFileTreeViewHolder;
 import com.hss01248.webviewspider.SpiderWebviewActivity;
 
 import org.devio.takephoto.wrap.TakeOnePhotoListener;
@@ -1291,7 +1291,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onNext(Boolean aBoolean) {
-                FileTreeViewHolder.viewExternalStorage();
+                //FileTreeViewHolder.viewExternalStorage();
+                CommonFileTreeViewHolder.viewExternalStorage();
             }
 
             @Override
@@ -1305,7 +1306,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        FileTreeViewHolder.viewAppDir();
+        CommonFileTreeViewHolder.viewAppDir();
 
 
        /* Dialog dialog1 = new Dialog(this);
