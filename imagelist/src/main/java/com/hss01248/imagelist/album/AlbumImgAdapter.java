@@ -72,7 +72,8 @@ public class AlbumImgAdapter extends BaseQuickAdapter<Image, BaseViewHolder> imp
             showLivePhotoIcon(helper,item);
         }
         ImageLoader.with(helper.itemView.getContext())
-                .load(item.path)
+                //.load(item.path)
+                .load(item.uri.toString())
                 //.loading(R.drawable.iv_loading_trans)
                 .defaultPlaceHolder(true)
                 .scale(ScaleMode.CENTER_CROP)
@@ -153,7 +154,7 @@ public class AlbumImgAdapter extends BaseQuickAdapter<Image, BaseViewHolder> imp
         ThreadUtils.executeByIo(new ThreadUtils.SimpleTask<Boolean>() {
             @Override
             public Boolean doInBackground() throws Throwable {
-                return MotionPhotoUtil.isMotionImage(item.path,false);
+                return MotionPhotoUtil.isMotionImage(item.uri.toString(),false);
             }
 
             @Override

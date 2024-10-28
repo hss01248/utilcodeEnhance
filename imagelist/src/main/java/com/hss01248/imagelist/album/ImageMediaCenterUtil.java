@@ -125,8 +125,10 @@ public class ImageMediaCenterUtil {
                          */
                             file = new File(image);
                             Log.d("ImageMediaCenterUtil", file.getAbsolutePath());
-                            if (file.exists()) {
-                                Album album1 = new Album(album, image, albumId).setVideo(isVideo);
+                           // if (file.exists()) {
+                                Album album1 = new Album(album, image, albumId)
+                                        .setVideo(isVideo)
+                                        .setUri(imageUri);
                                 albums.add(album1);
                                 albumSet.add(albumId);
 
@@ -142,7 +144,7 @@ public class ImageMediaCenterUtil {
                                 }*/
                                 album1.count = count;
                                 album1.fileSize = fileSize;
-                            }
+                            //}
                         }
 
                     } while (cursor.moveToPrevious());
@@ -237,9 +239,9 @@ public class ImageMediaCenterUtil {
                         // String name = cursor.getString(cursor.getColumnIndex(projection[1]));
                         String path = cursor.getString(cursor.getColumnIndex(projection[2]));
 
-                        File file = new File(path);
+                        //File file = new File(path);
                         Log.i("path", path);
-                        if (file.exists()) {
+                      //  if (file.exists()) {
 
 
                             long id = cursor.getLong(cursor.getColumnIndex(projection[0]));
@@ -255,7 +257,7 @@ public class ImageMediaCenterUtil {
                                     cursor.getLong(cursor.getColumnIndex(projection[6])),//HEIGHT
                                     cursor.getString(cursor.getColumnIndex(projection[7]))//MIME_TYPE
                             ).setUri(imageUri));
-                        }
+                       // }
                         count++;
                         //加速
                         if(count == 50 && cursor.getCount() > 500){

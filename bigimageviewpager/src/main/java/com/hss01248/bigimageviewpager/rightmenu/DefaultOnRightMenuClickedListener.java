@@ -7,6 +7,8 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.hss01248.bigimageviewpager.OnRightMenuClickedListener;
 import com.hss01248.bigimageviewpager.motion.MotionEditViewHolder;
+import com.hss01248.fullscreendialog.FullScreenDialogUtil;
+import com.hss01248.media.metadata.MetaDataUtil;
 
 import java.util.List;
 
@@ -34,6 +36,8 @@ public class DefaultOnRightMenuClickedListener implements OnRightMenuClickedList
                     doEdit(path);
                 }else if(i ==0){
                     doShare(path);
+                }else if(i ==1){
+                    showExif(path);
                 }
 
             }
@@ -42,6 +46,10 @@ public class DefaultOnRightMenuClickedListener implements OnRightMenuClickedList
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
 
+    }
+
+    private void showExif(String path) {
+        FullScreenDialogUtil.showText("exif", MetaDataUtil.getDes(path));
     }
 
     private void doShare(String path) {

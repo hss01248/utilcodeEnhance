@@ -1,5 +1,7 @@
 package com.hss01248.imagelist.album;
 
+import android.net.Uri;
+
 /**
  * Created by Darshan on 4/14/2015.
  */
@@ -9,6 +11,13 @@ public class Album {
     public String cover;
     public int count;
     public long fileSize;
+
+    public Album setUri(Uri uri) {
+        this.uri = uri;
+        return this;
+    }
+
+    public Uri uri;
 
     public Album setVideo(boolean video) {
         isVideo = video;

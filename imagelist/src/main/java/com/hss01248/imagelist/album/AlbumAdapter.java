@@ -51,7 +51,7 @@ public class AlbumAdapter extends BaseQuickAdapter<Album, BaseViewHolder> implem
         imageView.setLayoutParams(params);
 
         ImageLoader.with(helper.itemView.getContext())
-                .load(item.cover)
+                .load(item.uri.toString())
                 .scale(ScaleMode.CENTER_CROP)
                 .defaultPlaceHolder(true)
                 //.loading(R.drawable.iv_loading_trans)
