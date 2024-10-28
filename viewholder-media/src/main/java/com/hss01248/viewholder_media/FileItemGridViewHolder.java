@@ -13,10 +13,12 @@ import com.blankj.utilcode.util.DeviceUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.SizeUtils;
+import com.bumptech.glide.Glide;
 import com.hss.utils.enhance.viewholder.MyRecyclerViewHolder;
 import com.hss01248.image.ImageLoader;
 import com.hss01248.image.config.ScaleMode;
 import com.hss01248.viewholder_media.api.AbsFile;
+import com.hss01248.viewholder_media.api.JavaFile;
 import com.hss01248.viewholder_media.databinding.LayoutFileItemGridBinding;
 
 import io.reactivex.functions.Consumer;
@@ -96,11 +98,17 @@ public class FileItemGridViewHolder extends MyRecyclerViewHolder<LayoutFileItemG
                     name.endsWith(".webp") ||
                     name.endsWith(".mkv") ||
                     name.endsWith(".mp4")) {
-                ImageLoader.with(context)
-                        .file(data.getFullPath())
-                        .defaultErrorRes(true)
-                        .scale(ScaleMode.CENTER_CROP)
-                        .into(iv);
+                if(data instanceof JavaFile){
+                    ImageLoader.with(context)
+                            .file(data.getFullPath())
+                            .defaultErrorRes(true)
+                            .scale(ScaleMode.CENTER_CROP)
+                            .into(iv);
+                }else {
+                    Glide.with(context)
+                            .load(data.getRealFile())
+                            .into(iv);
+                }
                 if(!showFileName){
                     textView.setVisibility(View.GONE);
                 }else {

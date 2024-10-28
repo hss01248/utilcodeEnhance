@@ -33,6 +33,11 @@ public class JavaFile implements AbsFile{
     private boolean root;
 
     @Override
+    public Object getRealFile() {
+        return file;
+    }
+
+    @Override
     public boolean isRoot() {
         return root;
     }

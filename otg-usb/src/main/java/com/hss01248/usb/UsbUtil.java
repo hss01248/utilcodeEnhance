@@ -42,4 +42,6 @@ public class UsbUtil {
         //发送标准广播
         Utils.getApp().sendBroadcast(intent);
     }
+
+
 }

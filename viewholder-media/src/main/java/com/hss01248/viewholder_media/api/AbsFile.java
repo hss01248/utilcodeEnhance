@@ -12,6 +12,7 @@ import java.io.OutputStream;
 public interface AbsFile {
 
 
+    Object getRealFile();
     boolean isRoot();
 
     boolean exists();

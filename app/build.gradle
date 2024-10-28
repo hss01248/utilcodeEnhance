@@ -95,6 +95,7 @@ dependencies {
     api "com.github.hss01248.media:localvideoplayer:1.0.0"
     // lifecycle注解处理器
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:2.2.0"
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     //implementation 'com.github.gzu-liyujiang.AndroidPicker:FilePicker:4.1.2'
     //http://39.101.221.145:8081/repository/jitpack_proxy/
     //https://jitpack.io/com/github/hss01248/MyDataStore/1.0.1/MyDataStore-1.0.1.aar

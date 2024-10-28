@@ -29,6 +29,11 @@ public class UsbFileImpl implements AbsFile {
     UsbFile file;
 
     @Override
+    public Object getRealFile() {
+        return file;
+    }
+
+    @Override
     public boolean isRoot() {
         return file.isRoot();
     }
