@@ -1,4 +1,4 @@
-package com.hss01248.imagelist.album;
+package com.hss01248.imagelist.db;
 
 import android.net.Uri;
 
@@ -24,7 +24,7 @@ public class Album {
         return this;
     }
 
-    boolean isVideo;
+   public boolean isVideo;
 
     public Album(String name, String cover, long id) {
         this.name = name;

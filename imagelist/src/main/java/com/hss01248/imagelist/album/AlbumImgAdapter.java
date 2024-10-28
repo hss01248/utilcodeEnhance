@@ -17,6 +17,7 @@ import com.hss01248.image.ImageLoader;
 import com.hss01248.image.MyUtil;
 import com.hss01248.image.config.ScaleMode;
 import com.hss01248.imagelist.R;
+import com.hss01248.imagelist.db.Image;
 import com.hss01248.motion_photos.MotionPhotoUtil;
 
 import java.io.File;

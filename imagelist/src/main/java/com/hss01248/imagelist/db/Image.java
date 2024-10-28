@@ -1,4 +1,4 @@
-package com.hss01248.imagelist.album;
+package com.hss01248.imagelist.db;
 
 import android.net.Uri;
 import android.os.Parcel;

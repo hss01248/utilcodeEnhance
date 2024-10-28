@@ -25,7 +25,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.ConvertUtils;
 import com.blankj.utilcode.util.DeviceUtils;
 import com.blankj.utilcode.util.LogUtils;
@@ -46,6 +45,9 @@ import com.hss01248.fileoperation.FileOpenUtil;
 import com.hss01248.imagelist.NormalCallback;
 import com.hss01248.imagelist.R;
 
+import com.hss01248.imagelist.db.Album;
+import com.hss01248.imagelist.db.Image;
+import com.hss01248.imagelist.db.MediaStoreDB;
 import com.hss01248.img.compressor.ImageDirCompressor;
 import com.hss01248.img.compressor.UiForDirCompress;
 import com.hss01248.iwidget.singlechoose.ISingleChooseItem;
@@ -64,8 +66,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * time:2019/11/30
@@ -658,10 +658,10 @@ public class ImageListView extends FrameLayout {
 
     }
 
-    public void showImagesInAlbum(Album album,boolean isVideo) {
+    public void showImagesInAlbum(@Nullable  Album album, boolean isVideo) {
         titleBar.setVisibility(VISIBLE);
         List<Image> cachedImages = new ArrayList<>();
-        ImageMediaCenterUtil.listImagesByAlbumName(getContext(), album.id,isVideo, new NormalCallback<List<Image>>() {
+        MediaStoreDB.listImagesByAlbumId(getContext(), album==null ? 0: album.id,isVideo, new NormalCallback<List<Image>>() {
             @Override
             public void onSuccess(final List<Image> images, Object extra) {
                 LogUtils.d("onsuccess:" + images.size());
@@ -688,6 +688,7 @@ public class ImageListView extends FrameLayout {
 
             @Override
             public void onFail(Throwable e) {
+                ToastUtils.showShort(e.getMessage());
 
             }
 
@@ -760,7 +761,7 @@ public class ImageListView extends FrameLayout {
     }
 
     private void loadAlbumsAfterPermission(boolean isVideo) {
-        ImageMediaCenterUtil.getAlbums(getContext(),isVideo, new NormalCallback<List<Album>>() {
+        MediaStoreDB.getAlbums(getContext(),isVideo, new NormalCallback<List<Album>>() {
             @Override
             public void onSuccess(final List<Album> albums, Object extra) {
                 if(albums == null || albums.isEmpty()){

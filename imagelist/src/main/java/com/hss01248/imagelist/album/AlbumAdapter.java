@@ -15,6 +15,7 @@ import com.futuremind.recyclerviewfastscroll.SectionTitleProvider;
 import com.hss01248.image.ImageLoader;
 import com.hss01248.image.config.ScaleMode;
 import com.hss01248.imagelist.R;
+import com.hss01248.imagelist.db.Album;
 
 import java.util.List;
 

@@ -1603,4 +1603,12 @@ public class MainActivity extends AppCompatActivity {
         //boolean compress = ImageCompressor.compressOringinal(file.getAbsolutePath(), quality, file2.getAbsolutePath());
 
     }
+
+    public void viewImagesByMediaStore2(View view) {
+        ImageMediaCenterUtil.showPureImageOrVideos(false);
+    }
+
+    public void viewVideoByMediaStore2(View view) {
+        ImageMediaCenterUtil.showPureImageOrVideos(true);
+    }
 }

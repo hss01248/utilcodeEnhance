@@ -30,14 +30,26 @@
             app:flexDirection="row"
             app:flexWrap="wrap" >
             <androidx.appcompat.widget.AppCompatButton
-                android:text="查看相册图片-media store"
+                android:text="查看相册图片-media store-文件夹视图"
                 android:onClick="viewImagesByMediaStore"
                 android:textAllCaps="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <androidx.appcompat.widget.AppCompatButton
-                android:text="查看手机视频-media store"
+                android:text="查看手机视频-media store-文件夹视图"
                 android:onClick="viewVideoByMediaStore"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="查看相册图片-media store-文件视图"
+                android:onClick="viewImagesByMediaStore2"
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="查看手机视频-media store-文件视图"
+                android:onClick="viewVideoByMediaStore2"
                 android:textAllCaps="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
